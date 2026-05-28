@@ -252,19 +252,32 @@ def main():
     height = bbox_match.group(2) if bbox_match else "600"
 
     water_defs = '''<defs>
-    <linearGradient id="water-body-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="rgba(45, 140, 210, 0.38)"/>
-      <stop offset="100%" stop-color="rgba(20, 75, 140, 0.48)"/>
+    <linearGradient id="water-body-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="hsl(215, 38%, 16%)"/>
+      <stop offset="50%" stop-color="hsl(205, 42%, 20%)"/>
+      <stop offset="100%" stop-color="hsl(225, 32%, 12%)"/>
+    </linearGradient>
+    <radialGradient id="water-shimmer-gradient" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="rgba(0, 180, 255, 0.18)"/>
+      <stop offset="100%" stop-color="rgba(0, 100, 180, 0)"/>
+    </radialGradient>
+    <linearGradient id="water-channel-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="hsla(200, 55%, 42%, 0.32)"/>
+      <stop offset="100%" stop-color="hsla(220, 45%, 28%, 0.42)"/>
     </linearGradient>
   </defs>'''
 
     water_group = '''<g class="water-group">
+    <path class="water-channel-bed" d="M -20,372 Q 95,358 205,348 Q 320,338 430,342 Q 520,348 640,352" />
     <path class="water-channel-glow" d="M -20,372 Q 95,358 205,348 Q 320,338 430,342 Q 520,348 640,352" />
     <path class="water-channel" d="M -20,372 Q 95,358 205,348 Q 320,338 430,342 Q 520,348 640,352" />
+    <path class="water-channel-bed" d="M 205,348 C 215,385 255,418 335,432 Q 420,442 640,400" />
     <path class="water-channel-glow" d="M 205,348 C 215,385 255,418 335,432 Q 420,442 640,400" />
     <path class="water-channel" d="M 205,348 C 215,385 255,418 335,432 Q 420,442 640,400" />
     <ellipse class="water-fill" cx="283" cy="292" rx="22" ry="28" />
+    <ellipse class="water-shimmer" cx="278" cy="286" rx="10" ry="12" />
     <ellipse class="water-fill" cx="272" cy="318" rx="8" ry="6" />
+    <ellipse class="water-shimmer" cx="270" cy="316" rx="3" ry="2.5" />
   </g>'''
 
     # Complete SVG embedding (water below districts)

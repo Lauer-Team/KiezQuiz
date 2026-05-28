@@ -155,22 +155,35 @@
           <!-- Inlined Map SVG -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 615 600" class="hamburg-map-svg">
   <defs>
-    <linearGradient id="water-body-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="rgba(45, 140, 210, 0.38)"/>
-      <stop offset="100%" stop-color="rgba(20, 75, 140, 0.48)"/>
+    <linearGradient id="water-body-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="hsl(215, 38%, 16%)"/>
+      <stop offset="50%" stop-color="hsl(205, 42%, 20%)"/>
+      <stop offset="100%" stop-color="hsl(225, 32%, 12%)"/>
+    </linearGradient>
+    <radialGradient id="water-shimmer-gradient" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="rgba(0, 180, 255, 0.18)"/>
+      <stop offset="100%" stop-color="rgba(0, 100, 180, 0)"/>
+    </radialGradient>
+    <linearGradient id="water-channel-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="hsla(200, 55%, 42%, 0.32)"/>
+      <stop offset="100%" stop-color="hsla(220, 45%, 28%, 0.42)"/>
     </linearGradient>
   </defs>
   <g class="water-group">
     <!-- Norderelbe -->
+    <path class="water-channel-bed" d="M -20,372 Q 95,358 205,348 Q 320,338 430,342 Q 520,348 640,352" />
     <path class="water-channel-glow" d="M -20,372 Q 95,358 205,348 Q 320,338 430,342 Q 520,348 640,352" />
     <path class="water-channel" d="M -20,372 Q 95,358 205,348 Q 320,338 430,342 Q 520,348 640,352" />
     <!-- Süderelbe -->
+    <path class="water-channel-bed" d="M 205,348 C 215,385 255,418 335,432 Q 420,442 640,400" />
     <path class="water-channel-glow" d="M 205,348 C 215,385 255,418 335,432 Q 420,442 640,400" />
     <path class="water-channel" d="M 205,348 C 215,385 255,418 335,432 Q 420,442 640,400" />
     <!-- Außenalster -->
     <ellipse class="water-fill" cx="283" cy="292" rx="22" ry="28" />
+    <ellipse class="water-shimmer" cx="278" cy="286" rx="10" ry="12" />
     <!-- Binnenalster -->
     <ellipse class="water-fill" cx="272" cy="318" rx="8" ry="6" />
+    <ellipse class="water-shimmer" cx="270" cy="316" rx="3" ry="2.5" />
   </g>
   <g class="stadtteile-group">
     <path id="stadtteil-0" class="stadtteil-path" d="M 338.77,404.02 L 339.40,404.71 L 340.43,406.79 L 343.05,412.32 L 345.14,414.77 L 346.69,415.78 L 344.85,418.33 L 344.43,418.70 L 343.98,419.02 L 343.35,419.13 L 342.76,419.55 L 342.35,420.30 L 342.47,421.10 L 342.84,422.37 L 342.89,422.90 L 343.00,423.17 L 344.72,424.55 L 347.68,428.43 L 347.94,428.91 L 347.84,428.97 L 344.61,431.57 L 345.52,432.37 L 346.06,432.16 L 348.65,436.20 L 351.50,439.92 L 353.59,442.79 L 354.36,444.28 L 355.28,446.52 L 356.22,448.75 L 357.22,451.20 L 357.80,452.63 L 359.27,456.99 L 359.02,457.10 L 359.29,458.06 L 356.97,459.71 L 350.80,464.70 L 349.01,466.35 L 348.36,466.88 L 347.84,467.52 L 343.83,467.79 L 343.53,464.33 L 341.86,456.41 L 339.55,452.69 L 335.87,447.63 L 333.23,442.90 L 332.22,437.74 L 331.17,431.25 L 331.53,423.86 L 333.30,418.12 L 335.43,412.53 L 337.75,406.42 L 338.77,404.02 Z" data-name="Spadenland" data-bezirk="Bergedorf" />

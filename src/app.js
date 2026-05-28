@@ -166,6 +166,40 @@ class SoundManager {
     this.init().then(() => this._ensureRunning()).then(() => this._playLevelUpTone());
   }
 
+  playConfetti() {
+    if (this.muted) return;
+    this.init().then(() => this._ensureRunning()).then(() => this._playConfettiTone());
+  }
+
+  _playConfettiTone() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const pops = [
+      { freq: 440, type: 'square', delay: 0, dur: 0.12 },
+      { freq: 554, type: 'triangle', delay: 0.07, dur: 0.12 },
+      { freq: 659, type: 'square', delay: 0.14, dur: 0.12 },
+      { freq: 880, type: 'triangle', delay: 0.21, dur: 0.18 },
+      { freq: 1108, type: 'sine', delay: 0.30, dur: 0.25 }
+    ];
+
+    pops.forEach(({ freq, type, delay, dur }) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq * 0.85, t + delay);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.05, t + delay + dur * 0.4);
+
+      gain.gain.setValueAtTime(0, t + delay);
+      gain.gain.linearRampToValueAtTime(0.09, t + delay + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + delay + dur);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(t + delay);
+      osc.stop(t + delay + dur + 0.05);
+    });
+  }
+
   _ensureRunning() {
     if (this.ctx?.state === 'suspended') {
       return this.ctx.resume().catch(() => {});
@@ -197,7 +231,51 @@ class SoundManager {
   }
 }
 
-function launchConfetti() {
+function snapCoord(n) {
+  return Math.round(n * 10) / 10;
+}
+
+function segmentKey(x1, y1, x2, y2) {
+  const a = `${snapCoord(x1)},${snapCoord(y1)}`;
+  const b = `${snapCoord(x2)},${snapCoord(y2)}`;
+  return a < b ? `${a}|${b}` : `${b}|${a}`;
+}
+
+function parsePathSegments(d) {
+  const segments = [];
+  if (!d) return segments;
+
+  const parts = d.trim().split(/(?=[MLZ])/i);
+  let startPoint = null;
+  let current = null;
+
+  for (const part of parts) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    const cmd = trimmed[0].toUpperCase();
+    const nums = trimmed.slice(1).trim().split(/[\s,]+/).filter(Boolean).map(Number);
+
+    if (cmd === 'M') {
+      current = [nums[0], nums[1]];
+      startPoint = [...current];
+      for (let i = 2; i + 1 < nums.length; i += 2) {
+        segments.push([current[0], current[1], nums[i], nums[i + 1]]);
+        current = [nums[i], nums[i + 1]];
+      }
+    } else if (cmd === 'L') {
+      for (let i = 0; i + 1 < nums.length; i += 2) {
+        segments.push([current[0], current[1], nums[i], nums[i + 1]]);
+        current = [nums[i], nums[i + 1]];
+      }
+    } else if (cmd === 'Z' && current && startPoint) {
+      segments.push([current[0], current[1], startPoint[0], startPoint[1]]);
+    }
+  }
+  return segments;
+}
+
+function launchConfetti(soundManager) {
+  if (soundManager) soundManager.playConfetti();
   const container = document.createElement('div');
   container.className = 'confetti-container';
   const colors = ['#22c55e', '#00a2ff', '#fbbf24', '#a855f7', '#ef4444', '#14b8a6'];
@@ -379,6 +457,7 @@ class HamburgGame {
     this.nameAllTimeLeft = 600; // 10 minutes in seconds
     this.nameAllFound = new Set();
     this.nameAllIsActive = false;
+    this.nameAllActiveBezirke = [];
     
     this.loadState();
   }
@@ -398,6 +477,7 @@ class HamburgGame {
     
     this.setupUIListeners();
     this.initMapPaths();
+    this.buildBezirkBoundaries();
     this.renderStats();
     
     // Segment selectors binding
@@ -875,7 +955,7 @@ class HamburgGame {
       </div>
     `;
     document.body.appendChild(modal);
-    launchConfetti();
+    launchConfetti(this.sounds);
     document.getElementById('btn-lvl-dismiss').addEventListener('click', () => modal.remove());
   }
 
@@ -1078,10 +1158,73 @@ class HamburgGame {
 
   resetMapClasses() {
     document.querySelectorAll('.stadtteil-path').forEach(path => {
-      path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect');
+      path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect', 'bezirk-excluded');
       path.style.pointerEvents = '';
     });
     this.activeSelectPath = null;
+  }
+
+  applyActiveBezirkFilter(activeBezirke) {
+    if (!activeBezirke?.length) return;
+    const allUnlocked = this.getUnlockedBezirke();
+    const isSubset = activeBezirke.length < allUnlocked.length;
+    if (!isSubset) return;
+
+    document.querySelectorAll('.stadtteil-path').forEach(path => {
+      const bezirk = path.getAttribute('data-bezirk');
+      if (!activeBezirke.includes(bezirk)) {
+        path.classList.add('bezirk-excluded');
+        path.style.pointerEvents = 'none';
+      } else {
+        path.classList.remove('bezirk-excluded');
+      }
+    });
+  }
+
+  buildBezirkBoundaries() {
+    if (!this.svg) return;
+
+    const existing = this.svg.querySelector('.bezirk-boundaries-group');
+    if (existing) existing.remove();
+
+    const segmentBezirke = new Map();
+    document.querySelectorAll('.stadtteil-path').forEach(path => {
+      const bezirk = path.getAttribute('data-bezirk');
+      parsePathSegments(path.getAttribute('d')).forEach(([x1, y1, x2, y2]) => {
+        const key = segmentKey(x1, y1, x2, y2);
+        if (!segmentBezirke.has(key)) segmentBezirke.set(key, new Set());
+        segmentBezirke.get(key).add(bezirk);
+      });
+    });
+
+    const boundaryLines = [];
+    segmentBezirke.forEach((bezirke, key) => {
+      if (bezirke.size > 1) {
+        const [a, b] = key.split('|');
+        const [x1, y1] = a.split(',').map(Number);
+        const [x2, y2] = b.split(',').map(Number);
+        boundaryLines.push([x1, y1, x2, y2]);
+      }
+    });
+
+    if (!boundaryLines.length) return;
+
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('class', 'bezirk-boundaries-group');
+
+    const glowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    glowPath.setAttribute('class', 'bezirk-boundary-glow');
+    glowPath.setAttribute('d', boundaryLines.map(([x1, y1, x2, y2]) => `M ${x1} ${y1} L ${x2} ${y2}`).join(' '));
+
+    const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    linePath.setAttribute('class', 'bezirk-boundary-line');
+    linePath.setAttribute('d', glowPath.getAttribute('d'));
+
+    group.appendChild(glowPath);
+    group.appendChild(linePath);
+
+    const labels = this.svg.querySelector('#map-labels-group');
+    this.svg.insertBefore(group, labels || null);
   }
 
   /** On wrong map click: highlight only the correct target in red; wrong pick stays neutral */
@@ -1206,9 +1349,15 @@ class HamburgGame {
     if (!this.svg) return;
     const water = this.svg.querySelector('.water-group');
     const stadtteile = this.svg.querySelector('.stadtteile-group');
+    const boundaries = this.svg.querySelector('.bezirk-boundaries-group');
     const labels = this.svg.querySelector('#map-labels-group');
     if (water && stadtteile) {
       this.svg.insertBefore(water, stadtteile);
+    }
+    if (boundaries && labels) {
+      this.svg.insertBefore(boundaries, labels);
+    } else if (boundaries) {
+      this.svg.appendChild(boundaries);
     }
     if (labels) {
       this.svg.appendChild(labels);
@@ -1218,9 +1367,13 @@ class HamburgGame {
   raiseWaterLayerForNameAll() {
     if (!this.svg) return;
     const water = this.svg.querySelector('.water-group');
+    const boundaries = this.svg.querySelector('.bezirk-boundaries-group');
     const labels = this.svg.querySelector('#map-labels-group');
     if (water) {
-      this.svg.insertBefore(water, labels || null);
+      this.svg.insertBefore(water, boundaries || labels || null);
+    }
+    if (boundaries && labels) {
+      this.svg.insertBefore(boundaries, labels);
     }
   }
 
@@ -1524,6 +1677,10 @@ class HamburgGame {
       alert("Fehler: Keine Fragen im ausgewählten Bezirk gefunden!");
       this.inRound = false;
       return;
+    }
+
+    if (this.activeSegment === 'STADTTEILE' && Array.isArray(districtSelection)) {
+      this.applyActiveBezirkFilter(districtSelection);
     }
 
     // Toggle UI Card elements
@@ -2080,7 +2237,7 @@ class HamburgGame {
       </div>
     `;
 
-    if (percent === 100) launchConfetti();
+    if (percent === 100) launchConfetti(this.sounds);
 
     this.recordGameHistory({
       mode: this.currentMode,
@@ -2129,6 +2286,17 @@ class HamburgGame {
           Tippe sie ein. Richtige leuchten sofort grün auf!
           <br><strong>Zeitlimit: 10:00 Minuten.</strong>
         </p>
+        <div style="text-align: left; display:flex; flex-direction:column; gap:0.35rem;">
+          <label style="font-size:0.75rem; color: var(--text-muted); font-weight:600;">Bezirke einbeziehen:</label>
+          <div class="bezirk-picker" id="nameall-bezirk-picker">
+            ${this.getUnlockedBezirke().map(b => `
+              <label class="bezirk-picker-item">
+                <input type="checkbox" value="${b}" checked>
+                <span>${b}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
         <button class="primary-btn" id="btn-start-nameall" style="padding:0.75rem;">Beginnen</button>
       </div>
 
@@ -2149,13 +2317,32 @@ class HamburgGame {
       </div>
     `;
 
-    document.getElementById('btn-start-nameall').onclick = () => this.startNameAllChallenge();
+    document.getElementById('btn-start-nameall').onclick = () => {
+      const selected = this.getSelectedNameAllBezirke();
+      if (!selected.length) {
+        alert('Bitte wähle mindestens einen Bezirk aus.');
+        return;
+      }
+      this.startNameAllChallenge(selected);
+    };
   }
 
-  startNameAllChallenge() {
+  getSelectedNameAllBezirke() {
+    const picker = document.getElementById('nameall-bezirk-picker');
+    if (!picker) return [];
+    return Array.from(picker.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+  }
+
+  getNameAllPool(bezirke) {
+    return HAMBURG_DATA.filter(d => !d.is_island && bezirke.includes(d.bezirk));
+  }
+
+  startNameAllChallenge(selectedBezirke) {
     this.sounds.init();
     this.resetMapClasses();
     this.clearMapTextLabels();
+
+    this.nameAllActiveBezirke = selectedBezirke;
     
     // Hide unlocked segment overlays if progression is on, to make it completely blank
     document.querySelectorAll('.stadtteil-path').forEach(p => {
@@ -2164,6 +2351,7 @@ class HamburgGame {
       p.style.stroke = '';
       p.style.pointerEvents = 'none';
     });
+    this.applyActiveBezirkFilter(selectedBezirke);
     this.svg?.classList.add('name-all-active');
     this.raiseWaterLayerForNameAll();
 
@@ -2175,7 +2363,7 @@ class HamburgGame {
     document.getElementById('name-all-active').style.display = 'flex';
 
     const countLabel = document.getElementById('name-all-counter');
-    const totalCount = HAMBURG_DATA.filter(d => !d.is_island).length;
+    const totalCount = this.getNameAllPool(selectedBezirke).length;
     countLabel.textContent = `0 / ${totalCount}`;
 
     const input = document.getElementById('name-all-input');
@@ -2246,8 +2434,12 @@ class HamburgGame {
     const cleanStr = str => str.toLowerCase().replace(/[^a-z0-9äöüß]/g, '');
     const cleanVal = cleanStr(val);
 
-    // Look for matching stadtteil in database
-    const match = HAMBURG_DATA.find(d => cleanStr(d.name) === cleanVal && !d.is_island);
+    // Look for matching stadtteil in database (only within selected Bezirke)
+    const match = HAMBURG_DATA.find(d =>
+      cleanStr(d.name) === cleanVal &&
+      !d.is_island &&
+      this.nameAllActiveBezirke.includes(d.bezirk)
+    );
     
     if (match && !this.nameAllFound.has(match.name)) {
       this.nameAllFound.add(match.name);
@@ -2282,13 +2474,13 @@ class HamburgGame {
     this.reorderMapLayers();
     if (this.timerInterval) clearInterval(this.timerInterval);
 
-    const totalCount = HAMBURG_DATA.filter(d => !d.is_island).length;
+    const totalCount = this.getNameAllPool(this.nameAllActiveBezirke).length;
     const foundCount = this.nameAllFound.size;
-    const percent = Math.round((foundCount / totalCount) * 100);
+    const percent = totalCount > 0 ? Math.round((foundCount / totalCount) * 100) : 0;
 
     // If surrender or timeout, reveal all missing in red and label them!
     if (surrender) {
-      const missing = HAMBURG_DATA.filter(d => !d.is_island && !this.nameAllFound.has(d.name));
+      const missing = this.getNameAllPool(this.nameAllActiveBezirke).filter(d => !this.nameAllFound.has(d.name));
       let idx = 0;
       const revealBatch = () => {
         const slice = missing.slice(idx, idx + 12);
@@ -2308,14 +2500,14 @@ class HamburgGame {
       this.sounds.playIncorrect();
     } else {
       this.sounds.playLevelUp();
-      launchConfetti();
+      launchConfetti(this.sounds);
       this.unlockAchievement("meister_alle_stadtteile", "König von Hamburg 👑", "Finde alle Stadtteile in der Sporcle-Challenge!");
     }
 
     this.recordGameHistory({
       mode: 'NAME_ALL',
       segment: this.activeSegment,
-      districts: ['Alle Stadtteile'],
+      districts: this.nameAllActiveBezirke.length ? this.nameAllActiveBezirke : ['Alle Stadtteile'],
       correct: foundCount,
       total: totalCount,
       percent,

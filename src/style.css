@@ -786,32 +786,54 @@ body {
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* Water styling (Elbe, Alster) */
+/* Water styling (Elbe, Alster) — embedded in dark neon map */
 .water-group {
   pointer-events: none;
 }
 
 .water-group .water-fill {
   fill: url(#water-body-gradient);
-  stroke: rgba(90, 180, 230, 0.35);
-  stroke-width: 0.6;
+  stroke: rgba(0, 162, 255, 0.14);
+  stroke-width: 0.5;
   stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px rgba(0, 140, 220, 0.12));
+}
+
+.water-group .water-shimmer {
+  fill: url(#water-shimmer-gradient);
+  opacity: 0.55;
+  animation: water-shimmer 5s ease-in-out infinite;
+}
+
+.water-group .water-channel-bed {
+  fill: none;
+  stroke: hsl(225, 28%, 8%);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
 }
 
 .water-group .water-channel {
   fill: none;
-  stroke: rgba(55, 150, 210, 0.55);
-  stroke-width: 5;
+  stroke: url(#water-channel-gradient);
+  stroke-width: 3.2;
   stroke-linecap: round;
   stroke-linejoin: round;
+  filter: drop-shadow(0 0 2px rgba(0, 130, 210, 0.15));
 }
 
 .water-group .water-channel-glow {
   fill: none;
-  stroke: rgba(40, 130, 200, 0.18);
-  stroke-width: 11;
+  stroke: rgba(0, 162, 255, 0.07);
+  stroke-width: 6;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+@keyframes water-shimmer {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.65; }
 }
 
 /* Sporcle round feedback on map */
@@ -1155,9 +1177,51 @@ body {
   filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.45)) !important;
 }
 
-body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink) {
+body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+  stroke-width: 0.45px;
+  stroke: var(--bg-main);
+}
+
+/* Bezirk boundary overlay (Stadtteile segment only) */
+.bezirk-boundaries-group {
+  pointer-events: none;
+}
+
+body.segment-bezirke .bezirk-boundaries-group {
+  display: none;
+}
+
+.bezirk-boundary-line {
+  fill: none;
+  stroke: rgba(0, 200, 255, 0.38);
   stroke-width: 1.6px;
-  stroke: rgba(255, 255, 255, 0.32);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px rgba(0, 162, 255, 0.22));
+}
+
+.bezirk-boundary-glow {
+  fill: none;
+  stroke: rgba(0, 162, 255, 0.1);
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Grayed-out Bezirke when not included in active game */
+.stadtteil-path.bezirk-excluded {
+  fill: rgba(4, 8, 18, 0.72) !important;
+  stroke: rgba(255, 255, 255, 0.03) !important;
+  stroke-width: 0.35px !important;
+  filter: grayscale(0.85) brightness(0.45) !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.stadtteil-path.bezirk-excluded:hover {
+  stroke-width: 0.35px !important;
+  stroke: rgba(255, 255, 255, 0.03) !important;
+  filter: grayscale(0.85) brightness(0.45) !important;
 }
 
 .round-end-actions {
@@ -1267,9 +1331,17 @@ body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(
   }
 }
 
+.name-all-active .stadtteil-path.bezirk-excluded {
+  fill: rgba(2, 5, 12, 0.82) !important;
+  stroke: rgba(255, 255, 255, 0.02) !important;
+  filter: grayscale(0.9) brightness(0.3) !important;
+}
+
 .name-all-active .water-group .water-fill,
+.name-all-active .water-group .water-shimmer,
 .name-all-active .water-group .water-channel,
-.name-all-active .water-group .water-channel-glow {
+.name-all-active .water-group .water-channel-glow,
+.name-all-active .water-group .water-channel-bed {
   opacity: 1;
 }
 
