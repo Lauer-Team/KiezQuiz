@@ -324,6 +324,10 @@ def main():
         
         <!-- Audio Synthesizer toggle -->
         <button class="audio-toggle" id="btn-mute" title="Sound ein/ausschalten">🔊</button>
+        <!-- Game history -->
+        <button class="audio-toggle" id="btn-history" title="Spielverlauf">📋</button>
+        <!-- Settings -->
+        <button class="audio-toggle" id="btn-settings" title="Einstellungen">⚙️</button>
       </div>
     </header>
 
@@ -366,13 +370,6 @@ def main():
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;">Karten-Quiz</span>
                 <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Erkenne den blinkenden Ort</span>
-              </div>
-            </button>
-            <button class="mode-btn" data-mode="BEZIRK_MATCH" id="mode-match">
-              <span class="mode-icon">🏢</span>
-              <div style="display:flex; flex-direction:column;">
-                <span style="font-weight:700;">Bezirk-Zuordnung</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Weise den Bezirk korrekt zu</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="TYPE_NAME" id="mode-typename">
