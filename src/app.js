@@ -3,14 +3,41 @@
  * Pure modular JavaScript with Web Audio Synth and Custom SVG Zoom/Pan.
  * ------------------------------------------------------------- */
 
-// Rank thresholds and titles
+// Rank thresholds and titles (separate from Bezirk unlock XP)
 const RANKS = [
-  { level: 1, name: "Quiddje", minXp: 0, maxXp: 99 },
-  { level: 2, name: "Fischkopp", minXp: 100, maxXp: 299 },
-  { level: 3, name: "Hamburger Jung / Deern", minXp: 300, maxXp: 599 },
-  { level: 4, name: "Elbkapitän", minXp: 600, maxXp: 999 },
-  { level: 5, name: "Hamburg-Experte", minXp: 1000, maxXp: Infinity }
+  { level: 1, name: "Quiddje", minXp: 0, maxXp: 249 },
+  { level: 2, name: "Fischkopp", minXp: 250, maxXp: 749 },
+  { level: 3, name: "Hamburger Jung / Deern", minXp: 750, maxXp: 1499 },
+  { level: 4, name: "Elbkapitän", minXp: 1500, maxXp: 2499 },
+  { level: 5, name: "Hamburg-Experte", minXp: 2500, maxXp: Infinity }
 ];
+
+const ROUND_TIME_LIMIT = 600; // 10 minutes for all timed game modes
+
+function buildTrophyCatalog() {
+  const specials = [
+    { id: 'neuwerk_island', name: 'Neuwerk-Insulaner', icon: '🏝️', desc: 'Klicke auf das Neuwerk-Rätsel oben rechts auf der Karte.' },
+    { id: 'paradise_explorer', name: 'Entdecker des Paradieses!', icon: '🌴', desc: 'Tippe „Groß Flottbek“ zum ersten Mal richtig – in einem beliebigen Modus.' },
+    { id: 'meister_alle_stadtteile', name: 'König von Hamburg', icon: '👑', desc: 'Benenne alle Stadtteile in „Nenne alle Orte“.' },
+    { id: 'meister_alle_bezirke', name: 'Bezirks-Kapitän', icon: '🏛️', desc: 'Benenne alle sieben Bezirke in der Challenge.' }
+  ];
+  const bezirkTrophiesFixed = BEZIRKE_PROGRESSION.map(bz => {
+    const cssKey = {
+      Altona: 'altona', Bergedorf: 'bergedorf', 'Eimsbüttel': 'eimsbuettel',
+      'Hamburg-Mitte': 'hamburg-mitte', 'Hamburg-Nord': 'hamburg-nord',
+      Harburg: 'harburg', Wandsbek: 'wandsbek'
+    }[bz.name] || bz.name.toLowerCase();
+    return {
+      id: `master_${cssKey}`,
+      name: `${bz.name}-Entdecker`,
+      icon: '🏆',
+      desc: `Meistere alle Stadtteile im Bezirk ${bz.name}.`
+    };
+  });
+  return [...specials, ...bezirkTrophiesFixed];
+}
+
+const TROPHY_CATALOG = buildTrophyCatalog();
 
 // Bezirke unlock progression order (first unlocked: Altona, last: Bergedorf)
 const BEZIRKE_PROGRESSION = [
@@ -485,10 +512,13 @@ class HamburgGame {
     this.currentTarget = null; 
     this.currentChoices = [];
     this.achievements = new Set();
+    this.trophies = new Set();
     this.activeSelectPath = null;
     
     // --- SPORCLE ROUND STATES ---
     this.inRound = false;
+    this.roundTimeLeft = ROUND_TIME_LIMIT;
+    this.roundStartedAt = null;
     this.roundQuestions = [];
     this.roundIndex = 0;
     this.roundCorrect = 0;
@@ -503,7 +533,7 @@ class HamburgGame {
     
     // --- NAME_ALL (Sporcle Countdown Challenge) States ---
     this.timerInterval = null;
-    this.nameAllTimeLeft = 600; // 10 minutes in seconds
+    this.nameAllTimeLeft = ROUND_TIME_LIMIT;
     this.nameAllFound = new Set();
     this.nameAllIsActive = false;
     this.nameAllActiveBezirke = [];
@@ -638,7 +668,7 @@ class HamburgGame {
           if (btnBz) btnBz.classList.remove('active');
         }
         this.selectNeighbourhoodByName("Neuwerk");
-        this.unlockAchievement("island_finder", "Insulaner 🏝️", "Finde die Insel Neuwerk in der Nordsee.");
+        this.unlockTrophy("neuwerk_island", "Neuwerk-Insulaner 🏝️", "Du hast das Neuwerk-Rätsel gelöst.");
       });
     }
 
@@ -684,12 +714,21 @@ class HamburgGame {
     this.currentMode = savedMode === 'BEZIRK_MATCH' ? 'EXPLORER' : savedMode;
     this.activeSegment = localStorage.getItem('hh_segment') || 'STADTTEILE';
     
-    // Discovered achievements
-    const achs = localStorage.getItem('hh_achievements');
-    if (achs) {
+    // Trophies (Pokale) — migrate legacy achievement IDs
+    const savedTrophies = localStorage.getItem('hh_trophies');
+    const legacyAchs = localStorage.getItem('hh_achievements');
+    const trophyIds = savedTrophies || legacyAchs;
+    if (trophyIds) {
       try {
-        JSON.parse(achs).forEach(a => this.achievements.add(a));
-      } catch(e) {}
+        JSON.parse(trophyIds).forEach(id => {
+          this.trophies.add(id);
+          this.achievements.add(id);
+        });
+      } catch (e) {}
+    }
+    // Legacy island_finder → neuwerk_island
+    if (this.trophies.has('island_finder')) {
+      this.trophies.add('neuwerk_island');
     }
 
     // Load detailed Bezirk achievements
@@ -714,7 +753,8 @@ class HamburgGame {
     localStorage.setItem('hh_progression', this.progressionMode);
     localStorage.setItem('hh_mode', this.currentMode);
     localStorage.setItem('hh_segment', this.activeSegment);
-    localStorage.setItem('hh_achievements', JSON.stringify([...this.achievements]));
+    localStorage.setItem('hh_trophies', JSON.stringify([...this.trophies]));
+    localStorage.setItem('hh_achievements', JSON.stringify([...this.trophies]));
     
     BEZIRKE_PROGRESSION.forEach(bz => {
       localStorage.setItem(`hh_progress_${bz.name}`, JSON.stringify([...this.bezirkProgress[bz.name].solved]));
@@ -895,6 +935,23 @@ class HamburgGame {
       }
     }
     this.updateModeVisibility();
+    this.updateLocateModeLabel();
+  }
+
+  updateLocateModeLabel() {
+    const locateBtn = document.getElementById('mode-locate');
+    if (!locateBtn) return;
+    const labelRow = locateBtn.querySelector('div');
+    if (!labelRow) return;
+    const spans = labelRow.querySelectorAll('span');
+    if (spans[0]) {
+      spans[0].textContent = this.activeSegment === 'BEZIRKE' ? 'Bezirks-Detektiv' : 'Stadtteil-Detektiv';
+    }
+    if (spans[1]) {
+      spans[1].textContent = this.activeSegment === 'BEZIRKE'
+        ? 'Finde den Bezirk auf der Karte'
+        : 'Finde den Ort auf der Karte';
+    }
   }
 
   recordRoundProgress(stadtteilName, options = {}) {
@@ -989,11 +1046,64 @@ class HamburgGame {
     });
   }
 
-  unlockAchievement(id, title, desc) {
-    if (this.achievements.has(id)) return;
+  unlockTrophy(id, title, desc) {
+    if (this.trophies.has(id)) return;
+    this.trophies.add(id);
     this.achievements.add(id);
     this.saveState();
     this.showAchievementAlert(title, desc);
+  }
+
+  unlockAchievement(id, title, desc) {
+    this.unlockTrophy(id, title, desc);
+  }
+
+  checkParadiseTrophy(stadtteilName) {
+    if (stadtteilName === 'Groß Flottbek') {
+      this.unlockTrophy(
+        'paradise_explorer',
+        'Entdecker des Paradieses! 🌴',
+        'Du hast Groß Flottbek zum ersten Mal richtig erkannt.'
+      );
+    }
+  }
+
+  stopActiveTimer() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  }
+
+  updateRoundTimerDisplay() {
+    const display = document.getElementById('round-timer-display');
+    if (!display) return;
+    const minutes = Math.floor(this.roundTimeLeft / 60);
+    const seconds = this.roundTimeLeft % 60;
+    display.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    display.classList.toggle('timer-warning', this.roundTimeLeft <= 60);
+  }
+
+  startRoundTimer() {
+    this.stopActiveTimer();
+    this.roundTimeLeft = ROUND_TIME_LIMIT;
+    this.roundStartedAt = Date.now();
+    this.updateRoundTimerDisplay();
+    this.timerInterval = setInterval(() => {
+      this.roundTimeLeft--;
+      this.updateRoundTimerDisplay();
+      if (this.roundTimeLeft <= 0) {
+        this.stopActiveTimer();
+        if (this.inRound) this.finishRound({ timedOut: true });
+      }
+    }, 1000);
+  }
+
+  getRoundElapsedSeconds() {
+    if (this.roundStartedAt) {
+      return Math.min(ROUND_TIME_LIMIT, Math.round((Date.now() - this.roundStartedAt) / 1000));
+    }
+    return ROUND_TIME_LIMIT - this.roundTimeLeft;
   }
 
   showAchievementAlert(title, desc) {
@@ -1092,8 +1202,87 @@ class HamburgGame {
     localStorage.setItem('hh_game_history', JSON.stringify(history));
   }
 
-  getModeDisplayName(mode) {
+  getModeDisplayName(mode, segment) {
+    const seg = segment || this.activeSegment;
+    if (mode === 'LOCATE') {
+      return seg === 'BEZIRKE' ? 'Bezirks-Detektiv' : 'Stadtteil-Detektiv';
+    }
     return MODE_LABELS[mode] || mode;
+  }
+
+  formatDuration(seconds) {
+    const total = Math.max(0, Math.round(seconds));
+    const minutes = Math.floor(total / 60);
+    const secs = total % 60;
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  getRankProgressInfo() {
+    const currentRank = RANKS.find(r => r.level === this.level) || RANKS[0];
+    const nextRank = RANKS.find(r => r.level === this.level + 1);
+    let percent = 100;
+    if (nextRank) {
+      const span = nextRank.minXp - currentRank.minXp;
+      percent = span > 0 ? Math.min(100, ((this.xp - currentRank.minXp) / span) * 100) : 0;
+    }
+    return { currentRank, nextRank, percent };
+  }
+
+  renderRankLadderHtml() {
+    const { currentRank, nextRank, percent } = this.getRankProgressInfo();
+    const steps = RANKS.map(rank => {
+      let state = 'upcoming';
+      if (rank.level < this.level) state = 'passed';
+      else if (rank.level === this.level) state = 'current';
+      const xpHint = rank.level < RANKS.length
+        ? `${rank.minXp} XP`
+        : `${rank.minXp}+ XP`;
+      return `
+        <div class="rank-ladder-step rank-ladder-step--${state}">
+          <div class="rank-ladder-dot"></div>
+          <div class="rank-ladder-label">
+            <span class="rank-ladder-name">${rank.name}</span>
+            <span class="rank-ladder-xp">${xpHint}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const progressNote = nextRank
+      ? `${Math.round(percent)}% bis ${nextRank.name} (${nextRank.minXp} XP)`
+      : 'Höchster Rang erreicht';
+
+    return `
+      <div class="log-rank-section">
+        <h3 class="log-section-title">Dein Rang</h3>
+        <p class="log-rank-current"><strong>${currentRank.name}</strong> · ${this.xp} XP</p>
+        <div class="rank-ladder">${steps}</div>
+        <div class="rank-xp-bar"><div class="rank-xp-bar-fill" style="width:${percent}%"></div></div>
+        <p class="log-rank-progress-note">${progressNote}</p>
+        <p class="log-xp-hint">XP: Detektiv +15 · Quiz &amp; Namen eingeben +10 · „Nenne alle Orte“ +6 pro Treffer. Serie ab 3: ×1,5 · ab 5: ×2. Bezirke schaltest du separat über den Bezirks-Fortschritt frei.</p>
+      </div>
+    `;
+  }
+
+  renderTrophyGalleryHtml() {
+    const won = this.trophies.size;
+    const total = TROPHY_CATALOG.length;
+    const tiles = TROPHY_CATALOG.map(trophy => {
+      const earned = this.trophies.has(trophy.id);
+      return `
+        <div class="trophy-tile ${earned ? 'trophy-tile--earned' : 'trophy-tile--locked'}" title="${trophy.desc}">
+          <span class="trophy-icon">${trophy.icon}</span>
+          <span class="trophy-name">${trophy.name}</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="log-trophy-section">
+        <h3 class="log-section-title">Pokale (${won} / ${total})</h3>
+        <div class="trophy-gallery">${tiles}</div>
+      </div>
+    `;
   }
 
   showGameHistory() {
@@ -1103,7 +1292,7 @@ class HamburgGame {
 
     let listHtml;
     if (history.length === 0) {
-      listHtml = '<p style="font-size:0.85rem; color:var(--text-secondary);">Noch keine Spiele gespielt. Starte eine Runde!</p>';
+      listHtml = '<p class="log-empty-hint">Noch keine Spiele gespielt. Starte eine Runde!</p>';
     } else {
       listHtml = `<div class="game-history-list">${history.map(item => {
         const date = new Date(item.date);
@@ -1111,23 +1300,31 @@ class HamburgGame {
         const timeStr = date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
         const scoreColor = item.percent >= 75 ? 'var(--color-correct)' : 'var(--color-incorrect)';
         const districts = item.districts?.length ? item.districts.join(', ') : '—';
+        const durationHtml = item.durationSec != null
+          ? `<div class="gh-duration">⏱ ${this.formatDuration(item.durationSec)}</div>`
+          : '';
         return `
           <div class="game-history-item">
             <div class="gh-date">${dateStr} · ${timeStr}</div>
-            <div class="gh-mode">${this.getModeDisplayName(item.mode)}${item.segment === 'BEZIRKE' ? ' (Bezirke)' : ''}</div>
-            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:0.1rem;">${districts}</div>
+            <div class="gh-mode">${this.getModeDisplayName(item.mode, item.segment)}${item.segment === 'BEZIRKE' ? ' (Bezirke)' : ''}</div>
+            <div class="gh-districts">${districts}</div>
             <div class="gh-score" style="color:${scoreColor};">${item.correct} / ${item.total} (${item.percent}%)</div>
+            ${durationHtml}
           </div>
         `;
       }).join('')}</div>`;
     }
 
     modal.innerHTML = `
-      <div class="modal-content" style="max-width: 420px;">
-        <h2>📋 Spielverlauf</h2>
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem;">Deine letzten ${history.length > 0 ? history.length : ''} Spiele und Ergebnisse.</p>
-        ${listHtml}
-        <button class="primary-btn" id="btn-history-close" style="margin-top:1rem;">Schließen</button>
+      <div class="modal-content log-modal-content">
+        <h2>📋 Log</h2>
+        ${this.renderTrophyGalleryHtml()}
+        ${this.renderRankLadderHtml()}
+        <div class="log-history-section">
+          <h3 class="log-section-title">Spielverlauf</h3>
+          ${listHtml}
+        </div>
+        <button class="primary-btn" id="btn-history-close">Schließen</button>
       </div>
     `;
     document.body.appendChild(modal);
@@ -1682,6 +1879,7 @@ class HamburgGame {
           <h4 style="font-family: var(--font-display); font-weight:700; color: #fff;">Durchlauf starten</h4>
           <p style="font-size:0.82rem; color: var(--text-secondary);">
             Lerne fokussiert in geschlossenen Runden wie bei Sporcle. Richtige/falsche Antworten bleiben markiert!
+            <br><strong>Zeitlimit: 10 Minuten.</strong>
             ${this.progressionMode && !isBz ? '<br><strong style="color: var(--color-xp);">Schalte den nächsten Bezirk frei mit ≥75% im zuletzt freigeschalteten Bezirk!</strong>' : ''}
           </p>
           
@@ -1709,6 +1907,7 @@ class HamburgGame {
             <div class="prompt-sub" id="game-prompt-sub">Wähle deinen Bezirk...</div>
           </div>
           
+          <div class="timer-display" id="round-timer-display">10:00</div>
           <!-- Round Indicators -->
           <div style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.6rem; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; margin-bottom: 0.75rem;">
             <div id="round-questions-count" style="font-weight: 700; color: #fff;">Frage 0/0</div>
@@ -1796,6 +1995,7 @@ class HamburgGame {
     document.getElementById('round-setup-ui').style.display = 'none';
     document.getElementById('round-active-ui').style.display = 'flex';
     
+    this.startRoundTimer();
     this.nextRoundQuestion();
   }
 
@@ -1882,6 +2082,7 @@ class HamburgGame {
         answered.add(p.getAttribute('data-name'));
       }
     });
+    Object.keys(this.roundHistory).forEach(name => answered.add(name));
     return answered;
   }
 
@@ -1901,13 +2102,14 @@ class HamburgGame {
       }
     }
 
-    while (choices.size < 4 && pool.length > 0) {
+    const maxChoices = Math.min(4, pool.length + 1);
+    while (choices.size < maxChoices && pool.length > 0) {
       const pick = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
       choices.add(pick);
     }
 
     this.currentChoices = Array.from(choices).sort(() => Math.random() - 0.5);
-    const letters = ['A', 'B', 'C', 'D'];
+    const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
     this.currentChoices.forEach((choice, idx) => {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
@@ -2056,14 +2258,14 @@ class HamburgGame {
       document.getElementById('round-incorrect-count').textContent = this.roundIncorrect;
       this.revealMissedTarget(correctAnswer, isBz);
       if (input) {
+        input.style.pointerEvents = 'none';
         input.classList.add('input-shake');
-        setTimeout(() => input.classList.remove('input-shake'), 400);
-        input.select();
       }
-      const sub = document.getElementById('game-prompt-sub');
-      if (sub) {
-        sub.innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Nicht richtig — versuch es nochmal!</span>`;
-      }
+      document.getElementById('game-prompt-sub').innerHTML =
+        `<span style="color: var(--color-incorrect); font-weight:700;">Falsch! Richtig wäre: ${correctAnswer}</span>`;
+      this.roundHistory[correctAnswer] = { correct: false };
+      this.roundIndex++;
+      setTimeout(() => this.nextRoundQuestion(), 2400);
       return;
     }
 
@@ -2071,7 +2273,7 @@ class HamburgGame {
     this.sounds.init();
     this.roundCorrect++;
     this.incrementStreak();
-    const xp = this.addXp(15);
+    const xp = this.addXp(10);
     this.sounds.playCorrect();
 
     if (isBz) {
@@ -2084,6 +2286,7 @@ class HamburgGame {
       if (correctPath) correctPath.classList.add('round-correct');
       this.addMapTextLabel(correctAnswer, correctAnswer, 'correct');
       this.recordRoundProgress(correctAnswer);
+      this.checkParadiseTrophy(correctAnswer);
     }
 
     document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Richtig! +${xp} XP</span>`;
@@ -2121,7 +2324,7 @@ class HamburgGame {
     if (isCorrect) {
       this.roundCorrect++;
       this.incrementStreak();
-      const xp = this.addXp(15);
+      const xp = this.addXp(10);
       this.sounds.playCorrect();
 
       // Highlight map
@@ -2133,6 +2336,7 @@ class HamburgGame {
         if (correctPath) correctPath.classList.add('round-correct');
         this.addMapTextLabel(correctAnswer, correctAnswer, 'correct');
         this.recordRoundProgress(correctAnswer);
+        this.checkParadiseTrophy(correctAnswer);
       }
 
       document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Richtig! +${xp} XP</span>`;
@@ -2169,12 +2373,13 @@ class HamburgGame {
     if (isCorrect) {
       this.roundCorrect++;
       this.incrementStreak();
-      const xp = this.addXp(20); // Locate gives 20 XP
+      const xp = this.addXp(15);
       this.sounds.playCorrect();
 
       path.classList.add('round-correct');
       this.addMapTextLabel(name, name, 'correct');
       this.recordRoundProgress(name);
+      this.checkParadiseTrophy(name);
 
       document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Korrekt gefunden! +${xp} XP</span>`;
       
@@ -2212,7 +2417,7 @@ class HamburgGame {
     if (isCorrect) {
       this.roundCorrect++;
       this.incrementStreak();
-      const xp = this.addXp(20);
+      const xp = this.addXp(15);
       this.sounds.playCorrect();
 
       document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirkClicked}"]`).forEach(p => p.classList.add('round-correct'));
@@ -2315,7 +2520,11 @@ class HamburgGame {
   }
 
   // --- ROUND FINISHED SUMMARY ENGINE ---
-  finishRound() {
+  finishRound(options = {}) {
+    const { timedOut = false } = options;
+    if (!this.inRound) return;
+    this.stopActiveTimer();
+    const durationSec = this.getRoundElapsedSeconds();
     this.inRound = false;
     
     const total = this.roundQuestions.length;
@@ -2344,6 +2553,8 @@ class HamburgGame {
       <div style="display: flex; flex-direction: column; gap: 0.75rem; text-align: center; padding: 0.5rem;">
         <div style="font-size: 2.2rem;">🏁</div>
         <h3 style="font-family: var(--font-display); font-weight:700; color: #fff;">Runde beendet!</h3>
+        ${timedOut ? '<p style="font-size:0.85rem; color:var(--color-incorrect); font-weight:700;">⏱ Zeit abgelaufen (10 Minuten).</p>' : ''}
+        <p style="font-size:0.85rem; color:var(--text-secondary);">Spieldauer: <strong>${this.formatDuration(durationSec)}</strong></p>
         
         <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.75rem; display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top:0.4rem;">
           <div>
@@ -2375,7 +2586,8 @@ class HamburgGame {
       correct: this.roundCorrect,
       total,
       percent,
-      passed
+      passed,
+      durationSec
     });
 
     document.getElementById('btn-restart-round').onclick = () => {
@@ -2393,6 +2605,7 @@ class HamburgGame {
 
   // End active round immediately
   endRound(showUI = true) {
+    this.stopActiveTimer();
     this.inRound = false;
     this.resetMapClasses();
     this.clearMapTextLabels();
@@ -2404,7 +2617,7 @@ class HamburgGame {
   initNameAllMode(container) {
     this.nameAllFound.clear();
     this.nameAllIsActive = false;
-    this.nameAllTimeLeft = 600; // 10 minutes
+    this.nameAllTimeLeft = ROUND_TIME_LIMIT;
     const isBz = this.activeSegment === 'BEZIRKE';
     const placeLabel = isBz ? 'Bezirke' : 'Stadtteile';
     const pickerBezirke = isBz ? BEZIRKE_PROGRESSION.map(b => b.name) : this.getUnlockedBezirke();
@@ -2493,7 +2706,7 @@ class HamburgGame {
 
     this.nameAllFound.clear();
     this.nameAllIsActive = true;
-    this.nameAllTimeLeft = 600; // 10 minutes
+    this.nameAllTimeLeft = ROUND_TIME_LIMIT;
 
     document.getElementById('name-all-setup').style.display = 'none';
     document.getElementById('name-all-active').style.display = 'flex';
@@ -2523,7 +2736,7 @@ class HamburgGame {
     giveupBtn.onclick = () => this.stopNameAllChallenge(true); // surrender
 
     // Start Timer
-    if (this.timerInterval) clearInterval(this.timerInterval);
+    this.stopActiveTimer();
     this.timerInterval = setInterval(() => this.tickNameAll(), 1000);
   }
 
@@ -2537,7 +2750,10 @@ class HamburgGame {
     const formatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     
     const display = document.getElementById('timer-display');
-    if (display) display.textContent = formatted;
+    if (display) {
+      display.textContent = formatted;
+      display.classList.toggle('timer-warning', this.nameAllTimeLeft <= 60);
+    }
 
     if (this.nameAllTimeLeft <= 0) {
       this.stopNameAllChallenge(true); // time out
@@ -2558,7 +2774,7 @@ class HamburgGame {
     } else {
       btn.textContent = 'Weiter';
       if (input) input.disabled = true;
-      clearInterval(this.timerInterval);
+      this.stopActiveTimer();
     }
   }
 
@@ -2603,9 +2819,10 @@ class HamburgGame {
           this.addMapTextLabel(matchName, matchName, 'correct');
         }
         this.recordRoundProgress(matchName, { skipMapRefresh: true, skipStats: true });
+        this.checkParadiseTrophy(matchName);
       }
 
-      this.addXp(10, { quiet: true });
+      this.addXp(6, { quiet: true });
 
       document.getElementById('name-all-counter').textContent = `${this.nameAllFound.size} / ${totalCount}`;
 
@@ -2621,7 +2838,8 @@ class HamburgGame {
     this.nameAllIsActive = false;
     this.svg?.classList.remove('name-all-active');
     this.reorderMapLayers();
-    if (this.timerInterval) clearInterval(this.timerInterval);
+    const durationSec = ROUND_TIME_LIMIT - this.nameAllTimeLeft;
+    this.stopActiveTimer();
 
     const totalCount = this.getNameAllPool(this.nameAllActiveBezirke).length;
     const foundCount = this.nameAllFound.size;
@@ -2683,7 +2901,8 @@ class HamburgGame {
       correct: foundCount,
       total: totalCount,
       percent,
-      passed: !surrender && foundCount === totalCount
+      passed: !surrender && foundCount === totalCount,
+      durationSec
     });
 
     const container = document.getElementById('game-play-area');
@@ -2695,6 +2914,7 @@ class HamburgGame {
         <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.25rem;">
           ${surrender ? 'Du hast aufgegeben oder die Zeit ist abgelaufen. Alle fehlenden Orte leuchten rot auf der Karte.' : 'Unglaublich! Du hast JEDEN EINZELNEN Stadtteil gefunden!'}
         </p>
+        <p style="font-size:0.85rem; color:var(--text-secondary);">Spieldauer: <strong>${this.formatDuration(durationSec)}</strong></p>
 
         <div style="background: rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem; display:grid; grid-template-columns:1fr 1fr; gap:0.5rem;">
           <div>
