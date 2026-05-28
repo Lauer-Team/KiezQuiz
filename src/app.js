@@ -14,6 +14,17 @@ const RANKS = [
 
 const ROUND_TIME_LIMIT = 600; // 10 minutes for all timed game modes
 
+// Bezirke unlock progression order (first unlocked: Altona, last: Bergedorf)
+const BEZIRKE_PROGRESSION = [
+  { name: "Altona", xpNeeded: 0 },
+  { name: "Eimsbüttel", xpNeeded: 50 },
+  { name: "Hamburg-Nord", xpNeeded: 150 },
+  { name: "Wandsbek", xpNeeded: 300 },
+  { name: "Hamburg-Mitte", xpNeeded: 500 },
+  { name: "Harburg", xpNeeded: 750 },
+  { name: "Bergedorf", xpNeeded: 1000 }
+];
+
 function buildTrophyCatalog() {
   const specials = [
     { id: 'neuwerk_island', name: 'Neuwerk-Insulaner', icon: '🏝️', desc: 'Klicke auf das Neuwerk-Rätsel oben rechts auf der Karte.' },
@@ -38,17 +49,6 @@ function buildTrophyCatalog() {
 }
 
 const TROPHY_CATALOG = buildTrophyCatalog();
-
-// Bezirke unlock progression order (first unlocked: Altona, last: Bergedorf)
-const BEZIRKE_PROGRESSION = [
-  { name: "Altona", xpNeeded: 0 },
-  { name: "Eimsbüttel", xpNeeded: 50 },
-  { name: "Hamburg-Nord", xpNeeded: 150 },
-  { name: "Wandsbek", xpNeeded: 300 },
-  { name: "Hamburg-Mitte", xpNeeded: 500 },
-  { name: "Harburg", xpNeeded: 750 },
-  { name: "Bergedorf", xpNeeded: 1000 }
-];
 
 // Modes hidden in Bezirke segment (none — NAME_ALL available in both segments)
 const BEZIRKE_SEGMENT_HIDDEN_MODES = [];
