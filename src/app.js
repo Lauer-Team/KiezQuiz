@@ -23,6 +23,9 @@ const BEZIRKE_PROGRESSION = [
   { name: "Hamburg-Mitte", xpNeeded: 1000 }
 ];
 
+// Modes only available when learning Stadtteile (not Bezirke segment)
+const BEZIRKE_SEGMENT_HIDDEN_MODES = ['BEZIRK_MATCH', 'NAME_ALL'];
+
 // Hardcoded interesting trivia generator for districts and major neighbourhoods
 const TRIVIA_TEMPLATES = {
   "Altona": [
@@ -178,6 +181,7 @@ class MapNavigator {
     this.panX = 0;
     this.panY = 0;
     this.isDragging = false;
+    this.didDrag = false;
     this.startX = 0;
     this.startY = 0;
     
@@ -186,11 +190,12 @@ class MapNavigator {
   }
 
   setupListeners() {
-    // Mouse Dragging for Panning
+    // Mouse Dragging for Panning (not on district paths — those are for clicks)
     this.container.addEventListener('mousedown', (e) => {
-      // Only drag if left click on empty map area or paths
       if (e.button !== 0) return;
+      if (e.target.closest('.stadtteil-path')) return;
       this.isDragging = true;
+      this.didDrag = false;
       this.svg.classList.remove('smooth-transition'); // Disable transition for 1:1 real-time drag
       this.container.style.cursor = 'grabbing';
       this.startX = e.clientX - this.panX;
@@ -200,6 +205,7 @@ class MapNavigator {
 
     window.addEventListener('mousemove', (e) => {
       if (!this.isDragging) return;
+      this.didDrag = true;
       this.panX = e.clientX - this.startX;
       this.panY = e.clientY - this.startY;
       this.updateTransform();
@@ -323,6 +329,8 @@ class HamburgGame {
     
     // --- TYPE_NAME Autocomplete index ---
     this.autocompleteIndex = -1;
+    this.nameAllInputTimer = null;
+    this._alertStyleInjected = false;
     
     // --- NAME_ALL (Sporcle Countdown Challenge) States ---
     this.timerInterval = null;
@@ -347,20 +355,36 @@ class HamburgGame {
     
     // Segment selectors binding
     this.setupSegmentSelectors();
-    
-    // Set active mode UI
-    this.setMode(this.currentMode);
+    if (!this.isModeAllowedForSegment(this.currentMode)) {
+      this.currentMode = 'EXPLORER';
+    }
+    this.applySegmentUI();
+    this.setMode(this.resolveModeForCurrentSegment(this.currentMode));
     
     // Initial map unlock updates
     this.updateMapStates();
     
     // Play sound on first click to unlock context
     document.addEventListener('click', () => this.sounds.init(), { once: true });
+
+    // A–D shortcuts for Karten-Quiz / Bezirk-zuordnen
+    document.addEventListener('keydown', (e) => this.handleQuizKeydown(e));
     
     // Check if onboarding is needed
     if (this.xp === 0) {
       this.showOnboarding(true);
     }
+  }
+
+  switchSegment(segment) {
+    if (this.activeSegment === segment) return;
+    this.activeSegment = segment;
+    this.saveState();
+    this.applySegmentUI();
+    this.resetMapClasses();
+    this.clearMapTextLabels();
+    this.updateMapStates();
+    this.setMode(this.resolveModeForCurrentSegment(this.currentMode));
   }
 
   setupSegmentSelectors() {
@@ -373,16 +397,7 @@ class HamburgGame {
           this.endRound(false);
           this.stopNameAllChallenge(false);
         }
-        btnSt.classList.add('active');
-        btnBz.classList.remove('active');
-        this.activeSegment = 'STADTTEILE';
-        
-        // Hide districts lock container if needed, show progression
-        const lockCard = document.getElementById('unlocker-card-container');
-        if (lockCard) lockCard.style.display = 'block';
-
-        this.setMode(this.currentMode);
-        this.updateMapStates();
+        this.switchSegment('STADTTEILE');
       });
 
       btnBz.addEventListener('click', () => {
@@ -391,16 +406,7 @@ class HamburgGame {
           this.endRound(false);
           this.stopNameAllChallenge(false);
         }
-        btnBz.classList.add('active');
-        btnSt.classList.remove('active');
-        this.activeSegment = 'BEZIRKE';
-        
-        // Districts have no locked progression themselves, hide progress panel
-        const lockCard = document.getElementById('unlocker-card-container');
-        if (lockCard) lockCard.style.display = 'none';
-
-        this.setMode(this.currentMode);
-        this.updateMapStates();
+        this.switchSegment('BEZIRKE');
       });
     }
   }
@@ -525,7 +531,8 @@ class HamburgGame {
   }
 
   // Award XP to player and handle leveling up
-  addXp(amount) {
+  addXp(amount, options = {}) {
+    const { quiet = false } = options;
     const gained = amount * (this.streak >= 5 ? 2 : (this.streak >= 3 ? 1.5 : 1));
     const roundedGained = Math.round(gained);
     this.xp += roundedGained;
@@ -538,11 +545,11 @@ class HamburgGame {
     if (newLvl > this.level) {
       this.level = newLvl;
       this.sounds.playLevelUp();
-      this.showLevelUpModal(newLvl);
+      if (!quiet) this.showLevelUpModal(newLvl);
     }
     
     this.saveState();
-    this.renderStats();
+    if (!quiet) this.renderStats();
     return roundedGained;
   }
 
@@ -573,6 +580,92 @@ class HamburgGame {
     const info = HAMBURG_DATA.find(d => d.name === name);
     if (!info) return false;
     return this.getUnlockedBezirke().includes(info.bezirk);
+  }
+
+  getPathByNeighbourhoodName(name) {
+    if (!name || !this.svg) return null;
+    return this.svg.querySelector(
+      `.stadtteil-path[data-name="${CSS.escape(name)}"]`
+    );
+  }
+
+  markStadtteilSolved(name) {
+    const info = HAMBURG_DATA.find(d => d.name === name);
+    if (!info || info.is_island) return;
+    const progress = this.bezirkProgress[info.bezirk];
+    if (!progress) return;
+    progress.solved.add(name);
+    this.saveState();
+  }
+
+  getBezirkCssKey(bezirkName) {
+    const map = {
+      Altona: 'altona',
+      Bergedorf: 'bergedorf',
+      'Eimsbüttel': 'eimsbuettel',
+      'Hamburg-Mitte': 'hamburg-mitte',
+      'Hamburg-Nord': 'hamburg-nord',
+      Harburg: 'harburg',
+      Wandsbek: 'wandsbek'
+    };
+    return map[bezirkName] || bezirkName.toLowerCase().replace(/\s+/g, '-');
+  }
+
+  isModeAllowedForSegment(mode) {
+    if (this.activeSegment === 'BEZIRKE') {
+      return !BEZIRKE_SEGMENT_HIDDEN_MODES.includes(mode);
+    }
+    return true;
+  }
+
+  resolveModeForCurrentSegment(mode = this.currentMode) {
+    return this.isModeAllowedForSegment(mode) ? mode : 'EXPLORER';
+  }
+
+  updateModeVisibility() {
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      const mode = btn.dataset.mode;
+      if (this.activeSegment === 'BEZIRKE' && BEZIRKE_SEGMENT_HIDDEN_MODES.includes(mode)) {
+        btn.style.display = 'none';
+      } else {
+        btn.style.display = '';
+      }
+    });
+  }
+
+  applySegmentUI() {
+    const btnSt = document.getElementById('btn-segment-stadtteile');
+    const btnBz = document.getElementById('btn-segment-bezirke');
+    const lockCard = document.getElementById('unlocker-card-container');
+    if (btnSt && btnBz) {
+      if (this.activeSegment === 'BEZIRKE') {
+        btnBz.classList.add('active');
+        btnSt.classList.remove('active');
+        if (lockCard) lockCard.style.display = 'none';
+      } else {
+        btnSt.classList.add('active');
+        btnBz.classList.remove('active');
+        if (lockCard) lockCard.style.display = 'block';
+      }
+    }
+    this.updateModeVisibility();
+  }
+
+  recordRoundProgress(stadtteilName, options = {}) {
+    if (!stadtteilName) return;
+    const { skipMapRefresh = false, skipStats = false } = options;
+    this.markStadtteilSolved(stadtteilName);
+    if (!skipMapRefresh) this.updateMapStates();
+    if (!skipStats) this.renderStats();
+  }
+
+  nextQuestion() {
+    const playArea = document.getElementById('game-play-area');
+    if (!playArea || this.inRound || this.nameAllIsActive) return;
+    const mode = this.resolveModeForCurrentSegment(this.currentMode);
+    if (mode === 'EXPLORER') this.initExplorerMode(playArea);
+    else if (mode === 'NAME_ALL') this.initNameAllMode(playArea);
+    else this.initGameMode(playArea);
   }
 
   // Render score, progress-fill, XP etc.
@@ -628,11 +721,10 @@ class HamburgGame {
         row.classList.add('active-unlock');
       }
       
-      // Determine neon class color label
-      const lowerBz = bz.name.toLowerCase().replace('-', '');
+      const cssKey = this.getBezirkCssKey(bz.name);
       
       row.innerHTML = `
-        <div class="dp-indicator" style="background: var(--color-${lowerBz}); box-shadow: 0 0 6px var(--color-${lowerBz});"></div>
+        <div class="dp-indicator" style="background: var(--color-${cssKey}); box-shadow: 0 0 6px var(--color-${cssKey});"></div>
         <div class="dp-name">${bz.name}</div>
         ${isUnlocked ? 
           `<div class="dp-score">${solvedInDistrict}/${totalInDistrict} (${percent}%)</div>` : 
@@ -644,7 +736,7 @@ class HamburgGame {
       
       // Award special District Completion achievements
       if (solvedInDistrict === totalInDistrict && totalInDistrict > 0) {
-        this.unlockAchievement(`master_${lowerBz}`, `${bz.name}-Entdecker 🏆`, `Meistere alle Stadtteile im Bezirk ${bz.name}.`);
+        this.unlockAchievement(`master_${cssKey}`, `${bz.name}-Entdecker 🏆`, `Meistere alle Stadtteile im Bezirk ${bz.name}.`);
       }
     });
   }
@@ -688,20 +780,22 @@ class HamburgGame {
     
     document.body.appendChild(alertBox);
     
-    // Style injection for achievements slide in
-    const style = document.createElement('style');
-    style.id = 'alert-style';
-    style.innerHTML = `
-      @keyframes alertSlideIn {
-        from { transform: translateY(100px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-      }
-      @keyframes alertSlideOut {
-        from { transform: translateY(0); opacity: 1; }
-        to { transform: translateY(100px); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
+    if (!this._alertStyleInjected) {
+      const style = document.createElement('style');
+      style.id = 'alert-style';
+      style.innerHTML = `
+        @keyframes alertSlideIn {
+          from { transform: translateY(100px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes alertSlideOut {
+          from { transform: translateY(0); opacity: 1; }
+          to { transform: translateY(100px); opacity: 0; }
+        }
+      `;
+      document.head.appendChild(style);
+      this._alertStyleInjected = true;
+    }
 
     setTimeout(() => {
       alertBox.style.animation = 'alertSlideOut 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
@@ -795,6 +889,7 @@ class HamburgGame {
 
   // Mode Setter
   setMode(mode) {
+    mode = this.resolveModeForCurrentSegment(mode);
     this.currentMode = mode;
     this.saveState();
     
@@ -828,6 +923,8 @@ class HamburgGame {
     } else {
       this.initGameMode(playArea);
     }
+
+    this.updateModeVisibility();
   }
 
   // Update map visual styles based on current unlocked states and discoveries
@@ -837,7 +934,8 @@ class HamburgGame {
     document.querySelectorAll('.stadtteil-path').forEach(path => {
       const name = path.getAttribute('data-name');
       const bezirk = path.getAttribute('data-bezirk');
-      
+      path.style.pointerEvents = '';
+
       const isUnlocked = unlockedBezirke.includes(bezirk);
       
       // Update unlocked borders
@@ -862,8 +960,39 @@ class HamburgGame {
   resetMapClasses() {
     document.querySelectorAll('.stadtteil-path').forEach(path => {
       path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect');
+      path.style.pointerEvents = '';
     });
     this.activeSelectPath = null;
+  }
+
+  /** On wrong map click: highlight only the correct target in red; wrong pick stays neutral */
+  revealMissedTarget(targetName, isBezirk = false) {
+    if (isBezirk) {
+      document.querySelectorAll(`.stadtteil-path[data-bezirk="${targetName}"]`).forEach(p => {
+        p.classList.add('round-incorrect');
+      });
+      this.addMapTextLabel(targetName, targetName, 'incorrect');
+    } else {
+      const path = this.getPathByNeighbourhoodName(targetName);
+      if (path) path.classList.add('round-incorrect');
+      this.addMapTextLabel(targetName, targetName, 'incorrect');
+    }
+  }
+
+  handleQuizKeydown(e) {
+    if (!this.inRound || !['QUIZ', 'BEZIRK_MATCH'].includes(this.currentMode)) return;
+    if (e.target.matches('input, textarea, select')) return;
+
+    const idx = { a: 0, b: 1, c: 2, d: 3 }[e.key.toLowerCase()];
+    if (idx === undefined || !this.currentChoices || idx >= this.currentChoices.length) return;
+
+    const buttons = document.querySelectorAll('#game-options-container .choice-btn');
+    const btn = buttons[idx];
+    if (!btn || btn.style.pointerEvents === 'none') return;
+
+    e.preventDefault();
+    this.sounds.init();
+    this.handleRoundAnswer(this.currentChoices[idx], btn);
   }
 
   // Initialize Map paths and binding event listeners
@@ -886,8 +1015,7 @@ class HamburgGame {
           }
         }
         
-        this.tooltip.style.left = `${e.clientX}px`;
-        this.tooltip.style.top = `${e.clientY}px`;
+        this.positionMapTooltip(e.clientX, e.clientY);
         this.tooltip.style.display = 'block';
       });
 
@@ -914,12 +1042,18 @@ class HamburgGame {
         }
       });
 
+      path.addEventListener('mousedown', () => {
+        if (this.mapNav) this.mapNav.didDrag = false;
+      });
+
       // Selection / Click logic
       path.addEventListener('click', (e) => {
+        if (this.mapNav && this.mapNav.didDrag) return;
         const name = path.getAttribute('data-name');
         const bezirk = path.getAttribute('data-bezirk');
         
         if (path.classList.contains('locked-path') && !this.nameAllIsActive) {
+          this.sounds.init();
           this.sounds.playIncorrect();
           return;
         }
@@ -930,15 +1064,34 @@ class HamburgGame {
           } else {
             this.selectNeighbourhood(path, name, bezirk);
           }
-        } else if (this.currentMode === 'LOCATE') {
+        } else if (this.inRound && this.currentMode === 'LOCATE') {
           if (this.activeSegment === 'BEZIRKE') {
             this.handleBezirkLocateClick(bezirk);
           } else {
             this.handleLocateClick(path, name, bezirk);
           }
+        } else if (this.inRound && this.currentMode === 'QUIZ') {
+          this.handleRoundAnswer(name, null);
+        } else if (this.inRound && this.currentMode === 'BEZIRK_MATCH') {
+          this.handleRoundAnswer(bezirk, null);
         }
       });
     });
+  }
+
+  positionMapTooltip(clientX, clientY) {
+    if (!this.tooltip) return;
+    const offsetX = 14;
+    const offsetY = 16;
+    const rect = this.tooltip.getBoundingClientRect();
+    const w = rect.width || 160;
+    const h = rect.height || 40;
+    let x = clientX + offsetX;
+    let y = clientY - h - offsetY;
+    x = Math.max(8, Math.min(x, window.innerWidth - w - 8));
+    y = Math.max(8, Math.min(y, window.innerHeight - h - 8));
+    this.tooltip.style.left = `${x}px`;
+    this.tooltip.style.top = `${y}px`;
   }
 
   // --- MODE: EXPLORER (ENTDECKER) ---
@@ -1149,20 +1302,40 @@ class HamburgGame {
             <!-- Options or text input will be injected here -->
           </div>
 
-          <button class="control-btn" id="btn-cancel-round" style="margin-top: 1rem; border-color: rgba(239,68,68,0.3); color: var(--color-incorrect); text-align:center; padding:0.4rem;">Runde Abbrechen</button>
+          <button class="control-btn" id="btn-cancel-round" style="margin-top: 1rem; border-color: rgba(239,68,68,0.3); color: var(--color-incorrect); text-align:center; padding:0.4rem;">Runde abbrechen</button>
         </div>
       </div>
     `;
 
-    document.getElementById('btn-start-round').addEventListener('click', () => {
+    const startBtn = document.getElementById('btn-start-round');
+    startBtn.addEventListener('click', () => {
       const selectBz = document.getElementById('select-round-district');
       const bzChoice = selectBz ? selectBz.value : 'Eimsbüttel';
       this.startRound(bzChoice);
+    });
+
+    // Auto-start so map clicks work immediately (no extra "Runde starten" step)
+    requestAnimationFrame(() => {
+      if (this.currentMode !== 'EXPLORER' && this.currentMode !== 'NAME_ALL' && !this.inRound) {
+        const selectBz = document.getElementById('select-round-district');
+        const bzChoice = selectBz
+          ? (this.roundDistrict || selectBz.value)
+          : (this.roundDistrict || 'Eimsbüttel');
+        if (selectBz && this.roundDistrict) selectBz.value = this.roundDistrict;
+        this.startRound(bzChoice);
+      }
     });
   }
 
   // --- SPORCLE ROUND CONTROL FUNCTIONS ---
   startRound(districtSelection) {
+    if (this.inRound) return;
+
+    if (!document.getElementById('round-setup-ui')) {
+      const playArea = document.getElementById('game-play-area');
+      if (playArea) this.initGameMode(playArea);
+    }
+
     this.sounds.init();
     this.resetMapClasses();
     this.clearMapTextLabels();
@@ -1267,23 +1440,15 @@ class HamburgGame {
     }
     else if (this.currentMode === 'TYPE_NAME') {
       promptTitle.textContent = isBz ? "Bezirk benennen" : "Stadtteil benennen";
-      promptTarget.innerHTML = isBz ? "❔ Blinkender Bezirk ❔" : "❔ Blinkender Stadtteil ❔";
+      promptTarget.textContent = isBz ? "Welcher Bezirk auf der Karte?" : "Welcher Stadtteil auf der Karte?";
       promptTarget.classList.remove('highlight');
-      promptSub.textContent = "Tippe den Namen ein und drücke Enter!";
-
-      // Blink target path
-      if (isBz) {
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.add('blink'));
-      } else {
-        const targetPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
-        if (targetPath) targetPath.classList.add('blink');
-      }
+      promptSub.textContent = "Tippe den Namen ein und drücke Enter. Die Karte bleibt neutral, bis du richtig liegst.";
 
       this.generateTypingField(optionsContainer);
     }
 
     // Bind Cancel round button
-    document.getElementById('btn-cancel-round').onclick = () => this.endRound(false);
+    document.getElementById('btn-cancel-round').onclick = () => this.endRound(true);
   }
 
   // Generate MC Choices for QUIZ
@@ -1334,7 +1499,7 @@ class HamburgGame {
     });
   }
 
-  // Generate typing guess field with suggestions dropdown
+  // Generate typing guess field (no name suggestions — pure recall)
   generateTypingField(container) {
     const wrapper = document.createElement('div');
     wrapper.className = 'autocomplete-container';
@@ -1346,19 +1511,17 @@ class HamburgGame {
     input.id = 'type-name-input';
     input.setAttribute('autocomplete', 'off');
     
-    const dropdown = document.createElement('div');
-    dropdown.className = 'autocomplete-dropdown';
-    dropdown.id = 'autocomplete-suggestions';
-    
     wrapper.appendChild(input);
-    wrapper.appendChild(dropdown);
     container.appendChild(wrapper);
 
     input.focus();
 
-    // Key listeners for Autocomplete list
-    input.addEventListener('input', () => this.handleAutocompleteInput(input, dropdown));
-    input.addEventListener('keydown', (e) => this.handleAutocompleteKeys(e, input, dropdown));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        this.submitTypingGuess(input.value.trim());
+      }
+    });
   }
 
   handleAutocompleteInput(input, dropdown) {
@@ -1449,88 +1612,61 @@ class HamburgGame {
   }
 
   submitTypingGuess(typedValue) {
+    if (!typedValue || !this.currentTarget) return;
+
     const correctAnswer = this.currentTarget.name;
-    
-    // Fuzzy matching helpers
     const cleanStr = str => str.toLowerCase().replace(/[^a-z0-9äöüß]/g, '');
     const isCorrect = cleanStr(typedValue) === cleanStr(correctAnswer);
-    
     const input = document.getElementById('type-name-input');
-    if (input) input.style.pointerEvents = 'none';
-
-    // Disable target blink
     const isBz = this.activeSegment === 'BEZIRKE';
+
+    if (!isCorrect) {
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+      return;
+    }
+
+    if (input) input.style.pointerEvents = 'none';
+    this.sounds.init();
+    this.roundCorrect++;
+    this.incrementStreak();
+    const xp = this.addXp(15);
+    this.sounds.playCorrect();
+
     if (isBz) {
-      document.querySelectorAll(`.stadtteil-path[data-bezirk="${correctAnswer}"]`).forEach(p => p.classList.remove('blink'));
+      document.querySelectorAll(`.stadtteil-path[data-bezirk="${correctAnswer}"]`).forEach(p => {
+        p.classList.add('round-correct');
+      });
+      this.addMapTextLabel(correctAnswer, correctAnswer, 'correct');
     } else {
-      const targetPath = this.getPathByNeighbourhoodName(correctAnswer);
-      if (targetPath) targetPath.classList.remove('blink');
+      const correctPath = this.getPathByNeighbourhoodName(correctAnswer);
+      if (correctPath) correctPath.classList.add('round-correct');
+      this.addMapTextLabel(correctAnswer, correctAnswer, 'correct');
+      this.recordRoundProgress(correctAnswer);
     }
 
-    if (isCorrect) {
-      this.roundCorrect++;
-      this.incrementStreak();
-      const xp = this.addXp(15);
-      this.sounds.playCorrect();
+    document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Richtig! +${xp} XP</span>`;
 
-      // Permanent color on map
-      if (isBz) {
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${correctAnswer}"]`).forEach(p => {
-          p.classList.add('round-correct');
-        });
-        this.addMapTextLabel(correctAnswer, correctAnswer);
-      } else {
-        const correctPath = this.getPathByNeighbourhoodName(correctAnswer);
-        if (correctPath) correctPath.classList.add('round-correct');
-        this.addMapTextLabel(correctAnswer, correctAnswer);
-      }
-
-      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Richtig! +${xp} XP</span>`;
-      
-      this.roundIndex++;
-      setTimeout(() => this.nextRoundQuestion(), 1200);
-    } else {
-      this.roundIncorrect++;
-      this.resetStreak();
-      this.sounds.playIncorrect();
-
-      // Show red clicked (if matching something valid)
-      if (isBz) {
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${correctAnswer}"]`).forEach(p => {
-          p.classList.add('round-correct');
-        });
-        this.addMapTextLabel(correctAnswer, correctAnswer);
-      } else {
-        const correctPath = this.getPathByNeighbourhoodName(correctAnswer);
-        if (correctPath) correctPath.classList.add('round-correct');
-        this.addMapTextLabel(correctAnswer, correctAnswer);
-        
-        // Mark wrong typed stadtteil red if valid
-        const typedPath = this.getPathByNeighbourhoodName(typedValue);
-        if (typedPath) {
-          typedPath.classList.add('round-incorrect');
-          this.addMapTextLabel(typedValue, typedValue);
-        }
-      }
-
-      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Falsch! Es war: ${correctAnswer}</span>`;
-      
-      this.roundIndex++;
-      setTimeout(() => this.nextRoundQuestion(), 2400);
-    }
+    this.roundIndex++;
+    setTimeout(() => this.nextRoundQuestion(), 1200);
   }
 
-  // Answer handler for MCQ
+  // Answer handler for MCQ (and map clicks in QUIZ / BEZIRK_MATCH)
   handleRoundAnswer(selectedAnswer, chosenBtn) {
+    if (!this.inRound || !this.currentTarget) return;
+    this.sounds.init();
+
     const correctAnswer = this.currentMode === 'BEZIRK_MATCH' ? this.currentTarget.bezirk : this.currentTarget.name;
     const isCorrect = selectedAnswer === correctAnswer;
 
-    // Disable all options
     document.querySelectorAll('.choice-btn').forEach(btn => {
       btn.style.pointerEvents = 'none';
-      const textSpan = btn.querySelector('span').textContent;
-      if (textSpan === correctAnswer) btn.classList.add('correct');
+      const textSpan = btn.querySelector('span');
+      if (textSpan && textSpan.textContent === correctAnswer) btn.classList.add('correct');
     });
+    if (chosenBtn) chosenBtn.style.pointerEvents = 'none';
 
     const isBz = this.activeSegment === 'BEZIRKE';
     
@@ -1553,14 +1689,20 @@ class HamburgGame {
         // District matched correctly
         const correctPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
         if (correctPath) correctPath.classList.add('round-correct');
-        this.addMapTextLabel(this.currentTarget.name, this.currentTarget.name);
+        this.addMapTextLabel(this.currentTarget.name, this.currentTarget.name, 'correct');
       } else if (isBz) {
         document.querySelectorAll(`.stadtteil-path[data-bezirk="${correctAnswer}"]`).forEach(p => p.classList.add('round-correct'));
-        this.addMapTextLabel(correctAnswer, correctAnswer);
+        this.addMapTextLabel(correctAnswer, correctAnswer, 'correct');
       } else {
         const correctPath = this.getPathByNeighbourhoodName(correctAnswer);
         if (correctPath) correctPath.classList.add('round-correct');
-        this.addMapTextLabel(correctAnswer, correctAnswer);
+        this.addMapTextLabel(correctAnswer, correctAnswer, 'correct');
+      }
+
+      if (this.currentMode === 'BEZIRK_MATCH') {
+        this.recordRoundProgress(this.currentTarget.name);
+      } else if (!isBz) {
+        this.recordRoundProgress(correctAnswer);
       }
 
       document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Richtig! +${xp} XP</span>`;
@@ -1572,34 +1714,15 @@ class HamburgGame {
       this.resetStreak();
       this.sounds.playIncorrect();
 
-      chosenBtn.classList.add('incorrect');
+      if (chosenBtn) chosenBtn.classList.add('incorrect');
 
-      // Map highlight revealing correct
       if (this.currentMode === 'BEZIRK_MATCH') {
-        const correctPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
-        if (correctPath) correctPath.classList.add('round-incorrect');
-        this.addMapTextLabel(this.currentTarget.name, `${this.currentTarget.name} (${correctAnswer})`);
-      } else if (isBz) {
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${correctAnswer}"]`).forEach(p => p.classList.add('round-correct'));
-        this.addMapTextLabel(correctAnswer, correctAnswer);
-
-        // Highlight clicked wrong bezirk red
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${selectedAnswer}"]`).forEach(p => p.classList.add('round-incorrect'));
-        this.addMapTextLabel(selectedAnswer, selectedAnswer);
+        this.revealMissedTarget(this.currentTarget.name, false);
       } else {
-        const correctPath = this.getPathByNeighbourhoodName(correctAnswer);
-        if (correctPath) correctPath.classList.add('round-correct');
-        this.addMapTextLabel(correctAnswer, correctAnswer);
-
-        // Highlight wrong click red
-        const wrongPath = this.getPathByNeighbourhoodName(selectedAnswer);
-        if (wrongPath) {
-          wrongPath.classList.add('round-incorrect');
-          this.addMapTextLabel(selectedAnswer, selectedAnswer);
-        }
+        this.revealMissedTarget(correctAnswer, isBz);
       }
 
-      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Falsch! Korrekt war ${correctAnswer}</span>`;
+      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Falsch! Richtig wäre: ${correctAnswer}</span>`;
       
       this.roundIndex++;
       setTimeout(() => this.nextRoundQuestion(), 2400);
@@ -1609,6 +1732,7 @@ class HamburgGame {
   // Answer handler for Locate click on map
   handleLocateClick(path, name, bezirk) {
     if (!this.inRound) return;
+    this.sounds.init();
     const isCorrect = name === this.currentTarget.name;
     
     // Disable map temporary clicks
@@ -1621,7 +1745,8 @@ class HamburgGame {
       this.sounds.playCorrect();
 
       path.classList.add('round-correct');
-      this.addMapTextLabel(name, name);
+      this.addMapTextLabel(name, name, 'correct');
+      this.recordRoundProgress(name);
 
       document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Korrekt gefunden! +${xp} XP</span>`;
       
@@ -1635,17 +1760,9 @@ class HamburgGame {
       this.resetStreak();
       this.sounds.playIncorrect();
 
-      path.classList.add('round-incorrect');
-      this.addMapTextLabel(name, name);
+      this.revealMissedTarget(this.currentTarget.name, false);
 
-      // Reveal correct in green
-      const correctPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
-      if (correctPath) {
-        correctPath.classList.add('round-correct');
-        this.addMapTextLabel(this.currentTarget.name, this.currentTarget.name);
-      }
-
-      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Nein, das war ${name}. ${this.currentTarget.name} leuchtet grün!</span>`;
+      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Falsch! Richtig wäre: ${this.currentTarget.name}</span>`;
       
       this.roundIndex++;
       setTimeout(() => {
@@ -1657,6 +1774,7 @@ class HamburgGame {
 
   handleBezirkLocateClick(bezirkClicked) {
     if (!this.inRound) return;
+    this.sounds.init();
     const isCorrect = bezirkClicked === this.currentTarget.name;
 
     document.querySelectorAll('.stadtteil-path').forEach(p => p.style.pointerEvents = 'none');
@@ -1668,7 +1786,7 @@ class HamburgGame {
       this.sounds.playCorrect();
 
       document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirkClicked}"]`).forEach(p => p.classList.add('round-correct'));
-      this.addMapTextLabel(bezirkClicked, bezirkClicked);
+      this.addMapTextLabel(bezirkClicked, bezirkClicked, 'correct');
 
       document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-correct); font-weight:700;">Bezirk korrekt! +${xp} XP</span>`;
       
@@ -1682,15 +1800,9 @@ class HamburgGame {
       this.resetStreak();
       this.sounds.playIncorrect();
 
-      // clicked red
-      document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirkClicked}"]`).forEach(p => p.classList.add('round-incorrect'));
-      this.addMapTextLabel(bezirkClicked, bezirkClicked);
+      this.revealMissedTarget(this.currentTarget.name, true);
 
-      // correct green
-      document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.add('round-correct'));
-      this.addMapTextLabel(this.currentTarget.name, this.currentTarget.name);
-
-      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Falsch! Das war ${bezirkClicked}. ${this.currentTarget.name} leuchtet grün!</span>`;
+      document.getElementById('game-prompt-sub').innerHTML = `<span style="color: var(--color-incorrect); font-weight:700;">Falsch! Richtig wäre: ${this.currentTarget.name}</span>`;
       
       this.roundIndex++;
       setTimeout(() => {
@@ -1700,51 +1812,69 @@ class HamburgGame {
     }
   }
 
-  // --- SVG LABEL OVERLAY SYSTEM ---
-  addMapTextLabel(stadtteilName, labelText) {
-    const path = this.getPathByNeighbourhoodName(stadtteilName);
-    if (!path) return;
+  getPathCentroid(path) {
+    if (!path) return { x: 300, y: 300 };
+    try {
+      const box = path.getBBox();
+      return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    } catch (e) {
+      return { x: 300, y: 300 };
+    }
+  }
 
-    // Remove existing if any
-    const existing = document.getElementById(`lbl-${stadtteilName.replace(/[^a-zA-Z0-9]/g, '')}`);
+  getBezirkCentroid(bezirkName) {
+    const paths = this.svg.querySelectorAll(
+      `.stadtteil-path[data-bezirk="${CSS.escape(bezirkName)}"]`
+    );
+    if (!paths.length) return { x: 300, y: 300 };
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    paths.forEach(path => {
+      try {
+        const box = path.getBBox();
+        minX = Math.min(minX, box.x);
+        minY = Math.min(minY, box.y);
+        maxX = Math.max(maxX, box.x + box.width);
+        maxY = Math.max(maxY, box.y + box.height);
+      } catch (e) { /* skip */ }
+    });
+    if (!Number.isFinite(minX)) return { x: 300, y: 300 };
+    return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+  }
+
+  labelIdForKey(key) {
+    return `lbl-${String(key).replace(/[^a-zA-Z0-9]/g, '')}`;
+  }
+
+  // --- SVG LABEL OVERLAY SYSTEM ---
+  addMapTextLabel(targetKey, labelText, variant = 'neutral') {
+    const labelGroup = document.getElementById('map-labels-group');
+    if (!labelGroup) return;
+
+    const id = this.labelIdForKey(targetKey);
+    const existing = document.getElementById(id);
     if (existing) existing.remove();
 
-    // Compute geographic center (centroid) roughly from bounding box
-    const rect = path.getBoundingClientRect();
-    const svgRect = this.svg.getBoundingClientRect();
-    
-    // We get center coords relative to the SVG ViewBox (viewBox="0 0 615 600")
-    // Centroid formula from path data string
-    const d = path.getAttribute('d');
-    const pts = d.replace(/[M Z]/g, '').split('L');
-    let sumX = 0, sumY = 0, count = 0;
-    
-    pts.forEach(p => {
-      const xy = p.trim().split(',');
-      if (xy.length === 2) {
-        const xVal = parseFloat(xy[0]);
-        const yVal = parseFloat(xy[1]);
-        if (!isNaN(xVal) && !isNaN(yVal)) {
-          sumX += xVal;
-          sumY += yVal;
-          count++;
-        }
-      }
-    });
-
-    const x = count > 0 ? sumX / count : 300;
-    const y = count > 0 ? sumY / count : 300;
-
-    const labelGroup = document.getElementById('map-labels-group');
-    if (labelGroup) {
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', x.toFixed(2));
-      text.setAttribute('y', y.toFixed(2));
-      text.setAttribute('class', 'map-text-label');
-      text.setAttribute('id', `lbl-${stadtteilName.replace(/[^a-zA-Z0-9]/g, '')}`);
-      text.textContent = labelText;
-      labelGroup.appendChild(text);
+    let centroid;
+    const path = this.getPathByNeighbourhoodName(targetKey);
+    if (path) {
+      centroid = this.getPathCentroid(path);
+    } else if (BEZIRKE_PROGRESSION.some(b => b.name === targetKey)) {
+      centroid = this.getBezirkCentroid(targetKey);
+    } else {
+      return;
     }
+
+    const shortLabel = labelText.length > 18 ? `${labelText.slice(0, 16)}…` : labelText;
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', centroid.x.toFixed(2));
+    text.setAttribute('y', centroid.y.toFixed(2));
+    text.setAttribute('class', `map-text-label label-${variant}`);
+    text.setAttribute('id', id);
+    text.textContent = shortLabel;
+    labelGroup.appendChild(text);
   }
 
   clearMapTextLabels() {
@@ -1806,7 +1936,7 @@ class HamburgGame {
       </div>
     `;
 
-    document.getElementById('btn-restart-round').onclick = () => this.startRound(this.roundDistrict);
+    document.getElementById('btn-restart-round').onclick = () => this.setMode(this.currentMode);
     document.getElementById('btn-exit-round').onclick = () => this.setMode(this.currentMode);
 
     this.renderStats();
@@ -1849,11 +1979,6 @@ class HamburgGame {
         </div>
 
         <input type="text" class="text-input-field" id="name-all-input" placeholder="Gib einen Namen ein..." autocomplete="off">
-        
-        <!-- Live grid of found names -->
-        <div class="found-names-container" id="found-names-list">
-          <span style="font-size:0.75rem; color:var(--text-muted); width:100%; text-align:center;">Noch keine gefunden...</span>
-        </div>
 
         <div style="display:flex; gap:0.4rem; margin-top:0.4rem;">
           <button class="control-btn" id="btn-pause-nameall" style="flex:1; padding:0.4rem; text-align:center;">Pause</button>
@@ -1893,8 +2018,10 @@ class HamburgGame {
     input.value = '';
     input.focus();
 
-    // Autocheck input on typing
-    input.addEventListener('input', () => this.checkNameAllInput(input, totalCount));
+    input.addEventListener('input', () => {
+      clearTimeout(this.nameAllInputTimer);
+      this.nameAllInputTimer = setTimeout(() => this.checkNameAllInput(input, totalCount), 150);
+    });
 
     // Bind Controls
     const pauseBtn = document.getElementById('btn-pause-nameall');
@@ -1962,23 +2089,11 @@ class HamburgGame {
       const correctPath = this.getPathByNeighbourhoodName(match.name);
       if (correctPath) {
         correctPath.classList.add('round-correct');
-        this.addMapTextLabel(match.name, match.name);
+        this.addMapTextLabel(match.name, match.name, 'correct');
       }
 
-      // Add tag to display list
-      const list = document.getElementById('found-names-list');
-      if (list) {
-        if (this.nameAllFound.size === 1) list.innerHTML = ''; // Clear placeholder
-        
-        const tag = document.createElement('span');
-        tag.className = 'found-name-tag';
-        tag.textContent = match.name;
-        list.appendChild(tag);
-        list.scrollTop = list.scrollHeight; // Auto-scroll down
-      }
-
-      // Award XP
-      this.addXp(10); // 10 XP per found stadtteil
+      this.addXp(10, { quiet: true });
+      this.recordRoundProgress(match.name, { skipMapRefresh: true, skipStats: true });
 
       // Update counters
       document.getElementById('name-all-counter').textContent = `${this.nameAllFound.size} / ${totalCount}`;
@@ -2003,15 +2118,23 @@ class HamburgGame {
 
     // If surrender or timeout, reveal all missing in red and label them!
     if (surrender) {
-      HAMBURG_DATA.forEach(d => {
-        if (!d.is_island && !this.nameAllFound.has(d.name)) {
+      const missing = HAMBURG_DATA.filter(d => !d.is_island && !this.nameAllFound.has(d.name));
+      let idx = 0;
+      const revealBatch = () => {
+        const slice = missing.slice(idx, idx + 12);
+        slice.forEach(d => {
           const path = this.getPathByNeighbourhoodName(d.name);
           if (path) {
             path.classList.add('round-incorrect');
-            this.addMapTextLabel(d.name, d.name);
+            this.addMapTextLabel(d.name, d.name, 'incorrect');
           }
+        });
+        idx += 12;
+        if (idx < missing.length) {
+          requestAnimationFrame(revealBatch);
         }
-      });
+      };
+      requestAnimationFrame(revealBatch);
       this.sounds.playIncorrect();
     } else {
       this.sounds.playLevelUp();
@@ -2049,6 +2172,7 @@ class HamburgGame {
       this.setMode(this.currentMode);
     };
 
+    this.updateMapStates();
     this.renderStats();
     this.saveState();
   }

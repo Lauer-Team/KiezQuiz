@@ -330,6 +330,124 @@ body {
   }
 }
 
+/* Segment selector (Stadtteile / Bezirke) */
+.segment-selector {
+  display: flex;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.35rem;
+  gap: 0.3rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.segment-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+
+  &:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  &.active {
+    background: rgba(0, 162, 255, 0.15);
+    color: #fff;
+    border: 1px solid rgba(0, 162, 255, 0.3);
+    box-shadow: inset 0 0 10px rgba(0, 162, 255, 0.1);
+  }
+}
+
+/* Text input & autocomplete (game modes) */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(10, 15, 30, 0.95);
+  border: 1px solid var(--border-color-glow);
+  border-radius: var(--radius-md);
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+  margin-bottom: 5px;
+  display: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.autocomplete-item {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: var(--transition-fast);
+
+  &:hover,
+  &.active {
+    background: rgba(0, 162, 255, 0.15);
+    color: #fff;
+  }
+}
+
+.text-input-field {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  transition: var(--transition-fast);
+  outline: none;
+
+  &:focus {
+    border-color: rgba(0, 162, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 162, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+.round-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.round-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-neutral-glow);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
 /* Gameplay Interactive Section */
 .game-play-area {
   flex: 1;
@@ -623,25 +741,28 @@ body {
   }
 }
 
-/* Floating Tooltip */
+/* Floating Tooltip — fixed to viewport so it follows the cursor */
 .map-tooltip {
-  position: absolute;
+  position: fixed;
+  left: 0;
+  top: 0;
   pointer-events: none;
-  background: rgba(10, 15, 30, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(10, 15, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8rem;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: #fff;
-  z-index: 100;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
   display: none;
-  transform: translate(-50%, -100%);
-  margin-top: -10px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  transform: translate(12px, -100%);
+  margin-top: -8px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   white-space: nowrap;
+  max-width: min(280px, 90vw);
   
   .tooltip-bezirk {
     font-size: 0.65rem;
@@ -667,8 +788,76 @@ body {
 }
 
 /* Water styling (Elbe, Alster) */
-.water-group path {
-  pointer-events: none; /* click-through so user can click neighbourhoods behind it */
+.water-group {
+  pointer-events: none;
+}
+
+.water-group .water-fill {
+  fill: url(#water-body-gradient);
+  stroke: rgba(90, 180, 230, 0.35);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.water-group .water-channel {
+  fill: none;
+  stroke: rgba(55, 150, 210, 0.55);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.water-group .water-channel-glow {
+  fill: none;
+  stroke: rgba(40, 130, 200, 0.18);
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Sporcle round feedback on map */
+.stadtteil-path.round-correct {
+  fill: hsla(142, 70%, 42%, 0.55) !important;
+  stroke: var(--color-correct) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.45)) !important;
+}
+
+.stadtteil-path.round-incorrect {
+  fill: hsla(350, 85%, 55%, 0.5) !important;
+  stroke: var(--color-incorrect) !important;
+  stroke-width: 2px !important;
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4)) !important;
+}
+
+.stadtteil-path.bezirk-hover-highlight {
+  fill: rgba(0, 162, 255, 0.12) !important;
+  stroke: rgba(0, 200, 255, 0.65) !important;
+  stroke-width: 1.2px !important;
+}
+
+.map-text-label {
+  font-family: var(--font-sans);
+  font-size: 7px;
+  font-weight: 800;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  paint-order: stroke fill;
+  stroke: rgba(7, 10, 20, 0.92);
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+  fill: #fff;
+}
+
+.map-text-label.label-correct {
+  fill: #bbf7d0;
+  stroke: rgba(20, 80, 40, 0.95);
+}
+
+.map-text-label.label-incorrect {
+  fill: #fecaca;
+  stroke: rgba(100, 20, 30, 0.95);
 }
 
 /* SVG Path States */
@@ -743,12 +932,11 @@ body {
   animation: mapShake 0.4s ease-in-out;
 }
 
-/* Hidden locked paths (prevent interaction unless unlocked) */
+/* Locked paths: still receive clicks (handled in JS) so pan/drag does not steal focus */
 .stadtteil-path.locked-path {
   fill: rgba(0, 0, 0, 0.4);
   stroke: rgba(255, 255, 255, 0.02);
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 /* Floating Neuwerk Special Overlay box */
