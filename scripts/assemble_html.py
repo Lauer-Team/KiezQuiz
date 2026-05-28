@@ -311,12 +311,6 @@ def main():
       </div>
       
       <div class="stats-bar">
-        <!-- XP Pill -->
-        <div class="stat-pill xp-pill" title="Deine Erfahrungspunkte">
-          <span class="label">XP:</span>
-          <span class="value" id="stat-xp">0</span>
-        </div>
-        
         <!-- Streak Pill -->
         <div class="stat-pill streak-pill" title="Deine aktuelle Antwortserie">
           <div class="streak-info">
@@ -327,12 +321,17 @@ def main():
             <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
           </div>
         </div>
+
+        <!-- XP Pill -->
+        <div class="stat-pill xp-pill" title="Deine Erfahrungspunkte">
+          <span class="label">XP:</span>
+          <span class="value" id="stat-xp">0</span>
+        </div>
         
         <!-- Level & Rank tracker -->
         <div class="level-tracker">
           <div class="level-info">
             <span class="rank-name" id="stat-rank">Quiddje</span>
-            <span class="next-rank" id="stat-next-rank">Fischkopp (100 XP)</span>
           </div>
           <div class="progress-bg">
             <div class="progress-fill" id="progress-fill"></div>
