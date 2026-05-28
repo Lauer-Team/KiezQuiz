@@ -347,6 +347,28 @@ function launchSadEffects(soundManager) {
   setTimeout(() => overlay.remove(), 2200);
 }
 
+let overlayScrollLockY = 0;
+
+function openOverlayModal(html) {
+  const modal = document.createElement('div');
+  modal.className = 'overlay-modal';
+  modal.innerHTML = html;
+  overlayScrollLockY = window.scrollY;
+  document.body.style.top = `-${overlayScrollLockY}px`;
+  document.body.classList.add('overlay-open');
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function closeOverlayModal(modal) {
+  modal.remove();
+  if (!document.querySelector('.overlay-modal')) {
+    document.body.classList.remove('overlay-open');
+    document.body.style.top = '';
+    window.scrollTo(0, overlayScrollLockY);
+  }
+}
+
 function launchConfetti(soundManager) {
   if (soundManager) soundManager.playApplause();
   const container = document.createElement('div');
@@ -977,7 +999,6 @@ class HamburgGame {
     const streakVal = document.getElementById('stat-streak');
     const bestStreakVal = document.getElementById('stat-best-streak');
     const rankName = document.getElementById('stat-rank');
-    const nextRankName = document.getElementById('stat-next-rank');
     const progFill = document.getElementById('progress-fill');
     
     xpVal.textContent = this.xp;
@@ -990,14 +1011,11 @@ class HamburgGame {
     // Level progress bar
     if (this.level < 5) {
       const nextRank = RANKS.find(r => r.level === this.level + 1);
-      nextRankName.textContent = `${nextRank.name} (${nextRank.minXp} XP)`;
-      
       const currentMin = currentRank.minXp;
       const nextMin = nextRank.minXp;
       const progressPercent = ((this.xp - currentMin) / (nextMin - currentMin)) * 100;
       progFill.style.width = `${Math.min(progressPercent, 100)}%`;
     } else {
-      nextRankName.textContent = "Höchster Rang erreicht! 🎉";
       progFill.style.width = '100%';
     }
 
@@ -1163,19 +1181,16 @@ class HamburgGame {
 
   showLevelUpModal(lvl) {
     const rank = RANKS.find(r => r.level === lvl);
-    const modal = document.createElement('div');
-    modal.className = 'overlay-modal';
-    modal.innerHTML = `
+    const modal = openOverlayModal(`
       <div class="modal-content">
         <h2 style="font-size: 2.2rem; color: var(--color-xp); text-shadow: 0 0 15px rgba(255, 191, 0, 0.3);">🎉 Aufstieg! 🎉</h2>
         <p style="margin-top:0.5rem; font-weight:700; font-size: 1.1rem; color:#fff;">Du bist jetzt im Rang: ${rank.name}</p>
         <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">Dein hanseatisches Wissen wächst! Meistere noch mehr Stadtteile, um der ultimative Hamburg-Experte zu werden.</p>
         <button class="primary-btn" id="btn-lvl-dismiss">Weiter geht's!</button>
       </div>
-    `;
-    document.body.appendChild(modal);
+    `);
     launchConfetti(this.sounds);
-    document.getElementById('btn-lvl-dismiss').addEventListener('click', () => modal.remove());
+    document.getElementById('btn-lvl-dismiss').addEventListener('click', () => closeOverlayModal(modal));
   }
 
   resetGame() {
@@ -1259,7 +1274,11 @@ class HamburgGame {
         <div class="rank-ladder">${steps}</div>
         <div class="rank-xp-bar"><div class="rank-xp-bar-fill" style="width:${percent}%"></div></div>
         <p class="log-rank-progress-note">${progressNote}</p>
-        <p class="log-xp-hint">XP: Detektiv +15 · Quiz &amp; Namen eingeben +10 · „Nenne alle Orte“ +6 pro Treffer. Serie ab 3: ×1,5 · ab 5: ×2. Bezirke schaltest du separat über den Bezirks-Fortschritt frei.</p>
+        <div class="log-xp-hints">
+          <p class="log-xp-hint">XP: Jede richtige Antwort im Detektiv-Modus gibt je +15 XP · im Quiz &amp; beim Namen eingeben je +10 XP · Im „Nenne alle Orte“-Modus je +6 pro Treffer.</p>
+          <p class="log-xp-hint">Serien schalten XP-Boni frei: Ab 3: ×1,5 · ab 5: ×2.</p>
+          <p class="log-xp-hint">Bezirke schaltest du separat über den Bezirks-Fortschritt frei.</p>
+        </div>
       </div>
     `;
   }
@@ -1287,8 +1306,6 @@ class HamburgGame {
 
   showGameHistory() {
     const history = this.loadGameHistory();
-    const modal = document.createElement('div');
-    modal.className = 'overlay-modal';
 
     let listHtml;
     if (history.length === 0) {
@@ -1315,7 +1332,7 @@ class HamburgGame {
       }).join('')}</div>`;
     }
 
-    modal.innerHTML = `
+    const modal = openOverlayModal(`
       <div class="modal-content log-modal-content">
         <h2>📋 Log</h2>
         ${this.renderTrophyGalleryHtml()}
@@ -1326,15 +1343,12 @@ class HamburgGame {
         </div>
         <button class="primary-btn" id="btn-history-close">Schließen</button>
       </div>
-    `;
-    document.body.appendChild(modal);
-    document.getElementById('btn-history-close').addEventListener('click', () => modal.remove());
+    `);
+    document.getElementById('btn-history-close').addEventListener('click', () => closeOverlayModal(modal));
   }
 
   showSettings() {
-    const modal = document.createElement('div');
-    modal.className = 'overlay-modal';
-    modal.innerHTML = `
+    const modal = openOverlayModal(`
       <div class="modal-content" style="max-width: 400px;">
         <h2>⚙️ Einstellungen</h2>
         <hr style="border-color: rgba(255,255,255,0.1); margin: 1rem 0;">
@@ -1345,16 +1359,13 @@ class HamburgGame {
         </div>
         <button class="primary-btn" id="btn-settings-close" style="margin-top: 0.5rem;">Schließen</button>
       </div>
-    `;
-    document.body.appendChild(modal);
-    document.getElementById('btn-settings-close').addEventListener('click', () => modal.remove());
+    `);
+    document.getElementById('btn-settings-close').addEventListener('click', () => closeOverlayModal(modal));
     document.getElementById('btn-settings-reset').addEventListener('click', () => this.resetGame());
   }
 
   showOnboarding(firstTime = false) {
-    const modal = document.createElement('div');
-    modal.className = 'overlay-modal';
-    modal.innerHTML = `
+    const modal = openOverlayModal(`
       <div class="modal-content" style="max-width: 550px;">
         <h2>Moin Moin in Hamburg! ⚓</h2>
         <p>Lerne spielerisch alle 7 Bezirke und 104 Stadtteile Hamburgs kennen. Du fängst ganz klein als <strong>Quiddje</strong> (Nicht-Hamburger) an und arbeitest dich hoch!</p>
@@ -1386,9 +1397,8 @@ class HamburgGame {
         <p style="font-size: 0.8rem; color: var(--text-muted);">Tipp: Die Elbe fließt als breiter hellblauer Strom durch Hamburg und hilft dir perfekt bei der Orientierung auf der Karte!</p>
         <button class="primary-btn" id="btn-onboarding-dismiss">Leinen los!</button>
       </div>
-    `;
-    document.body.appendChild(modal);
-    document.getElementById('btn-onboarding-dismiss').addEventListener('click', () => modal.remove());
+    `);
+    document.getElementById('btn-onboarding-dismiss').addEventListener('click', () => closeOverlayModal(modal));
   }
 
   // Mode Setter

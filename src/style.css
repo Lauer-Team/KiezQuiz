@@ -67,6 +67,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+body.overlay-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  touch-action: none;
+}
+
 /* Webkit Custom Scrollbar (Safari compatible) */
 ::-webkit-scrollbar {
   width: 8px;
@@ -199,12 +206,12 @@ body {
 
   .level-info {
     display: flex;
-    justify-content: space-between;
     font-size: 0.8rem;
     font-weight: 600;
     
     .rank-name {
-      color: var(--color-neutral-glow);
+      color: var(--color-xp);
+      text-shadow: 0 0 10px rgba(255, 191, 0, 0.3);
     }
   }
 
@@ -219,10 +226,10 @@ body {
   .progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--color-neutral-glow), var(--color-wandsbek));
+    background: linear-gradient(90deg, var(--color-neutral-glow), var(--color-xp));
     border-radius: 999px;
     transition: width 0.5s ease-out;
-    box-shadow: 0 0 10px rgba(0, 162, 255, 0.5);
+    box-shadow: 0 0 10px rgba(255, 191, 0, 0.45);
   }
 }
 
@@ -1046,6 +1053,8 @@ body {
   justify-content: center;
   padding: 1.5rem;
   animation: fadeIn 0.4s ease-out;
+  overscroll-behavior: contain;
+  overflow-y: auto;
 }
 
 .modal-content {
@@ -1413,6 +1422,12 @@ body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(
   font-size: 0.75rem;
   color: var(--text-secondary);
   margin: 0 0 0.35rem 0;
+}
+
+.log-xp-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .log-xp-hint {

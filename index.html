@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moin Hamburg! - Stadtteile spielerisch lernen</title>
-  <meta name="description" content="Lerne spielerisch alle 7 Bezirke und 104 Stadtteile Hamburgs kennen mit der interaktiven Gamified Web-App. Offline spielbar und mobiloptimiert.">
+  <title>KiezQuiz – Stadtteile spielerisch lernen</title>
+  <meta name="description" content="KiezQuiz: Lerne spielerisch alle 7 Bezirke und 104 Stadtteile Hamburgs – interaktiv, offline spielbar und mobiloptimiert.">
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
@@ -14,17 +14,11 @@
     <!-- App Header & Stats Bar -->
     <header class="app-header">
       <div class="brand">
-        <h1>Moin Hamburg! ⚓</h1>
+        <h1>KiezQuiz ⚓</h1>
         <span class="badge">Gamified Learning</span>
       </div>
       
       <div class="stats-bar">
-        <!-- XP Pill -->
-        <div class="stat-pill xp-pill" title="Deine Erfahrungspunkte">
-          <span class="label">XP:</span>
-          <span class="value" id="stat-xp">0</span>
-        </div>
-        
         <!-- Streak Pill -->
         <div class="stat-pill streak-pill" title="Deine aktuelle Antwortserie">
           <div class="streak-info">
@@ -35,12 +29,17 @@
             <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
           </div>
         </div>
+
+        <!-- XP Pill -->
+        <div class="stat-pill xp-pill" title="Deine Erfahrungspunkte">
+          <span class="label">XP:</span>
+          <span class="value" id="stat-xp">0</span>
+        </div>
         
         <!-- Level & Rank tracker -->
         <div class="level-tracker">
           <div class="level-info">
             <span class="rank-name" id="stat-rank">Quiddje</span>
-            <span class="next-rank" id="stat-next-rank">Fischkopp (100 XP)</span>
           </div>
           <div class="progress-bg">
             <div class="progress-fill" id="progress-fill"></div>
