@@ -423,6 +423,9 @@ class MapNavigator {
     this.isDragging = false;
     this.isPinching = false;
     this.didDrag = false;
+    this.pendingDrag = false;
+    this.dragStartX = 0;
+    this.dragStartY = 0;
     this.startX = 0;
     this.startY = 0;
     this.lastPinchDistance = 0;
@@ -439,36 +442,57 @@ class MapNavigator {
   }
 
   setupListeners() {
-    // Mouse Dragging for Panning (works on empty map areas and on district paths)
+    const DRAG_THRESHOLD = 5;
+
+    const beginPendingDrag = (clientX, clientY) => {
+      this.pendingDrag = true;
+      this.isDragging = false;
+      this.dragStartX = clientX;
+      this.dragStartY = clientY;
+      this.startX = clientX - this.panX;
+      this.startY = clientY - this.panY;
+    };
+
+    const updatePendingDrag = (clientX, clientY) => {
+      if (!this.pendingDrag || this.isDragging) return;
+      const dx = clientX - this.dragStartX;
+      const dy = clientY - this.dragStartY;
+      if (Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+      this.isDragging = true;
+      this.didDrag = true;
+      this.svg.classList.remove('smooth-transition');
+      this.container.style.cursor = 'grabbing';
+    };
+
+    const endDrag = () => {
+      this.pendingDrag = false;
+      if (this.isDragging) {
+        this.isDragging = false;
+        this.container.style.cursor = 'grab';
+      }
+    };
+
+    // Mouse Dragging for Panning — threshold so clicks on districts still fire
     this.container.addEventListener('mousedown', (e) => {
       if (e.button !== 0) return;
-      this.isDragging = true;
       this.didDrag = false;
-      this.svg.classList.remove('smooth-transition'); // Disable transition for 1:1 real-time drag
-      this.container.style.cursor = 'grabbing';
-      this.startX = e.clientX - this.panX;
-      this.startY = e.clientY - this.panY;
-      e.preventDefault();
+      beginPendingDrag(e.clientX, e.clientY);
     });
 
     window.addEventListener('mousemove', (e) => {
+      updatePendingDrag(e.clientX, e.clientY);
       if (!this.isDragging) return;
-      this.didDrag = true;
       this.panX = e.clientX - this.startX;
       this.panY = e.clientY - this.startY;
       this.updateTransform();
     });
 
-    window.addEventListener('mouseup', () => {
-      if (this.isDragging) {
-        this.isDragging = false;
-        this.container.style.cursor = 'grab';
-      }
-    });
+    window.addEventListener('mouseup', endDrag);
 
     // Touch: pan (1 finger) and pinch-zoom (2 fingers)
     this.container.addEventListener('touchstart', (e) => {
       if (e.touches.length === 2) {
+        this.pendingDrag = false;
         this.isDragging = false;
         this.isPinching = true;
         this.didDrag = false;
@@ -479,11 +503,8 @@ class MapNavigator {
       }
       if (e.touches.length === 1) {
         this.isPinching = false;
-        this.isDragging = true;
         this.didDrag = false;
-        this.svg.classList.remove('smooth-transition');
-        this.startX = e.touches[0].clientX - this.panX;
-        this.startY = e.touches[0].clientY - this.panY;
+        beginPendingDrag(e.touches[0].clientX, e.touches[0].clientY);
       }
     }, { passive: false });
 
@@ -506,8 +527,9 @@ class MapNavigator {
         e.preventDefault();
         return;
       }
-      if (!this.isDragging || e.touches.length !== 1) return;
-      this.didDrag = true;
+      if (e.touches.length !== 1) return;
+      updatePendingDrag(e.touches[0].clientX, e.touches[0].clientY);
+      if (!this.isDragging) return;
       this.panX = e.touches[0].clientX - this.startX;
       this.panY = e.touches[0].clientY - this.startY;
       this.updateTransform();
@@ -519,9 +541,7 @@ class MapNavigator {
         this.isPinching = false;
         this.lastPinchDistance = 0;
       }
-      if (e.touches.length === 0) {
-        this.isDragging = false;
-      }
+      endDrag();
     });
 
     // Mouse Wheel Zoom (Silkier and dampened)

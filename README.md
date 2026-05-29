@@ -48,7 +48,10 @@ Kein Backend nötig. Fortschritt (XP, Streak) liegt im **localStorage** des Brow
 
 ## Repository
 
-https://github.com/logic3/KiezQuiz
+- **Web-App:** https://github.com/logic3/KiezQuiz
+- **Native App (iOS/macOS, Capacitor):** https://github.com/logic3/KiezQuiz-App
+
+Spiel-Logik immer in diesem Repo ändern; danach in `KiezQuiz-App` mit `npm run cap:sync` in die Xcode-App übernehmen.
 
 ## Technik
 
