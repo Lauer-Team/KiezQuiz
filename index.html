@@ -163,6 +163,12 @@
             <div class="no-badge"></div>
             <span>Neuwerk (Insel-Rätsel) 🏝️</span>
           </div>
+
+          <div id="map-prompt-bar" class="map-prompt-bar" hidden aria-live="polite">
+            <div class="map-prompt-title" id="map-prompt-title"></div>
+            <div class="map-prompt-target" id="map-prompt-target"></div>
+            <div class="map-prompt-sub" id="map-prompt-sub"></div>
+          </div>
           
           <!-- Inlined Map SVG -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 615 600" class="hamburg-map-svg">
@@ -319,9 +325,6 @@
           </div>
           <div class="map-hint" id="map-hint-text">
             💡 Tipp: Ziehe zum Verschieben. Pinch oder Mausrad zum Zoomen.
-          </div>
-          <div style="text-align:center; margin-top: 0.4rem;">
-            <button id="btn-reset-link" style="background:none; border:none; color:var(--text-muted); font-size:0.75rem; cursor:pointer; opacity:0.6; text-decoration:underline;" title="Spielstand löschen und neu starten">↺ Neustart</button>
           </div>
         </div>
 

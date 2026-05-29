@@ -163,6 +163,26 @@ class SoundManager {
     osc1.stop(t + 0.4);
   }
 
+  playSelect() {
+    if (this.muted) return;
+    this.init().then(() => this._ensureRunning()).then(() => this._playSelectTone());
+  }
+
+  _playSelectTone() {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(520, t);
+    gain.gain.setValueAtTime(0.08, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.07);
+  }
+
   playIncorrect() {
     if (this.muted) return;
     this.init().then(() => this._ensureRunning()).then(() => this._playIncorrectTone());
@@ -636,6 +656,7 @@ class HamburgGame {
     
     // Initial map unlock updates
     this.updateMapStates();
+    this.updateNeuwerkBadge();
     
     const primeAudio = () => this.sounds.init();
     document.addEventListener('click', primeAudio);
@@ -653,6 +674,7 @@ class HamburgGame {
 
   switchSegment(segment) {
     if (this.activeSegment === segment) return;
+    this.playSelectionSound();
     this.activeSegment = segment;
     this.saveState();
     this.applySegmentUI();
@@ -708,6 +730,7 @@ class HamburgGame {
           this.stopNameAllChallenge(false);
         }
         
+        this.playSelectionSound();
         this.setMode(mode);
       });
     });
@@ -721,7 +744,6 @@ class HamburgGame {
     const historyBtn = document.getElementById('btn-history');
     if (historyBtn) historyBtn.addEventListener('click', () => this.showGameHistory());
     document.getElementById('btn-settings').addEventListener('click', () => this.showSettings());
-    document.getElementById('btn-reset-link').addEventListener('click', () => this.resetGame());
 
     // Sound Toggle
     const muteBtn = document.getElementById('btn-mute');
@@ -735,6 +757,7 @@ class HamburgGame {
     const nwAnchor = document.getElementById('neuwerk-anchor');
     if (nwAnchor) {
       nwAnchor.addEventListener('click', () => {
+        this.playSelectionSound();
         if (this.activeSegment === 'BEZIRKE') {
           this.activeSegment = 'STADTTEILE';
           const btnSt = document.getElementById('btn-segment-stadtteile');
@@ -1123,6 +1146,52 @@ class HamburgGame {
     this.achievements.add(id);
     this.saveState();
     this.showAchievementAlert(title, desc);
+    this.updateNeuwerkBadge();
+  }
+
+  updateNeuwerkBadge() {
+    const anchor = document.getElementById('neuwerk-anchor');
+    const badge = anchor?.querySelector('.no-badge');
+    if (!badge || !anchor) return;
+    const unlocked = this.trophies.has('neuwerk_island');
+    badge.classList.toggle('is-unlocked', unlocked);
+    anchor.title = unlocked
+      ? 'Neuwerk-Insulaner — Trophäe freigeschaltet!'
+      : 'Wo liegt eigentlich Neuwerk? Klicke hier!';
+  }
+
+  playSelectionSound() {
+    this.sounds.init();
+    this.sounds.playSelect();
+  }
+
+  syncMapPromptBar({ title, target, sub, highlight = false, isHtml = false }) {
+    const bar = document.getElementById('map-prompt-bar');
+    if (!bar) return;
+
+    const mapTitle = document.getElementById('map-prompt-title');
+    const mapTarget = document.getElementById('map-prompt-target');
+    const mapSub = document.getElementById('map-prompt-sub');
+
+    if (mapTitle) mapTitle.textContent = title;
+    if (mapTarget) {
+      if (isHtml) mapTarget.innerHTML = target;
+      else mapTarget.textContent = target;
+      mapTarget.classList.toggle('highlight', highlight);
+    }
+    if (mapSub) mapSub.textContent = sub;
+
+    if (this.inRound) bar.hidden = false;
+  }
+
+  hideMapPromptBar() {
+    const bar = document.getElementById('map-prompt-bar');
+    if (bar) bar.hidden = true;
+  }
+
+  setInRoundUI(active) {
+    document.body.classList.toggle('in-round', active);
+    if (!active) this.hideMapPromptBar();
   }
 
   unlockAchievement(id, title, desc) {
@@ -1803,6 +1872,7 @@ class HamburgGame {
   }
 
   selectNeighbourhood(path, name, bezirk) {
+    this.playSelectionSound();
     this.resetMapClasses();
     path.classList.add('selected');
     this.activeSelectPath = path;
@@ -1862,6 +1932,7 @@ class HamburgGame {
   }
 
   selectBezirk(bezirkName) {
+    this.playSelectionSound();
     this.resetMapClasses();
     
     // Highlight all paths in this Bezirk
@@ -2013,6 +2084,13 @@ class HamburgGame {
       }
       this.startRound(selected);
     });
+
+    const bezirkPicker = document.getElementById('bezirk-picker');
+    if (bezirkPicker) {
+      bezirkPicker.addEventListener('change', (e) => {
+        if (e.target.matches('input[type="checkbox"]')) this.playSelectionSound();
+      });
+    }
   }
 
   getSelectedRoundBezirke() {
@@ -2064,6 +2142,8 @@ class HamburgGame {
     // Toggle UI Card elements
     document.getElementById('round-setup-ui').style.display = 'none';
     document.getElementById('round-active-ui').style.display = 'flex';
+
+    this.setInRoundUI(true);
     
     this.startRoundTimer();
     this.nextRoundQuestion();
@@ -2099,18 +2179,24 @@ class HamburgGame {
     
     // Mode specific prompt loading
     const isBz = this.activeSegment === 'BEZIRKE';
+    let promptData = { title: '', target: '', sub: '', highlight: false, isHtml: false };
 
     if (this.currentMode === 'LOCATE') {
-      promptTitle.textContent = isBz ? "Finde den Bezirk" : "Finde den Stadtteil";
-      promptTarget.textContent = this.currentTarget.name;
-      promptTarget.classList.add('highlight');
-      promptSub.textContent = isBz ? "Klicke ihn auf der Karte an!" : `Liegt im Bezirk ${this.currentTarget.bezirk}. Klicke ihn an!`;
+      promptData = {
+        title: isBz ? "Finde den Bezirk" : "Finde den Stadtteil",
+        target: this.currentTarget.name,
+        sub: isBz ? "Klicke ihn auf der Karte an!" : `Liegt im Bezirk ${this.currentTarget.bezirk}. Klicke ihn an!`,
+        highlight: true
+      };
     } 
     else if (this.currentMode === 'QUIZ') {
-      promptTitle.textContent = isBz ? "Welcher Bezirk blinkt?" : "Welcher Stadtteil blinkt?";
-      promptTarget.innerHTML = isBz ? "❔ Blinkender Bezirk ❔" : "❔ Blinkender Stadtteil ❔";
-      promptTarget.classList.remove('highlight');
-      promptSub.textContent = "Wähle die passende Antwort aus den Optionen!";
+      promptData = {
+        title: isBz ? "Welcher Bezirk blinkt?" : "Welcher Stadtteil blinkt?",
+        target: isBz ? "❔ Blinkender Bezirk ❔" : "❔ Blinkender Stadtteil ❔",
+        sub: "Wähle die passende Antwort aus den Optionen!",
+        highlight: false,
+        isHtml: true
+      };
       
       // Blink target path
       if (isBz) {
@@ -2123,10 +2209,12 @@ class HamburgGame {
       this.generateMCROptions(optionsContainer);
     }
     else if (this.currentMode === 'TYPE_NAME') {
-      promptTitle.textContent = isBz ? "Bezirk benennen" : "Stadtteil benennen";
-      promptTarget.textContent = isBz ? "Welcher Bezirk blinkt?" : "Welcher Stadtteil blinkt?";
-      promptTarget.classList.remove('highlight');
-      promptSub.textContent = "Tippe den Namen ein — bei richtiger Eingabe zählt er sofort.";
+      promptData = {
+        title: isBz ? "Bezirk benennen" : "Stadtteil benennen",
+        target: isBz ? "Welcher Bezirk blinkt?" : "Welcher Stadtteil blinkt?",
+        sub: "Tippe den Namen ein — bei richtiger Eingabe zählt er sofort.",
+        highlight: false
+      };
 
       if (isBz) {
         document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.add('blink'));
@@ -2137,6 +2225,13 @@ class HamburgGame {
 
       this.generateTypingField(optionsContainer);
     }
+
+    promptTitle.textContent = promptData.title;
+    if (promptData.isHtml) promptTarget.innerHTML = promptData.target;
+    else promptTarget.textContent = promptData.target;
+    promptTarget.classList.toggle('highlight', promptData.highlight);
+    promptSub.textContent = promptData.sub;
+    this.syncMapPromptBar(promptData);
 
     // Bind Cancel round button
     document.getElementById('btn-cancel-round').onclick = () => this.endRound(true);
@@ -2596,6 +2691,7 @@ class HamburgGame {
     this.stopActiveTimer();
     const durationSec = this.getRoundElapsedSeconds();
     this.inRound = false;
+    this.setInRoundUI(false);
     
     const total = this.roundQuestions.length;
     const percent = Math.round((this.roundCorrect / total) * 100);
@@ -2677,6 +2773,7 @@ class HamburgGame {
   endRound(showUI = true) {
     this.stopActiveTimer();
     this.inRound = false;
+    this.setInRoundUI(false);
     this.resetMapClasses();
     this.clearMapTextLabels();
     if (showUI) this.setMode(this.currentMode);
