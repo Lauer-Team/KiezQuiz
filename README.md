@@ -1,61 +1,131 @@
-# KiezQuiz
+# KiezQuiz ⚓
 
-Gamifizierte Web-App zum spielerischen Lernen der **7 Bezirke** und **104 Stadtteile** Hamburgs – mit Karte, Quiz-Modi, XP, Rängen und Streaks.
+Gamifizierte Web-App zum spielerischen Lernen der **7 Bezirke** und **104 Stadtteile** Hamburgs — mit interaktiver Karte, Quiz-Modi, XP, Rängen und Streaks.
 
-**Live:** https://logic3.github.io/KiezQuiz/
+**Live:** [kiezquiz.lauer.team](https://kiezquiz.lauer.team) · [logic3.github.io/KiezQuiz](https://logic3.github.io/KiezQuiz/)
 
-## Starten (lokal)
+## Spielmodi
+
+| Modus | Beschreibung |
+|-------|--------------|
+| Entdecker | Karte frei erkunden, Infos zu Bezirken und Stadtteilen |
+| Stadtteil-Detektiv | Gesuchten Ort auf der Karte finden |
+| Karten-Quiz | Blinkenden Stadtteil erkennen |
+| Namen eingeben | Blinkenden Ort eintippen |
+| Nenne alle Orte | Sporcle-Challenge gegen die Zeit |
+
+Fortschritt (XP, Streak, freigeschaltete Bezirke) wird **lokal** gespeichert — kein Account, kein Server.
+
+---
+
+## Repositories
+
+Dieses Repo ist die **Quelle für alles Spielrelevante**. Die native iOS/macOS-App ist ein separates Wrapper-Projekt:
+
+| Repo | Inhalt |
+|------|--------|
+| **[KiezQuiz](https://github.com/logic3/KiezQuiz)** (dieses Repo) | Web-App — HTML, CSS, JavaScript, Daten |
+| **[KiezQuiz-App](https://github.com/logic3/KiezQuiz-App)** | Native Hülle — Capacitor, Xcode, iOS/macOS |
+
+---
+
+## Lokal starten
 
 ```bash
 npm run dev
 ```
 
-Öffnet einen lokalen Server auf Port 3000 und startet den Browser. Alternativ `index.html` direkt im Browser öffnen (statische App, kein Build nötig).
+Startet einen lokalen Server auf Port 3000 und öffnet den Browser. Alternativ `index.html` direkt öffnen — kein Build-Schritt nötig.
 
-## Online stellen (kostenlos)
+---
 
-Die App ist reine HTML/CSS/JS – du brauchst nur **statisches Hosting**. Empfehlung: **GitHub Pages** (kostenlos, dauerhaft).
+## Entwicklung: Web-App und native App
 
-### GitHub Pages (empfohlen)
+**Spiel-Logik, Karte, Design → immer hier ändern.** Die Capacitor-App packt diese Dateien nur in ein natives Fenster (WKWebView).
 
-1. Projekt auf GitHub pushen (z. B. Repository `logic3/KiezQuiz`).
-2. Auf GitHub: **Settings → Pages**.
-3. **Build and deployment → Source:** „Deploy from a branch“.
-4. **Branch:** `main` (oder dein Standard-Branch), **Folder:** `/ (root)`.
-5. Speichern. Nach 1–2 Minuten ist die App erreichbar unter:
+### Was wo hingehört
 
-   `https://<dein-github-name>.github.io/KiezQuiz/`
+| Änderung | Repo | Danach |
+|----------|------|--------|
+| Quiz, Karte, Sounds, CSS, XP | **KiezQuiz** (hier) | siehe Sync unten |
+| App-Icon, Splash, Signing, Bundle ID | [KiezQuiz-App](https://github.com/logic3/KiezQuiz-App) / Xcode | — |
+| Capacitor-Einstellungen (Scroll, Statusleiste) | KiezQuiz-App | — |
 
-   Beispiel: `https://logic3.github.io/KiezQuiz/`
+Nicht manuell editieren in KiezQuiz-App: `www/` und `ios/App/App/public/` — werden beim Sync überschrieben.
 
-6. Diesen Link kannst du per WhatsApp, E-Mail oder QR-Code teilen – funktioniert auf iPhone, iPad und Desktop.
+### Workflow nach Web-Änderungen
 
-### Weitere kostenlose Alternativen
+Beide Repos lokal **nebeneinander** klonen:
 
-| Dienst | URL-Muster | Hinweis |
-|--------|------------|---------|
-| [Cloudflare Pages](https://pages.cloudflare.com/) | `*.pages.dev` | Drag & Drop oder Git-Anbindung |
-| [Netlify Drop](https://app.netlify.com/drop) | `*.netlify.app` | Ordner hochziehen, fertig |
-| [Vercel](https://vercel.com/) | `*.vercel.app` | Git-Repo verbinden |
+```
+…/KiezQuiz/       ← dieses Repo
+…/KiezQuiz-App/   ← natives Repo
+```
 
-Kein Backend nötig. Fortschritt (XP, Streak) liegt im **localStorage** des Browsers – pro Gerät getrennt.
+```bash
+# 1. Web-App ändern und committen
+cd KiezQuiz
+git add -A && git commit -m "…" && git push
 
-## Auf dem iPhone „wie eine App“
+# 2. In native App übernehmen
+cd ../KiezQuiz-App
+npm run cap:sync
 
-1. Link in **Safari** öffnen (nicht nur in Instagram/WhatsApp-In-App-Browser).
+# 3. In Xcode testen (⇧⌘K, dann ⌘R)
+npm run cap:open:ios
+```
+
+Ausführliche Xcode-Anleitung: [KiezQuiz-App/SETUP.md](https://github.com/logic3/KiezQuiz-App/blob/main/SETUP.md)
+
+---
+
+## Nutzung ohne native App
+
+### Im Browser
+
+Link teilen oder lokal mit `npm run dev` — funktioniert auf Mac, iPhone, iPad und Desktop.
+
+### Auf dem iPhone „wie eine App“
+
+1. Link in **Safari** öffnen (nicht im In-App-Browser von WhatsApp/Instagram).
 2. **Teilen** → **Zum Home-Bildschirm**.
-3. KiezQuiz startet dann im Vollbild (PWA-ähnlich).
+3. KiezQuiz startet im Vollbild (PWA-ähnlich).
 
-## Repository
+---
 
-- **Web-App:** https://github.com/logic3/KiezQuiz
-- **Native App (iOS/macOS, Capacitor):** https://github.com/logic3/KiezQuiz-App
+## Projektstruktur
 
-Spiel-Logik immer in diesem Repo ändern; danach in `KiezQuiz-App` mit `npm run cap:sync` in die Xcode-App übernehmen.
+```
+KiezQuiz/
+├── index.html              # Einstieg, eingebettete SVG-Karte
+├── manifest.webmanifest    # PWA-Manifest
+├── src/
+│   ├── app.js              # Spiel-Logik
+│   ├── style.css           # Layout & Design
+│   └── data/               # Bezirke, Stadtteile, Karte
+├── icons/
+└── scripts/
+    └── assemble_html.py    # Optional: index.html aus Vorlage regenerieren
+```
+
+---
 
 ## Technik
 
-- Vanilla HTML, CSS und JavaScript
-- Daten: `src/data/hamburg_stadtteile.json`, Karte eingebettet in `index.html`
-- Optional: `python scripts/assemble_html.py` zum Regenerieren der HTML-Vorlage
-- Mobil: Safe Areas (Notch), Touch-Pan, Pinch-Zoom, größere Tap-Targets
+- Vanilla HTML, CSS und JavaScript — kein Framework, kein Build
+- Statisches Hosting (GitHub Pages)
+- Web Audio API für Soundeffekte
+- `localStorage` für Spielstand
+- Mobil: Safe Areas, Touch-Pan, Pinch-Zoom, größere Tap-Targets
+
+---
+
+## Datenschutz
+
+Keine Server, keine Accounts. Der Spielstand wird ausschließlich lokal im Browser bzw. in der App gespeichert und nicht übertragen.
+
+---
+
+## Lizenz & Credit
+
+Courtesy of Jeremiah J. Lauer, LL.M.
