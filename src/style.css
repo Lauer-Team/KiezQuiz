@@ -798,6 +798,52 @@ body.overlay-open {
   }
 }
 
+.map-prompt-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.65rem 1rem 0.75rem;
+  background: rgba(10, 15, 30, 0.92);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  z-index: 40;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  &[hidden] {
+    display: none !important;
+  }
+
+  .map-prompt-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-neutral-glow);
+    margin-bottom: 0.15rem;
+  }
+
+  .map-prompt-target {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+
+    &.highlight {
+      color: var(--color-neutral-glow);
+      text-shadow: 0 0 15px rgba(0, 162, 255, 0.4);
+    }
+  }
+
+  .map-prompt-sub {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+}
+
 /* Floating Tooltip — fixed to viewport so it follows the cursor */
 .map-tooltip {
   position: fixed;
@@ -1029,6 +1075,11 @@ body.overlay-open {
     height: 8px;
     border-radius: 50%;
     box-shadow: 0 0 6px var(--color-hamburg-mitte);
+
+    &.is-unlocked {
+      background: var(--color-correct);
+      box-shadow: 0 0 6px var(--color-correct);
+    }
   }
   
   &:hover {
@@ -1698,6 +1749,25 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     max-height: 55vh;
     max-height: 55dvh;
   }
+
+  .map-prompt-bar {
+    display: block;
+  }
+
+  body.in-round .segment-selector,
+  body.in-round .mode-selector {
+    display: none;
+  }
+
+  body.in-round .map-container-wrapper {
+    min-height: min(42vh, 42dvh, 320px);
+  }
+}
+
+@media (min-width: 1025px) {
+  .map-prompt-bar {
+    display: none !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1790,9 +1860,17 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     border-radius: var(--radius-md);
     padding: 0.5rem;
   }
+
+  body.in-round .map-container-wrapper {
+    min-height: min(38vh, 38dvh, 280px);
+  }
   
   .hamburg-map-svg {
     max-height: none;
+  }
+
+  .map-prompt-bar .map-prompt-target {
+    font-size: 1.2rem;
   }
   
   .brand h1 {
