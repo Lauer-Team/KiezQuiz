@@ -2185,6 +2185,34 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   color: var(--color-neutral-glow);
 }
 
+.settings-lang-block {
+  margin-bottom: 1.2rem;
+}
+
+.lang-switcher {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.lang-btn {
+  flex: 1;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.lang-btn.active {
+  border-color: var(--color-neutral-glow);
+  color: #fff;
+  background: rgba(0, 162, 255, 0.15);
+}
+
 .sync-toast {
   position: fixed;
   bottom: 2rem;

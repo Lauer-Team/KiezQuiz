@@ -43,15 +43,15 @@
     <header class="app-header">
       <div class="brand">
         <h1>KiezQuiz ⚓</h1>
-        <span class="badge">Gamified Learning</span>
+        <span class="badge" data-i18n="header.badge">Gamified Learning</span>
       </div>
       
       <div class="stats-bar">
         <!-- Streak Pill -->
-        <div class="stat-pill streak-pill" title="Deine aktuelle Antwortserie">
+        <div class="stat-pill streak-pill" data-i18n-title="header.streakTitle" title="Deine aktuelle Antwortserie">
           <div class="streak-info">
             <div class="streak-current">
-              <span class="label">Serie 🔥:</span>
+              <span class="label" data-i18n="header.streakLabel">Serie 🔥:</span>
               <span class="value" id="stat-streak">0x</span>
             </div>
             <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
@@ -59,8 +59,8 @@
         </div>
 
         <!-- XP Pill -->
-        <div class="stat-pill xp-pill" title="Deine Erfahrungspunkte">
-          <span class="label">XP:</span>
+        <div class="stat-pill xp-pill" data-i18n-title="header.xpTitle" title="Deine Erfahrungspunkte">
+          <span class="label" data-i18n="header.xpLabel">XP:</span>
           <span class="value" id="stat-xp">0</span>
         </div>
         
@@ -75,18 +75,18 @@
         </div>
         
         <!-- Auth / Cloud sync -->
-        <button type="button" class="auth-pill" id="auth-pill" title="Cloud-Speicherung: optional anmelden">
+        <button type="button" class="auth-pill" id="auth-pill" data-i18n-title="header.authTitle" title="Cloud-Speicherung: optional anmelden">
           <span class="auth-pill-icon">👤</span>
-          <span class="auth-pill-label">Gast</span>
-          <span class="auth-pill-action">Anmelden</span>
+          <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
+          <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
         </button>
 
         <!-- Audio Synthesizer toggle -->
-        <button class="audio-toggle" id="btn-mute" title="Sound ein/ausschalten">🔊</button>
+        <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
         <!-- Game history -->
-        <button class="audio-toggle" id="btn-history" title="Log: Pokale, Rang & Spielverlauf">📋</button>
+        <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf">📋</button>
         <!-- Settings -->
-        <button class="audio-toggle" id="btn-settings" title="Einstellungen">⚙️</button>
+        <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
       </div>
     </header>
 
@@ -99,50 +99,50 @@
         <!-- Segment selector (Lerne Stadtteile vs Bezirke) -->
         <div class="segment-selector">
           <button class="segment-btn active" id="btn-segment-stadtteile">
-            <span>🏙️ Stadtteile</span>
+            <span data-i18n="segment.stadtteile">🏙️ Stadtteile</span>
           </button>
           <button class="segment-btn" id="btn-segment-bezirke">
-            <span>🏢 Bezirke lernen</span>
+            <span data-i18n="segment.bezirke">🏢 Bezirke lernen</span>
           </button>
         </div>
 
         <!-- Game Mode Selection -->
         <div class="glass-card mode-selector">
-          <h3>Spielmodus wählen</h3>
+          <h3 data-i18n="modes.selectTitle">Spielmodus wählen</h3>
           <div class="modes-list">
             <button class="mode-btn active" data-mode="EXPLORER" id="mode-explorer">
               <span class="mode-icon">🗺️</span>
               <div style="display:flex; flex-direction:column;">
-                <span style="font-weight:700;">Entdecker-Modus</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Frei erkunden & Infos lernen</span>
+                <span style="font-weight:700;" data-i18n="modes.explorer.label">Entdecker-Modus</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.explorer.desc">Frei erkunden & Infos lernen</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="LOCATE" id="mode-locate">
               <span class="mode-icon">🕵️</span>
               <div style="display:flex; flex-direction:column;">
-                <span style="font-weight:700;">Stadtteil-Detektiv</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Finde den Ort auf der Karte</span>
+                <span style="font-weight:700;" data-i18n="modes.locate.label">Stadtteil-Detektiv</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.locate.desc">Finde den Ort auf der Karte</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="QUIZ" id="mode-quiz">
               <span class="mode-icon">⚡</span>
               <div style="display:flex; flex-direction:column;">
-                <span style="font-weight:700;">Karten-Quiz</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Erkenne den blinkenden Ort</span>
+                <span style="font-weight:700;" data-i18n="modes.quiz.label">Karten-Quiz</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.quiz.desc">Erkenne den blinkenden Ort</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="TYPE_NAME" id="mode-typename">
               <span class="mode-icon">⌨️</span>
               <div style="display:flex; flex-direction:column;">
-                <span style="font-weight:700;">Namen eingeben</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Blinkenden Ort eintippen</span>
+                <span style="font-weight:700;" data-i18n="modes.typeName.label">Namen eingeben</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.typeName.desc">Blinkenden Ort eintippen</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="NAME_ALL" id="mode-nameall">
               <span class="mode-icon">⏱️</span>
               <div style="display:flex; flex-direction:column;">
-                <span style="font-weight:700;">Nenne alle Orte</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Sporcle-Challenge gegen die Zeit</span>
+                <span style="font-weight:700;" data-i18n="modes.nameAll.label">Nenne alle Orte</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.nameAll.desc">Sporcle-Challenge gegen die Zeit</span>
               </div>
             </button>
           </div>
@@ -158,7 +158,7 @@
         <!-- Progression & Bezirk Lock Status -->
         <div class="glass-card unlocker-card" id="unlocker-card-container">
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem; margin-bottom:0.5rem;">
-            <h3 style="font-family:var(--font-display); font-size:1rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em;">Bezirks-Fortschritt</h3>
+            <h3 style="font-family:var(--font-display); font-size:1rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em;" data-i18n="progress.title">Bezirks-Fortschritt</h3>
           </div>
           <div class="district-progress-list" id="district-progress-list">
             <!-- Appended dynamically by app.js -->
@@ -168,8 +168,8 @@
         <!-- Bypass progression Toggle -->
         <div class="glass-card" style="padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
           <div style="display: flex; flex-direction: column;">
-            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;">Alle Bezirke freischalten</span>
-            <span style="font-size: 0.75rem; color: var(--text-secondary);">Bypass für Profis (keine Progression)</span>
+            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;" data-i18n="progress.unlockAll">Alle Bezirke freischalten</span>
+            <span style="font-size: 0.75rem; color: var(--text-secondary);" data-i18n="progress.unlockAllHint">Bypass für Profis (keine Progression)</span>
           </div>
           <label class="switch">
             <input type="checkbox" id="toggle-progression">
@@ -186,9 +186,9 @@
         <div class="map-container-wrapper" id="map-wrapper">
           
           <!-- Floating Neuwerk Island Easter Egg -->
-          <div class="neuwerk-overlay" id="neuwerk-anchor" title="Wo liegt eigentlich Neuwerk? Klicke hier!">
+          <div class="neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!">
             <div class="no-badge"></div>
-            <span>Neuwerk (Insel-Rätsel) 🏝️</span>
+            <span data-i18n="map.neuwerkLabel">Neuwerk (Insel-Rätsel) 🏝️</span>
           </div>
 
           <div id="map-prompt-bar" class="map-prompt-bar" hidden aria-live="polite">
@@ -346,11 +346,11 @@
         <!-- Map Navigation Controls -->
         <div class="map-controls">
           <div class="zoom-btns">
-            <button class="control-btn" id="btn-zoom-in" title="Vergrößern">+</button>
-            <button class="control-btn" id="btn-zoom-out" title="Verkleinern">-</button>
-            <button class="control-btn" id="btn-zoom-reset" title="Originalgröße und Zentrierung" style="color: var(--color-neutral-glow); font-weight: 800; border-color: rgba(0, 162, 255, 0.3);">🏠 Zentrieren & Reset</button>
+            <button class="control-btn" id="btn-zoom-in" data-i18n-title="map.zoomIn" title="Vergrößern">+</button>
+            <button class="control-btn" id="btn-zoom-out" data-i18n-title="map.zoomOut" title="Verkleinern">-</button>
+            <button class="control-btn" id="btn-zoom-reset" data-i18n-title="map.zoomReset" data-i18n="map.zoomReset" title="Originalgröße und Zentrierung" style="color: var(--color-neutral-glow); font-weight: 800; border-color: rgba(0, 162, 255, 0.3);">🏠 Zentrieren & Reset</button>
           </div>
-          <div class="map-hint" id="map-hint-text">
+          <div class="map-hint" id="map-hint-text" data-i18n="map.hintDesktop">
             💡 Tipp: Ziehe zum Verschieben. Pinch oder Mausrad zum Zoomen.
           </div>
         </div>
@@ -361,13 +361,14 @@
 
     <footer class="app-footer">
       <p class="privacy-notice">
-        <strong>Datenschutz:</strong> Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.
+        <strong data-i18n="footer.privacy">Datenschutz:</strong> <span data-i18n="footer.privacyText">Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.</span>
       </p>
       <p class="footer-credit">Courtesy of Jeremiah J. Lauer, LL.M.</p>
     </footer>
   </div>
 
   <!-- Database & Logic Script tags -->
+  <script src="src/i18n.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="src/supabaseConfig.js"></script>
   <script src="src/auth.js"></script>

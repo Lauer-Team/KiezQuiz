@@ -1,7 +1,7 @@
 {
   "name": "KiezQuiz",
   "short_name": "KiezQuiz",
-  "description": "Hamburgs Bezirke und Stadtteile spielerisch lernen",
+  "description": "Hamburgs Bezirke und Stadtteile spielerisch lernen / Learn Hamburg's districts through play",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0f1118",

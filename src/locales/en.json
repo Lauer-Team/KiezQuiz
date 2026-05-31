@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "title": "KiezQuiz – Learn Hamburg's districts playfully",
+    "description": "KiezQuiz: Learn all 7 boroughs and 104 districts of Hamburg through play — interactive, offline-capable, and mobile-optimized.",
+    "ogDescription": "Know better than know-it-alls.",
+    "manifestDescription": "Learn Hamburg's boroughs and districts through play"
+  },
+  "header": {
+    "badge": "Gamified Learning",
+    "streakLabel": "Streak 🔥:",
+    "streakBest": "Best: {count}x",
+    "xpLabel": "XP:",
+    "authTitle": "Cloud save: optional sign-in",
+    "guest": "Guest",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "soundTitle": "Toggle sound",
+    "historyTitle": "Log: trophies, rank & game history",
+    "settingsTitle": "Settings",
+    "streakTitle": "Your current answer streak",
+    "xpTitle": "Your experience points"
+  },
+  "segment": {
+    "stadtteile": "🏙️ Districts",
+    "bezirke": "🏢 Learn boroughs"
+  },
+  "modes": {
+    "selectTitle": "Choose game mode",
+    "explorer": {
+      "label": "Explorer Mode",
+      "desc": "Explore freely & learn facts"
+    },
+    "locate": {
+      "label": "District Detective",
+      "desc": "Find the place on the map",
+      "labelBezirk": "Borough Detective",
+      "descBezirk": "Find the borough on the map"
+    },
+    "quiz": {
+      "label": "Map Quiz",
+      "desc": "Identify the blinking place"
+    },
+    "typeName": {
+      "label": "Type the name",
+      "desc": "Type the blinking place"
+    },
+    "nameAll": {
+      "label": "Name all places",
+      "desc": "Sporcle-style timed challenge"
+    },
+    "EXPLORER": "Explorer Mode",
+    "LOCATE": "District Detective",
+    "LOCATE_BEZIRKE": "Borough Detective",
+    "QUIZ": "Map Quiz",
+    "TYPE_NAME": "Type the name",
+    "NAME_ALL": "Name all places"
+  },
+  "progress": {
+    "title": "Borough progress",
+    "unlockAll": "Unlock all boroughs",
+    "unlockAllHint": "Pro bypass (no progression)",
+    "lockHint": "🔒 75% in previous borough"
+  },
+  "map": {
+    "neuwerkTitle": "Where is Neuwerk? Click here!",
+    "neuwerkTitleUnlocked": "Neuwerk Islander — trophy unlocked!",
+    "neuwerkLabel": "Neuwerk (island puzzle) 🏝️",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoomReset": "🏠 Center & reset",
+    "hintDesktop": "💡 Tip: Drag to pan. Mouse wheel or pinch to zoom.",
+    "hintTouch": "💡 Tip: One finger to pan, two fingers to zoom. Use +/- buttons.",
+    "tooltipLocked": "🔒 Borough locked",
+    "tooltipLockedHint": "Keep learning to unlock",
+    "tooltipBezirk": "Borough: {bezirk}",
+    "tooltipTapLearn": "Tap to learn"
+  },
+  "footer": {
+    "privacy": "Privacy:",
+    "privacyText": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username, and save data are encrypted via TLS and stored with Supabase (EU) — no sharing with third parties."
+  },
+  "settings": {
+    "title": "⚙️ Settings",
+    "language": "Language / Sprache",
+    "langDe": "Deutsch",
+    "langEn": "English",
+    "cloudTitle": "☁️ Cloud save",
+    "cloudNotConfigured": "Cloud save is not set up yet (local progress only).",
+    "cloudLoggedIn": "Signed in as <strong>{name}</strong>. Your progress syncs automatically.",
+    "cloudGuest": "Not signed in — progress stored locally only. Tap \"Sign in\" top-right for cloud sync.",
+    "privacyTitle": "🔒 Privacy",
+    "privacyBody": "Without an account, your progress is stored locally in the browser (localStorage). With an optional account, saves are encrypted via TLS and stored with Supabase (EU) — email, username, and progress. No sharing with third parties. Details in docs/SUPABASE-SETUP.md.",
+    "resetTitle": "🗑️ Reset progress",
+    "resetBody": "Deletes all XP, achievements, and progress{cloudSuffix}. Fresh start as Outsider.",
+    "resetCloudSuffix": " (locally and in the cloud)",
+    "resetBtn": "↺ Reset",
+    "close": "Close"
+  },
+  "auth": {
+    "player": "Player",
+    "cloudTitle": "☁️ Cloud save",
+    "cloudIntro": "Optional: With an account your progress is saved across devices. Without signing in you play as a guest (local only).",
+    "loginTab": "Sign in",
+    "registerTab": "Register",
+    "usernameOrEmail": "Username or email",
+    "password": "Password",
+    "username": "Username",
+    "email": "Email",
+    "loginSubmit": "Sign in",
+    "registerSubmit": "Register",
+    "cancel": "Cancel",
+    "loggingIn": "Signing in…",
+    "registering": "Registering…",
+    "emailRegistered": "Email already registered.",
+    "invalidCredentials": "Username, email, or password incorrect.",
+    "passwordMin": "Password must be at least 6 characters.",
+    "invalidEmail": "Please enter a valid email address.",
+    "genericError": "An error occurred.",
+    "cloudNotConfigured": "Cloud save is not configured.",
+    "usernameRequired": "Please enter a username.",
+    "identifierRequired": "Please enter username or email."
+  },
+  "sync": {
+    "restored": "☁️ Progress restored from the cloud.",
+    "uploaded": "☁️ Local progress uploaded to the cloud."
+  },
+  "ranks": {
+    "1": { "name": "Outsider" },
+    "2": { "name": "Fish-head" },
+    "3": { "name": "Hamburg Local" },
+    "4": { "name": "Elbe Captain" },
+    "5": { "name": "Hamburg Expert" },
+    "fallback": "Hamburger",
+    "maxReached": "Highest rank reached",
+    "progressTo": "{percent}% to {name} ({xp} XP)"
+  },
+  "trophies": {
+    "neuwerk_island": {
+      "name": "Neuwerk Islander",
+      "unlockTitle": "Neuwerk Islander 🏝️",
+      "desc": "Click the Neuwerk puzzle at the top-right of the map.",
+      "unlockDesc": "You solved the Neuwerk puzzle."
+    },
+    "paradise_explorer": {
+      "name": "Paradise Explorer!",
+      "unlockTitle": "Paradise Explorer! 🌴",
+      "desc": "Correctly tap \"Groß Flottbek\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Groß Flottbek for the first time."
+    },
+    "meister_alle_stadtteile": {
+      "name": "King of Hamburg",
+      "unlockTitle": "King of Hamburg 👑",
+      "desc": "Name all districts in \"Name all places\".",
+      "unlockDesc": "Find every district in the Sporcle challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Borough Captain",
+      "unlockTitle": "Borough Captain 🏛️",
+      "desc": "Name all seven boroughs in the challenge.",
+      "unlockDesc": "Name all seven boroughs in the challenge!"
+    },
+    "master_altona": { "name": "{bezirk} Explorer", "desc": "Master all districts in the {bezirk} borough." },
+    "master_bergedorf": { "name": "{bezirk} Explorer", "desc": "Master all districts in the {bezirk} borough." },
+    "master_eimsbuettel": { "name": "{bezirk} Explorer", "desc": "Master all districts in the {bezirk} borough." },
+    "master_hamburg-mitte": { "name": "{bezirk} Explorer", "desc": "Master all districts in the {bezirk} borough." },
+    "master_hamburg-nord": { "name": "{bezirk} Explorer", "desc": "Master all districts in the {bezirk} borough." },
+    "master_harburg": { "name": "{bezirk} Explorer", "desc": "Master all districts in the {bezirk} borough." },
+    "master_wandsbek": { "name": "{bezirk} Explorer", "desc": "Master all districts in the {bezirk} borough." }
+  },
+  "trivia": {
+    "defaultStadtteil": "A charming Hamburg district with its own distinct character.",
+    "defaultBezirk": "A significant borough of Hamburg.",
+    "locatedIn": "{name} is in the borough of {bezirk}.",
+    "templates": {
+      "Altona": [
+        "Was historically an independent Danish rival city to Hamburg.",
+        "Known for the Elbe beach at Övelgönne and lively Ottensen.",
+        "Offers a beautiful view from the Altona balcony over Hamburg's port."
+      ],
+      "Bergedorf": [
+        "Hamburg's largest borough by area, shaped by agriculture and the Vierlande.",
+        "Home to Bergedorf Castle, the only preserved castle in Hamburg.",
+        "Famous Vierlande roses and fresh vegetables for Hamburg grow here."
+      ],
+      "Eimsbüttel": [
+        "One of the most densely populated areas with beautiful old buildings.",
+        "Known for the Grindel quarter, the historic center of Jewish life in Hamburg.",
+        "Home to the famous Hagenbeck Zoo in the Stellingen district."
+      ],
+      "Hamburg-Mitte": [
+        "The beating heart of Hamburg with the port, Speicherstadt, city hall, and St. Pauli.",
+        "The Elbphilharmonie concert hall stands in modern HafenCity.",
+        "Stretches across the Elbe to Wilhelmsburg and Finkenwerder."
+      ],
+      "Hamburg-Nord": [
+        "Defined by the huge Hamburg Stadtpark and Hamburg Airport.",
+        "Beautiful Alster canals flow through Winterhude and Eppendorf.",
+        "Home to the famous Jarrestadt, a legendary brick estate."
+      ],
+      "Harburg": [
+        "Lies south of the Norderelbe with a distinct identity of its own.",
+        "Known for the wooded Harburger Berge and Schwarze Berge wildlife park.",
+        "Home to Hamburg University of Technology (TUHH) and the inland port."
+      ],
+      "Wandsbek": [
+        "Hamburg's most populous borough with many green residential areas.",
+        "Combines village charm in the Alster valley with urban centers.",
+        "Named after the poet Matthias Claudius (Wandsbecker Bote)."
+      ]
+    },
+    "specific": {
+      "St. Pauli": "Home to the famous Kiez (neighborhood), the Reeperbahn, and FC St. Pauli. Once a suburb outside Hamburg's city limits.",
+      "HafenCity": "Europe's largest inner-city development project on the Elbe, home to the Elbphilharmonie.",
+      "Blankenese": "A former fishing village, world-famous for its idyllic stepped quarter on the steep Elbe shore.",
+      "Neuwerk": "A North Sea island in the Wadden Sea National Park. Officially part of Hamburg-Mitte since the Cuxhaven Treaty of 1969.",
+      "Sternschanze": "Hamburg's smallest district, famous for alternative culture, street art, and the lively Schanzenviertel.",
+      "Eppendorf": "Known for elegant art nouveau villas, fine boutiques, and the University Medical Center Hamburg-Eppendorf (UKE).",
+      "Rothenburgsort": "Historically a workers' quarter, almost completely destroyed in WWII and now a creative hotspot.",
+      "Wilhelmsburg": "Europe's largest river island, between the Norder- and Süderelbe, a multicultural and green district.",
+      "Finkenwerder": "Home to Airbus factories and traditional fruit orchards (Altes Land).",
+      "Speicherstadt": "The world's largest contiguous warehouse ensemble and a UNESCO World Heritage Site."
+    }
+  },
+  "onboarding": {
+    "title": "Welcome to Hamburg! ⚓",
+    "intro": "Learn all 7 boroughs and 104 districts of Hamburg through play. You start small as an <strong>Outsider</strong> (non-Hamburger) and work your way up!",
+    "feature1Title": "1. Learn boroughs (New!)",
+    "feature1Text": "Learn all 104 districts in detail, or switch to \"Boroughs\" top-left to master the 7 main boroughs first.",
+    "feature2Title": "2. Sporcle runs & challenges (New!)",
+    "feature2Text": "Start structured rounds! Wrong clicks stay marked red, correct ones green. Score at least <strong>75%</strong> in a borough to unlock the next! Or name all places against the clock.",
+    "feature3Title": "3. Type the name (New!)",
+    "feature3Text": "Raise the difficulty! Type blinking district names directly from the keyboard (with smart autocomplete suggestions).",
+    "elbeTip": "Tip: The Elbe flows as a bright blue river through Hamburg and helps you orient yourself on the map!",
+    "dismiss": "Let's go!"
+  },
+  "explorer": {
+    "emptyBezirk": "Click a borough on the map to see fascinating metadata and Hanseatic facts!",
+    "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
+    "residents": "Population",
+    "area": "Area",
+    "density": "Population density",
+    "densityUnit": "inh./km²",
+    "na": "n/a",
+    "bezirkTitle": "Borough {name}",
+    "mainDistrict": "Main borough",
+    "totalResidents": "Total population",
+    "totalArea": "Total area",
+    "avgDensity": "Average density",
+    "subdistricts": "Districts ({count})"
+  },
+  "game": {
+    "roundStartTitle": "Start a run",
+    "roundStartDesc": "Learn focused in closed rounds like Sporcle. Correct/wrong answers stay marked!",
+    "timeLimit": "Time limit: 10 minutes.",
+    "unlockHint": "Unlock the next borough with ≥75% in the last unlocked borough!",
+    "bezirkPicker": "Include boroughs:",
+    "begin": "Start",
+    "ready": "Ready?",
+    "chooseBezirk": "Choose your borough...",
+    "questionCount": "Question {current}/{total}",
+    "placeCount": "Place {current} of {total}",
+    "cancelRound": "Cancel round",
+    "selectBezirkAlert": "Please select at least one borough.",
+    "noQuestionsAlert": "Error: No questions found in the selected borough!",
+    "confirmSegmentSwitch": "A round is in progress. Switch segment and cancel the round?",
+    "confirmModeSwitch": "A run is in progress. Switch mode and cancel the run?",
+    "confirmReset": "Really reset everything? XP, streak, progress, and achievements will be deleted. This cannot be undone.",
+    "locateBezirk": "Find the borough",
+    "locateStadtteil": "Find the district",
+    "locateClickBezirk": "Click it on the map!",
+    "locateClickStadtteil": "In the {bezirk} borough. Click it!",
+    "quizBezirk": "Which borough is blinking?",
+    "quizStadtteil": "Which district is blinking?",
+    "quizBlinkBezirk": "❔ Blinking borough ❔",
+    "quizBlinkStadtteil": "❔ Blinking district ❔",
+    "quizChoose": "Choose the correct answer from the options!",
+    "typeBezirk": "Name the borough",
+    "typeStadtteil": "Name the district",
+    "typeHint": "Type the name — a correct entry counts immediately.",
+    "placeholderBezirk": "Enter borough name...",
+    "placeholderStadtteil": "Enter district name...",
+    "correctXp": "Correct! +{xp} XP",
+    "wrongAnswer": "Wrong! Correct answer: {answer}",
+    "locateCorrect": "Found it! +{xp} XP",
+    "bezirkCorrect": "Borough correct! +{xp} XP",
+    "roundEnded": "Round finished!",
+    "timeUp": "⏱ Time's up (10 minutes).",
+    "playDuration": "Play time:",
+    "result": "Result",
+    "successRate": "Success rate",
+    "playAgain": "Play again",
+    "exit": "Exit",
+    "bezirkUnlocked": "🎉 Borough unlocked: {name}!",
+    "bezirkNeed75": "{bezirk}: {percent}% — at least 75% needed to unlock the next borough."
+  },
+  "nameAll": {
+    "titleBezirke": "Name all boroughs!",
+    "titleStadtteile": "Name all districts!",
+    "introBezirke": "How many Hamburg boroughs can you name from memory?",
+    "introStadtteile": "How many Hamburg districts can you name from memory?",
+    "introSuffix": "Type them in. Correct ones light up green instantly!",
+    "timeLimit": "Time limit: 10:00 minutes.",
+    "found": "Found:",
+    "placeholder": "Enter a name...",
+    "pause": "Pause",
+    "resume": "Resume",
+    "giveUp": "Give up",
+    "challengeEnded": "Challenge finished!",
+    "surrenderMsg": "You gave up or time ran out. All missing places are shown in red on the map.",
+    "perfectMsgStadtteile": "Incredible! You found EVERY SINGLE district!",
+    "perfectMsgBezirke": "Incredible! You found all seven boroughs!",
+    "foundLabel": "Found",
+    "quoteLabel": "Rate",
+    "exitCleanup": "Exit & clear map",
+    "allStadtteile": "All districts"
+  },
+  "log": {
+    "title": "📋 Log",
+    "close": "Close",
+    "emptyHistory": "No games played yet. Start a round!",
+    "historyTitle": "Game history",
+    "bezirkeSegment": " (Boroughs)",
+    "yourRank": "Your rank",
+    "trophies": "Trophies ({won} / {total})",
+    "xpHint1": "XP: Each correct answer in Detective mode gives +15 XP · Quiz & type-name modes +10 XP · \"Name all places\" +6 per hit.",
+    "xpHint2": "Streaks unlock XP bonuses: From 3: ×1.5 · from 5: ×2.",
+    "xpHint3": "Boroughs unlock separately via borough progress.",
+    "xpPlus": "{xp}+ XP"
+  },
+  "achievement": {
+    "unlocked": "Achievement unlocked!"
+  },
+  "levelUp": {
+    "title": "🎉 Level up! 🎉",
+    "rank": "You are now rank: {name}",
+    "body": "Your Hanseatic knowledge is growing! Master more districts to become the ultimate Hamburg Expert.",
+    "dismiss": "Let's keep going!"
+  }
+}
