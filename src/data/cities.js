@@ -44,7 +44,8 @@
       trophyCatalog: 'hamburg',
       totalTrophies: 11,
       islandEasterEgg: 'neuwerk',
-      paradiseTarget: 'Groß Flottbek'
+      paradiseTarget: 'Groß Flottbek',
+      onboardingVersion: 1
     },
     {
       id: 'berlin',
@@ -63,7 +64,8 @@
       trophyCatalog: 'berlin',
       totalTrophies: 16,
       islandEasterEgg: 'pfaueninsel',
-      paradiseTarget: 'Teufelsberg'
+      paradiseTarget: 'Teufelsberg',
+      onboardingVersion: 1
     },
     {
       id: 'frankfurt',

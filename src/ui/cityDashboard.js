@@ -180,9 +180,12 @@
     const won = game.trophies.size;
     const total = catalog.length;
     const { currentRank, nextRank, percent, totals } = game.getCityRankProgressInfo();
+    const cityRankKey = typeof getCityRankLocaleKey === 'function'
+      ? getCityRankLocaleKey(game.activeCityId)
+      : 'cityRanks';
     const cityRankNote = nextRank
-      ? t('cityRanks.progressTo', { percent: Math.round(percent), name: nextRank.name })
-      : t('cityRanks.maxReached');
+      ? t(`${cityRankKey}.progressTo`, { percent: Math.round(percent), name: nextRank.name })
+      : t(`${cityRankKey}.maxReached`);
     const stripItems = catalog.slice(0, 4).map((tr) => {
       const earned = game.trophies.has(tr.id);
       return `<div class="cpc-tro-chip${earned ? ' earned' : ' locked'}" title="${tr.name} — ${tr.desc}"><span class="cpc-tro-icon">${tr.icon}</span></div>`;
@@ -201,7 +204,7 @@
           </div>
           <div class="cpc-rank-bar"><div class="cpc-rank-fill" style="width:${percent}%"></div></div>
           <span class="cpc-rank-hint">${cityRankNote}</span>
-          <span class="cpc-rank-meta">${t('cityRanks.progressHint', totals)}</span>
+          <span class="cpc-rank-meta">${t(`${cityRankKey}.progressHint`, totals)}</span>
         </div>
         <div class="cpc-unlock-row">
           <div class="cpc-unlock">

@@ -27,14 +27,17 @@
       ? t('ranks.progressTo', { percent: Math.round(percent), name: nextRank.name, xp: nextRank.minXp })
       : t('ranks.maxReached');
 
-    const cityRankSteps = getCityRanks().map((rank) => {
+    const cityRankKey = typeof getCityRankLocaleKey === 'function'
+      ? getCityRankLocaleKey(game.activeCityId)
+      : 'cityRanks';
+    const cityRankSteps = getCityRanks(game.activeCityId).map((rank) => {
       let state = 'upcoming';
       if (rank.level < cityRankInfo.cityLevel) state = 'passed';
       else if (rank.level === cityRankInfo.cityLevel) state = 'current';
-      const isMax = rank.level === getCityRanks().length;
+      const isMax = rank.level === getCityRanks(game.activeCityId).length;
       const reqDistricts = isMax ? cityRankInfo.totals.totalDistricts : Math.min(rank.minDistricts, cityRankInfo.totals.totalDistricts);
       const reqTrophies = isMax ? cityRankInfo.totals.totalTrophies : Math.min(rank.minTrophies, cityRankInfo.totals.totalTrophies);
-      const reqHint = t('cityRanks.progressHint', {
+      const reqHint = t(`${cityRankKey}.progressHint`, {
         districts: reqDistricts,
         totalDistricts: cityRankInfo.totals.totalDistricts,
         trophies: reqTrophies,
@@ -51,8 +54,8 @@
     }).join('');
 
     const cityProgressNote = cityRankInfo.nextRank
-      ? t('cityRanks.progressTo', { percent: Math.round(cityRankInfo.percent), name: cityRankInfo.nextRank.name })
-      : t('cityRanks.maxReached');
+      ? t(`${cityRankKey}.progressTo`, { percent: Math.round(cityRankInfo.percent), name: cityRankInfo.nextRank.name })
+      : t(`${cityRankKey}.maxReached`);
 
     const trophyTiles = trophyCatalog.map((tr) => {
       const earned = game.trophies.has(tr.id);
@@ -116,7 +119,7 @@
             <span class="log-zone-tag city">${city.name}</span>
             <span class="log-zone-note">${t('log.zoneCityNote', { won, total })}</span>
           </div>
-          <p class="log-rank-current">${t('cityRanks.yourRank')}: <strong style="color:var(--acc-bright)">${cityRankInfo.currentRank.name}</strong></p>
+          <p class="log-rank-current">${t(`${cityRankKey}.yourRank`)}: <strong style="color:var(--acc-bright)">${cityRankInfo.currentRank.name}</strong></p>
           <div class="rank-ladder rank-ladder-city">${cityRankSteps}</div>
           <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${cityRankInfo.percent}%"></div></div>
           <p class="log-rank-progress-note">${cityProgressNote}</p>

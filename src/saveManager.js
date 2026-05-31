@@ -24,7 +24,8 @@
       highScore: 0,
       trophies: [],
       regionProgress,
-      gameHistory: []
+      gameHistory: [],
+      onboardingVersionSeen: 0
     };
   }
 
@@ -109,7 +110,8 @@
           highScore: parseInt(localStorage.getItem('hh_highscore'), 10) || 0,
           trophies: normalizeTrophyIds(trophies),
           regionProgress,
-          gameHistory
+          gameHistory,
+          onboardingVersionSeen: 1
         }
       },
       migratedFromV1: true,

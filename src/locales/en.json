@@ -37,6 +37,8 @@
     "locate": {
       "label": "District Detective",
       "desc": "Find the place on the map",
+      "labelOrtsteil": "Neighbourhood Detective",
+      "descOrtsteil": "Find the neighbourhood on the map",
       "labelBezirk": "Borough Detective",
       "descBezirk": "Find the borough on the map"
     },
@@ -160,6 +162,47 @@
     "progressTo": "{percent}% to {name}",
     "progressHint": "Boroughs {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "City rank"
+  },
+  "cityRanksBerlin": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Newbie" },
+    "3": { "name": "Berlin Local" },
+    "4": { "name": "Spree Captain" },
+    "5": { "name": "Berlin Expert" },
+    "6": { "name": "True Berliner" },
+    "7": { "name": "Borough Boss" },
+    "8": { "name": "King of Berlin" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Berlin rank reached — all boroughs & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Boroughs {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Berlin rank"
+  },
+  "trophiesBerlin": {
+    "pfaueninsel_island": {
+      "name": "Peacock Island Explorer",
+      "unlockTitle": "Peacock Island Explorer 🦚",
+      "desc": "Click the Peacock Island puzzle at the top-right of the map.",
+      "unlockDesc": "You solved the Peacock Island puzzle."
+    },
+    "paradise_explorer": {
+      "name": "Paradise Explorer!",
+      "unlockTitle": "Paradise Explorer! 🌴",
+      "desc": "Correctly tap \"Teufelsberg\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Teufelsberg for the first time."
+    },
+    "meister_alle_stadtteile": {
+      "name": "King of Berlin",
+      "unlockTitle": "King of Berlin 👑",
+      "desc": "Name all neighbourhoods in \"Name all places\".",
+      "unlockDesc": "Find every neighbourhood in the Sporcle challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Borough Boss",
+      "unlockTitle": "Borough Boss 🏛️",
+      "desc": "Name all twelve boroughs in the challenge.",
+      "unlockDesc": "Name all twelve boroughs in the challenge!"
+    }
   },
   "trophies": {
     "neuwerk_island": {
@@ -316,7 +359,9 @@
   },
   "explorer": {
     "emptyBezirk": "Click a borough on the map to see fascinating metadata and Hanseatic facts!",
+    "emptyBezirkBerlin": "Click a borough on the map to see fascinating metadata and Berlin facts!",
     "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
+    "emptyOrtsteil": "Click a neighbourhood on the map to see fascinating metadata and Berlin facts!",
     "residents": "Population",
     "area": "Area",
     "density": "Population density",
@@ -327,7 +372,8 @@
     "totalResidents": "Total population",
     "totalArea": "Total area",
     "avgDensity": "Average density",
-    "subdistricts": "Districts ({count})"
+    "subdistricts": "Districts ({count})",
+    "subdistrictsBerlin": "Neighbourhoods ({count})"
   },
   "game": {
     "roundStartTitle": "Start a run",
@@ -348,18 +394,24 @@
     "confirmReset": "Really reset everything? XP, streak, progress, and achievements will be deleted. This cannot be undone.",
     "locateBezirk": "Find the borough",
     "locateStadtteil": "Find the district",
+    "locateOrtsteil": "Find the neighbourhood",
     "locateClickBezirk": "Click it on the map!",
     "locateClickStadtteil": "In the {bezirk} borough. Click it!",
+    "locateClickOrtsteil": "In the {bezirk} borough. Click it!",
     "quizBezirk": "Which borough is blinking?",
     "quizStadtteil": "Which district is blinking?",
+    "quizOrtsteil": "Which neighbourhood is blinking?",
     "quizBlinkBezirk": "❔ Blinking borough ❔",
     "quizBlinkStadtteil": "❔ Blinking district ❔",
+    "quizBlinkOrtsteil": "❔ Blinking neighbourhood ❔",
     "quizChoose": "Choose the correct answer from the options!",
     "typeBezirk": "Name the borough",
     "typeStadtteil": "Name the district",
+    "typeOrtsteil": "Name the neighbourhood",
     "typeHint": "Type the name — a correct entry counts immediately.",
     "placeholderBezirk": "Enter borough name...",
     "placeholderStadtteil": "Enter district name...",
+    "placeholderOrtsteil": "Enter neighbourhood name...",
     "correctXp": "Correct! +{xp} XP",
     "wrongAnswer": "Wrong! Correct answer: {answer}",
     "locateCorrect": "Found it! +{xp} XP",

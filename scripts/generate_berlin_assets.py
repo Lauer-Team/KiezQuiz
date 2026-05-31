@@ -22,25 +22,23 @@ def main():
         html = r.read().decode("utf-8")
 
     tables = re.findall(r"<table.*?>(.*?)</table>", html, re.DOTALL)
-    table_content = tables[0]
+    # Table 1 is the full Ortsteile list (Nr | Ortsteil | Bezirk | Fläche | Einwohner)
+    table_content = max(tables, key=lambda t: len(re.findall(r"<tr.*?>", t, re.DOTALL)))
     rows = re.findall(r"<tr.*?>(.*?)</tr>", table_content, re.DOTALL)
+
+    def clean_cell(cell):
+        link = re.search(r"<a[^>]*>(.*?)</a>", cell)
+        text = link.group(1) if link else cell
+        return unescape(re.sub(r"<.*?>", "", text).strip())
 
     wiki_data = {}
     for row in rows[1:]:
         cols = re.findall(r"<td.*?>(.*?)</td>", row, re.DOTALL)
-        if len(cols) >= 4:
-            st_match = re.search(r"<a[^>]*>(.*?)</a>", cols[0])
-            st_name = st_match.group(1) if st_match else cols[0]
-            st_name = re.sub(r"<.*?>", "", st_name).strip()
-            st_name = unescape(st_name)
-
-            bz_match = re.search(r"<a[^>]*>(.*?)</a>", cols[1])
-            bz_name = bz_match.group(1) if bz_match else cols[1]
-            bz_name = re.sub(r"<.*?>", "", bz_name).strip()
-            bz_name = unescape(bz_name)
-
-            area = re.sub(r"<.*?>", "", cols[2]).strip()
-            pop = re.sub(r"<.*?>", "", cols[3]).strip()
+        if len(cols) >= 5:
+            st_name = clean_cell(cols[1])
+            bz_name = clean_cell(cols[2])
+            area = clean_cell(cols[3])
+            pop = clean_cell(cols[4])
 
             wiki_data[st_name] = {
                 "bezirk": bz_name,

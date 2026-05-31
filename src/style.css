@@ -1363,6 +1363,22 @@ body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(
   stroke-linejoin: round;
 }
 
+/* Berlin: Bezirksgrenzen deutlich dicker als Ortsteil-Grenzen */
+#city-view[data-city="berlin"] .bezirk-boundary-line {
+  stroke: rgba(255, 255, 255, 0.38);
+  stroke-width: 2.25px;
+}
+
+#city-view[data-city="berlin"] .bezirk-boundary-glow {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 4.5px;
+}
+
+#city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+  stroke-width: 0.25px;
+  stroke: rgba(255, 255, 255, 0.12);
+}
+
 /* Grayed-out Bezirke when not included in active game */
 .stadtteil-path.bezirk-excluded {
   fill: rgba(4, 8, 18, 0.72) !important;

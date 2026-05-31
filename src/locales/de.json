@@ -37,6 +37,8 @@
     "locate": {
       "label": "Stadtteil-Detektiv",
       "desc": "Finde den Ort auf der Karte",
+      "labelOrtsteil": "Ortsteil-Detektiv",
+      "descOrtsteil": "Finde den Ortsteil auf der Karte",
       "labelBezirk": "Bezirks-Detektiv",
       "descBezirk": "Finde den Bezirk auf der Karte"
     },
@@ -160,6 +162,47 @@
     "progressTo": "{percent}% bis {name}",
     "progressHint": "Bezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Stadtrang"
+  },
+  "cityRanksBerlin": {
+    "1": { "name": "Touri" },
+    "2": { "name": "Woss" },
+    "3": { "name": "Berliner Jung / Maus" },
+    "4": { "name": "Spree-Kapitän" },
+    "5": { "name": "Berlin-Experte" },
+    "6": { "name": "Urberliner" },
+    "7": { "name": "Bezirks-Babo" },
+    "8": { "name": "König von Berlin" },
+    "fallback": "Touri",
+    "maxReached": "Höchster Berlin-Rang erreicht — alle Bezirke & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Bezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Berlin-Rang"
+  },
+  "trophiesBerlin": {
+    "pfaueninsel_island": {
+      "name": "Pfaueninsel-Entdecker",
+      "unlockTitle": "Pfaueninsel-Entdecker 🦚",
+      "desc": "Klicke auf das Pfaueninsel-Rätsel oben rechts auf der Karte.",
+      "unlockDesc": "Du hast das Pfaueninsel-Rätsel gelöst."
+    },
+    "paradise_explorer": {
+      "name": "Entdecker des Paradieses!",
+      "unlockTitle": "Entdecker des Paradieses! 🌴",
+      "desc": "Tippe „Teufelsberg“ zum ersten Mal richtig – in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Teufelsberg zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "König von Berlin",
+      "unlockTitle": "König von Berlin 👑",
+      "desc": "Benenne alle Ortsteile in „Nenne alle Orte“.",
+      "unlockDesc": "Finde alle Ortsteile in der Sporcle-Challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Bezirks-Babo",
+      "unlockTitle": "Bezirks-Babo 🏛️",
+      "desc": "Benenne alle zwölf Bezirke in der Challenge.",
+      "unlockDesc": "Benenne alle zwölf Bezirke in der Challenge!"
+    }
   },
   "trophies": {
     "neuwerk_island": {
@@ -364,7 +407,9 @@
   },
   "explorer": {
     "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
+    "emptyBezirkBerlin": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
+    "emptyOrtsteil": "Klicke auf einen Ortsteil der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "residents": "Einwohner",
     "area": "Fläche",
     "density": "Bevölkerungsdichte",
@@ -375,7 +420,8 @@
     "totalResidents": "Gesamt-Einwohner",
     "totalArea": "Gesamt-Fläche",
     "avgDensity": "Durchschnittliche Dichte",
-    "subdistricts": "Stadtteile ({count})"
+    "subdistricts": "Stadtteile ({count})",
+    "subdistrictsBerlin": "Ortsteile ({count})"
   },
   "game": {
     "roundStartTitle": "Durchlauf starten",
@@ -396,18 +442,24 @@
     "confirmReset": "Wirklich alles zurücksetzen? XP, Streak, Fortschritt und Achievements werden gelöscht. Das kann nicht rückgängig gemacht werden.",
     "locateBezirk": "Finde den Bezirk",
     "locateStadtteil": "Finde den Stadtteil",
+    "locateOrtsteil": "Finde den Ortsteil",
     "locateClickBezirk": "Klicke ihn auf der Karte an!",
     "locateClickStadtteil": "Liegt im Bezirk {bezirk}. Klicke ihn an!",
+    "locateClickOrtsteil": "Liegt im Bezirk {bezirk}. Klicke ihn an!",
     "quizBezirk": "Welcher Bezirk blinkt?",
     "quizStadtteil": "Welcher Stadtteil blinkt?",
+    "quizOrtsteil": "Welcher Ortsteil blinkt?",
     "quizBlinkBezirk": "❔ Blinkender Bezirk ❔",
     "quizBlinkStadtteil": "❔ Blinkender Stadtteil ❔",
+    "quizBlinkOrtsteil": "❔ Blinkender Ortsteil ❔",
     "quizChoose": "Wähle die passende Antwort aus den Optionen!",
     "typeBezirk": "Bezirk benennen",
     "typeStadtteil": "Stadtteil benennen",
+    "typeOrtsteil": "Ortsteil benennen",
     "typeHint": "Tippe den Namen ein — bei richtiger Eingabe zählt er sofort.",
     "placeholderBezirk": "Bezirksname eingeben...",
     "placeholderStadtteil": "Stadtteilname eingeben...",
+    "placeholderOrtsteil": "Ortsteilname eingeben...",
     "correctXp": "Richtig! +{xp} XP",
     "wrongAnswer": "Falsch! Richtig wäre: {answer}",
     "locateCorrect": "Korrekt gefunden! +{xp} XP",
