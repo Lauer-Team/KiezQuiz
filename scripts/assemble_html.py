@@ -308,7 +308,7 @@ def main():
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KiezQuiz">
   <meta property="og:title" content="KiezQuiz">
-  <meta property="og:description" content="Besser wissen als Besserwissen">
+  <meta property="og:description" content="Besser wissen als Besserwissen.">
   <meta property="og:url" content="https://kiezquiz.lauer.team/">
   <meta property="og:locale" content="de_DE">
   <meta property="og:image" content="https://kiezquiz.lauer.team/assets/og-image.jpg">
@@ -319,7 +319,7 @@ def main():
   <!-- Link-Vorschau: Twitter / X Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="KiezQuiz">
-  <meta name="twitter:description" content="Besser wissen als Besserwissen">
+  <meta name="twitter:description" content="Besser wissen als Besserwissen.">
   <meta name="twitter:image" content="https://kiezquiz.lauer.team/assets/og-image.jpg">
 
   <link rel="manifest" href="manifest.webmanifest">
