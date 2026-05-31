@@ -112,7 +112,7 @@ class CloudSync {
       this.game.deserializeState(cloudState);
       this.game.saveState();
       if (typeof this.game.showSyncToast === 'function') {
-        this.game.showSyncToast('☁️ Spielstand aus der Cloud wiederhergestellt.');
+        this.game.showSyncToast(t('sync.restored'));
       }
       return;
     }
@@ -126,7 +126,7 @@ class CloudSync {
       this.game.deserializeState(cloudState);
       this.game.saveState();
       if (typeof this.game.showSyncToast === 'function') {
-        this.game.showSyncToast('☁️ Spielstand aus der Cloud wiederhergestellt.');
+        this.game.showSyncToast(t('sync.restored'));
       }
       return;
     }
@@ -134,7 +134,7 @@ class CloudSync {
     if (!cloudEmpty && localXp > cloudXp) {
       await this.flushSaveNow();
       if (typeof this.game.showSyncToast === 'function') {
-        this.game.showSyncToast('☁️ Lokaler Fortschritt in die Cloud hochgeladen.');
+        this.game.showSyncToast(t('sync.uploaded'));
       }
       return;
     }

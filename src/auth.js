@@ -29,7 +29,7 @@ class AuthManager {
   }
 
   getDisplayName() {
-    return this.profile?.username || this.user?.email?.split('@')[0] || 'Spieler';
+    return this.profile?.username || this.user?.email?.split('@')[0] || t('auth.player');
   }
 
   onAuthChange(callback) {
@@ -95,30 +95,30 @@ class AuthManager {
   _mapAuthError(message) {
     const msg = (message || '').toLowerCase();
     if (msg.includes('already registered') || msg.includes('already been registered')) {
-      return 'E-Mail bereits registriert.';
+      return t('auth.emailRegistered');
     }
     if (msg.includes('invalid login credentials')) {
-      return 'Benutzername, E-Mail oder Passwort falsch.';
+      return t('auth.invalidCredentials');
     }
     if (msg.includes('password') && msg.includes('6')) {
-      return 'Passwort muss mindestens 6 Zeichen haben.';
+      return t('auth.passwordMin');
     }
     if (msg.includes('valid email')) {
-      return 'Bitte eine gültige E-Mail-Adresse eingeben.';
+      return t('auth.invalidEmail');
     }
-    return message || 'Ein Fehler ist aufgetreten.';
+    return message || t('auth.genericError');
   }
 
   async signUp(username, email, password) {
     if (!this.supabase) {
-      return { error: 'Cloud-Speicherung ist nicht konfiguriert.' };
+      return { error: t('auth.cloudNotConfigured') };
     }
     const trimmedName = (username || '').trim();
     if (!trimmedName) {
-      return { error: 'Bitte einen Benutzernamen eingeben.' };
+      return { error: t('auth.usernameRequired') };
     }
     if ((password || '').length < 6) {
-      return { error: 'Passwort muss mindestens 6 Zeichen haben.' };
+      return { error: t('auth.passwordMin') };
     }
 
     const { data, error } = await this.supabase.auth.signUp({
@@ -140,12 +140,12 @@ class AuthManager {
 
   async signIn(identifier, password) {
     if (!this.supabase) {
-      return { error: 'Cloud-Speicherung ist nicht konfiguriert.' };
+      return { error: t('auth.cloudNotConfigured') };
     }
 
     const trimmed = (identifier || '').trim();
     if (!trimmed) {
-      return { error: 'Bitte Benutzername oder E-Mail eingeben.' };
+      return { error: t('auth.identifierRequired') };
     }
 
     let email = trimmed;
@@ -154,10 +154,10 @@ class AuthManager {
         .rpc('get_email_for_username', { p_username: trimmed });
       if (lookupError) {
         console.warn('Username-Lookup fehlgeschlagen:', lookupError.message);
-        return { error: 'Benutzername, E-Mail oder Passwort falsch.' };
+        return { error: t('auth.invalidCredentials') };
       }
       if (!resolvedEmail) {
-        return { error: 'Benutzername, E-Mail oder Passwort falsch.' };
+        return { error: t('auth.invalidCredentials') };
       }
       email = resolvedEmail;
     }
@@ -196,7 +196,7 @@ class AuthManager {
       pill.innerHTML = `
         <span class="auth-pill-icon">👤</span>
         <span class="auth-pill-name">${this._escapeHtml(this.getDisplayName())}</span>
-        <button type="button" class="auth-pill-action" id="btn-auth-logout" title="Abmelden">Abmelden</button>
+        <button type="button" class="auth-pill-action" id="btn-auth-logout" title="${t('header.logout')}">${t('header.logout')}</button>
       `;
       document.getElementById('btn-auth-logout')?.addEventListener('click', async (e) => {
         e.stopPropagation();
@@ -206,8 +206,8 @@ class AuthManager {
       pill.classList.remove('auth-pill--logged-in');
       pill.innerHTML = `
         <span class="auth-pill-icon">👤</span>
-        <span class="auth-pill-label">Gast</span>
-        <span class="auth-pill-action">Anmelden</span>
+        <span class="auth-pill-label">${t('header.guest')}</span>
+        <span class="auth-pill-action">${t('header.login')}</span>
       `;
     }
   }
@@ -231,41 +231,41 @@ class AuthManager {
     let activeTab = 'login';
     const modal = openOverlayModal(`
       <div class="modal-content auth-modal-content">
-        <h2>☁️ Cloud-Speicherung</h2>
-        <p class="auth-modal-intro">Optional: Mit Account wird dein Spielstand geräteübergreifend gesichert. Ohne Login spielst du weiter als Gast (nur lokal).</p>
+        <h2>${t('auth.cloudTitle')}</h2>
+        <p class="auth-modal-intro">${t('auth.cloudIntro')}</p>
         <div class="auth-tabs">
-          <button type="button" class="auth-tab auth-tab--active" data-tab="login">Anmelden</button>
-          <button type="button" class="auth-tab" data-tab="register">Registrieren</button>
+          <button type="button" class="auth-tab auth-tab--active" data-tab="login">${t('auth.loginTab')}</button>
+          <button type="button" class="auth-tab" data-tab="register">${t('auth.registerTab')}</button>
         </div>
         <form class="auth-form" id="auth-form-login">
           <label class="auth-field">
-            <span>Benutzername oder E-Mail</span>
+            <span>${t('auth.usernameOrEmail')}</span>
             <input type="text" id="auth-email" autocomplete="username" required>
           </label>
           <label class="auth-field">
-            <span>Passwort</span>
+            <span>${t('auth.password')}</span>
             <input type="password" id="auth-password" autocomplete="current-password" required minlength="6">
           </label>
           <p class="auth-error" id="auth-error" hidden></p>
-          <button type="submit" class="primary-btn auth-submit">Anmelden</button>
+          <button type="submit" class="primary-btn auth-submit">${t('auth.loginSubmit')}</button>
         </form>
         <form class="auth-form" id="auth-form-register" hidden>
           <label class="auth-field">
-            <span>Benutzername</span>
+            <span>${t('auth.username')}</span>
             <input type="text" id="auth-username" autocomplete="username" required minlength="2" maxlength="30">
           </label>
           <label class="auth-field">
-            <span>E-Mail</span>
+            <span>${t('auth.email')}</span>
             <input type="email" id="auth-email-reg" autocomplete="email" required>
           </label>
           <label class="auth-field">
-            <span>Passwort</span>
+            <span>${t('auth.password')}</span>
             <input type="password" id="auth-password-reg" autocomplete="new-password" required minlength="6">
           </label>
           <p class="auth-error" id="auth-error-reg" hidden></p>
-          <button type="submit" class="primary-btn auth-submit">Registrieren</button>
+          <button type="submit" class="primary-btn auth-submit">${t('auth.registerSubmit')}</button>
         </form>
-        <button type="button" class="secondary-btn auth-cancel" id="btn-auth-cancel">Abbrechen</button>
+        <button type="button" class="secondary-btn auth-cancel" id="btn-auth-cancel">${t('auth.cancel')}</button>
       </div>
     `, { closeOnBackdrop: true });
 
@@ -275,7 +275,7 @@ class AuthManager {
 
     const setTab = (tab) => {
       activeTab = tab;
-      tabs.forEach((t) => t.classList.toggle('auth-tab--active', t.dataset.tab === tab));
+      tabs.forEach((tEl) => tEl.classList.toggle('auth-tab--active', tEl.dataset.tab === tab));
       loginForm.hidden = tab !== 'login';
       registerForm.hidden = tab !== 'register';
     };
@@ -295,11 +295,11 @@ class AuthManager {
 
       const submitBtn = loginForm.querySelector('.auth-submit');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Wird angemeldet…';
+      submitBtn.textContent = t('auth.loggingIn');
 
       const { error } = await this.signIn(email, password);
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Anmelden';
+      submitBtn.textContent = t('auth.loginSubmit');
 
       if (error) {
         errEl.textContent = error;
@@ -320,11 +320,11 @@ class AuthManager {
 
       const submitBtn = registerForm.querySelector('.auth-submit');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Wird registriert…';
+      submitBtn.textContent = t('auth.registering');
 
       const { error } = await this.signUp(username, email, password);
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Registrieren';
+      submitBtn.textContent = t('auth.registerSubmit');
 
       if (error) {
         errEl.textContent = error;

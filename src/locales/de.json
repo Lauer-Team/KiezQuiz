@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "title": "KiezQuiz – Stadtteile spielerisch lernen",
+    "description": "KiezQuiz: Lerne spielerisch alle 7 Bezirke und 104 Stadtteile Hamburgs – interaktiv, offline spielbar und mobiloptimiert.",
+    "ogDescription": "Besser wissen als Besserwissen.",
+    "manifestDescription": "Hamburgs Bezirke und Stadtteile spielerisch lernen"
+  },
+  "header": {
+    "badge": "Gamified Learning",
+    "streakLabel": "Serie 🔥:",
+    "streakBest": "Beste: {count}x",
+    "xpLabel": "XP:",
+    "authTitle": "Cloud-Speicherung: optional anmelden",
+    "guest": "Gast",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "soundTitle": "Sound ein/ausschalten",
+    "historyTitle": "Log: Pokale, Rang & Spielverlauf",
+    "settingsTitle": "Einstellungen",
+    "streakTitle": "Deine aktuelle Antwortserie",
+    "xpTitle": "Deine Erfahrungspunkte"
+  },
+  "segment": {
+    "stadtteile": "🏙️ Stadtteile",
+    "bezirke": "🏢 Bezirke lernen"
+  },
+  "modes": {
+    "selectTitle": "Spielmodus wählen",
+    "explorer": {
+      "label": "Entdecker-Modus",
+      "desc": "Frei erkunden & Infos lernen"
+    },
+    "locate": {
+      "label": "Stadtteil-Detektiv",
+      "desc": "Finde den Ort auf der Karte",
+      "labelBezirk": "Bezirks-Detektiv",
+      "descBezirk": "Finde den Bezirk auf der Karte"
+    },
+    "quiz": {
+      "label": "Karten-Quiz",
+      "desc": "Erkenne den blinkenden Ort"
+    },
+    "typeName": {
+      "label": "Namen eingeben",
+      "desc": "Blinkenden Ort eintippen"
+    },
+    "nameAll": {
+      "label": "Nenne alle Orte",
+      "desc": "Sporcle-Challenge gegen die Zeit"
+    },
+    "EXPLORER": "Entdecker-Modus",
+    "LOCATE": "Stadtteil-Detektiv",
+    "LOCATE_BEZIRKE": "Bezirks-Detektiv",
+    "QUIZ": "Karten-Quiz",
+    "TYPE_NAME": "Namen eingeben",
+    "NAME_ALL": "Nenne alle Orte"
+  },
+  "progress": {
+    "title": "Bezirks-Fortschritt",
+    "unlockAll": "Alle Bezirke freischalten",
+    "unlockAllHint": "Bypass für Profis (keine Progression)",
+    "lockHint": "🔒 75% im vorherigen Bezirk"
+  },
+  "map": {
+    "neuwerkTitle": "Wo liegt eigentlich Neuwerk? Klicke hier!",
+    "neuwerkTitleUnlocked": "Neuwerk-Insulaner — Trophäe freigeschaltet!",
+    "neuwerkLabel": "Neuwerk (Insel-Rätsel) 🏝️",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern",
+    "zoomReset": "🏠 Zentrieren & Reset",
+    "hintDesktop": "💡 Tipp: Ziehe zum Verschieben. Mausrad oder Pinch zum Zoomen.",
+    "hintTouch": "💡 Tipp: Mit einem Finger verschieben, mit zwei Fingern zoomen. +/- Buttons nutzen.",
+    "tooltipLocked": "🔒 Bezirk gesperrt",
+    "tooltipLockedHint": "Lerne weiter zum Freischalten",
+    "tooltipBezirk": "Bezirk: {bezirk}",
+    "tooltipTapLearn": "Tippen zum Lernen"
+  },
+  "footer": {
+    "privacy": "Datenschutz:",
+    "privacyText": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte."
+  },
+  "settings": {
+    "title": "⚙️ Einstellungen",
+    "language": "Sprache / Language",
+    "langDe": "Deutsch",
+    "langEn": "English",
+    "cloudTitle": "☁️ Cloud-Speicherung",
+    "cloudNotConfigured": "Cloud-Speicherung ist noch nicht eingerichtet (nur lokaler Spielstand).",
+    "cloudLoggedIn": "Eingeloggt als <strong>{name}</strong>. Dein Spielstand wird automatisch synchronisiert.",
+    "cloudGuest": "Nicht eingeloggt — Spielstand nur lokal. Tippe oben rechts auf „Anmelden“ für Cloud-Sync.",
+    "privacyTitle": "🔒 Datenschutz",
+    "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert (localStorage). Mit optionalem Account werden Spielstände verschlüsselt über TLS bei Supabase (EU) gespeichert — E-Mail, Benutzername und Spielstand. Keine Weitergabe an Dritte. Details in der Setup-Anleitung unter docs/SUPABASE-SETUP.md.",
+    "resetTitle": "🗑️ Spielstand zurücksetzen",
+    "resetBody": "Löscht alle XP, Achievements und Fortschritte{cloudSuffix}. Frischer Start als Quiddje.",
+    "resetCloudSuffix": " (lokal und in der Cloud)",
+    "resetBtn": "↺ Neustart",
+    "close": "Schließen"
+  },
+  "auth": {
+    "player": "Spieler",
+    "cloudTitle": "☁️ Cloud-Speicherung",
+    "cloudIntro": "Optional: Mit Account wird dein Spielstand geräteübergreifend gesichert. Ohne Login spielst du weiter als Gast (nur lokal).",
+    "loginTab": "Anmelden",
+    "registerTab": "Registrieren",
+    "usernameOrEmail": "Benutzername oder E-Mail",
+    "password": "Passwort",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "loginSubmit": "Anmelden",
+    "registerSubmit": "Registrieren",
+    "cancel": "Abbrechen",
+    "loggingIn": "Wird angemeldet…",
+    "registering": "Wird registriert…",
+    "emailRegistered": "E-Mail bereits registriert.",
+    "invalidCredentials": "Benutzername, E-Mail oder Passwort falsch.",
+    "passwordMin": "Passwort muss mindestens 6 Zeichen haben.",
+    "invalidEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
+    "genericError": "Ein Fehler ist aufgetreten.",
+    "cloudNotConfigured": "Cloud-Speicherung ist nicht konfiguriert.",
+    "usernameRequired": "Bitte einen Benutzernamen eingeben.",
+    "identifierRequired": "Bitte Benutzername oder E-Mail eingeben."
+  },
+  "sync": {
+    "restored": "☁️ Spielstand aus der Cloud wiederhergestellt.",
+    "uploaded": "☁️ Lokaler Fortschritt in die Cloud hochgeladen."
+  },
+  "ranks": {
+    "1": { "name": "Quiddje" },
+    "2": { "name": "Fischkopp" },
+    "3": { "name": "Hamburger Jung / Deern" },
+    "4": { "name": "Elbkapitän" },
+    "5": { "name": "Hamburg-Experte" },
+    "fallback": "Hamburger",
+    "maxReached": "Höchster Rang erreicht",
+    "progressTo": "{percent}% bis {name} ({xp} XP)"
+  },
+  "trophies": {
+    "neuwerk_island": {
+      "name": "Neuwerk-Insulaner",
+      "unlockTitle": "Neuwerk-Insulaner 🏝️",
+      "desc": "Klicke auf das Neuwerk-Rätsel oben rechts auf der Karte.",
+      "unlockDesc": "Du hast das Neuwerk-Rätsel gelöst."
+    },
+    "paradise_explorer": {
+      "name": "Entdecker des Paradieses!",
+      "unlockTitle": "Entdecker des Paradieses! 🌴",
+      "desc": "Tippe „Groß Flottbek“ zum ersten Mal richtig – in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Groß Flottbek zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "König von Hamburg",
+      "unlockTitle": "König von Hamburg 👑",
+      "desc": "Benenne alle Stadtteile in „Nenne alle Orte“.",
+      "unlockDesc": "Finde alle Stadtteile in der Sporcle-Challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Bezirks-Kapitän",
+      "unlockTitle": "Bezirks-Kapitän 🏛️",
+      "desc": "Benenne alle sieben Bezirke in der Challenge.",
+      "unlockDesc": "Benenne alle sieben Bezirke in der Challenge!"
+    },
+    "master_altona": { "name": "{bezirk}-Entdecker", "desc": "Meistere alle Stadtteile im Bezirk {bezirk}." },
+    "master_bergedorf": { "name": "{bezirk}-Entdecker", "desc": "Meistere alle Stadtteile im Bezirk {bezirk}." },
+    "master_eimsbuettel": { "name": "{bezirk}-Entdecker", "desc": "Meistere alle Stadtteile im Bezirk {bezirk}." },
+    "master_hamburg-mitte": { "name": "{bezirk}-Entdecker", "desc": "Meistere alle Stadtteile im Bezirk {bezirk}." },
+    "master_hamburg-nord": { "name": "{bezirk}-Entdecker", "desc": "Meistere alle Stadtteile im Bezirk {bezirk}." },
+    "master_harburg": { "name": "{bezirk}-Entdecker", "desc": "Meistere alle Stadtteile im Bezirk {bezirk}." },
+    "master_wandsbek": { "name": "{bezirk}-Entdecker", "desc": "Meistere alle Stadtteile im Bezirk {bezirk}." }
+  },
+  "trivia": {
+    "defaultStadtteil": "Ein charmanter Hamburger Stadtteil mit ganz eigenem Flair.",
+    "defaultBezirk": "Ein bedeutender Bezirk Hamburgs.",
+    "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
+    "templates": {
+      "Altona": [
+        "War historisch eine eigenständige dänische Konkurrenzstadt zu Hamburg.",
+        "Bekannt für den Elbstrand in Övelgönne und das lebendige Ottensen.",
+        "Bietet eine wunderschöne Aussicht vom Altonaer Balkon auf den Hamburger Hafen."
+      ],
+      "Bergedorf": [
+        "Der flächenmäßig größte Bezirk Hamburgs, geprägt von Landwirtschaft und Vierlanden.",
+        "Besitzt mit dem Schloss Bergedorf das einzige erhaltene Schloss im Hamburger Stadtgebiet.",
+        "Hier wachsen die berühmten Vierländer Rosen und frisches Gemüse für Hamburg."
+      ],
+      "Eimsbüttel": [
+        "Eines der am dichtesten besiedelten Wohngebiete mit wunderschönen Altbauten.",
+        "Bekannt für das Grindelviertel, das historische Zentrum jüdischen Lebens in Hamburg.",
+        "Beheimatet das bekannte Tierpark Hagenbeck im Stadtteil Stellingen."
+      ],
+      "Hamburg-Mitte": [
+        "Das schlagende Herz Hamburgs mit Hafen, Speicherstadt, Rathaus und St. Pauli.",
+        "Hier liegt die Elbphilharmonie in der modernen HafenCity.",
+        "Erstreckt sich über die Elbe hinweg bis nach Wilhelmsburg und Finkenwerder."
+      ],
+      "Hamburg-Nord": [
+        "Geprägt durch den riesigen Hamburger Stadtpark und den Hamburger Flughafen.",
+        "Wunderschöne Alsterkanäle fließen durch Winterhude und Eppendorf.",
+        "Beheimatet die berühmte Jarrestadt, eine legendäre Backsteinsiedlung."
+      ],
+      "Harburg": [
+        "Liegt südlich der Norderelbe und hat eine ganz eigene, markante Identität.",
+        "Bekannt für die waldreichen Harburger Berge und den Schwarzen Berge Wildpark.",
+        "Sitz der Technischen Universität Hamburg (TUHH) und des Binnenhafens."
+      ],
+      "Wandsbek": [
+        "Der einwohnerstärkste Bezirk Hamburgs mit vielen grünen Wohngebieten.",
+        "Verbindet dörfliche Idylle im Alstertal mit urbanen Zentren.",
+        "Benannt nach dem historischen Dichter Matthias Claudius (Wandsbecker Bote)."
+      ]
+    },
+    "specific": {
+      "St. Pauli": "Heimat des berühmten Kiez, der Reeperbahn und des FC St. Pauli. Einst ein Vorort außerhalb der Hamburger Stadtgrenzen.",
+      "HafenCity": "Europas größtes innerstädtisches Stadtentwicklungsprojekt direkt an der Elbe, Heimat der Elbphilharmonie.",
+      "Blankenese": "Ehemaliges Fischerdorf, weltberühmt für sein idyllisches Treppenviertel am Steilufer der Elbe.",
+      "Neuwerk": "Eine Nordseeinsel im Nationalpark Wattenmeer. Gehört seit dem Cuxhaven-Vertrag 1969 offiziell zu Hamburg-Mitte.",
+      "Sternschanze": "Hamburgs kleinster Stadtteil, berühmt für alternative Kultur, Streetart und das belebte Schanzenviertel.",
+      "Eppendorf": "Bekannt für edle Jugendstilvillen, feine Boutiquen und das Universitätsklinikum Eppendorf (UKE).",
+      "Rothenburgsort": "Historisch ein Arbeiterquartier, das im Zweiten Weltkrieg fast vollständig zerstört wurde und heute ein kreativer Hotspot ist.",
+      "Wilhelmsburg": "Die größte Flussinsel Europas, gelegen zwischen Norder- und Süderelbe, ein multikultureller und grüner Stadtteil.",
+      "Finkenwerder": "Heimat der Airbus-Werke und des traditionellen Obstanbaus (Altes Land).",
+      "Speicherstadt": "Das größte zusammenhängende Lagerhausensemble der Welt und UNESCO-Weltkulturerbe."
+    }
+  },
+  "onboarding": {
+    "title": "Moin Moin in Hamburg! ⚓",
+    "intro": "Lerne spielerisch alle 7 Bezirke und 104 Stadtteile Hamburgs kennen. Du fängst ganz klein als <strong>Quiddje</strong> (Nicht-Hamburger) an und arbeitest dich hoch!",
+    "feature1Title": "1. Bezirke lernen (Neu!)",
+    "feature1Text": "Lerne entweder alle 104 Stadtteile im Detail oder schalte oben links auf \"Bezirke\" um, um erst einmal die 7 großen Hauptbezirke spielerisch zu meistern.",
+    "feature2Title": "2. Sporcle-Durchläufe & Challenges (Neu!)",
+    "feature2Text": "Starte strukturierte Runden! Falsche Klicks bleiben dauerhaft rot markiert, richtige grün. Meistere einen Bezirk mit mindestens <strong>75%</strong>, um weiterzukommen! Oder nenne alle Orte im Countdown-Timer.",
+    "feature3Title": "3. Namen eingeben (Neu!)",
+    "feature3Text": "Erhöhe die Schwierigkeit! Tippe im neuen Eingabemodus die blinkenden Stadtteil-Namen direkt per Tastatur ein (mit smarter Autocomplete-Vorschlagsliste).",
+    "elbeTip": "Tipp: Die Elbe fließt als breiter hellblauer Strom durch Hamburg und hilft dir perfekt bei der Orientierung auf der Karte!",
+    "dismiss": "Leinen los!"
+  },
+  "explorer": {
+    "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
+    "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
+    "residents": "Einwohner",
+    "area": "Fläche",
+    "density": "Bevölkerungsdichte",
+    "densityUnit": "Einw./km²",
+    "na": "k.A.",
+    "bezirkTitle": "Bezirk {name}",
+    "mainDistrict": "Hauptbezirk",
+    "totalResidents": "Gesamt-Einwohner",
+    "totalArea": "Gesamt-Fläche",
+    "avgDensity": "Durchschnittliche Dichte",
+    "subdistricts": "Stadtteile ({count})"
+  },
+  "game": {
+    "roundStartTitle": "Durchlauf starten",
+    "roundStartDesc": "Lerne fokussiert in geschlossenen Runden wie bei Sporcle. Richtige/falsche Antworten bleiben markiert!",
+    "timeLimit": "Zeitlimit: 10 Minuten.",
+    "unlockHint": "Schalte den nächsten Bezirk frei mit ≥75% im zuletzt freigeschalteten Bezirk!",
+    "bezirkPicker": "Bezirke einbeziehen:",
+    "begin": "Beginnen",
+    "ready": "Bereit?",
+    "chooseBezirk": "Wähle deinen Bezirk...",
+    "questionCount": "Frage {current}/{total}",
+    "placeCount": "Ort {current} von {total}",
+    "cancelRound": "Runde abbrechen",
+    "selectBezirkAlert": "Bitte wähle mindestens einen Bezirk aus.",
+    "noQuestionsAlert": "Fehler: Keine Fragen im ausgewählten Bezirk gefunden!",
+    "confirmSegmentSwitch": "Runde läuft gerade. Segment wirklich wechseln und Runde abbrechen?",
+    "confirmModeSwitch": "Aktiver Durchlauf läuft gerade. Modus wirklich wechseln und Durchlauf abbrechen?",
+    "confirmReset": "Wirklich alles zurücksetzen? XP, Streak, Fortschritt und Achievements werden gelöscht. Das kann nicht rückgängig gemacht werden.",
+    "locateBezirk": "Finde den Bezirk",
+    "locateStadtteil": "Finde den Stadtteil",
+    "locateClickBezirk": "Klicke ihn auf der Karte an!",
+    "locateClickStadtteil": "Liegt im Bezirk {bezirk}. Klicke ihn an!",
+    "quizBezirk": "Welcher Bezirk blinkt?",
+    "quizStadtteil": "Welcher Stadtteil blinkt?",
+    "quizBlinkBezirk": "❔ Blinkender Bezirk ❔",
+    "quizBlinkStadtteil": "❔ Blinkender Stadtteil ❔",
+    "quizChoose": "Wähle die passende Antwort aus den Optionen!",
+    "typeBezirk": "Bezirk benennen",
+    "typeStadtteil": "Stadtteil benennen",
+    "typeHint": "Tippe den Namen ein — bei richtiger Eingabe zählt er sofort.",
+    "placeholderBezirk": "Bezirksname eingeben...",
+    "placeholderStadtteil": "Stadtteilname eingeben...",
+    "correctXp": "Richtig! +{xp} XP",
+    "wrongAnswer": "Falsch! Richtig wäre: {answer}",
+    "locateCorrect": "Korrekt gefunden! +{xp} XP",
+    "bezirkCorrect": "Bezirk korrekt! +{xp} XP",
+    "roundEnded": "Runde beendet!",
+    "timeUp": "⏱ Zeit abgelaufen (10 Minuten).",
+    "playDuration": "Spieldauer:",
+    "result": "Ergebnis",
+    "successRate": "Erfolgsquote",
+    "playAgain": "Nochmal spielen",
+    "exit": "Beenden",
+    "bezirkUnlocked": "🎉 Bezirk freigeschaltet: {name}!",
+    "bezirkNeed75": "{bezirk}: {percent}% — mindestens 75% nötig, um den nächsten Bezirk freizuschalten."
+  },
+  "nameAll": {
+    "titleBezirke": "Nenne alle Bezirke!",
+    "titleStadtteile": "Nenne alle Stadtteile!",
+    "introBezirke": "Wie viele Hamburger Bezirke kannst du aus dem Kopf nennen?",
+    "introStadtteile": "Wie viele Hamburger Stadtteile kannst du aus dem Kopf nennen?",
+    "introSuffix": "Tippe sie ein. Richtige leuchten sofort grün auf!",
+    "timeLimit": "Zeitlimit: 10:00 Minuten.",
+    "found": "Gefunden:",
+    "placeholder": "Gib einen Namen ein...",
+    "pause": "Pause",
+    "resume": "Weiter",
+    "giveUp": "Aufgeben",
+    "challengeEnded": "Challenge beendet!",
+    "surrenderMsg": "Du hast aufgegeben oder die Zeit ist abgelaufen. Alle fehlenden Orte leuchten rot auf der Karte.",
+    "perfectMsgStadtteile": "Unglaublich! Du hast JEDEN EINZELNEN Stadtteil gefunden!",
+    "perfectMsgBezirke": "Unglaublich! Du hast alle sieben Bezirke gefunden!",
+    "foundLabel": "Gefunden",
+    "quoteLabel": "Quote",
+    "exitCleanup": "Beenden & Karte aufräumen",
+    "allStadtteile": "Alle Stadtteile"
+  },
+  "log": {
+    "title": "📋 Log",
+    "close": "Schließen",
+    "emptyHistory": "Noch keine Spiele gespielt. Starte eine Runde!",
+    "historyTitle": "Spielverlauf",
+    "bezirkeSegment": " (Bezirke)",
+    "yourRank": "Dein Rang",
+    "trophies": "Pokale ({won} / {total})",
+    "xpHint1": "XP: Jede richtige Antwort im Detektiv-Modus gibt je +15 XP · im Quiz & beim Namen eingeben je +10 XP · Im „Nenne alle Orte“-Modus je +6 pro Treffer.",
+    "xpHint2": "Serien schalten XP-Boni frei: Ab 3: ×1,5 · ab 5: ×2.",
+    "xpHint3": "Bezirke schaltest du separat über den Bezirks-Fortschritt frei.",
+    "xpPlus": "{xp}+ XP"
+  },
+  "achievement": {
+    "unlocked": "Erfolg freigeschaltet!"
+  },
+  "levelUp": {
+    "title": "🎉 Aufstieg! 🎉",
+    "rank": "Du bist jetzt im Rang: {name}",
+    "body": "Dein hanseatisches Wissen wächst! Meistere noch mehr Stadtteile, um der ultimative Hamburg-Experte zu werden.",
+    "dismiss": "Weiter geht's!"
+  }
+}
