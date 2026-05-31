@@ -75,7 +75,7 @@
         </div>
         <div class="hub-account">
           <div class="hub-account-rank">
-            <span class="hub-account-label">${t('hub.yourRank')}</span>
+            <span class="hub-account-label">${t('header.globalRankLabel')}</span>
             <span class="hub-account-value">${currentRank?.name || t('ranks.fallback')}</span>
           </div>
           <div class="stat-pill xp-pill"><span class="label">${t('header.xpLabel').replace(':', '')}</span><span class="value" id="hub-stat-xp">${game.xp}</span></div>
@@ -85,6 +85,7 @@
             <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
             <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
           </button>
+          <button class="audio-toggle lang-toggle" id="hub-btn-lang" title="">🇩🇪</button>
           <button class="audio-toggle" id="hub-btn-settings" data-i18n-title="header.settingsTitle" title="">⚙️</button>
         </div>
       </div>`;
@@ -170,6 +171,14 @@
 
     const settingsBtn = container.querySelector('#hub-btn-settings');
     if (settingsBtn) settingsBtn.addEventListener('click', () => game.showSettings());
+
+    const langBtn = container.querySelector('#hub-btn-lang');
+    if (langBtn) {
+      game.updateLangButton(langBtn);
+      langBtn.addEventListener('click', () => {
+        setLocale(getLocale() === 'de' ? 'en' : 'de');
+      });
+    }
 
     game.syncHubStats();
   }

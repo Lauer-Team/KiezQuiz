@@ -3,6 +3,7 @@
   function showLogModal(game) {
     const city = window.cityRegistry.localizeCity(window.cityRegistry.getCity(game.activeCityId || 'hamburg'));
     const { currentRank, nextRank, percent } = game.getRankProgressInfo();
+    const cityRankInfo = game.getCityRankProgressInfo();
     const trophyCatalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog() : [];
     const won = game.trophies.size;
     const total = trophyCatalog.length;
@@ -11,7 +12,7 @@
       let state = 'upcoming';
       if (rank.level < game.level) state = 'passed';
       else if (rank.level === game.level) state = 'current';
-      const xpHint = rank.level < 5 ? `${rank.minXp} XP` : t('log.xpPlus', { xp: rank.minXp });
+      const xpHint = rank.maxXp !== Infinity ? `${rank.minXp} XP` : t('log.xpPlus', { xp: rank.minXp });
       return `
         <div class="rank-ladder-step rank-ladder-step--${state}">
           <span class="rank-ladder-dot"></span>
@@ -25,6 +26,33 @@
     const progressNote = nextRank
       ? t('ranks.progressTo', { percent: Math.round(percent), name: nextRank.name, xp: nextRank.minXp })
       : t('ranks.maxReached');
+
+    const cityRankSteps = getCityRanks().map((rank) => {
+      let state = 'upcoming';
+      if (rank.level < cityRankInfo.cityLevel) state = 'passed';
+      else if (rank.level === cityRankInfo.cityLevel) state = 'current';
+      const isMax = rank.level === getCityRanks().length;
+      const reqDistricts = isMax ? cityRankInfo.totals.totalDistricts : Math.min(rank.minDistricts, cityRankInfo.totals.totalDistricts);
+      const reqTrophies = isMax ? cityRankInfo.totals.totalTrophies : Math.min(rank.minTrophies, cityRankInfo.totals.totalTrophies);
+      const reqHint = t('cityRanks.progressHint', {
+        districts: reqDistricts,
+        totalDistricts: cityRankInfo.totals.totalDistricts,
+        trophies: reqTrophies,
+        totalTrophies: cityRankInfo.totals.totalTrophies
+      });
+      return `
+        <div class="rank-ladder-step rank-ladder-step--${state}">
+          <span class="rank-ladder-dot"></span>
+          <span class="rank-ladder-label">
+            <span class="rank-ladder-name">${rank.name}</span>
+            <span class="rank-ladder-xp">${reqHint}</span>
+          </span>
+        </div>`;
+    }).join('');
+
+    const cityProgressNote = cityRankInfo.nextRank
+      ? t('cityRanks.progressTo', { percent: Math.round(cityRankInfo.percent), name: cityRankInfo.nextRank.name })
+      : t('cityRanks.maxReached');
 
     const trophyTiles = trophyCatalog.map((tr) => {
       const earned = game.trophies.has(tr.id);
@@ -73,7 +101,7 @@
             <span class="log-zone-tag global">${t('log.zoneGlobal')}</span>
             <span class="log-zone-note">${t('log.zoneGlobalNote')}</span>
           </div>
-          <p class="log-rank-current">${t('log.yourRank')}: <strong style="color:var(--color-xp)">${currentRank.name}</strong> · ${game.xp} XP</p>
+          <p class="log-rank-current">${t('log.yourGlobalRank')}: <strong style="color:var(--color-xp)">${currentRank.name}</strong> · ${game.xp} XP</p>
           <div class="rank-ladder">${rankSteps}</div>
           <div class="rank-xp-bar"><div class="rank-xp-bar-fill" style="width:${percent}%"></div></div>
           <p class="log-rank-progress-note">${progressNote}</p>
@@ -88,6 +116,10 @@
             <span class="log-zone-tag city">${city.name}</span>
             <span class="log-zone-note">${t('log.zoneCityNote', { won, total })}</span>
           </div>
+          <p class="log-rank-current">${t('cityRanks.yourRank')}: <strong style="color:var(--acc-bright)">${cityRankInfo.currentRank.name}</strong></p>
+          <div class="rank-ladder rank-ladder-city">${cityRankSteps}</div>
+          <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${cityRankInfo.percent}%"></div></div>
+          <p class="log-rank-progress-note">${cityProgressNote}</p>
           <div class="trophy-gallery">${trophyTiles}</div>
           <p class="log-city-note">${t('log.cityNote')}</p>
         </div>

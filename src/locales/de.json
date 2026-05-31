@@ -18,6 +18,9 @@
     "soundTitle": "Sound ein/ausschalten",
     "historyTitle": "Log: Pokale, Rang & Spielverlauf",
     "settingsTitle": "Einstellungen",
+    "langSwitchToEn": "Switch to English",
+    "langSwitchToDe": "Auf Deutsch wechseln",
+    "globalRankLabel": "Globaler Rang",
     "streakTitle": "Deine aktuelle Antwortserie",
     "xpTitle": "Deine Erfahrungspunkte"
   },
@@ -92,7 +95,7 @@
     "privacyTitle": "🔒 Datenschutz",
     "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert (localStorage). Mit optionalem Account werden Spielstände verschlüsselt über TLS bei Supabase (EU) gespeichert — E-Mail, Benutzername und Spielstand. Keine Weitergabe an Dritte. Details in der Setup-Anleitung unter docs/SUPABASE-SETUP.md.",
     "resetTitle": "🗑️ Spielstand zurücksetzen",
-    "resetBody": "Löscht alle XP, Achievements und Fortschritte{cloudSuffix}. Frischer Start als Quiddje.",
+    "resetBody": "Löscht alle XP, Achievements und Fortschritte{cloudSuffix}. Frischer Start als Neuling.",
     "resetCloudSuffix": " (lokal und in der Cloud)",
     "resetBtn": "↺ Neustart",
     "close": "Schließen"
@@ -126,14 +129,34 @@
     "uploaded": "☁️ Lokaler Fortschritt in die Cloud hochgeladen."
   },
   "ranks": {
-    "1": { "name": "Quiddje" },
-    "2": { "name": "Fischkopp" },
-    "3": { "name": "Hamburger Jung / Deern" },
-    "4": { "name": "Elbkapitän" },
-    "5": { "name": "Hamburg-Experte" },
-    "fallback": "Hamburger",
-    "maxReached": "Höchster Rang erreicht",
+    "1": { "name": "Neuling" },
+    "2": { "name": "Kiez-Kenner" },
+    "3": { "name": "Stadtentdecker" },
+    "4": { "name": "Kartograf" },
+    "5": { "name": "Orientierungsprofi" },
+    "6": { "name": "Stadtführer" },
+    "7": { "name": "Regionalheld" },
+    "8": { "name": "KiezQuiz-Veteran" },
+    "9": { "name": "Ortslegende" },
+    "10": { "name": "KiezQuiz-Meister" },
+    "fallback": "Spieler",
+    "maxReached": "Höchster globaler Rang erreicht",
     "progressTo": "{percent}% bis {name} ({xp} XP)"
+  },
+  "cityRanks": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Besucher" },
+    "3": { "name": "Entdecker" },
+    "4": { "name": "Stammgast" },
+    "5": { "name": "Insider" },
+    "6": { "name": "Kenner" },
+    "7": { "name": "Champion" },
+    "8": { "name": "Stadt-Legende" },
+    "fallback": "Neu in der Stadt",
+    "maxReached": "Höchster Stadtrang erreicht — alle Bezirke & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Bezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Stadtrang"
   },
   "trophies": {
     "neuwerk_island": {
@@ -319,9 +342,10 @@
     "title": "📋 Log",
     "intro": "So trennt KiezQuiz deinen Fortschritt.",
     "zoneGlobal": "Global",
-    "zoneGlobalNote": "gilt über alle Städte",
+    "zoneGlobalNote": "XP-Rang · gilt über alle Städte",
+    "yourGlobalRank": "Globaler Rang",
     "zoneCityNote": "Pokale {won}/{total} · nur in dieser Stadt",
-    "cityNote": "Wechselst du die Stadt, siehst du hier deren eigene Pokale — dein Rang oben bleibt gleich.",
+    "cityNote": "Wechselst du die Stadt, siehst du hier deren eigenen Stadtrang und Pokale — dein globaler Rang oben bleibt gleich.",
     "close": "Schließen",
     "emptyHistory": "Noch keine Spiele gespielt. Starte eine Runde!",
     "historyTitle": "Spielverlauf",
@@ -339,14 +363,14 @@
   "levelUp": {
     "title": "🎉 Aufstieg! 🎉",
     "rank": "Du bist jetzt im Rang: {name}",
-    "body": "Dein hanseatisches Wissen wächst! Meistere noch mehr Stadtteile, um der ultimative Hamburg-Experte zu werden.",
+    "body": "Dein Wissen wächst! Sammle XP in jeder Stadt und jedem Modus, um weiter aufzusteigen.",
     "dismiss": "Weiter geht's!"
   },
   "hub": {
     "badge": "Städte",
     "yourRank": "Dein Rang",
     "title": "Welche Stadt erkundest du?",
-    "subtitle": "Dein <strong>Level & Rang gelten überall</strong> — Pokale und Freischaltungen sammelst du pro Stadt.",
+    "subtitle": "Dein <strong>globaler Rang & XP gelten überall</strong> — Stadtrang, Pokale und Freischaltungen sammelst du pro Stadt.",
     "startCity": "Stadt starten",
     "continueCity": "Weiterspielen",
     "comingSoon": "Demnächst",
@@ -372,6 +396,7 @@
   "cityProgress": {
     "title": "Fortschritt",
     "cityOnly": "nur in dieser Stadt",
+    "cityRank": "Stadtrang",
     "unlocked": "freigeschaltet",
     "mastered": "gemeistert",
     "gateHint": "🔒 Schaffe 75 % in einem {singular}, um den nächsten freizuschalten.",

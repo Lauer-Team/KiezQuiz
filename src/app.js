@@ -4,11 +4,27 @@
  * ------------------------------------------------------------- */
 
 const RANK_THRESHOLDS = [
-  { level: 1, minXp: 0, maxXp: 249 },
-  { level: 2, minXp: 250, maxXp: 749 },
-  { level: 3, minXp: 750, maxXp: 1499 },
-  { level: 4, minXp: 1500, maxXp: 2499 },
-  { level: 5, minXp: 2500, maxXp: Infinity }
+  { level: 1, minXp: 0, maxXp: 99 },
+  { level: 2, minXp: 100, maxXp: 249 },
+  { level: 3, minXp: 250, maxXp: 499 },
+  { level: 4, minXp: 500, maxXp: 799 },
+  { level: 5, minXp: 800, maxXp: 1199 },
+  { level: 6, minXp: 1200, maxXp: 1699 },
+  { level: 7, minXp: 1700, maxXp: 2299 },
+  { level: 8, minXp: 2300, maxXp: 2999 },
+  { level: 9, minXp: 3000, maxXp: 3999 },
+  { level: 10, minXp: 4000, maxXp: Infinity }
+];
+
+const CITY_RANK_THRESHOLDS = [
+  { level: 1, minDistricts: 0, minTrophies: 0 },
+  { level: 2, minDistricts: 1, minTrophies: 0 },
+  { level: 3, minDistricts: 2, minTrophies: 1 },
+  { level: 4, minDistricts: 3, minTrophies: 2 },
+  { level: 5, minDistricts: 4, minTrophies: 4 },
+  { level: 6, minDistricts: 5, minTrophies: 6 },
+  { level: 7, minDistricts: 6, minTrophies: 8 },
+  { level: 8, minDistricts: 7, minTrophies: 11 }
 ];
 
 function getRanks() {
@@ -18,8 +34,50 @@ function getRanks() {
   }));
 }
 
+function getCityRanks() {
+  return CITY_RANK_THRESHOLDS.map((rank) => ({
+    ...rank,
+    name: t(`cityRanks.${rank.level}.name`)
+  }));
+}
+
 function getRankName(level) {
   return t(`ranks.${level}.name`) || t('ranks.fallback');
+}
+
+function getCityRankName(level) {
+  return t(`cityRanks.${level}.name`) || t('cityRanks.fallback');
+}
+
+function getCityRankTotals(game, cityId) {
+  const city = window.cityRegistry?.getCity(cityId);
+  if (!city || city.status !== 'playable') {
+    return { unlockedDistricts: 0, totalDistricts: 0, trophies: 0, totalTrophies: 0 };
+  }
+  const progression = window.cityRegistry.getBezirkeProgression(cityId);
+  const totalDistricts = progression.length;
+  const unlockedDistricts = game.unlockedBezirkIndex + 1;
+  const totalTrophies = typeof getTrophyCatalog === 'function' ? getTrophyCatalog().length : (city.totalTrophies || 0);
+  const trophies = game.trophies?.size || 0;
+  return { unlockedDistricts, totalDistricts, trophies, totalTrophies };
+}
+
+function calculateCityLevel(game, cityId) {
+  const totals = getCityRankTotals(game, cityId);
+  if (totals.totalDistricts === 0 && totals.totalTrophies === 0) return 1;
+  let currentLvl = 1;
+  for (const rank of CITY_RANK_THRESHOLDS) {
+    const minDistricts = rank.level === CITY_RANK_THRESHOLDS.length
+      ? totals.totalDistricts
+      : Math.min(rank.minDistricts, totals.totalDistricts);
+    const minTrophies = rank.level === CITY_RANK_THRESHOLDS.length
+      ? totals.totalTrophies
+      : Math.min(rank.minTrophies, totals.totalTrophies);
+    if (totals.unlockedDistricts >= minDistricts && totals.trophies >= minTrophies) {
+      currentLvl = rank.level;
+    }
+  }
+  return currentLvl;
 }
 
 function getTriviaTemplates(bezirk) {
@@ -833,6 +891,15 @@ class KiezQuizGame {
     if (historyBtn) historyBtn.addEventListener('click', () => this.showGameHistory());
     document.getElementById('btn-settings').addEventListener('click', () => this.showSettings());
 
+    const langBtn = document.getElementById('btn-lang');
+    if (langBtn && langBtn.dataset.bound !== 'true') {
+      langBtn.dataset.bound = 'true';
+      this.updateLangButton(langBtn);
+      langBtn.addEventListener('click', () => {
+        setLocale(getLocale() === 'de' ? 'en' : 'de');
+      });
+    }
+
     // Sound Toggle
     const muteBtn = document.getElementById('btn-mute');
     muteBtn.innerHTML = this.sounds.muted ? '🔇' : '🔊';
@@ -961,6 +1028,10 @@ class KiezQuizGame {
       this.streak = parseInt(g.streak, 10) || 0;
       this.bestStreak = parseInt(g.bestStreak, 10) || 0;
       this.level = this.calculateLevel(this.xp);
+      const storedRankSeen = parseInt(g.rankSeen, 10) || 1;
+      if (storedRankSeen < this.level && this._save.global) {
+        this._save.global.rankSeen = this.level;
+      }
       this.activeCityId = this._save.lastCity || 'hamburg';
       const savedMode = this._save.lastMode || 'EXPLORER';
       this.currentMode = savedMode === 'BEZIRK_MATCH' ? 'EXPLORER' : savedMode;
@@ -1301,6 +1372,20 @@ class KiezQuizGame {
     else this.initGameMode(playArea);
   }
 
+  updateHeaderBadge() {
+    const badge = document.getElementById('header-badge') || document.querySelector('#city-view .brand .badge');
+    if (!badge) return;
+    const city = window.cityRegistry.localizeCity(window.cityRegistry.getCity(this.activeCityId));
+    badge.textContent = city?.name || this.activeCityId;
+  }
+
+  updateLangButton(btn) {
+    const el = btn || document.getElementById('btn-lang') || document.getElementById('hub-btn-lang');
+    if (!el) return;
+    el.textContent = getLocale() === 'de' ? '🇩🇪' : '🇬🇧';
+    el.title = getLocale() === 'de' ? t('header.langSwitchToEn') : t('header.langSwitchToDe');
+  }
+
   // Render score, progress-fill, XP etc.
   renderStats() {
     const xpVal = document.getElementById('stat-xp');
@@ -1316,16 +1401,18 @@ class KiezQuizGame {
     const currentRank = getRanks().find(r => r.level === this.level);
     rankName.textContent = currentRank ? currentRank.name : t('ranks.fallback');
     
-    // Level progress bar
-    if (this.level < 5) {
-      const nextRank = getRanks().find(r => r.level === this.level + 1);
-      const currentMin = currentRank.minXp;
-      const nextMin = nextRank.minXp;
-      const progressPercent = ((this.xp - currentMin) / (nextMin - currentMin)) * 100;
+    // Global rank progress bar (XP-based)
+    const nextRank = getRanks().find(r => r.level === this.level + 1);
+    if (nextRank && currentRank) {
+      const span = nextRank.minXp - currentRank.minXp;
+      const progressPercent = span > 0 ? ((this.xp - currentRank.minXp) / span) * 100 : 0;
       progFill.style.width = `${Math.min(progressPercent, 100)}%`;
     } else {
       progFill.style.width = '100%';
     }
+
+    this.updateHeaderBadge();
+    this.updateLangButton();
 
     // Progression Unlock Panel Update
     this.renderUnlockProgress();
@@ -1631,6 +1718,35 @@ class KiezQuizGame {
     return { currentRank, nextRank, percent };
   }
 
+  getCityRankProgressInfo(cityId = this.activeCityId) {
+    const cityLevel = calculateCityLevel(this, cityId);
+    const ranks = getCityRanks();
+    const currentRank = ranks.find(r => r.level === cityLevel) || ranks[0];
+    const nextRank = ranks.find(r => r.level === cityLevel + 1);
+    const totals = getCityRankTotals(this, cityId);
+    let percent = 100;
+    if (nextRank) {
+      const nextDistricts = nextRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalDistricts
+        : Math.min(nextRank.minDistricts, totals.totalDistricts);
+      const nextTrophies = nextRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalTrophies
+        : Math.min(nextRank.minTrophies, totals.totalTrophies);
+      const curDistricts = currentRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalDistricts
+        : Math.min(currentRank.minDistricts, totals.totalDistricts);
+      const curTrophies = currentRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalTrophies
+        : Math.min(currentRank.minTrophies, totals.totalTrophies);
+      const districtSpan = Math.max(nextDistricts - curDistricts, 1);
+      const trophySpan = Math.max(nextTrophies - curTrophies, 1);
+      const districtPct = Math.min(100, ((totals.unlockedDistricts - curDistricts) / districtSpan) * 100);
+      const trophyPct = Math.min(100, ((totals.trophies - curTrophies) / trophySpan) * 100);
+      percent = Math.min(districtPct, trophyPct);
+    }
+    return { currentRank, nextRank, percent, cityLevel, totals };
+  }
+
   renderRankLadderHtml() {
     const { currentRank, nextRank, percent } = this.getRankProgressInfo();
     const steps = getRanks().map(rank => {
@@ -1765,19 +1881,11 @@ class KiezQuizGame {
     }
 
     const resetCloudSuffix = loggedIn ? t('settings.resetCloudSuffix') : '';
-    const currentLang = getLocale();
 
     const modal = openOverlayModal(`
       <div class="modal-content" style="max-width: 400px;">
         <h2>${t('settings.title')}</h2>
         <hr style="border-color: rgba(255,255,255,0.1); margin: 1rem 0;">
-        <div class="settings-lang-block">
-          <strong>${t('settings.language')}</strong>
-          <div class="lang-switcher">
-            <button type="button" class="lang-btn${currentLang === 'de' ? ' active' : ''}" data-lang="de">${t('settings.langDe')}</button>
-            <button type="button" class="lang-btn${currentLang === 'en' ? ' active' : ''}" data-lang="en">${t('settings.langEn')}</button>
-          </div>
-        </div>
         <div class="settings-cloud-block" style="margin-bottom: 1.2rem;">
           <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.cloudTitle')}</strong>
           ${cloudStatusHtml}
@@ -1796,12 +1904,6 @@ class KiezQuizGame {
     `, { closeOnBackdrop: true });
     document.getElementById('btn-settings-close').addEventListener('click', () => closeOverlayModal(modal));
     document.getElementById('btn-settings-reset').addEventListener('click', () => this.resetGame());
-    modal.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        setLocale(btn.dataset.lang);
-        this.reRenderCurrentView();
-      });
-    });
   }
 
   showOnboarding(firstTime = false) {

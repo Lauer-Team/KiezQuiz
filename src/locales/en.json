@@ -2,7 +2,7 @@
   "meta": {
     "title": "KiezQuiz – Learn cities through play",
     "description": "KiezQuiz: Learn boroughs and districts of German cities through play — start in Hamburg, more cities coming soon.",
-    "ogDescription": "Know better than know-it-alls.",
+    "ogDescription": "Don't be a know-it-all. Know it all.",
     "manifestDescription": "Learn German cities through play — Hamburg playable"
   },
   "header": {
@@ -18,6 +18,9 @@
     "soundTitle": "Toggle sound",
     "historyTitle": "Log: trophies, rank & game history",
     "settingsTitle": "Settings",
+    "langSwitchToEn": "Switch to English",
+    "langSwitchToDe": "Switch to German",
+    "globalRankLabel": "Global rank",
     "streakTitle": "Your current answer streak",
     "xpTitle": "Your experience points"
   },
@@ -126,14 +129,34 @@
     "uploaded": "☁️ Local progress uploaded to the cloud."
   },
   "ranks": {
-    "1": { "name": "Outsider" },
-    "2": { "name": "Fish-head" },
-    "3": { "name": "Hamburg Local" },
-    "4": { "name": "Elbe Captain" },
-    "5": { "name": "Hamburg Expert" },
-    "fallback": "Hamburger",
-    "maxReached": "Highest rank reached",
+    "1": { "name": "Newcomer" },
+    "2": { "name": "Neighborhood Novice" },
+    "3": { "name": "City Explorer" },
+    "4": { "name": "Cartographer" },
+    "5": { "name": "Wayfinder" },
+    "6": { "name": "City Guide" },
+    "7": { "name": "Regional Hero" },
+    "8": { "name": "KiezQuiz Veteran" },
+    "9": { "name": "Local Legend" },
+    "10": { "name": "KiezQuiz Master" },
+    "fallback": "Player",
+    "maxReached": "Highest global rank reached",
     "progressTo": "{percent}% to {name} ({xp} XP)"
+  },
+  "cityRanks": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Visitor" },
+    "3": { "name": "Explorer" },
+    "4": { "name": "Regular" },
+    "5": { "name": "Insider" },
+    "6": { "name": "Expert" },
+    "7": { "name": "Champion" },
+    "8": { "name": "City Legend" },
+    "fallback": "New in town",
+    "maxReached": "Highest city rank reached — all boroughs & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Boroughs {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "City rank"
   },
   "trophies": {
     "neuwerk_island": {
@@ -319,9 +342,10 @@
     "title": "📋 Log",
     "intro": "This is how KiezQuiz separates your progress.",
     "zoneGlobal": "Global",
-    "zoneGlobalNote": "applies across all cities",
+    "zoneGlobalNote": "XP rank · applies across all cities",
+    "yourGlobalRank": "Global rank",
     "zoneCityNote": "Trophies {won}/{total} · this city only",
-    "cityNote": "When you switch cities, you see that city's trophies here — your rank above stays the same.",
+    "cityNote": "Switch cities to see each city's rank and trophies — your global rank above stays the same.",
     "close": "Close",
     "emptyHistory": "No games played yet. Start a round!",
     "historyTitle": "Game history",
@@ -339,14 +363,14 @@
   "levelUp": {
     "title": "🎉 Level up! 🎉",
     "rank": "You are now rank: {name}",
-    "body": "Your Hanseatic knowledge is growing! Master more districts to become the ultimate Hamburg Expert.",
+    "body": "Your knowledge is growing! Earn XP in any city and mode to keep climbing.",
     "dismiss": "Let's keep going!"
   },
   "hub": {
     "badge": "Cities",
     "yourRank": "Your rank",
     "title": "Which city will you explore?",
-    "subtitle": "Your <strong>level & rank apply everywhere</strong> — trophies and unlocks are collected per city.",
+    "subtitle": "Your <strong>global rank & XP apply everywhere</strong> — city rank, trophies, and unlocks are per city.",
     "startCity": "Start city",
     "continueCity": "Continue",
     "comingSoon": "Coming soon",
@@ -372,6 +396,7 @@
   "cityProgress": {
     "title": "Progress",
     "cityOnly": "this city only",
+    "cityRank": "City rank",
     "unlocked": "unlocked",
     "mastered": "mastered",
     "gateHint": "🔒 Reach 75% in one {singular} to unlock the next.",
