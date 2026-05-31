@@ -115,13 +115,18 @@ class CloudSync {
 
     const localXp = parseInt(local.global?.xp, 10) || 0;
     const cloudXp = parseInt(cloud.global?.xp, 10) || 0;
-    const useCloudNav = cloudXp > localXp;
+    const localTime = local.savedAt ? Date.parse(local.savedAt) : 0;
+    const cloudTime = cloud.savedAt ? Date.parse(cloud.savedAt) : 0;
+    const useCloudNav = cloudXp > localXp || (cloudXp === localXp && cloudTime > localTime);
+    const preferCloudStreak = cloudTime > localTime;
 
     return {
       saveVersion: 2,
       global: {
         xp: Math.max(localXp, cloudXp),
-        streak: Math.max(parseInt(local.global?.streak, 10) || 0, parseInt(cloud.global?.streak, 10) || 0),
+        streak: preferCloudStreak
+          ? (parseInt(cloud.global?.streak, 10) || 0)
+          : (parseInt(local.global?.streak, 10) || 0),
         bestStreak: Math.max(parseInt(local.global?.bestStreak, 10) || 0, parseInt(cloud.global?.bestStreak, 10) || 0),
         rankSeen: Math.max(parseInt(local.global?.rankSeen, 10) || 1, parseInt(cloud.global?.rankSeen, 10) || 1),
         muted: local.global?.muted ?? cloud.global?.muted ?? false

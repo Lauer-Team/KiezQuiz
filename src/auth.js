@@ -40,7 +40,22 @@ class AuthManager {
   _notify(user, profile) {
     this.user = user;
     this.profile = profile;
-    this._listeners.forEach((cb) => cb(user, profile));
+    this._listeners.forEach((cb) => {
+      try {
+        const result = cb(user, profile);
+        if (result && typeof result.then === 'function') {
+          this._pendingAuthTasks = (this._pendingAuthTasks || []).concat([result]);
+        }
+      } catch (e) {
+        console.warn('Auth listener failed:', e);
+      }
+    });
+  }
+
+  async waitForPendingAuthTasks() {
+    const tasks = this._pendingAuthTasks || [];
+    this._pendingAuthTasks = [];
+    await Promise.allSettled(tasks);
   }
 
   async init() {

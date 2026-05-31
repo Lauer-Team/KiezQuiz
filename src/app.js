@@ -3464,6 +3464,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   });
 
   await window.authManager.init();
+  await window.authManager.waitForPendingAuthTasks();
   window.authManager.initUI();
 
   document.addEventListener('visibilitychange', () => {
@@ -3475,4 +3476,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   onLocaleChange(() => game.reRenderCurrentView());
 
   game.init();
+
+  if (window.authManager.isLoggedIn()) {
+    game.reRenderCurrentView();
+    if (game.view === 'city') {
+      game.updateMapStates();
+      game.updateNeuwerkBadge();
+    }
+  }
 });
