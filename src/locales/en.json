@@ -1,12 +1,13 @@
 {
   "meta": {
-    "title": "KiezQuiz – Learn Hamburg's districts playfully",
-    "description": "KiezQuiz: Learn all 7 boroughs and 104 districts of Hamburg through play — interactive, offline-capable, and mobile-optimized.",
+    "title": "KiezQuiz – Learn cities through play",
+    "description": "KiezQuiz: Learn boroughs and districts of German cities through play — start in Hamburg, more cities coming soon.",
     "ogDescription": "Know better than know-it-alls.",
-    "manifestDescription": "Learn Hamburg's boroughs and districts through play"
+    "manifestDescription": "Learn German cities through play — Hamburg playable"
   },
   "header": {
     "badge": "Gamified Learning",
+    "badgeGlobal": "Global",
     "streakLabel": "Streak 🔥:",
     "streakBest": "Best: {count}x",
     "xpLabel": "XP:",
@@ -316,6 +317,11 @@
   },
   "log": {
     "title": "📋 Log",
+    "intro": "This is how KiezQuiz separates your progress.",
+    "zoneGlobal": "Global",
+    "zoneGlobalNote": "applies across all cities",
+    "zoneCityNote": "Trophies {won}/{total} · this city only",
+    "cityNote": "When you switch cities, you see that city's trophies here — your rank above stays the same.",
     "close": "Close",
     "emptyHistory": "No games played yet. Start a round!",
     "historyTitle": "Game history",
@@ -335,5 +341,74 @@
     "rank": "You are now rank: {name}",
     "body": "Your Hanseatic knowledge is growing! Master more districts to become the ultimate Hamburg Expert.",
     "dismiss": "Let's keep going!"
+  },
+  "hub": {
+    "badge": "Cities",
+    "yourRank": "Your rank",
+    "title": "Which city will you explore?",
+    "subtitle": "Your <strong>level & rank apply everywhere</strong> — trophies and unlocks are collected per city.",
+    "startCity": "Start city",
+    "continueCity": "Continue",
+    "comingSoon": "Coming soon",
+    "comingSoonBadge": "Coming soon",
+    "comingSoonHint": "This city is in the works — vote below for what should come next.",
+    "comingSoonToast": "{city} is coming soon — stay tuned!",
+    "homeCity": "Home city",
+    "trophyHint": "Trophies for this city",
+    "wishTitle": "Request a city",
+    "wishSub": "Which city should we build next? Vote or suggest a new one.",
+    "wishModalTitle": "Request a city",
+    "wishModalBody": "Which city should we build next? Vote — or suggest a new one.",
+    "wishPlaceholder": "Suggest your own city…",
+    "wishSubmit": "Submit",
+    "wishThanks": "Thanks! Your wish is noted. 🙌",
+    "wishVote": "▲ Vote",
+    "wishVoted": "✓ Voted",
+    "backToHub": "Back to city overview",
+    "citiesNav": "Cities",
+    "switchCity": "Switch city",
+    "viewAllCities": "⊞ View all cities"
+  },
+  "cities": {
+    "tier": {
+      "overview": "Overview",
+      "detail": "Detail"
+    },
+    "hamburg": {
+      "greeting": "Moin Moin!",
+      "blurb": "7 boroughs · 104 districts",
+      "levels": {
+        "bezirke": "Boroughs",
+        "stadtteile": "Districts"
+      },
+      "singular": {
+        "bezirk": "Borough",
+        "stadtteil": "District"
+      }
+    },
+    "berlin": {
+      "greeting": "Hello Berlin!",
+      "blurb": "12 boroughs · 96 neighbourhoods",
+      "levels": {
+        "bezirke": "Boroughs",
+        "ortsteile": "Neighbourhoods"
+      },
+      "singular": {
+        "bezirk": "Borough",
+        "ortsteil": "Neighbourhood"
+      }
+    },
+    "frankfurt": {
+      "greeting": "Ei gude!",
+      "blurb": "16 districts · 46 neighbourhoods",
+      "levels": {
+        "stadtbezirke": "City districts",
+        "stadtteile": "Neighbourhoods"
+      },
+      "singular": {
+        "stadtbezirk": "City district",
+        "stadtteil": "Neighbourhood"
+      }
+    }
   }
 }

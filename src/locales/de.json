@@ -1,12 +1,13 @@
 {
   "meta": {
-    "title": "KiezQuiz – Stadtteile spielerisch lernen",
-    "description": "KiezQuiz: Lerne spielerisch alle 7 Bezirke und 104 Stadtteile Hamburgs – interaktiv, offline spielbar und mobiloptimiert.",
+    "title": "KiezQuiz – Städte spielerisch lernen",
+    "description": "KiezQuiz: Lerne spielerisch Bezirke und Stadtteile deutscher Städte — starte in Hamburg, weitere Städte folgen.",
     "ogDescription": "Besser wissen als Besserwissen.",
-    "manifestDescription": "Hamburgs Bezirke und Stadtteile spielerisch lernen"
+    "manifestDescription": "Deutsche Städte spielerisch lernen — Hamburg spielbar"
   },
   "header": {
     "badge": "Gamified Learning",
+    "badgeGlobal": "Global",
     "streakLabel": "Serie 🔥:",
     "streakBest": "Beste: {count}x",
     "xpLabel": "XP:",
@@ -316,6 +317,11 @@
   },
   "log": {
     "title": "📋 Log",
+    "intro": "So trennt KiezQuiz deinen Fortschritt.",
+    "zoneGlobal": "Global",
+    "zoneGlobalNote": "gilt über alle Städte",
+    "zoneCityNote": "Pokale {won}/{total} · nur in dieser Stadt",
+    "cityNote": "Wechselst du die Stadt, siehst du hier deren eigene Pokale — dein Rang oben bleibt gleich.",
     "close": "Schließen",
     "emptyHistory": "Noch keine Spiele gespielt. Starte eine Runde!",
     "historyTitle": "Spielverlauf",
@@ -335,5 +341,74 @@
     "rank": "Du bist jetzt im Rang: {name}",
     "body": "Dein hanseatisches Wissen wächst! Meistere noch mehr Stadtteile, um der ultimative Hamburg-Experte zu werden.",
     "dismiss": "Weiter geht's!"
+  },
+  "hub": {
+    "badge": "Städte",
+    "yourRank": "Dein Rang",
+    "title": "Welche Stadt erkundest du?",
+    "subtitle": "Dein <strong>Level & Rang gelten überall</strong> — Pokale und Freischaltungen sammelst du pro Stadt.",
+    "startCity": "Stadt starten",
+    "continueCity": "Weiterspielen",
+    "comingSoon": "Demnächst",
+    "comingSoonBadge": "Demnächst",
+    "comingSoonHint": "Diese Stadt ist in Planung — stimme unten ab, welche als Nächstes kommen soll.",
+    "comingSoonToast": "{city} kommt demnächst — bleib dran!",
+    "homeCity": "Heimatstadt",
+    "trophyHint": "Pokale dieser Stadt",
+    "wishTitle": "Stadt wünschen",
+    "wishSub": "Welche Stadt sollen wir als Nächstes bauen? Stimme ab oder schlage eine neue vor.",
+    "wishModalTitle": "Stadt wünschen",
+    "wishModalBody": "Welche Stadt sollen wir als Nächstes bauen? Stimme ab — oder schlage eine neue vor.",
+    "wishPlaceholder": "Eigene Stadt vorschlagen…",
+    "wishSubmit": "Einreichen",
+    "wishThanks": "Danke! Dein Wunsch ist notiert. 🙌",
+    "wishVote": "▲ Voten",
+    "wishVoted": "✓ Gestimmt",
+    "backToHub": "Zur Städte-Übersicht",
+    "citiesNav": "Städte",
+    "switchCity": "Stadt wechseln",
+    "viewAllCities": "⊞ Alle Städte ansehen"
+  },
+  "cities": {
+    "tier": {
+      "overview": "Überblick",
+      "detail": "Detail"
+    },
+    "hamburg": {
+      "greeting": "Moin Moin!",
+      "blurb": "7 Bezirke · 104 Stadtteile",
+      "levels": {
+        "bezirke": "Bezirke",
+        "stadtteile": "Stadtteile"
+      },
+      "singular": {
+        "bezirk": "Bezirk",
+        "stadtteil": "Stadtteil"
+      }
+    },
+    "berlin": {
+      "greeting": "Hallo Berlin!",
+      "blurb": "12 Bezirke · 96 Ortsteile",
+      "levels": {
+        "bezirke": "Bezirke",
+        "ortsteile": "Ortsteile"
+      },
+      "singular": {
+        "bezirk": "Bezirk",
+        "ortsteil": "Ortsteil"
+      }
+    },
+    "frankfurt": {
+      "greeting": "Ei gude!",
+      "blurb": "16 Stadtbezirke · 46 Stadtteile",
+      "levels": {
+        "stadtbezirke": "Stadtbezirke",
+        "stadtteile": "Stadtteile"
+      },
+      "singular": {
+        "stadtbezirk": "Stadtbezirk",
+        "stadtteil": "Stadtteil"
+      }
+    }
   }
 }
