@@ -2,7 +2,7 @@
 
 Gamifizierte Web-App zum spielerischen Lernen der **7 Bezirke** und **104 Stadtteile** Hamburgs — mit interaktiver Karte, Quiz-Modi, XP, Rängen und Streaks.
 
-**Live:** [kiezquiz.lauer.team](https://kiezquiz.lauer.team) · [logic3.github.io/KiezQuiz](https://logic3.github.io/KiezQuiz/)
+**Live:** [kiezquiz.de](https://kiezquiz.de) · [kiezquiz.lauer.team](https://kiezquiz.lauer.team) (Weiterleitung)
 
 ## Spielmodi
 

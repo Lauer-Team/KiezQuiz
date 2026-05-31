@@ -158,10 +158,10 @@ grant execute on function public.get_email_for_username(text) to anon, authentic
 ## 4. Redirect-URLs eintragen
 
 1. **Authentication** → **URL Configuration**.
-2. **Site URL:** `https://kiezquiz.lauer.team`
+2. **Site URL:** `https://kiezquiz.de`
 3. **Redirect URLs** — jede Zeile einzeln hinzufügen:
+   - `https://kiezquiz.de/**`
    - `https://kiezquiz.lauer.team/**`
-   - `https://logic3.github.io/KiezQuiz/**`
    - `http://localhost:3000/**`
 4. **Save** klicken.
 

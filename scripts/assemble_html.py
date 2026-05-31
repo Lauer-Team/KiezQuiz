@@ -304,14 +304,14 @@ def main():
   <meta name="format-detection" content="telephone=no">
 
   <!-- Link-Vorschau: Open Graph (WhatsApp, Signal, Telegram, Facebook, …) -->
-  <!-- DOMAIN: Alle https://kiezquiz.lauer.team-URLs unten anpassen, z. B. https://logic3.github.io/KiezQuiz -->
+  <link rel="canonical" href="https://kiezquiz.de/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KiezQuiz">
   <meta property="og:title" content="KiezQuiz">
   <meta property="og:description" content="Besser wissen als Besserwissen.">
-  <meta property="og:url" content="https://kiezquiz.lauer.team/">
+  <meta property="og:url" content="https://kiezquiz.de/">
   <meta property="og:locale" content="de_DE">
-  <meta property="og:image" content="https://kiezquiz.lauer.team/assets/og-image.jpg">
+  <meta property="og:image" content="https://kiezquiz.de/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:type" content="image/jpeg">
@@ -320,7 +320,7 @@ def main():
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="KiezQuiz">
   <meta name="twitter:description" content="Besser wissen als Besserwissen.">
-  <meta name="twitter:image" content="https://kiezquiz.lauer.team/assets/og-image.jpg">
+  <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.jpg">
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
