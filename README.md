@@ -31,6 +31,15 @@ Dieses Repo ist die **Quelle für alles Spielrelevante**. Die native iOS/macOS-A
 
 ## Lokal starten
 
+**Supabase (optional):** Für Cloud-Sync die Vorlage kopieren und Keys eintragen:
+
+```bash
+cp src/supabaseConfig.example.js src/supabaseConfig.js
+# Dann URL und anon Key aus dem Supabase-Dashboard eintragen (siehe docs/SUPABASE-SETUP.md)
+```
+
+`src/supabaseConfig.js` ist in `.gitignore` und wird bei GitHub Pages aus Repository-Secrets erzeugt — nicht committen.
+
 ```bash
 npm run dev
 ```
@@ -103,7 +112,8 @@ KiezQuiz/
 │   ├── app.js              # Spiel-Logik
 │   ├── auth.js             # Supabase Auth (optional)
 │   ├── cloudSync.js        # Cloud-Spielstand-Sync
-│   ├── supabaseConfig.js   # Supabase-Keys (Platzhalter → siehe docs/)
+│   ├── supabaseConfig.example.js  # Vorlage für lokale Keys
+│   ├── supabaseConfig.js   # Lokal / CI-generiert (nicht in Git)
 │   ├── style.css           # Layout & Design
 │   └── data/               # Bezirke, Stadtteile, Karte
 ├── docs/

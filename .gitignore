@@ -3,5 +3,5 @@
 *.log
 LOCAL-INFO.md
 
-# Optional: echte Supabase-Keys nicht committen (dann supabaseConfig.js lokal pflegen)
-# src/supabaseConfig.js
+# Lokale Supabase-Keys (Vorlage: src/supabaseConfig.example.js)
+src/supabaseConfig.js

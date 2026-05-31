@@ -67,6 +67,83 @@ create policy "saves_update_own" on public.game_saves for update using (auth.uid
 
 4. Unten sollte **Success** erscheinen. Falls Fehler wie „already exists“ kommen, hast du das Skript vermutlich schon ausgeführt — dann ist alles in Ordnung.
 
+### Username-Login (RPC)
+
+Für Anmeldung mit **Benutzername** (statt E-Mail) wird die RPC `get_email_for_username` benötigt. Im SQL Editor ausführen (Rate-Limit gegen Enumeration ist enthalten):
+
+```sql
+-- Rate-Limit-Tabelle (nur für die RPC, kein Client-Zugriff)
+create table if not exists public.username_lookup_rate_limits (
+  bucket text primary key,
+  attempt_count int not null default 1,
+  window_start timestamptz not null default now()
+);
+
+alter table public.username_lookup_rate_limits enable row level security;
+revoke all on table public.username_lookup_rate_limits from public, anon, authenticated;
+
+create or replace function public.get_email_for_username(p_username text)
+returns text
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_email text;
+  v_bucket text;
+  v_count int;
+  v_max_attempts constant int := 10;
+  v_window_seconds constant int := 300;
+begin
+  if p_username is null or length(trim(p_username)) < 2 then
+    return null;
+  end if;
+
+  begin
+    v_bucket := coalesce(
+      nullif(trim((current_setting('request.headers', true)::json)->>'cf-connecting-ip'), ''),
+      nullif(trim(split_part((current_setting('request.headers', true)::json)->>'x-forwarded-for', ',', 1)), ''),
+      'user:' || lower(trim(p_username))
+    );
+  exception when others then
+    v_bucket := 'user:' || lower(trim(p_username));
+  end;
+
+  insert into public.username_lookup_rate_limits (bucket, attempt_count, window_start)
+  values (v_bucket, 1, now())
+  on conflict (bucket) do update
+    set
+      attempt_count = case
+        when username_lookup_rate_limits.window_start < now() - make_interval(secs => v_window_seconds)
+        then 1
+        else username_lookup_rate_limits.attempt_count + 1
+      end,
+      window_start = case
+        when username_lookup_rate_limits.window_start < now() - make_interval(secs => v_window_seconds)
+        then now()
+        else username_lookup_rate_limits.window_start
+      end
+  returning attempt_count into v_count;
+
+  if v_count > v_max_attempts then
+    return null;
+  end if;
+
+  select u.email into v_email
+  from auth.users u
+  join public.profiles p on p.id = u.id
+  where lower(p.username) = lower(trim(p_username));
+
+  return v_email;
+end;
+$$;
+
+revoke all on function public.get_email_for_username(text) from public;
+grant execute on function public.get_email_for_username(text) to anon, authenticated, service_role;
+```
+
+**Hinweis:** `SECURITY DEFINER` + `anon`-Execute erlaubt theoretisch Username-Enumeration; das Rate-Limit (10 Versuche / 5 Min. pro IP oder Username) reduziert das Risiko. Für maximale Härte nur E-Mail-Login anbieten.
+
 ---
 
 ## 3. E-Mail-Auth konfigurieren
@@ -92,12 +169,15 @@ create policy "saves_update_own" on public.game_saves for update using (auth.uid
 
 ## 5. API-Keys in die App eintragen
 
+### Lokal
+
 1. **Project Settings** (Zahnrad unten links) → **API**.
-2. Kopiere:
-   - **Project URL** (z. B. `https://abcdefgh.supabase.co`)
-   - **anon public** Key (beginnt mit `eyJ…` — **nicht** den `service_role` Key!)
-3. Öffne in deinem KiezQuiz-Projekt die Datei **`src/supabaseConfig.js`**.
-4. Ersetze die Platzhalter:
+2. Kopiere **Project URL** und **anon public** Key (beginnt mit `eyJ…` — **nicht** `service_role`).
+3. Vorlage kopieren und Keys eintragen:
+
+```bash
+cp src/supabaseConfig.example.js src/supabaseConfig.js
+```
 
 ```javascript
 window.SUPABASE_CONFIG = {
@@ -106,7 +186,20 @@ window.SUPABASE_CONFIG = {
 };
 ```
 
-5. Speichern. Optional: In `.gitignore` die Zeile `# src/supabaseConfig.js` entkommentieren, wenn du echte Keys **nicht** committen willst.
+`src/supabaseConfig.js` steht in `.gitignore` und darf **nicht** ins Repository.
+
+### GitHub Pages (CI)
+
+Im Repo **Settings → Secrets and variables → Actions** anlegen (wie bei BottleBuddy):
+
+| Secret | Inhalt |
+|--------|--------|
+| `VITE_SUPABASE_URL` | Project URL |
+| `VITE_SUPABASE_ANON_KEY` | anon public Key |
+
+Alternativ `SUPABASE_URL` und `SUPABASE_ANON_KEY` — das Deploy-Workflow akzeptiert beide Paare.
+
+Bei Push auf `main` erzeugt [`.github/workflows/deploy.yml`](../.github/workflows/deploy.yml) `src/supabaseConfig.js` und deployt nach GitHub Pages.
 
 ---
 
@@ -115,11 +208,11 @@ window.SUPABASE_CONFIG = {
 ```bash
 cd KiezQuiz
 git add -A
-git commit -m "Supabase Cloud-Sync aktivieren"
+git commit -m "…"
 git push
 ```
 
-GitHub Pages deployt automatisch. Dann testen:
+GitHub Actions deployt nach Pages (Secrets müssen gesetzt sein). Dann testen:
 
 | Test | Erwartung |
 |------|-----------|
