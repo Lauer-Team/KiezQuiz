@@ -369,6 +369,15 @@
     "switchCity": "Switch city",
     "viewAllCities": "⊞ View all cities"
   },
+  "cityProgress": {
+    "title": "Progress",
+    "cityOnly": "this city only",
+    "unlocked": "unlocked",
+    "mastered": "mastered",
+    "gateHint": "🔒 Reach 75% in one {singular} to unlock the next.",
+    "trophies": "Trophies",
+    "viewLog": "View trophies & rank"
+  },
   "cities": {
     "tier": {
       "overview": "Overview",

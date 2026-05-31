@@ -1330,7 +1330,10 @@ class KiezQuizGame {
     // Progression Unlock Panel Update
     this.renderUnlockProgress();
     if (this.view === 'hub') this.syncHubStats();
-    else window.kiezCityDashboard?.updateBreadcrumb(this);
+    else {
+      window.kiezCityDashboard?.updateBreadcrumb(this);
+      window.kiezCityDashboard?.renderCityProgressCard(this);
+    }
   }
 
   renderUnlockProgress() {

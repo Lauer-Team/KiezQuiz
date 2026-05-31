@@ -127,6 +127,90 @@
     if (chev) chev.style.transform = 'none';
   });
 
+  function computeLevelProgress(game, city, levelKey) {
+    const progression = window.cityRegistry.getBezirkeProgression(city.id);
+    const lv = city.levels.find((l) => l.key === levelKey) || city.levels[0];
+    if (!lv) return { unlocked: 0, mastered: 0, total: 0, singular: '' };
+
+    if (levelKey === 'bezirke' || window.cityRegistry.levelKeyToSegment(levelKey) === 'BEZIRKE') {
+      const unlocked = game.unlockedBezirkIndex + 1;
+      let mastered = 0;
+      progression.forEach((bz) => {
+        const total = typeof HAMBURG_DATA !== 'undefined'
+          ? HAMBURG_DATA.filter((d) => d.bezirk === bz.name && !d.is_island).length
+          : 0;
+        const solved = game.bezirkProgress[bz.name]?.solved?.size || 0;
+        if (total > 0 && solved >= total) mastered += 1;
+      });
+      return { unlocked, mastered, total: lv.count, singular: lv.singular };
+    }
+
+    let unlocked = 0;
+    let mastered = 0;
+    progression.forEach((bz, idx) => {
+      if (idx > game.unlockedBezirkIndex) return;
+      const total = typeof HAMBURG_DATA !== 'undefined'
+        ? HAMBURG_DATA.filter((d) => d.bezirk === bz.name && !d.is_island).length
+        : 0;
+      unlocked += total;
+      mastered += game.bezirkProgress[bz.name]?.solved?.size || 0;
+    });
+    return { unlocked, mastered, total: lv.count, singular: lv.singular };
+  }
+
+  function renderCityProgressCard(game) {
+    const container = document.getElementById('city-progress-card');
+    if (!container) return;
+
+    const rawCity = window.cityRegistry.getCity(game.activeCityId);
+    const city = window.cityRegistry.localizeCity(rawCity);
+    if (!rawCity || rawCity.status !== 'playable') {
+      container.innerHTML = '';
+      return;
+    }
+
+    const levelKey = window.cityRegistry.segmentToLevelKey(game.activeSegment, game.activeCityId);
+    const level = city.levels.find((l) => l.key === levelKey) || city.levels[0];
+    const prog = computeLevelProgress(game, city, levelKey);
+    const singular = t(level.singularKey || `cities.${city.id}.singular.${levelKey}`);
+
+    const catalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog() : [];
+    const won = game.trophies.size;
+    const total = catalog.length;
+    const stripItems = catalog.slice(0, 4).map((tr) => {
+      const earned = game.trophies.has(tr.id);
+      return `<div class="cpc-tro-chip${earned ? ' earned' : ' locked'}" title="${tr.name} — ${tr.desc}"><span class="cpc-tro-icon">${tr.icon}</span></div>`;
+    }).join('');
+
+    container.innerHTML = `
+      <div class="glass-card city-progress-card">
+        <div class="cpc-head">
+          <h3>${city.name} · ${t('cityProgress.title')}</h3>
+          <span class="cpc-badge">${t('cityProgress.cityOnly')}</span>
+        </div>
+        <div class="cpc-unlock-row">
+          <div class="cpc-unlock">
+            <span class="cpc-unlock-num">${prog.unlocked}<span class="cpc-unlock-den">/${prog.total}</span></span>
+            <span class="cpc-unlock-lbl">${level.label} ${t('cityProgress.unlocked')}</span>
+          </div>
+          <div class="cpc-unlock">
+            <span class="cpc-unlock-num">${prog.mastered}</span>
+            <span class="cpc-unlock-lbl">${t('cityProgress.mastered')}</span>
+          </div>
+        </div>
+        <div class="cpc-gate-hint">${t('cityProgress.gateHint', { singular })}</div>
+        <div class="cpc-trophies">
+          <div class="cpc-tro-head"><span>🏆 ${t('cityProgress.trophies')}</span><span class="cpc-tro-count">${won}/${total}</span></div>
+          <div class="cpc-tro-strip">${stripItems}</div>
+        </div>
+        <button type="button" class="secondary-btn" id="btn-city-progress-log">${t('cityProgress.viewLog')}</button>
+      </div>`;
+
+    container.querySelector('#btn-city-progress-log')?.addEventListener('click', () => {
+      if (window.kiezModals?.showLogModal) window.kiezModals.showLogModal(game);
+    });
+  }
+
   function enhanceSegmentSelector() {
     const selector = document.querySelector('#city-view .segment-selector');
     if (!selector || selector.dataset.adaptive === 'true') return;
@@ -159,6 +243,8 @@
     renderContextBar,
     updateBreadcrumb,
     closeSwitcher,
-    enhanceSegmentSelector
+    enhanceSegmentSelector,
+    renderCityProgressCard,
+    computeLevelProgress
   };
 })();

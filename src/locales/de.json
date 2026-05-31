@@ -369,6 +369,15 @@
     "switchCity": "Stadt wechseln",
     "viewAllCities": "⊞ Alle Städte ansehen"
   },
+  "cityProgress": {
+    "title": "Fortschritt",
+    "cityOnly": "nur in dieser Stadt",
+    "unlocked": "freigeschaltet",
+    "mastered": "gemeistert",
+    "gateHint": "🔒 Schaffe 75 % in einem {singular}, um den nächsten freizuschalten.",
+    "trophies": "Pokale",
+    "viewLog": "Pokale & Rang ansehen"
+  },
   "cities": {
     "tier": {
       "overview": "Überblick",

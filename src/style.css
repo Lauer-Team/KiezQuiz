@@ -2456,6 +2456,28 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
 .wish-submit-btn { width: auto !important; padding: 0.85rem 1.4rem !important; }
 .wish-thanks { margin-top: 0.8rem; text-align: center; color: var(--color-correct); font-weight: 700; }
 
+/* City progress card (dashboard console) */
+.city-progress-card { gap: 0; }
+.cpc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.9rem; }
+.cpc-head h3 { font-family: var(--font-display); font-size: 1rem; color: #fff; }
+.cpc-badge { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--acc-bright); background: var(--acc-fill);
+  border: 1px solid var(--acc-line); padding: 0.2rem 0.55rem; border-radius: 999px; font-weight: 700; }
+.cpc-unlock-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.7rem; }
+.cpc-unlock { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.7rem 0.8rem; display: flex; flex-direction: column; gap: 0.15rem; }
+.cpc-unlock-num { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: #fff; }
+.cpc-unlock-den { font-size: 0.9rem; color: var(--text-muted); }
+.cpc-unlock-lbl { font-size: 0.7rem; color: var(--text-muted); }
+.cpc-gate-hint { font-size: 0.72rem; color: var(--text-secondary); background: var(--acc-fill-soft); border: 1px solid var(--acc-line);
+  border-radius: var(--radius-md); padding: 0.55rem 0.75rem; margin-bottom: 0.85rem; }
+.cpc-trophies { margin-bottom: 0.9rem; }
+.cpc-tro-head { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem; }
+.cpc-tro-count { color: var(--acc-bright); font-family: var(--font-display); }
+.cpc-tro-strip { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+.cpc-tro-chip { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); font-size: 1.2rem; }
+.cpc-tro-chip.earned { border-color: var(--acc-line); background: var(--acc-fill); box-shadow: 0 0 12px -2px var(--acc-glow); }
+.cpc-tro-chip.locked { filter: grayscale(1); opacity: 0.4; }
+
 @media (max-width: 680px) {
   .hub-tiles { grid-template-columns: 1fr; }
   .hub-account { width: 100%; justify-content: space-between; }
