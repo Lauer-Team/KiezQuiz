@@ -195,10 +195,14 @@
         <!-- Bounding Box for SVG Map -->
         <div class="map-container-wrapper" id="map-wrapper">
           
-          <!-- Floating Neuwerk Island Easter Egg -->
-          <div class="neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!">
+          <!-- Floating island Easter Eggs (city-specific) -->
+          <div class="island-overlay neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!" hidden>
             <div class="no-badge"></div>
             <span data-i18n="map.neuwerkLabel">Neuwerk (Insel-Rätsel) 🏝️</span>
+          </div>
+          <div class="island-overlay pfaueninsel-overlay" id="pfaueninsel-anchor" data-i18n-title="map.pfaueninselTitle" title="Wo liegt die Pfaueninsel? Klicke hier!" hidden>
+            <div class="no-badge"></div>
+            <span data-i18n="map.pfaueninselLabel">Pfaueninsel (Insel-Rätsel) 🦚</span>
           </div>
 
           <div id="map-prompt-bar" class="map-prompt-bar" hidden aria-live="polite">
@@ -208,7 +212,7 @@
           </div>
           
           <!-- Inlined Map SVG -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 615 600" class="hamburg-map-svg">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 615 600" class="hamburg-map-svg city-map-svg" data-city-map="hamburg">
   <defs>
     <linearGradient id="water-body-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="hsl(215, 38%, 16%)"/>
@@ -392,6 +396,7 @@
   <script src="src/ui/modals.js"></script>
   <script src="src/cloudSync.js"></script>
   <script src="src/data/hamburg_data.js"></script>
+  <script src="src/data/berlin_data.js"></script>
   <script src="src/app.js"></script>
 </body>
 </html>

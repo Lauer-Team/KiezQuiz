@@ -133,6 +133,7 @@
         if (parsed && parsed.saveVersion === 2) {
           parsed.cities = parsed.cities || {};
           ensureCityBranch(parsed, 'hamburg');
+          ensureCityBranch(parsed, 'berlin');
           if (parsed.cities.hamburg) {
             parsed.cities.hamburg.trophies = normalizeTrophyIds(parsed.cities.hamburg.trophies);
           }

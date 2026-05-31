@@ -69,6 +69,9 @@
     "neuwerkTitle": "Where is Neuwerk? Click here!",
     "neuwerkTitleUnlocked": "Neuwerk Islander — trophy unlocked!",
     "neuwerkLabel": "Neuwerk (island puzzle) 🏝️",
+    "pfaueninselTitle": "Where is Peacock Island? Click here!",
+    "pfaueninselTitleUnlocked": "Peacock Island Explorer — trophy unlocked!",
+    "pfaueninselLabel": "Peacock Island (island puzzle) 🦚",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "zoomReset": "🏠 Center & reset",
@@ -165,6 +168,16 @@
       "desc": "Click the Neuwerk puzzle at the top-right of the map.",
       "unlockDesc": "You solved the Neuwerk puzzle."
     },
+    "pfaueninsel_island": {
+      "name": "Peacock Island Explorer",
+      "unlockTitle": "Peacock Island Explorer 🦚",
+      "desc": "Click the Peacock Island puzzle at the top-right of the map.",
+      "unlockDesc": "You solved the Peacock Island puzzle."
+    },
+    "master_bezirk": {
+      "name": "{bezirk} Explorer",
+      "desc": "Master all {unit} in the {bezirk} borough."
+    },
     "paradise_explorer": {
       "name": "Paradise Explorer!",
       "unlockTitle": "Paradise Explorer! 🌴",
@@ -193,7 +206,9 @@
   },
   "trivia": {
     "defaultStadtteil": "A charming Hamburg district with its own distinct character.",
+    "defaultOrtsteil": "A Berlin neighbourhood with its own distinct Kiez character.",
     "defaultBezirk": "A significant borough of Hamburg.",
+    "defaultBezirkBerlin": "A significant borough of Berlin.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
     "templates": {
       "Altona": [
@@ -230,7 +245,19 @@
         "Hamburg's most populous borough with many green residential areas.",
         "Combines village charm in the Alster valley with urban centers.",
         "Named after the poet Matthias Claudius (Wandsbecker Bote)."
-      ]
+      ],
+      "Mitte": ["Berlin's political centre: Reichstag, Museum Island, Alexanderplatz.", "Government, culture, and tourism meet here.", "Small in area but extremely dense."],
+      "Friedrichshain-Kreuzberg": ["Berlin's youngest borough, merged in 2001.", "RAW site, East Side Gallery, vibrant nightlife.", "High share of young residents and creative industry."],
+      "Pankow": ["Berlin's most populous borough, including Prenzlauer Berg.", "Gründerzeit blocks and villa quarters in the north.", "Seat of the Berlin Senate."],
+      "Charlottenburg-Wilmersdorf": ["West Berlin's traditional centre along Ku'damm.", "Home to TU Berlin and the trade fair grounds.", "Mix of Gründerzeit, post-war modernism, and City West."],
+      "Spandau": ["Westernmost borough with citadel and Havel waterfront.", "Historically an independent city until 1920.", "Major industry and logistics hub."],
+      "Steglitz-Zehlendorf": ["South-west green belt: Wannsee, Grunewald, villas.", "Free University of Berlin in Dahlem.", "Large, mostly residential and recreational."],
+      "Tempelhof-Schöneberg": ["Former Tempelhof airport and lively Schöneberg.", "Rainbow neighbourhood and Bergmannkiez.", "Tempelhofer Feld is a huge public park today."],
+      "Neukölln": ["Diverse borough with strong migration heritage.", "Britzer Garten and Tempelhofer Feld nearby.", "From Reuterkiez to north Neukölln — many micro-neighbourhoods."],
+      "Treptow-Köpenick": ["Largest borough by area: Müggelsee and Köpenick old town.", "South-east Berlin — water, forest, single-family homes.", "Treptower Park Soviet memorial is iconic."],
+      "Marzahn-Hellersdorf": ["DDR-era plattenbau estates and Gärten der Welt.", "Large housing estates like Marzahn.", "Green spaces between the blocks."],
+      "Lichtenberg": ["East Berlin: Tierpark and Stasi memorial.", "Mix of plattenbau and detached housing.", "Key transport axis to the Berlin ring road."],
+      "Reinickendorf": ["North-west: Tegeler See and airship hangar.", "Housing from the 1920s and 1970s.", "Borders Brandenburg and Spandau."]
     },
     "specific": {
       "St. Pauli": "Home to the famous Kiez (neighborhood), the Reeperbahn, and FC St. Pauli. Once a suburb outside Hamburg's city limits.",
@@ -242,7 +269,24 @@
       "Rothenburgsort": "Historically a workers' quarter, almost completely destroyed in WWII and now a creative hotspot.",
       "Wilhelmsburg": "Europe's largest river island, between the Norder- and Süderelbe, a multicultural and green district.",
       "Finkenwerder": "Home to Airbus factories and traditional fruit orchards (Altes Land).",
-      "Speicherstadt": "The world's largest contiguous warehouse ensemble and a UNESCO World Heritage Site."
+      "Speicherstadt": "The world's largest contiguous warehouse ensemble and a UNESCO World Heritage Site.",
+      "Kreuzberg": "Famous for Kottbusser Tor, Görlitzer Park, and multicultural street life.",
+      "Prenzlauer Berg": "Once the scene quarter, now cafés, Altbauten, and Mauerpark flea market.",
+      "Mitte": "Government quarter, Museum Island, Hackescher Markt — tourist heart of Berlin.",
+      "Schöneberg": "Schöneberg town hall — where Kennedy said \"Ich bin ein Berliner\".",
+      "Neukölln": "From Reuterkiez to Britz — one of the city's most dynamic boroughs.",
+      "Köpenick": "Famous for the Captain of Köpenick story.",
+      "Charlottenburg": "Ku'damm, Lietzensee, and Charlottenburg Palace define the west.",
+      "Wannsee": "Popular lake outing — gateway to Peacock Island.",
+      "Teufelsberg": "Former US listening station on a rubble hill — now a street-art hotspot.",
+      "Mauerpark": "Sunday flea market and karaoke on the former border strip.",
+      "Alexanderplatz": "Berlin's best-known square with TV Tower and transport hub.",
+      "Friedrichshain": "RAW site, Warschauer Straße, and nightlife along the Spree.",
+      "Spandau": "Spandau Citadel and picturesque old town on the Havel.",
+      "Tempelhof": "Legendary airport — today a huge park for Berliners.",
+      "Marzahn": "Gärten der Welt and typical plattenbau estates in the east.",
+      "Lichtenberg": "Tierpark and Hohenschönhausen memorial recall DDR history.",
+      "Reinickendorf": "Tegeler See for swimming — with a view of the airship hangar."
     }
   },
   "onboarding": {
@@ -254,7 +298,20 @@
     "feature2Text": "Start structured rounds! Wrong clicks stay marked red, correct ones green. Score at least <strong>75%</strong> in a borough to unlock the next! Or name all places against the clock.",
     "feature3Title": "3. Type the name (New!)",
     "feature3Text": "Raise the difficulty! Type blinking district names directly from the keyboard (with smart autocomplete suggestions).",
+    "mapTip": "Tip: The Elbe flows as a bright blue river through Hamburg and helps you orient yourself on the map!",
     "elbeTip": "Tip: The Elbe flows as a bright blue river through Hamburg and helps you orient yourself on the map!",
+    "dismiss": "Let's go!"
+  },
+  "onboardingBerlin": {
+    "title": "Welcome to Berlin! 🐻",
+    "intro": "Learn all 12 boroughs and 97 neighbourhoods through play. You start in <strong>Mitte</strong> and unlock the city step by step.",
+    "feature1Title": "1. Boroughs & neighbourhoods",
+    "feature1Text": "Learn all 97 neighbourhoods in detail, or switch to \"Boroughs\" to master Berlin's 12 boroughs first.",
+    "feature2Title": "2. Sporcle runs & challenges",
+    "feature2Text": "Structured rounds with permanent green/red marks. Score at least <strong>75%</strong> in a borough to unlock the next!",
+    "feature3Title": "3. Type the name",
+    "feature3Text": "Type neighbourhood names from the keyboard — with smart autocomplete suggestions.",
+    "mapTip": "Tip: The Spree and large green spaces like Tiergarten help you orient yourself on the Berlin map!",
     "dismiss": "Let's go!"
   },
   "explorer": {
@@ -422,7 +479,7 @@
     },
     "berlin": {
       "greeting": "Hello Berlin!",
-      "blurb": "12 boroughs · 96 neighbourhoods",
+      "blurb": "12 boroughs · 97 neighbourhoods",
       "levels": {
         "bezirke": "Boroughs",
         "ortsteile": "Neighbourhoods"

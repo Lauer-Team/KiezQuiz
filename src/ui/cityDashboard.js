@@ -140,9 +140,8 @@
       const unlocked = game.unlockedBezirkIndex + 1;
       let mastered = 0;
       progression.forEach((bz) => {
-        const total = typeof HAMBURG_DATA !== 'undefined'
-          ? HAMBURG_DATA.filter((d) => d.bezirk === bz.name && !d.is_island).length
-          : 0;
+        const data = window[city.dataGlobal] || [];
+        const total = data.filter((d) => d.bezirk === bz.name && !d.is_island).length;
         const solved = game.bezirkProgress[bz.name]?.solved?.size || 0;
         if (total > 0 && solved >= total) mastered += 1;
       });
@@ -153,9 +152,8 @@
     let mastered = 0;
     progression.forEach((bz, idx) => {
       if (idx > game.unlockedBezirkIndex) return;
-      const total = typeof HAMBURG_DATA !== 'undefined'
-        ? HAMBURG_DATA.filter((d) => d.bezirk === bz.name && !d.is_island).length
-        : 0;
+      const data = window[city.dataGlobal] || [];
+      const total = data.filter((d) => d.bezirk === bz.name && !d.is_island).length;
       unlocked += total;
       mastered += game.bezirkProgress[bz.name]?.solved?.size || 0;
     });
@@ -178,7 +176,7 @@
     const prog = computeLevelProgress(game, city, levelKey);
     const singular = t(level.singularKey || `cities.${city.id}.singular.${levelKey}`);
 
-    const catalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog() : [];
+    const catalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(game.activeCityId) : [];
     const won = game.trophies.size;
     const total = catalog.length;
     const { currentRank, nextRank, percent, totals } = game.getCityRankProgressInfo();
