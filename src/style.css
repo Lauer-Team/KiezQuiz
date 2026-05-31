@@ -2213,6 +2213,17 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   background: rgba(0, 162, 255, 0.15);
 }
 
+.lang-toggle {
+  font-size: 1.15rem;
+  line-height: 1;
+  padding: 0;
+}
+
+.lang-toggle:hover {
+  border-color: var(--color-neutral-glow);
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .sync-toast {
   position: fixed;
   bottom: 2rem;
@@ -2404,10 +2415,16 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); color: var(--text-secondary);
   font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: var(--font-sans);
 }
-.ccb-breadcrumb { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; flex-wrap: wrap; }
+.ccb-breadcrumb { display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem 0.45rem; font-size: 0.82rem; }
+.bc-step { white-space: nowrap; }
 .bc-city { color: var(--acc-bright); font-weight: 700; }
-.bc-tier { color: var(--acc-bright); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.bc-sep { color: var(--text-muted); }
+.bc-tier {
+  color: var(--acc-bright); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em;
+  font-weight: 700; padding: 0.12rem 0.4rem; border-radius: 999px;
+  background: var(--acc-fill); border: 1px solid var(--acc-line);
+}
+.bc-level { color: var(--text-secondary); font-weight: 600; }
+.bc-sep { color: var(--text-muted); font-size: 0.75rem; padding: 0 0.1rem; user-select: none; }
 .bc-mode { color: #fff; font-weight: 600; }
 
 .segment-selector.adaptive { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding: 0; background: none; border: none; }
@@ -2462,6 +2479,18 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
 .cpc-head h3 { font-family: var(--font-display); font-size: 1rem; color: #fff; }
 .cpc-badge { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--acc-bright); background: var(--acc-fill);
   border: 1px solid var(--acc-line); padding: 0.2rem 0.55rem; border-radius: 999px; font-weight: 700; }
+.cpc-rank-row {
+  display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.85rem;
+  padding: 0.75rem 0.85rem; border-radius: var(--radius-md);
+  background: var(--acc-fill-soft); border: 1px solid var(--acc-line);
+}
+.cpc-rank-info { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+.cpc-rank-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+.cpc-rank-name { font-family: var(--font-display); font-weight: 700; color: var(--acc-bright); font-size: 1rem; }
+.cpc-rank-bar { height: 5px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+.cpc-rank-fill { height: 100%; background: linear-gradient(90deg, var(--acc), var(--acc-bright)); border-radius: 999px; transition: width 0.5s ease; }
+.cpc-rank-hint { font-size: 0.72rem; color: var(--text-secondary); }
+.cpc-rank-meta { font-size: 0.68rem; color: var(--text-muted); }
 .cpc-unlock-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.7rem; }
 .cpc-unlock { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.7rem 0.8rem; display: flex; flex-direction: column; gap: 0.15rem; }
 .cpc-unlock-num { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: #fff; }

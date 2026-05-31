@@ -61,9 +61,11 @@
         </div>
         <div class="ccb-breadcrumb" id="city-breadcrumb">
           <span class="bc-step bc-city">${city.name}</span>
-          <span class="bc-sep">›</span>
-          <span class="bc-step bc-level"><span class="bc-tier">${level.tier}</span> ${level.label}</span>
-          <span class="bc-sep">›</span>
+          <span class="bc-sep" aria-hidden="true">›</span>
+          <span class="bc-step bc-tier">${level.tier}</span>
+          <span class="bc-sep" aria-hidden="true">›</span>
+          <span class="bc-step bc-level">${level.label}</span>
+          <span class="bc-sep" aria-hidden="true">›</span>
           <span class="bc-step bc-mode">${modeLabel}</span>
         </div>
       </div>`;
@@ -105,9 +107,11 @@
     const modeLabel = getModeLabelForBreadcrumb(game);
     bc.innerHTML = `
       <span class="bc-step bc-city">${city.name}</span>
-      <span class="bc-sep">›</span>
-      <span class="bc-step bc-level"><span class="bc-tier">${level.tier}</span> ${level.label}</span>
-      <span class="bc-sep">›</span>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <span class="bc-step bc-tier">${level.tier}</span>
+      <span class="bc-sep" aria-hidden="true">›</span>
+      <span class="bc-step bc-level">${level.label}</span>
+      <span class="bc-sep" aria-hidden="true">›</span>
       <span class="bc-step bc-mode">${modeLabel}</span>`;
   }
 
@@ -177,6 +181,10 @@
     const catalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog() : [];
     const won = game.trophies.size;
     const total = catalog.length;
+    const { currentRank, nextRank, percent, totals } = game.getCityRankProgressInfo();
+    const cityRankNote = nextRank
+      ? t('cityRanks.progressTo', { percent: Math.round(percent), name: nextRank.name })
+      : t('cityRanks.maxReached');
     const stripItems = catalog.slice(0, 4).map((tr) => {
       const earned = game.trophies.has(tr.id);
       return `<div class="cpc-tro-chip${earned ? ' earned' : ' locked'}" title="${tr.name} — ${tr.desc}"><span class="cpc-tro-icon">${tr.icon}</span></div>`;
@@ -187,6 +195,15 @@
         <div class="cpc-head">
           <h3>${city.name} · ${t('cityProgress.title')}</h3>
           <span class="cpc-badge">${t('cityProgress.cityOnly')}</span>
+        </div>
+        <div class="cpc-rank-row">
+          <div class="cpc-rank-info">
+            <span class="cpc-rank-label">${t('cityProgress.cityRank')}</span>
+            <span class="cpc-rank-name">${currentRank.name}</span>
+          </div>
+          <div class="cpc-rank-bar"><div class="cpc-rank-fill" style="width:${percent}%"></div></div>
+          <span class="cpc-rank-hint">${cityRankNote}</span>
+          <span class="cpc-rank-meta">${t('cityRanks.progressHint', totals)}</span>
         </div>
         <div class="cpc-unlock-row">
           <div class="cpc-unlock">
