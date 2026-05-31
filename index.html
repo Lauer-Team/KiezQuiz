@@ -54,6 +54,13 @@
           </div>
         </div>
         
+        <!-- Auth / Cloud sync -->
+        <button type="button" class="auth-pill" id="auth-pill" title="Cloud-Speicherung: optional anmelden">
+          <span class="auth-pill-icon">👤</span>
+          <span class="auth-pill-label">Gast</span>
+          <span class="auth-pill-action">Anmelden</span>
+        </button>
+
         <!-- Audio Synthesizer toggle -->
         <button class="audio-toggle" id="btn-mute" title="Sound ein/ausschalten">🔊</button>
         <!-- Game history -->
@@ -334,13 +341,17 @@
 
     <footer class="app-footer">
       <p class="privacy-notice">
-        <strong>Datenschutz:</strong> Keine Server, keine Accounts — dein Spielstand (XP, Streak, Fortschritt) wird nur lokal im Browser gespeichert und nicht an uns übertragen.
+        <strong>Datenschutz:</strong> Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.
       </p>
       <p class="footer-credit">Courtesy of Jeremiah J. Lauer, LL.M.</p>
     </footer>
   </div>
 
   <!-- Database & Logic Script tags -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="src/supabaseConfig.js"></script>
+  <script src="src/auth.js"></script>
+  <script src="src/cloudSync.js"></script>
   <script src="src/data/hamburg_data.js"></script>
   <script src="src/app.js"></script>
 </body>

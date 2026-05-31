@@ -2,3 +2,6 @@
 .cursor/
 *.log
 LOCAL-INFO.md
+
+# Optional: echte Supabase-Keys nicht committen (dann supabaseConfig.js lokal pflegen)
+# src/supabaseConfig.js

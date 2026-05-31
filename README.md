@@ -14,7 +14,7 @@ Gamifizierte Web-App zum spielerischen Lernen der **7 Bezirke** und **104 Stadtt
 | Namen eingeben | Blinkenden Ort eintippen |
 | Nenne alle Orte | Sporcle-Challenge gegen die Zeit |
 
-Fortschritt (XP, Streak, freigeschaltete Bezirke) wird **lokal** gespeichert — kein Account, kein Server.
+Fortschritt (XP, Streak, freigeschaltete Bezirke) wird **lokal** gespeichert. Optional kannst du dich mit E-Mail anmelden, um den Spielstand **geräteübergreifend in der Cloud** zu sichern — siehe [docs/SUPABASE-SETUP.md](docs/SUPABASE-SETUP.md).
 
 ---
 
@@ -101,8 +101,13 @@ KiezQuiz/
 ├── manifest.webmanifest    # PWA-Manifest
 ├── src/
 │   ├── app.js              # Spiel-Logik
+│   ├── auth.js             # Supabase Auth (optional)
+│   ├── cloudSync.js        # Cloud-Spielstand-Sync
+│   ├── supabaseConfig.js   # Supabase-Keys (Platzhalter → siehe docs/)
 │   ├── style.css           # Layout & Design
 │   └── data/               # Bezirke, Stadtteile, Karte
+├── docs/
+│   └── SUPABASE-SETUP.md   # Supabase Schritt-für-Schritt-Anleitung
 ├── icons/
 └── scripts/
     └── assemble_html.py    # Optional: index.html aus Vorlage regenerieren
@@ -115,14 +120,16 @@ KiezQuiz/
 - Vanilla HTML, CSS und JavaScript — kein Framework, kein Build
 - Statisches Hosting (GitHub Pages)
 - Web Audio API für Soundeffekte
-- `localStorage` für Spielstand
+- `localStorage` für Spielstand; optional Supabase Cloud-Sync ([Setup-Anleitung](docs/SUPABASE-SETUP.md))
 - Mobil: Safe Areas, Touch-Pan, Pinch-Zoom, größere Tap-Targets
 
 ---
 
 ## Datenschutz
 
-Keine Server, keine Accounts. Der Spielstand wird ausschließlich lokal im Browser bzw. in der App gespeichert und nicht übertragen.
+**Ohne Account:** Der Spielstand wird ausschließlich lokal im Browser bzw. in der App gespeichert — keine Übertragung an Server.
+
+**Mit optionalem Account:** E-Mail, Benutzername und Spielstand werden verschlüsselt über TLS bei [Supabase](https://supabase.com) (Region EU) gespeichert. Keine Weitergabe an Dritte. Einrichtung: [docs/SUPABASE-SETUP.md](docs/SUPABASE-SETUP.md).
 
 ---
 

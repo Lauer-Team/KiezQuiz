@@ -810,18 +810,41 @@ class HamburgGame {
     }
   }
 
-  // Load state from local storage
-  loadState() {
-    this.xp = parseInt(localStorage.getItem('hh_xp')) || 0;
-    this.streak = parseInt(localStorage.getItem('hh_streak')) || 0;
-    this.bestStreak = parseInt(localStorage.getItem('hh_best_streak')) || 0;
-    this.highScore = parseInt(localStorage.getItem('hh_highscore')) || 0;
+  serializeState() {
+    const bezirkProgress = {};
+    BEZIRKE_PROGRESSION.forEach(bz => {
+      bezirkProgress[bz.name] = [...this.bezirkProgress[bz.name].solved];
+    });
+    return {
+      xp: this.xp,
+      streak: this.streak,
+      bestStreak: this.bestStreak,
+      highScore: this.highScore,
+      unlockedBezirkIndex: this.unlockedBezirkIndex,
+      progressionMode: this.progressionMode,
+      currentMode: this.currentMode,
+      activeSegment: this.activeSegment,
+      trophies: [...this.trophies],
+      bezirkProgress,
+      gameHistory: this.loadGameHistory(),
+      muted: this.sounds.muted,
+      savedAt: new Date().toISOString()
+    };
+  }
+
+  deserializeState(data) {
+    if (!data) return;
+
+    this.xp = parseInt(data.xp, 10) || 0;
+    this.streak = parseInt(data.streak, 10) || 0;
+    this.bestStreak = parseInt(data.bestStreak, 10) || 0;
+    this.highScore = parseInt(data.highScore, 10) || 0;
     this.level = this.calculateLevel(this.xp);
-    this.progressionMode = localStorage.getItem('hh_progression') !== 'false';
-    const savedUnlockIdx = localStorage.getItem('hh_unlocked_bz_idx');
-    if (savedUnlockIdx !== null) {
+    this.progressionMode = data.progressionMode !== false;
+
+    if (data.unlockedBezirkIndex != null) {
       this.unlockedBezirkIndex = Math.min(
-        parseInt(savedUnlockIdx, 10) || 0,
+        parseInt(data.unlockedBezirkIndex, 10) || 0,
         BEZIRKE_PROGRESSION.length - 1
       );
     } else {
@@ -833,36 +856,89 @@ class HamburgGame {
         }
       }
     }
-    const savedMode = localStorage.getItem('hh_mode') || 'EXPLORER';
+
+    const savedMode = data.currentMode || 'EXPLORER';
     this.currentMode = savedMode === 'BEZIRK_MATCH' ? 'EXPLORER' : savedMode;
-    this.activeSegment = localStorage.getItem('hh_segment') || 'STADTTEILE';
-    
-    // Trophies (Pokale) — migrate legacy achievement IDs
-    const savedTrophies = localStorage.getItem('hh_trophies');
-    const legacyAchs = localStorage.getItem('hh_achievements');
-    const trophyIds = savedTrophies || legacyAchs;
-    if (trophyIds) {
-      try {
-        JSON.parse(trophyIds).forEach(id => {
-          this.trophies.add(id);
-          this.achievements.add(id);
-        });
-      } catch (e) {}
+    this.activeSegment = data.activeSegment || 'STADTTEILE';
+
+    this.trophies = new Set();
+    this.achievements = new Set();
+    if (Array.isArray(data.trophies)) {
+      data.trophies.forEach(id => {
+        this.trophies.add(id);
+        this.achievements.add(id);
+      });
     }
-    // Legacy island_finder → neuwerk_island
     if (this.trophies.has('island_finder')) {
       this.trophies.add('neuwerk_island');
     }
 
-    // Load detailed Bezirk achievements
     BEZIRKE_PROGRESSION.forEach(bz => {
       this.bezirkProgress[bz.name] = { solved: new Set() };
+      const saved = data.bezirkProgress?.[bz.name];
+      if (Array.isArray(saved)) {
+        saved.forEach(st => this.bezirkProgress[bz.name].solved.add(st));
+      }
+    });
+
+    if (Array.isArray(data.gameHistory)) {
+      localStorage.setItem('hh_game_history', JSON.stringify(data.gameHistory));
+    }
+
+    if (typeof data.muted === 'boolean') {
+      this.sounds.muted = data.muted;
+      localStorage.setItem('hamburg_muted', data.muted ? 'true' : 'false');
+      const muteBtn = document.getElementById('btn-mute');
+      if (muteBtn) muteBtn.innerHTML = data.muted ? '🔇' : '🔊';
+    }
+  }
+
+  // Load state from local storage
+  loadState() {
+    const savedUnlockIdx = localStorage.getItem('hh_unlocked_bz_idx');
+    let unlockedBezirkIndex = 0;
+    if (savedUnlockIdx !== null) {
+      unlockedBezirkIndex = Math.min(
+        parseInt(savedUnlockIdx, 10) || 0,
+        BEZIRKE_PROGRESSION.length - 1
+      );
+    }
+
+    const savedTrophies = localStorage.getItem('hh_trophies');
+    const legacyAchs = localStorage.getItem('hh_achievements');
+    const trophyIds = savedTrophies || legacyAchs;
+    let trophies = [];
+    if (trophyIds) {
+      try {
+        trophies = JSON.parse(trophyIds);
+      } catch (e) {}
+    }
+
+    const bezirkProgress = {};
+    BEZIRKE_PROGRESSION.forEach(bz => {
       const saved = localStorage.getItem(`hh_progress_${bz.name}`);
+      bezirkProgress[bz.name] = [];
       if (saved) {
         try {
-          JSON.parse(saved).forEach(st => this.bezirkProgress[bz.name].solved.add(st));
-        } catch(e) {}
+          bezirkProgress[bz.name] = JSON.parse(saved);
+        } catch (e) {}
       }
+    });
+
+    const savedMode = localStorage.getItem('hh_mode') || 'EXPLORER';
+    this.deserializeState({
+      xp: parseInt(localStorage.getItem('hh_xp'), 10) || 0,
+      streak: parseInt(localStorage.getItem('hh_streak'), 10) || 0,
+      bestStreak: parseInt(localStorage.getItem('hh_best_streak'), 10) || 0,
+      highScore: parseInt(localStorage.getItem('hh_highscore'), 10) || 0,
+      unlockedBezirkIndex: savedUnlockIdx !== null ? unlockedBezirkIndex : undefined,
+      progressionMode: localStorage.getItem('hh_progression') !== 'false',
+      currentMode: savedMode,
+      activeSegment: localStorage.getItem('hh_segment') || 'STADTTEILE',
+      trophies,
+      bezirkProgress,
+      gameHistory: this.loadGameHistory(),
+      muted: localStorage.getItem('hamburg_muted') === 'true'
     });
   }
 
@@ -878,10 +954,14 @@ class HamburgGame {
     localStorage.setItem('hh_segment', this.activeSegment);
     localStorage.setItem('hh_trophies', JSON.stringify([...this.trophies]));
     localStorage.setItem('hh_achievements', JSON.stringify([...this.trophies]));
-    
+
     BEZIRKE_PROGRESSION.forEach(bz => {
       localStorage.setItem(`hh_progress_${bz.name}`, JSON.stringify([...this.bezirkProgress[bz.name].solved]));
     });
+
+    if (window.cloudSync) {
+      window.cloudSync.scheduleSave(this.serializeState());
+    }
   }
 
   calculateLevel(xp) {
@@ -1340,9 +1420,11 @@ class HamburgGame {
     document.getElementById('btn-lvl-dismiss').addEventListener('click', () => closeOverlayModal(modal));
   }
 
-  resetGame() {
+  async resetGame() {
     if (!confirm("Wirklich alles zurücksetzen? XP, Streak, Fortschritt und Achievements werden gelöscht. Das kann nicht rückgängig gemacht werden.")) return;
-    // Remove all hh_ keys and mute setting
+    if (window.cloudSync?.isEnabled()) {
+      await window.cloudSync.clearCloudSave();
+    }
     const keysToRemove = Object.keys(localStorage).filter(k => k.startsWith('hh_') || k === 'hamburg_muted' || k === 'hh_game_history');
     keysToRemove.forEach(k => localStorage.removeItem(k));
     location.reload();
@@ -1362,6 +1444,7 @@ class HamburgGame {
     history.unshift({ ...entry, date: new Date().toISOString() });
     if (history.length > 50) history.length = 50;
     localStorage.setItem('hh_game_history', JSON.stringify(history));
+    this.saveState();
   }
 
   getModeDisplayName(mode, segment) {
@@ -1494,18 +1577,46 @@ class HamburgGame {
     document.getElementById('btn-history-close').addEventListener('click', () => closeOverlayModal(modal));
   }
 
+  showSyncToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'sync-toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('sync-toast--visible'));
+    setTimeout(() => {
+      toast.classList.remove('sync-toast--visible');
+      setTimeout(() => toast.remove(), 400);
+    }, 3500);
+  }
+
   showSettings() {
+    const auth = window.authManager;
+    const cloudConfigured = auth?.isConfigured();
+    const loggedIn = auth?.isLoggedIn();
+    let cloudStatusHtml;
+    if (!cloudConfigured) {
+      cloudStatusHtml = '<p class="settings-cloud-status">Cloud-Speicherung ist noch nicht eingerichtet (nur lokaler Spielstand).</p>';
+    } else if (loggedIn) {
+      cloudStatusHtml = `<p class="settings-cloud-status settings-cloud-status--active">Eingeloggt als <strong>${auth._escapeHtml(auth.getDisplayName())}</strong>. Dein Spielstand wird automatisch synchronisiert.</p>`;
+    } else {
+      cloudStatusHtml = '<p class="settings-cloud-status">Nicht eingeloggt — Spielstand nur lokal. Tippe oben rechts auf „Anmelden“ für Cloud-Sync.</p>';
+    }
+
     const modal = openOverlayModal(`
       <div class="modal-content" style="max-width: 400px;">
         <h2>⚙️ Einstellungen</h2>
         <hr style="border-color: rgba(255,255,255,0.1); margin: 1rem 0;">
+        <div class="settings-cloud-block" style="margin-bottom: 1.2rem;">
+          <strong style="display:block; margin-bottom: 0.4rem;">☁️ Cloud-Speicherung</strong>
+          ${cloudStatusHtml}
+        </div>
         <div class="settings-privacy-block" style="margin-bottom: 1.2rem;">
           <strong style="display:block; margin-bottom: 0.4rem;">🔒 Datenschutz</strong>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Keine Server, keine Accounts. Dein Spielstand wird nur lokal im Browser gespeichert (localStorage) und nicht an Dritte übermittelt. Beim Löschen des Browser-Verlaufs geht der Fortschritt verloren.</p>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">Ohne Account wird dein Spielstand nur lokal im Browser gespeichert (localStorage). Mit optionalem Account werden Spielstände verschlüsselt über TLS bei Supabase (EU) gespeichert — E-Mail, Benutzername und Spielstand. Keine Weitergabe an Dritte. Details in der Setup-Anleitung unter docs/SUPABASE-SETUP.md.</p>
         </div>
         <div style="margin-bottom: 1.2rem;">
           <strong style="display:block; margin-bottom: 0.4rem;">🗑️ Spielstand zurücksetzen</strong>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">Löscht alle XP, Achievements und Fortschritte. Frischer Start als Quiddje.</p>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">Löscht alle XP, Achievements und Fortschritte${loggedIn ? ' (lokal und in der Cloud)' : ''}. Frischer Start als Quiddje.</p>
           <button id="btn-settings-reset" style="background: rgba(220,50,50,0.2); border: 1px solid rgba(220,50,50,0.5); color: #ff6b6b; padding: 0.5rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">↺ Neustart</button>
         </div>
         <button class="primary-btn" id="btn-settings-close" style="margin-top: 0.5rem;">Schließen</button>
@@ -3138,8 +3249,25 @@ class HamburgGame {
 }
 
 // Global initialization when page loads
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   const game = new HamburgGame();
-  game.init();
   window.hamburgGame = game;
+
+  window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
+  window.cloudSync = new CloudSync(window.authManager, game);
+
+  window.authManager.onAuthChange(async (user) => {
+    window.authManager.updateHeaderUI();
+    if (user) {
+      await window.cloudSync.handleLoginMerge();
+      game.renderStats();
+      game.updateMapStates();
+      game.updateNeuwerkBadge();
+    }
+  });
+
+  await window.authManager.init();
+  window.authManager.initUI();
+
+  game.init();
 });
