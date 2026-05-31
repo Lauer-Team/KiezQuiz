@@ -98,7 +98,7 @@ class AuthManager {
       return 'E-Mail bereits registriert.';
     }
     if (msg.includes('invalid login credentials')) {
-      return 'E-Mail oder Passwort falsch.';
+      return 'Benutzername, E-Mail oder Passwort falsch.';
     }
     if (msg.includes('password') && msg.includes('6')) {
       return 'Passwort muss mindestens 6 Zeichen haben.';
@@ -138,13 +138,32 @@ class AuthManager {
     return { error: null };
   }
 
-  async signIn(email, password) {
+  async signIn(identifier, password) {
     if (!this.supabase) {
       return { error: 'Cloud-Speicherung ist nicht konfiguriert.' };
     }
 
+    const trimmed = (identifier || '').trim();
+    if (!trimmed) {
+      return { error: 'Bitte Benutzername oder E-Mail eingeben.' };
+    }
+
+    let email = trimmed;
+    if (!trimmed.includes('@')) {
+      const { data: resolvedEmail, error: lookupError } = await this.supabase
+        .rpc('get_email_for_username', { p_username: trimmed });
+      if (lookupError) {
+        console.warn('Username-Lookup fehlgeschlagen:', lookupError.message);
+        return { error: 'Benutzername, E-Mail oder Passwort falsch.' };
+      }
+      if (!resolvedEmail) {
+        return { error: 'Benutzername, E-Mail oder Passwort falsch.' };
+      }
+      email = resolvedEmail;
+    }
+
     const { data, error } = await this.supabase.auth.signInWithPassword({
-      email: email.trim(),
+      email,
       password
     });
 
@@ -160,6 +179,9 @@ class AuthManager {
   }
 
   async signOut() {
+    if (window.cloudSync) {
+      await window.cloudSync.flushSaveNow();
+    }
     if (!this.supabase) return;
     await this.supabase.auth.signOut();
     this._notify(null, null);
@@ -176,9 +198,9 @@ class AuthManager {
         <span class="auth-pill-name">${this._escapeHtml(this.getDisplayName())}</span>
         <button type="button" class="auth-pill-action" id="btn-auth-logout" title="Abmelden">Abmelden</button>
       `;
-      document.getElementById('btn-auth-logout')?.addEventListener('click', (e) => {
+      document.getElementById('btn-auth-logout')?.addEventListener('click', async (e) => {
         e.stopPropagation();
-        this.signOut();
+        await this.signOut();
       });
     } else {
       pill.classList.remove('auth-pill--logged-in');
@@ -217,8 +239,8 @@ class AuthManager {
         </div>
         <form class="auth-form" id="auth-form-login">
           <label class="auth-field">
-            <span>E-Mail</span>
-            <input type="email" id="auth-email" autocomplete="email" required>
+            <span>Benutzername oder E-Mail</span>
+            <input type="text" id="auth-email" autocomplete="username" required>
           </label>
           <label class="auth-field">
             <span>Passwort</span>

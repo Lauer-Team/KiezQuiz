@@ -33,6 +33,19 @@ class CloudSync {
     this._saveTimer = setTimeout(() => this._flushSave(), this.SAVE_DEBOUNCE_MS);
   }
 
+  async flushSaveNow() {
+    if (this._saveTimer) {
+      clearTimeout(this._saveTimer);
+      this._saveTimer = null;
+    }
+    if (!this.isEnabled()) return;
+
+    if (!this._pendingData && this.game?.serializeState) {
+      this._pendingData = this.game.serializeState();
+    }
+    await this._flushSave();
+  }
+
   async _flushSave() {
     this._saveTimer = null;
     if (!this.isEnabled() || !this._pendingData) return;
@@ -95,8 +108,17 @@ class CloudSync {
     const cloudXp = parseInt(cloudState?.xp, 10) || 0;
     const cloudEmpty = this._isCloudEmpty(cloudState);
 
+    if (localXp === 0 && !cloudEmpty) {
+      this.game.deserializeState(cloudState);
+      this.game.saveState();
+      if (typeof this.game.showSyncToast === 'function') {
+        this.game.showSyncToast('☁️ Spielstand aus der Cloud wiederhergestellt.');
+      }
+      return;
+    }
+
     if (localXp > 0 && cloudEmpty) {
-      this.scheduleSave(localState);
+      await this.flushSaveNow();
       return;
     }
 
@@ -110,7 +132,7 @@ class CloudSync {
     }
 
     if (!cloudEmpty && localXp > cloudXp) {
-      this.scheduleSave(localState);
+      await this.flushSaveNow();
       if (typeof this.game.showSyncToast === 'function') {
         this.game.showSyncToast('☁️ Lokaler Fortschritt in die Cloud hochgeladen.');
       }
@@ -124,7 +146,7 @@ class CloudSync {
         this.game.deserializeState(cloudState);
         this.game.saveState();
       } else if (localTime > cloudTime) {
-        this.scheduleSave(localState);
+        await this.flushSaveNow();
       }
     }
   }

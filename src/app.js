@@ -1425,9 +1425,36 @@ class HamburgGame {
     if (window.cloudSync?.isEnabled()) {
       await window.cloudSync.clearCloudSave();
     }
-    const keysToRemove = Object.keys(localStorage).filter(k => k.startsWith('hh_') || k === 'hamburg_muted' || k === 'hh_game_history');
-    keysToRemove.forEach(k => localStorage.removeItem(k));
+    this.resetToGuestState(true);
     location.reload();
+  }
+
+  resetToGuestState(clearLocalOnly = false) {
+    const keysToRemove = Object.keys(localStorage).filter(
+      (k) => k.startsWith('hh_') || k === 'hh_game_history'
+    );
+    keysToRemove.forEach((k) => localStorage.removeItem(k));
+
+    this.deserializeState({
+      xp: 0,
+      streak: 0,
+      bestStreak: 0,
+      highScore: 0,
+      unlockedBezirkIndex: 0,
+      progressionMode: true,
+      currentMode: 'EXPLORER',
+      activeSegment: 'STADTTEILE',
+      trophies: [],
+      bezirkProgress: {},
+      gameHistory: []
+    });
+
+    if (!clearLocalOnly) {
+      this.setMode('EXPLORER');
+      this.renderStats();
+      this.updateMapStates();
+      this.updateNeuwerkBadge();
+    }
   }
 
   loadGameHistory() {
@@ -3255,6 +3282,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
   window.cloudSync = new CloudSync(window.authManager, game);
+  let _previousAuthUser;
 
   window.authManager.onAuthChange(async (user) => {
     window.authManager.updateHeaderUI();
@@ -3263,11 +3291,20 @@ window.addEventListener('DOMContentLoaded', async () => {
       game.renderStats();
       game.updateMapStates();
       game.updateNeuwerkBadge();
+    } else if (_previousAuthUser !== undefined) {
+      game.resetToGuestState();
     }
+    _previousAuthUser = user;
   });
 
   await window.authManager.init();
   window.authManager.initUI();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && window.cloudSync?.isEnabled()) {
+      window.cloudSync.flushSaveNow();
+    }
+  });
 
   game.init();
 });

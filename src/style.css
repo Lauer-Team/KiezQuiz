@@ -2126,6 +2126,10 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   margin-bottom: 0.75rem;
 }
 
+.auth-form[hidden] {
+  display: none !important;
+}
+
 .auth-field {
   display: flex;
   flex-direction: column;
