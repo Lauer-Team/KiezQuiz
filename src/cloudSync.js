@@ -1,5 +1,5 @@
 /**
- * CloudSync — debounced Supabase-Spielstand-Synchronisation.
+ * CloudSync — debounced Supabase-Spielstand-Synchronisation (v2 schema).
  */
 class CloudSync {
   constructor(authManager, game) {
@@ -15,15 +15,128 @@ class CloudSync {
     return this.auth.isConfigured() && this.auth.isLoggedIn();
   }
 
+  _isV2(data) {
+    return data && (data.saveVersion === 2 || data.cities);
+  }
+
+  _normalizeToV2(data) {
+    if (!data) return window.saveManager.createEmptySave();
+    if (this._isV2(data)) {
+      const save = { ...window.saveManager.createEmptySave(), ...data, saveVersion: 2 };
+      save.cities = save.cities || {};
+      window.saveManager.ensureCityBranch(save, 'hamburg');
+      if (save.cities.hamburg) {
+        save.cities.hamburg.trophies = window.saveManager.normalizeTrophyIds(save.cities.hamburg.trophies);
+      }
+      return save;
+    }
+    const progression = window.cityRegistry?.getBezirkeProgression('hamburg') || [];
+    const regionProgress = data.bezirkProgress || {};
+    return {
+      saveVersion: 2,
+      global: {
+        xp: parseInt(data.xp, 10) || 0,
+        streak: parseInt(data.streak, 10) || 0,
+        bestStreak: parseInt(data.bestStreak, 10) || 0,
+        rankSeen: 1,
+        muted: !!data.muted
+      },
+      lastCity: 'hamburg',
+      lastLevelKey: window.cityRegistry?.segmentToLevelKey(data.activeSegment || 'STADTTEILE', 'hamburg') || 'stadtteile',
+      lastMode: data.currentMode || 'EXPLORER',
+      cities: {
+        hamburg: {
+          unlockedRegionIndex: data.unlockedBezirkIndex,
+          progressionMode: data.progressionMode !== false,
+          highScore: parseInt(data.highScore, 10) || 0,
+          trophies: window.saveManager.normalizeTrophyIds(data.trophies || []),
+          regionProgress,
+          gameHistory: Array.isArray(data.gameHistory) ? data.gameHistory : []
+        }
+      },
+      savedAt: data.savedAt || new Date().toISOString()
+    };
+  }
+
   _isCloudEmpty(data) {
-    if (!data || typeof data !== 'object') return true;
-    const xp = parseInt(data.xp, 10) || 0;
-    const hasTrophies = Array.isArray(data.trophies) && data.trophies.length > 0;
-    const hasHistory = Array.isArray(data.gameHistory) && data.gameHistory.length > 0;
-    const hasBezirk = data.bezirkProgress && Object.values(data.bezirkProgress).some(
+    const v2 = this._normalizeToV2(data);
+    const xp = parseInt(v2.global?.xp, 10) || 0;
+    const hamburg = v2.cities?.hamburg || {};
+    const hasTrophies = Array.isArray(hamburg.trophies) && hamburg.trophies.length > 0;
+    const hasHistory = Array.isArray(hamburg.gameHistory) && hamburg.gameHistory.length > 0;
+    const hasBezirk = hamburg.regionProgress && Object.values(hamburg.regionProgress).some(
       (arr) => Array.isArray(arr) && arr.length > 0
     );
     return xp === 0 && !hasTrophies && !hasHistory && !hasBezirk;
+  }
+
+  _mergeRegionProgress(a, b) {
+    const out = { ...(a || {}) };
+    Object.entries(b || {}).forEach(([name, arr]) => {
+      const set = new Set(Array.isArray(out[name]) ? out[name] : []);
+      (Array.isArray(arr) ? arr : []).forEach((x) => set.add(x));
+      out[name] = [...set];
+    });
+    return out;
+  }
+
+  _mergeCity(localCity, cloudCity) {
+    const a = localCity || window.saveManager.emptyCityState(window.cityRegistry.getBezirkeProgression('hamburg'));
+    const b = cloudCity || window.saveManager.emptyCityState(window.cityRegistry.getBezirkeProgression('hamburg'));
+    const trophies = window.saveManager.normalizeTrophyIds([
+      ...(a.trophies || []),
+      ...(b.trophies || [])
+    ]);
+    const histories = [...(a.gameHistory || []), ...(b.gameHistory || [])];
+    histories.sort((x, y) => Date.parse(y.date || 0) - Date.parse(x.date || 0));
+    const mergedHistory = histories.slice(0, 50);
+    return {
+      unlockedRegionIndex: Math.max(a.unlockedRegionIndex || 0, b.unlockedRegionIndex || 0),
+      progressionMode: a.progressionMode !== false && b.progressionMode !== false,
+      highScore: Math.max(parseInt(a.highScore, 10) || 0, parseInt(b.highScore, 10) || 0),
+      trophies,
+      regionProgress: this._mergeRegionProgress(a.regionProgress, b.regionProgress),
+      gameHistory: mergedHistory
+    };
+  }
+
+  mergeSaves(localRaw, cloudRaw) {
+    const local = this._normalizeToV2(localRaw);
+    const cloud = this._normalizeToV2(cloudRaw);
+    const cityIds = new Set([
+      ...Object.keys(local.cities || {}),
+      ...Object.keys(cloud.cities || {})
+    ]);
+
+    const cities = {};
+    cityIds.forEach((id) => {
+      cities[id] = this._mergeCity(local.cities?.[id], cloud.cities?.[id]);
+    });
+
+    const localXp = parseInt(local.global?.xp, 10) || 0;
+    const cloudXp = parseInt(cloud.global?.xp, 10) || 0;
+    const localTime = local.savedAt ? Date.parse(local.savedAt) : 0;
+    const cloudTime = cloud.savedAt ? Date.parse(cloud.savedAt) : 0;
+    const useCloudNav = cloudXp > localXp || (cloudXp === localXp && cloudTime > localTime);
+    const preferCloudStreak = cloudTime > localTime;
+
+    return {
+      saveVersion: 2,
+      global: {
+        xp: Math.max(localXp, cloudXp),
+        streak: preferCloudStreak
+          ? (parseInt(cloud.global?.streak, 10) || 0)
+          : (parseInt(local.global?.streak, 10) || 0),
+        bestStreak: Math.max(parseInt(local.global?.bestStreak, 10) || 0, parseInt(cloud.global?.bestStreak, 10) || 0),
+        rankSeen: Math.max(parseInt(local.global?.rankSeen, 10) || 1, parseInt(cloud.global?.rankSeen, 10) || 1),
+        muted: local.global?.muted ?? cloud.global?.muted ?? false
+      },
+      lastCity: useCloudNav ? (cloud.lastCity || local.lastCity || 'hamburg') : (local.lastCity || cloud.lastCity || 'hamburg'),
+      lastLevelKey: useCloudNav ? (cloud.lastLevelKey || local.lastLevelKey) : (local.lastLevelKey || cloud.lastLevelKey),
+      lastMode: useCloudNav ? (cloud.lastMode || local.lastMode) : (local.lastMode || cloud.lastMode),
+      cities,
+      savedAt: new Date().toISOString()
+    };
   }
 
   scheduleSave(stateData) {
@@ -50,7 +163,7 @@ class CloudSync {
     this._saveTimer = null;
     if (!this.isEnabled() || !this._pendingData) return;
 
-    const data = this._pendingData;
+    const data = this._normalizeToV2(this._pendingData);
     this._pendingData = null;
 
     if (this._saveInFlight) {
@@ -96,19 +209,18 @@ class CloudSync {
       return null;
     }
 
-    return data?.save_data || null;
+    return data?.save_data ? this._normalizeToV2(data.save_data) : null;
   }
 
   async handleLoginMerge() {
     if (!this.isEnabled() || !this.game?.serializeState) return;
 
-    const localState = this.game.serializeState();
+    const localState = this._normalizeToV2(this.game.serializeState());
     const cloudState = await this.loadCloudSave();
-    const localXp = parseInt(localState.xp, 10) || 0;
-    const cloudXp = parseInt(cloudState?.xp, 10) || 0;
     const cloudEmpty = this._isCloudEmpty(cloudState);
+    const localEmpty = this._isCloudEmpty(localState);
 
-    if (localXp === 0 && !cloudEmpty) {
+    if (localEmpty && !cloudEmpty) {
       this.game.deserializeState(cloudState);
       this.game.saveState();
       if (typeof this.game.showSyncToast === 'function') {
@@ -117,36 +229,34 @@ class CloudSync {
       return;
     }
 
-    if (localXp > 0 && cloudEmpty) {
+    if (!localEmpty && cloudEmpty) {
       await this.flushSaveNow();
       return;
     }
 
-    if (!cloudEmpty && cloudXp > localXp) {
-      this.game.deserializeState(cloudState);
-      this.game.saveState();
-      if (typeof this.game.showSyncToast === 'function') {
-        this.game.showSyncToast(t('sync.restored'));
-      }
-      return;
-    }
-
-    if (!cloudEmpty && localXp > cloudXp) {
-      await this.flushSaveNow();
-      if (typeof this.game.showSyncToast === 'function') {
-        this.game.showSyncToast(t('sync.uploaded'));
-      }
-      return;
-    }
-
-    if (!cloudEmpty && localXp === cloudXp && cloudState) {
-      const cloudTime = cloudState.savedAt ? Date.parse(cloudState.savedAt) : 0;
+    if (!cloudEmpty && !localEmpty) {
+      const merged = this.mergeSaves(localState, cloudState);
+      const localXp = parseInt(localState.global?.xp, 10) || 0;
+      const cloudXp = parseInt(cloudState.global?.xp, 10) || 0;
       const localTime = localState.savedAt ? Date.parse(localState.savedAt) : 0;
-      if (cloudTime > localTime) {
-        this.game.deserializeState(cloudState);
+      const cloudTime = cloudState.savedAt ? Date.parse(cloudState.savedAt) : 0;
+
+      if (cloudXp > localXp || (cloudXp === localXp && cloudTime > localTime)) {
+        this.game.deserializeState(merged);
         this.game.saveState();
-      } else if (localTime > cloudTime) {
+        if (typeof this.game.showSyncToast === 'function') {
+          this.game.showSyncToast(t('sync.restored'));
+        }
+      } else if (localXp > cloudXp || (localXp === cloudXp && localTime > cloudTime)) {
+        this.game.deserializeState(merged);
+        this.game.saveState();
         await this.flushSaveNow();
+        if (typeof this.game.showSyncToast === 'function') {
+          this.game.showSyncToast(t('sync.uploaded'));
+        }
+      } else {
+        this.game.deserializeState(merged);
+        this.game.saveState();
       }
     }
   }
@@ -154,21 +264,7 @@ class CloudSync {
   async clearCloudSave() {
     if (!this.isEnabled()) return;
 
-    const emptySave = {
-      xp: 0,
-      streak: 0,
-      bestStreak: 0,
-      highScore: 0,
-      unlockedBezirkIndex: 0,
-      progressionMode: true,
-      currentMode: 'EXPLORER',
-      activeSegment: 'STADTTEILE',
-      trophies: [],
-      bezirkProgress: {},
-      gameHistory: [],
-      muted: false,
-      savedAt: new Date().toISOString()
-    };
+    const emptySave = window.saveManager.createEmptySave();
 
     try {
       await this.auth.supabase

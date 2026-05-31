@@ -40,7 +40,22 @@ class AuthManager {
   _notify(user, profile) {
     this.user = user;
     this.profile = profile;
-    this._listeners.forEach((cb) => cb(user, profile));
+    this._listeners.forEach((cb) => {
+      try {
+        const result = cb(user, profile);
+        if (result && typeof result.then === 'function') {
+          this._pendingAuthTasks = (this._pendingAuthTasks || []).concat([result]);
+        }
+      } catch (e) {
+        console.warn('Auth listener failed:', e);
+      }
+    });
+  }
+
+  async waitForPendingAuthTasks() {
+    const tasks = this._pendingAuthTasks || [];
+    this._pendingAuthTasks = [];
+    await Promise.allSettled(tasks);
   }
 
   async init() {
@@ -188,36 +203,49 @@ class AuthManager {
   }
 
   updateHeaderUI() {
-    const pill = document.getElementById('auth-pill');
-    if (!pill) return;
+    const pills = document.querySelectorAll('.auth-pill');
+    if (!pills.length) return;
 
-    if (this.isLoggedIn()) {
-      pill.classList.add('auth-pill--logged-in');
-      pill.innerHTML = `
+    const loggedInHtml = `
         <span class="auth-pill-icon">👤</span>
         <span class="auth-pill-name">${this._escapeHtml(this.getDisplayName())}</span>
-        <button type="button" class="auth-pill-action" id="btn-auth-logout" title="${t('header.logout')}">${t('header.logout')}</button>
+        <button type="button" class="auth-pill-action btn-auth-logout" title="${t('header.logout')}">${t('header.logout')}</button>
       `;
-      document.getElementById('btn-auth-logout')?.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        await this.signOut();
-      });
-    } else {
-      pill.classList.remove('auth-pill--logged-in');
-      pill.innerHTML = `
+    const guestHtml = `
         <span class="auth-pill-icon">👤</span>
         <span class="auth-pill-label">${t('header.guest')}</span>
         <span class="auth-pill-action">${t('header.login')}</span>
       `;
-    }
+
+    pills.forEach((pill) => {
+      if (this.isLoggedIn()) {
+        pill.classList.add('auth-pill--logged-in');
+        pill.innerHTML = loggedInHtml;
+      } else {
+        pill.classList.remove('auth-pill--logged-in');
+        pill.innerHTML = guestHtml;
+      }
+    });
+
+    document.querySelectorAll('.btn-auth-logout').forEach((btn) => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        await this.signOut();
+      });
+    });
   }
 
   initUI() {
-    const pill = document.getElementById('auth-pill');
-    if (!pill) return;
+    if (this._uiBound) {
+      this.updateHeaderUI();
+      return;
+    }
+    this._uiBound = true;
 
-    pill.addEventListener('click', (e) => {
-      if (e.target.closest('#btn-auth-logout')) return;
+    document.body.addEventListener('click', (e) => {
+      const pill = e.target.closest('.auth-pill');
+      if (!pill) return;
+      if (e.target.closest('.btn-auth-logout')) return;
       if (this.isLoggedIn()) return;
       this.showAuthModal();
     });

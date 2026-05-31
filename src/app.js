@@ -73,15 +73,7 @@ function getModeLabel(mode, segment) {
 
 const ROUND_TIME_LIMIT = 600; // 10 minutes for all timed game modes
 
-const BEZIRKE_PROGRESSION = [
-  { name: "Altona", xpNeeded: 0 },
-  { name: "Eimsbüttel", xpNeeded: 50 },
-  { name: "Hamburg-Nord", xpNeeded: 150 },
-  { name: "Wandsbek", xpNeeded: 300 },
-  { name: "Hamburg-Mitte", xpNeeded: 500 },
-  { name: "Harburg", xpNeeded: 750 },
-  { name: "Bergedorf", xpNeeded: 1000 }
-];
+const BEZIRKE_PROGRESSION = window.KQ_DATA.BEZIRKE_PROGRESSION;
 
 const MODE_ICONS = {
   EXPLORER: '🗺️',
@@ -580,10 +572,13 @@ class MapNavigator {
 }
 
 // Core Game Controller
-class HamburgGame {
+class KiezQuizGame {
   constructor() {
     this.sounds = new SoundManager();
     this.mapNav = null;
+    this.view = 'hub';
+    this.activeCityId = 'hamburg';
+    this._save = null;
     
     // Game States
     this.xp = 0;
@@ -633,25 +628,60 @@ class HamburgGame {
   }
 
   init() {
-    // DOM bindings
+    this._save = window.saveManager.loadSave();
+    this.view = window.saveManager.getInitialView(this._save);
+    this.activeCityId = this._save.lastCity || 'hamburg';
+
+    const hubEl = document.getElementById('hub-view');
+    const cityEl = document.getElementById('city-view');
+
+    if (this.view === 'hub') {
+      if (hubEl) hubEl.hidden = false;
+      if (cityEl) cityEl.hidden = true;
+      window.kiezHub?.render(this, hubEl);
+      if (window.authManager) window.authManager.updateHeaderUI();
+      if (this.xp === 0) this.showOnboarding(true);
+      return;
+    }
+
+    this._initCityPlay();
+  }
+
+  _initCityPlay() {
+    const hubEl = document.getElementById('hub-view');
+    const cityEl = document.getElementById('city-view');
+    if (hubEl) hubEl.hidden = true;
+    if (cityEl) {
+      cityEl.hidden = false;
+      const city = window.cityRegistry.getCity(this.activeCityId);
+      if (city) window.cityRegistry.applyAccentVars(cityEl, city.hue);
+      cityEl.dataset.city = this.activeCityId;
+    }
+
     this.svg = document.querySelector('.hamburg-map-svg');
     this.mapWrapper = document.querySelector('.map-container-wrapper');
     this.tooltip = document.getElementById('map-tooltip');
-    
-    this.mapNav = new MapNavigator(this.svg, this.mapWrapper);
-    this.reorderMapLayers();
+
+    if (this.svg && this.mapWrapper) {
+      this.mapNav = new MapNavigator(this.svg, this.mapWrapper);
+      this.reorderMapLayers();
+    }
 
     if (this.tooltip && this.tooltip.parentElement !== document.body) {
       document.body.appendChild(this.tooltip);
     }
-    
+
+    window.kiezCityDashboard?.enhanceSegmentSelector();
+    window.kiezCityDashboard?.renderContextBar(this, document.getElementById('city-context-bar'));
+
     this.setupUIListeners();
     this.setupMobileMapHint();
-    this.initMapPaths();
-    this.buildBezirkBoundaries();
+    if (this.svg) {
+      this.initMapPaths();
+      this.buildBezirkBoundaries();
+    }
     this.renderStats();
-    
-    // Segment selectors binding
+
     this.setupSegmentSelectors();
     if (!this.isModeAllowedForSegment(this.currentMode)) {
       this.currentMode = 'EXPLORER';
@@ -660,23 +690,71 @@ class HamburgGame {
     this.updateModeLabels();
     this.syncSegmentBodyClass();
     this.setMode(this.resolveModeForCurrentSegment(this.currentMode));
-    
-    // Initial map unlock updates
+
     this.updateMapStates();
     this.updateNeuwerkBadge();
-    
-    const primeAudio = () => this.sounds.init();
-    document.addEventListener('click', primeAudio);
-    document.addEventListener('keydown', primeAudio);
-    document.addEventListener('touchstart', primeAudio, { passive: true });
 
-    // A–D shortcuts for Karten-Quiz / Bezirk-zuordnen
-    document.addEventListener('keydown', (e) => this.handleQuizKeydown(e));
-    
-    // Check if onboarding is needed
-    if (this.xp === 0) {
+    if (!this._audioPrimed) {
+      const primeAudio = () => this.sounds.init();
+      document.addEventListener('click', primeAudio);
+      document.addEventListener('keydown', primeAudio);
+      document.addEventListener('touchstart', primeAudio, { passive: true });
+      document.addEventListener('keydown', (e) => this.handleQuizKeydown(e));
+      this._audioPrimed = true;
+    }
+
+    if (this.xp === 0 && !this._save?.migratedFromV1) {
       this.showOnboarding(true);
     }
+  }
+
+  showHub(persistNav = true) {
+    if (this.inRound || this.nameAllIsActive) {
+      if (!confirm(t('game.confirmSegmentSwitch'))) return;
+      this.endRound(false);
+      this.stopNameAllChallenge(false);
+    }
+    this.view = 'hub';
+    if (persistNav) {
+      this._syncToSaveObject();
+      this._save.lastCity = this.activeCityId;
+      window.saveManager.persistSave(this._save);
+    }
+    window.kiezCityDashboard?.closeSwitcher();
+    const hubEl = document.getElementById('hub-view');
+    const cityEl = document.getElementById('city-view');
+    if (cityEl) cityEl.hidden = true;
+    if (hubEl) {
+      hubEl.hidden = false;
+      window.kiezHub?.render(this, hubEl);
+    }
+    if (window.authManager) window.authManager.updateHeaderUI();
+  }
+
+  enterCity(cityId, persistNav = true) {
+    const city = window.cityRegistry.getCity(cityId);
+    if (!city || city.status !== 'playable') {
+      this.showComingSoonToast(cityId);
+      return;
+    }
+    this.activeCityId = cityId;
+    this.view = 'city';
+    if (persistNav) {
+      this._syncToSaveObject();
+      this._save.lastCity = cityId;
+      window.saveManager.persistSave(this._save);
+    }
+    this._initCityPlay();
+  }
+
+  showComingSoonToast(cityId) {
+    const city = window.cityRegistry.getCity(cityId);
+    const name = city?.name || cityId;
+    this.showSyncToast(t('hub.comingSoonToast', { city: name }));
+  }
+
+  syncHubStats() {
+    window.kiezHub?.updateStats(this);
   }
 
   switchSegment(segment) {
@@ -690,12 +768,17 @@ class HamburgGame {
     this.updateMapStates();
     this.syncSegmentBodyClass();
     this.setMode(this.resolveModeForCurrentSegment(this.currentMode));
+    window.kiezCityDashboard?.updateBreadcrumb(this);
   }
 
   setupSegmentSelectors() {
+    const selector = document.querySelector('#city-view .segment-selector');
+    if (!selector || selector.dataset.bound === 'true') return;
+
     const btnSt = document.getElementById('btn-segment-stadtteile');
     const btnBz = document.getElementById('btn-segment-bezirke');
     if (btnSt && btnBz) {
+      selector.dataset.bound = 'true';
       btnSt.addEventListener('click', () => {
         if (this.inRound || this.nameAllIsActive) {
           if (!confirm(t('game.confirmSegmentSwitch'))) return;
@@ -790,35 +873,110 @@ class HamburgGame {
     }
   }
 
-  serializeState() {
-    const bezirkProgress = {};
-    BEZIRKE_PROGRESSION.forEach(bz => {
-      bezirkProgress[bz.name] = [...this.bezirkProgress[bz.name].solved];
+  _syncToSaveObject() {
+    if (!this._save) this._save = window.saveManager.loadSave();
+    const progression = BEZIRKE_PROGRESSION;
+    const regionProgress = {};
+    progression.forEach((bz) => {
+      regionProgress[bz.name] = [...(this.bezirkProgress[bz.name]?.solved || [])];
     });
-    return {
+    this._save.global = {
+      ...this._save.global,
       xp: this.xp,
       streak: this.streak,
       bestStreak: this.bestStreak,
-      highScore: this.highScore,
-      unlockedBezirkIndex: this.unlockedBezirkIndex,
-      progressionMode: this.progressionMode,
-      currentMode: this.currentMode,
-      activeSegment: this.activeSegment,
-      trophies: [...this.trophies],
-      bezirkProgress,
-      gameHistory: this.loadGameHistory(),
-      muted: this.sounds.muted,
-      savedAt: new Date().toISOString()
+      rankSeen: this.level,
+      muted: this.sounds.muted
     };
+    this._save.lastCity = this.activeCityId;
+    this._save.lastLevelKey = window.cityRegistry.segmentToLevelKey(this.activeSegment, this.activeCityId);
+    this._save.lastMode = this.currentMode;
+    window.saveManager.ensureCityBranch(this._save, this.activeCityId);
+    this._save.cities[this.activeCityId] = {
+      ...this._save.cities[this.activeCityId],
+      unlockedRegionIndex: this.unlockedBezirkIndex,
+      progressionMode: this.progressionMode,
+      highScore: this.highScore,
+      trophies: window.saveManager.normalizeTrophyIds([...this.trophies]),
+      regionProgress,
+      gameHistory: this.loadGameHistory()
+    };
+    this._save.savedAt = new Date().toISOString();
+  }
+
+  serializeState() {
+    this._syncToSaveObject();
+    return JSON.parse(JSON.stringify(this._save));
+  }
+
+  _applyCityBranch(cityData) {
+    if (!cityData) return;
+    this.unlockedBezirkIndex = 0;
+    if (cityData.unlockedRegionIndex != null) {
+      this.unlockedBezirkIndex = Math.min(
+        parseInt(cityData.unlockedRegionIndex, 10) || 0,
+        BEZIRKE_PROGRESSION.length - 1
+      );
+    } else if (this.xp > 0) {
+      for (let i = BEZIRKE_PROGRESSION.length - 1; i >= 0; i--) {
+        if (this.xp >= BEZIRKE_PROGRESSION[i].xpNeeded) {
+          this.unlockedBezirkIndex = i;
+          break;
+        }
+      }
+    }
+    this.progressionMode = cityData.progressionMode !== false;
+    this.highScore = parseInt(cityData.highScore, 10) || 0;
+
+    this.trophies = new Set();
+    this.achievements = new Set();
+    if (Array.isArray(cityData.trophies)) {
+      window.saveManager.normalizeTrophyIds(cityData.trophies).forEach((id) => {
+        this.trophies.add(id);
+        this.achievements.add(id);
+      });
+    }
+
+    BEZIRKE_PROGRESSION.forEach((bz) => {
+      this.bezirkProgress[bz.name] = { solved: new Set() };
+      const saved = cityData.regionProgress?.[bz.name] ?? cityData.bezirkProgress?.[bz.name];
+      if (Array.isArray(saved)) {
+        saved.forEach((st) => this.bezirkProgress[bz.name].solved.add(st));
+      }
+    });
+
+    if (Array.isArray(cityData.gameHistory)) {
+      const key = this.activeCityId === 'hamburg' ? 'hh_game_history' : `kq_history_${this.activeCityId}`;
+      localStorage.setItem(key, JSON.stringify(cityData.gameHistory));
+    }
   }
 
   deserializeState(data) {
     if (!data) return;
 
+    if (data.saveVersion === 2 || data.cities) {
+      this._save = data.saveVersion === 2 ? data : { ...window.saveManager.createEmptySave(), ...data, saveVersion: 2 };
+      const g = this._save.global || {};
+      this.xp = parseInt(g.xp, 10) || 0;
+      this.streak = parseInt(g.streak, 10) || 0;
+      this.bestStreak = parseInt(g.bestStreak, 10) || 0;
+      this.level = this.calculateLevel(this.xp);
+      this.activeCityId = this._save.lastCity || 'hamburg';
+      const savedMode = this._save.lastMode || 'EXPLORER';
+      this.currentMode = savedMode === 'BEZIRK_MATCH' ? 'EXPLORER' : savedMode;
+      this.activeSegment = window.cityRegistry.levelKeyToSegment(this._save.lastLevelKey || 'stadtteile');
+      this._applyCityBranch(this._save.cities[this.activeCityId] || this._save.cities.hamburg);
+      if (typeof g.muted === 'boolean') {
+        this.sounds.muted = g.muted;
+        const muteBtn = document.getElementById('btn-mute');
+        if (muteBtn) muteBtn.innerHTML = g.muted ? '🔇' : '🔊';
+      }
+      return;
+    }
+
     this.xp = parseInt(data.xp, 10) || 0;
     this.streak = parseInt(data.streak, 10) || 0;
     this.bestStreak = parseInt(data.bestStreak, 10) || 0;
-    this.highScore = parseInt(data.highScore, 10) || 0;
     this.level = this.calculateLevel(this.xp);
     this.progressionMode = data.progressionMode !== false;
 
@@ -844,20 +1002,17 @@ class HamburgGame {
     this.trophies = new Set();
     this.achievements = new Set();
     if (Array.isArray(data.trophies)) {
-      data.trophies.forEach(id => {
+      window.saveManager.normalizeTrophyIds(data.trophies).forEach((id) => {
         this.trophies.add(id);
         this.achievements.add(id);
       });
     }
-    if (this.trophies.has('island_finder')) {
-      this.trophies.add('neuwerk_island');
-    }
 
-    BEZIRKE_PROGRESSION.forEach(bz => {
+    BEZIRKE_PROGRESSION.forEach((bz) => {
       this.bezirkProgress[bz.name] = { solved: new Set() };
       const saved = data.bezirkProgress?.[bz.name];
       if (Array.isArray(saved)) {
-        saved.forEach(st => this.bezirkProgress[bz.name].solved.add(st));
+        saved.forEach((st) => this.bezirkProgress[bz.name].solved.add(st));
       }
     });
 
@@ -871,74 +1026,20 @@ class HamburgGame {
       const muteBtn = document.getElementById('btn-mute');
       if (muteBtn) muteBtn.innerHTML = data.muted ? '🔇' : '🔊';
     }
+
+    this._save = window.saveManager.createEmptySave();
+    this._syncToSaveObject();
   }
 
-  // Load state from local storage
   loadState() {
-    const savedUnlockIdx = localStorage.getItem('hh_unlocked_bz_idx');
-    let unlockedBezirkIndex = 0;
-    if (savedUnlockIdx !== null) {
-      unlockedBezirkIndex = Math.min(
-        parseInt(savedUnlockIdx, 10) || 0,
-        BEZIRKE_PROGRESSION.length - 1
-      );
-    }
-
-    const savedTrophies = localStorage.getItem('hh_trophies');
-    const legacyAchs = localStorage.getItem('hh_achievements');
-    const trophyIds = savedTrophies || legacyAchs;
-    let trophies = [];
-    if (trophyIds) {
-      try {
-        trophies = JSON.parse(trophyIds);
-      } catch (e) {}
-    }
-
-    const bezirkProgress = {};
-    BEZIRKE_PROGRESSION.forEach(bz => {
-      const saved = localStorage.getItem(`hh_progress_${bz.name}`);
-      bezirkProgress[bz.name] = [];
-      if (saved) {
-        try {
-          bezirkProgress[bz.name] = JSON.parse(saved);
-        } catch (e) {}
-      }
-    });
-
-    const savedMode = localStorage.getItem('hh_mode') || 'EXPLORER';
-    this.deserializeState({
-      xp: parseInt(localStorage.getItem('hh_xp'), 10) || 0,
-      streak: parseInt(localStorage.getItem('hh_streak'), 10) || 0,
-      bestStreak: parseInt(localStorage.getItem('hh_best_streak'), 10) || 0,
-      highScore: parseInt(localStorage.getItem('hh_highscore'), 10) || 0,
-      unlockedBezirkIndex: savedUnlockIdx !== null ? unlockedBezirkIndex : undefined,
-      progressionMode: localStorage.getItem('hh_progression') !== 'false',
-      currentMode: savedMode,
-      activeSegment: localStorage.getItem('hh_segment') || 'STADTTEILE',
-      trophies,
-      bezirkProgress,
-      gameHistory: this.loadGameHistory(),
-      muted: localStorage.getItem('hamburg_muted') === 'true'
-    });
+    const save = window.saveManager.loadSave();
+    this._save = save;
+    this.deserializeState(save);
   }
 
-  // Save current game state
   saveState() {
-    localStorage.setItem('hh_xp', this.xp);
-    localStorage.setItem('hh_streak', this.streak);
-    localStorage.setItem('hh_best_streak', this.bestStreak);
-    localStorage.setItem('hh_highscore', this.highScore);
-    localStorage.setItem('hh_unlocked_bz_idx', this.unlockedBezirkIndex);
-    localStorage.setItem('hh_progression', this.progressionMode);
-    localStorage.setItem('hh_mode', this.currentMode);
-    localStorage.setItem('hh_segment', this.activeSegment);
-    localStorage.setItem('hh_trophies', JSON.stringify([...this.trophies]));
-    localStorage.setItem('hh_achievements', JSON.stringify([...this.trophies]));
-
-    BEZIRKE_PROGRESSION.forEach(bz => {
-      localStorage.setItem(`hh_progress_${bz.name}`, JSON.stringify([...this.bezirkProgress[bz.name].solved]));
-    });
-
+    this._syncToSaveObject();
+    window.saveManager.persistSave(this._save);
     if (window.cloudSync) {
       window.cloudSync.scheduleSave(this.serializeState());
     }
@@ -1165,11 +1266,19 @@ class HamburgGame {
   reRenderCurrentView() {
     applyToDom();
     if (window.authManager) window.authManager.updateHeaderUI();
+    if (this.view === 'hub') {
+      const hubEl = document.getElementById('hub-view');
+      if (hubEl && !hubEl.hidden) window.kiezHub?.render(this, hubEl);
+      return;
+    }
+    window.kiezCityDashboard?.enhanceSegmentSelector();
+    this.setupSegmentSelectors();
     this.renderStats();
     this.applySegmentUI();
     this.updateModeLabels();
     this.updateNeuwerkBadge();
     this.setupMobileMapHint();
+    window.kiezCityDashboard?.updateBreadcrumb(this);
     if (!this.inRound && !this.nameAllIsActive) {
       this.nextQuestion();
     }
@@ -1220,6 +1329,11 @@ class HamburgGame {
 
     // Progression Unlock Panel Update
     this.renderUnlockProgress();
+    if (this.view === 'hub') this.syncHubStats();
+    else {
+      window.kiezCityDashboard?.updateBreadcrumb(this);
+      window.kiezCityDashboard?.renderCityProgressCard(this);
+    }
   }
 
   renderUnlockProgress() {
@@ -1450,23 +1564,23 @@ class HamburgGame {
   }
 
   resetToGuestState(clearLocalOnly = false) {
+    window.saveManager.clearSave();
     const keysToRemove = Object.keys(localStorage).filter(
-      (k) => k.startsWith('hh_') || k === 'hh_game_history'
+      (k) => k.startsWith('hh_') || k === 'hh_game_history' || k.startsWith('kq_history_')
     );
     keysToRemove.forEach((k) => localStorage.removeItem(k));
 
+    this._save = window.saveManager.createEmptySave();
+    this.activeCityId = 'hamburg';
+    this.view = 'hub';
+
     this.deserializeState({
-      xp: 0,
-      streak: 0,
-      bestStreak: 0,
-      highScore: 0,
-      unlockedBezirkIndex: 0,
-      progressionMode: true,
-      currentMode: 'EXPLORER',
-      activeSegment: 'STADTTEILE',
-      trophies: [],
-      bezirkProgress: {},
-      gameHistory: []
+      saveVersion: 2,
+      global: { xp: 0, streak: 0, bestStreak: 0, rankSeen: 1, muted: false },
+      lastCity: null,
+      lastLevelKey: 'stadtteile',
+      lastMode: 'EXPLORER',
+      cities: { hamburg: window.saveManager.emptyCityState(BEZIRKE_PROGRESSION) }
     });
 
     if (!clearLocalOnly) {
@@ -1579,6 +1693,10 @@ class HamburgGame {
   }
 
   showGameHistory() {
+    if (window.kiezModals?.showLogModal) {
+      window.kiezModals.showLogModal(this);
+      return;
+    }
     const history = this.loadGameHistory();
 
     let listHtml;
@@ -1761,9 +1879,8 @@ class HamburgGame {
     }
 
     this.updateModeVisibility();
+    window.kiezCityDashboard?.updateBreadcrumb(this);
   }
-
-  // Update map visual styles based on current unlocked states and discoveries
   updateMapStates() {
     const unlockedBezirke = this.getUnlockedBezirke();
     
@@ -3323,7 +3440,8 @@ class HamburgGame {
 // Global initialization when page loads
 window.addEventListener('DOMContentLoaded', async () => {
   await initI18n();
-  const game = new HamburgGame();
+  const game = new KiezQuizGame();
+  window.kiezQuizGame = game;
   window.hamburgGame = game;
 
   window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
@@ -3334,9 +3452,11 @@ window.addEventListener('DOMContentLoaded', async () => {
     window.authManager.updateHeaderUI();
     if (user) {
       await window.cloudSync.handleLoginMerge();
-      game.renderStats();
-      game.updateMapStates();
-      game.updateNeuwerkBadge();
+      game.reRenderCurrentView();
+      if (game.view === 'city') {
+        game.updateMapStates();
+        game.updateNeuwerkBadge();
+      }
     } else if (_previousAuthUser !== undefined) {
       game.resetToGuestState();
     }
@@ -3344,6 +3464,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   });
 
   await window.authManager.init();
+  await window.authManager.waitForPendingAuthTasks();
   window.authManager.initUI();
 
   document.addEventListener('visibilitychange', () => {
@@ -3355,4 +3476,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   onLocaleChange(() => game.reRenderCurrentView());
 
   game.init();
+
+  if (window.authManager.isLoggedIn()) {
+    game.reRenderCurrentView();
+    if (game.view === 'city') {
+      game.updateMapStates();
+      game.updateNeuwerkBadge();
+    }
+  }
 });

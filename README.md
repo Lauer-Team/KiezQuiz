@@ -1,8 +1,18 @@
 # KiezQuiz ⚓
 
-Gamifizierte Web-App zum spielerischen Lernen der **7 Bezirke** und **104 Stadtteile** Hamburgs — mit interaktiver Karte, Quiz-Modi, XP, Rängen und Streaks.
+Gamifizierte Web-App zum spielerischen Lernen von **Stadtgliederungen** — starte in **Hamburg** (7 Bezirke, 104 Stadtteile), weitere Städte folgen. Mit interaktiver Karte, Quiz-Modi, XP, Quiddje-Rängen und Streaks.
 
 **Live:** [kiezquiz.de](https://kiezquiz.de) · [kiezquiz.lauer.team](https://kiezquiz.lauer.team) (Weiterleitung)
+
+## Städte
+
+| Stadt | Status |
+|-------|--------|
+| Hamburg | Spielbar |
+| Berlin | Demnächst |
+| Frankfurt | Demnächst |
+
+**Global** (über alle Städte): XP, Streak, Quiddje-Rang. **Pro Stadt:** Pokale, Freischaltungen, Karten-Fortschritt.
 
 ## Spielmodi
 

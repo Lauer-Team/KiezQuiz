@@ -2,6 +2,16 @@ import os
 
 def main():
     print("Starting HTML assembly...")
+
+    index_path = "index.html"
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            if "hub-view" in f.read() or "city-view" in f.read():
+                print(
+                    "Aborted: index.html is the multi-city shell. "
+                    "Edit index.html manually; use scripts/generate_assets.py for Hamburg data/SVG."
+                )
+                return
     
     # 1. Read SVG contents
     svg_path = "src/data/hamburg_map.svg"
