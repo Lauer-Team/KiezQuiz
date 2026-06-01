@@ -209,6 +209,9 @@
   }
 
   function getInitialView(save) {
+    if (window.kiezViewRouter) {
+      return window.kiezViewRouter.getInitialViewFromSave(save);
+    }
     if (save.migratedFromV1 && save.lastCity) return 'city';
     if (save.lastCity && hasAnyProgress(save)) return 'city';
     return 'hub';

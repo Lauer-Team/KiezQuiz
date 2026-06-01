@@ -9,8 +9,10 @@ const path = require('path');
 
 const root = path.join(__dirname, '..');
 const saveManagerSrc = fs.readFileSync(path.join(root, 'src/saveManager.js'), 'utf8');
-const appSrc = fs.readFileSync(path.join(root, 'src/app.js'), 'utf8');
+const gameSrc = fs.readFileSync(path.join(root, 'src/game/KiezQuizGame.js'), 'utf8');
+const initSrc = fs.readFileSync(path.join(root, 'src/game/init.js'), 'utf8');
 const bootSrc = fs.readFileSync(path.join(root, 'src/bootView.js'), 'utf8');
+const routerSrc = fs.readFileSync(path.join(root, 'src/viewRouter.js'), 'utf8');
 
 let failed = 0;
 
@@ -25,24 +27,29 @@ function assert(cond, msg) {
 
 assert(saveManagerSrc.includes("const SAVE_KEY = 'kiezquiz_save_v2'"), 'SAVE_KEY unchanged');
 assert(!saveManagerSrc.includes('clearSave()') || saveManagerSrc.includes('function clearSave'), 'clearSave still present');
-assert(appSrc.includes('hadProgress') && appSrc.includes('prevLastCity'), 'deep link guards lastCity for returning players');
-assert(appSrc.includes('.trim().toLowerCase()'), 'deep link normalizes city param');
-assert(appSrc.includes('game.init();') && appSrc.includes('void (async'), 'game init not blocked on auth');
-assert(appSrc.includes('_sessionCityOverride'), 'deep link session city override');
-assert(appSrc.includes('} else if (_previousAuthUser) {'), 'guest auth does not reset on duplicate null session');
-assert(!appSrc.includes('_previousAuthUser !== undefined'), 'removed duplicate null-session reset');
-assert(appSrc.includes('_loadedMapCityId'), 'map tracks loaded city for resync');
-assert(appSrc.includes('history.replaceState'), 'deep link cleans URL after load');
-assert(bootSrc.includes('kiezquiz_save_v2'), 'bootView reads v2 save');
-assert(bootSrc.includes('hasV1Save'), 'bootView detects v1 migration candidates');
+assert(gameSrc.includes('hadProgress') && gameSrc.includes('prevLastCity'), 'deep link guards lastCity for returning players');
+assert(gameSrc.includes('.trim().toLowerCase()'), 'deep link normalizes city param');
+assert(initSrc.includes('game.init();') && initSrc.includes('void (async'), 'game init not blocked on auth');
+assert(gameSrc.includes('_sessionCityOverride'), 'deep link session city override');
+assert(initSrc.includes('} else if (_previousAuthUser) {'), 'guest auth does not reset on duplicate null session');
+assert(!initSrc.includes('_previousAuthUser !== undefined'), 'removed duplicate null-session reset');
+assert(gameSrc.includes('_loadedMapCityId'), 'map tracks loaded city for resync');
+assert(gameSrc.includes('history.replaceState'), 'deep link cleans URL after load');
+assert(bootSrc.includes('kiezViewRouter'), 'bootView delegates to viewRouter');
+assert(routerSrc.includes('kiezquiz_save_v2'), 'viewRouter reads v2 save');
+assert(routerSrc.includes('hasV1Save'), 'viewRouter detects v1 migration candidates');
 assert(fs.existsSync(path.join(root, 'index.html')), 'index.html exists');
 const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+assert(indexHtml.includes('src/viewRouter.js'), 'index.html loads viewRouter.js');
 assert(indexHtml.includes('src/bootView.js'), 'index.html loads bootView.js');
+assert(indexHtml.includes('src/bootstrap.js'), 'index.html loads bootstrap.js');
+assert(!indexHtml.includes('src/data/hamburg_data.js'), 'city data not in initial HTML scripts');
 assert(indexHtml.includes('seo-hub-fallback'), 'SEO fallback content still in DOM for crawlers');
 assert(indexHtml.includes('id="hub-view"') && indexHtml.includes('hidden'), 'hub starts hidden to avoid flash');
 assert(indexHtml.includes('hreflang="de"') && indexHtml.includes('hreflang="en"'), 'homepage hreflang tags');
 assert(indexHtml.includes('FAQPage'), 'homepage FAQ schema');
 assert(indexHtml.includes('<noscript>'), 'homepage noscript fallback');
+assert(!indexHtml.includes('<!-- Inlined Map SVG -->'), 'inline Hamburg SVG removed from HTML');
 
 for (const slug of ['hamburg', 'berlin', 'frankfurt']) {
   const cityHtml = fs.readFileSync(path.join(root, slug, 'index.html'), 'utf8');

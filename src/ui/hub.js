@@ -28,12 +28,8 @@
   }
 
   function getBranchState(game, cityId) {
-    if (cityId === game.activeCityId && game.view === 'city') {
-      return {
-        unlockedBezirkIndex: game.unlockedBezirkIndex,
-        bezirkProgress: game.bezirkProgress,
-        trophies: game.trophies
-      };
+    if (window.kiezProgress && window.kiezProgress.getBranchState) {
+      return window.kiezProgress.getBranchState(game, cityId);
     }
     const branch = game._save?.cities?.[cityId];
     const progression = window.cityRegistry.getBezirkeProgression(cityId);
@@ -91,31 +87,8 @@
   }
 
   function renderHubHeader(game) {
-    const ranks = typeof getRanks === 'function' ? getRanks() : [];
-    const currentRank = ranks.find((r) => r.level === game.level) || ranks[0];
-    return `
-      <div class="hub-top">
-        <div class="brand">
-          <span style="font-size:1.7rem">⚓</span>
-          <h1>KiezQuiz</h1>
-          <span class="badge">${t('hub.badge')}</span>
-        </div>
-        <div class="hub-account">
-          <div class="hub-account-rank">
-            <span class="hub-account-label">${t('header.globalRankLabel')}</span>
-            <span class="hub-account-value">${currentRank?.name || t('ranks.fallback')}</span>
-          </div>
-          <div class="stat-pill xp-pill"><span class="label">${t('header.xpLabel').replace(':', '')}</span><span class="value" id="hub-stat-xp">${game.xp}</span></div>
-          <div class="stat-pill streak-pill"><span style="font-size:1rem">🔥</span><span class="value" style="color:var(--color-hamburg-mitte)" id="hub-stat-streak">${game.streak}</span></div>
-          <button type="button" class="auth-pill hub-auth-pill" data-i18n-title="header.authTitle" title="">
-            <span class="auth-pill-icon">👤</span>
-            <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
-            <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
-          </button>
-          <button class="audio-toggle lang-toggle" id="hub-btn-lang" title="">🇩🇪</button>
-          <button class="audio-toggle" id="hub-btn-settings" data-i18n-title="header.settingsTitle" title="">⚙️</button>
-        </div>
-      </div>`;
+    if (window.kiezGlobalHeader) return window.kiezGlobalHeader.renderHubHeader(game);
+    return '';
   }
 
   function renderCityTile(city, stats, onEnter) {
@@ -192,12 +165,28 @@
     const wishBtn = container.querySelector('#hub-wish-tile');
     if (wishBtn) {
       wishBtn.addEventListener('click', () => {
-        if (window.kiezModals?.showWishModal) window.kiezModals.showWishModal();
+        const open = () => {
+          if (window.kiezModals?.showWishModal) window.kiezModals.showWishModal();
+        };
+        if (typeof window.loadGameBundle === 'function') {
+          window.loadGameBundle().then(open);
+        } else {
+          open();
+        }
       });
     }
 
     const settingsBtn = container.querySelector('#hub-btn-settings');
-    if (settingsBtn) settingsBtn.addEventListener('click', () => game.showSettings());
+    if (settingsBtn) {
+      settingsBtn.addEventListener('click', () => {
+        const open = () => game.showSettings();
+        if (typeof window.loadGameBundle === 'function') {
+          window.loadGameBundle().then(open);
+        } else {
+          open();
+        }
+      });
+    }
 
     const langBtn = container.querySelector('#hub-btn-lang');
     if (langBtn) {
