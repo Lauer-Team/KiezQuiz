@@ -294,10 +294,15 @@ def render_page(slug: str, city: dict) -> str:
   <meta property="og:title" content="{html.escape(city['title'])}">
   <meta property="og:description" content="{html.escape(city['meta_description'])}">
   <meta property="og:url" content="{page_url}">
+  <meta property="og:locale" content="de_DE">
   <meta property="og:image" content="{BASE_URL}/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{html.escape(city['title'])}">
   <meta name="twitter:description" content="{html.escape(city['meta_description'])}">
+  <meta name="twitter:image" content="{BASE_URL}/assets/og-image.jpg">
   <style>{PAGE_CSS}</style>
   <script type="application/ld+json">
 {json_ld_webapp(city, page_url)}

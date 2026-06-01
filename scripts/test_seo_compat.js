@@ -40,6 +40,15 @@ const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert(indexHtml.includes('src/bootView.js'), 'index.html loads bootView.js');
 assert(indexHtml.includes('seo-hub-fallback'), 'SEO fallback content still in DOM for crawlers');
 assert(indexHtml.includes('id="hub-view"') && indexHtml.includes('hidden'), 'hub starts hidden to avoid flash');
+assert(indexHtml.includes('hreflang="de"') && indexHtml.includes('hreflang="en"'), 'homepage hreflang tags');
+assert(indexHtml.includes('FAQPage'), 'homepage FAQ schema');
+assert(indexHtml.includes('<noscript>'), 'homepage noscript fallback');
+
+for (const slug of ['hamburg', 'berlin', 'frankfurt']) {
+  const cityHtml = fs.readFileSync(path.join(root, slug, 'index.html'), 'utf8');
+  assert(cityHtml.includes('twitter:image'), `${slug} has twitter:image`);
+  assert(cityHtml.includes('og:image:width'), `${slug} has og:image dimensions`);
+}
 
 if (failed) {
   process.exit(1);

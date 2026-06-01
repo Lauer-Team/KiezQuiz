@@ -30,9 +30,18 @@ Manual steps for search-engine registration and community launch. Code deploys `
 - [x] Confirm `https://kiezquiz.de/robots.txt` is reachable and references the sitemap. (verified 2026-06-01)
 - [x] Confirm `https://kiezquiz.de/sitemap.xml` lists all four URLs. (verified 2026-06-01)
 - [x] Confirm city pages load: `/hamburg/`, `/berlin/`, `/frankfurt/`. (verified 2026-06-01)
+- [x] Homepage: shorter SERP title, `hreflang`, FAQ schema, `<noscript>` fallback (2026-06-01)
+- [x] City pages: `twitter:image`, `og:image` dimensions, `og:locale` (generator, 2026-06-01)
 - [ ] Test deep links: `https://kiezquiz.de/?city=berlin` opens Berlin in the app (manual in browser).
 - [x] Confirm `https://kiezquiz.lauer.team/` redirects to `https://kiezquiz.de/` (301, verified 2026-06-01).
 - [ ] Re-run sitemap submission after adding new static pages.
+
+## www-Subdomain (DNS)
+
+Falls `www.kiezquiz.de` in DNS existiert, **301-Weiterleitung** auf `https://kiezquiz.de/` einrichten (Duplicate Content vermeiden):
+
+- **Cloudflare:** Rules → Redirect Rule: `www.kiezquiz.de/*` → `https://kiezquiz.de/$1` (301)
+- **IONOS / anderer Host:** Domain-Weiterleitung oder CNAME nur auf Apex, kein paralleles www ohne Redirect
 
 ## Bestandsnutzer & Spielstand (Kompatibilität)
 
@@ -55,7 +64,7 @@ Use when announcing KiezQuiz publicly. Prepare assets once, then post on launch 
 - [ ] Screenshot or short screen recording of map quiz (Explorer + Quiz mode).
 - [ ] One-line pitch: *“Free map quiz — learn all districts of Hamburg, Berlin & Frankfurt. No signup, works offline.”*
 - [ ] Link ready: `https://kiezquiz.de/` plus city deep links (`?city=hamburg`, etc.).
-- [ ] OG image verified (`/assets/og-image.jpg`) for link previews.
+- [ ] OG image verified (`/assets/og-image.jpg`) — [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/?q=https%3A%2F%2Fkiezquiz.de%2F)
 
 ### Reddit
 
