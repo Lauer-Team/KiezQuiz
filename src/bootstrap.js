@@ -14,6 +14,8 @@
     'src/data/hamburg_data.js',
     'src/data/berlin_data.js',
     'src/data/frankfurt_data.js',
+    'src/data/europe_data.js',
+    'src/data/europe_islands.js',
     'src/ui/cityDashboard.js',
     'src/ui/modals.js'
   ];

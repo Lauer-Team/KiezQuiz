@@ -83,6 +83,30 @@ CITIES = {
             ),
         ],
     },
+    "europe": {
+        "slug": "europe",
+        "name": "Europa",
+        "title": "Europa Länder & Hauptstädte lernen – Kostenloses Karten-Quiz | KiezQuiz",
+        "meta_description": (
+            "Lerne alle 44 europäischen Länder und Hauptstädte spielerisch auf der Karte. "
+            "Mit EU-Pokalen, XP, Streaks und Trivia — kostenlos, mobil und offline."
+        ),
+        "h1": "Europäische Länder und Hauptstädte spielerisch lernen",
+        "faq": [
+            (
+                "Wie viele Länder sind im Europa-Quiz?",
+                "KiezQuiz Europa umfasst 44 souveräne Staaten mit ihren Hauptstädten — von Deutschland bis Island.",
+            ),
+            (
+                "Kann ich zwischen Ländern und Hauptstädten wechseln?",
+                "Ja. Wie bei Hamburg oder Berlin wechselst du zwischen Länder-Überblick und Hauptstadt-Detail.",
+            ),
+            (
+                "Gibt es spezielle EU-Pokale?",
+                "Ja — unter anderem für alle Gründungsstaaten oder alle 27 EU-Mitglieder in einem perfekten Spiel.",
+            ),
+        ],
+    },
 }
 
 

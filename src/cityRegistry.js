@@ -9,7 +9,9 @@
     stadtteile: 'STADTTEILE',
     bezirke: 'BEZIRKE',
     ortsteile: 'STADTTEILE',
-    stadtbezirke: 'BEZIRKE'
+    stadtbezirke: 'BEZIRKE',
+    countries: 'BEZIRKE',
+    capitals: 'STADTTEILE'
   };
 
   function accentVars(hue) {

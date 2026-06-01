@@ -43,11 +43,17 @@
       "labelOrtsteil": "Ortsteil-Detektiv",
       "descOrtsteil": "Finde den Ortsteil auf der Karte",
       "labelBezirk": "Bezirks-Detektiv",
-      "descBezirk": "Finde den Bezirk auf der Karte"
+      "descBezirk": "Finde den Bezirk auf der Karte",
+      "labelCountry": "Länder-Detektiv",
+      "descCountry": "Finde das Land auf der Europakarte",
+      "labelCapital": "Hauptstadt-Detektiv",
+      "descCapital": "Finde die Hauptstadt auf der Karte"
     },
     "quiz": {
       "label": "Karten-Quiz",
-      "desc": "Erkenne den blinkenden Ort"
+      "desc": "Erkenne den blinkenden Ort",
+      "labelCapital": "Hauptstadt-Quiz",
+      "descCapital": "Land blinkt — wähle die Hauptstadt"
     },
     "typeName": {
       "label": "Namen eingeben",
@@ -77,6 +83,20 @@
     "pfaueninselTitle": "Wo liegt die Pfaueninsel? Klicke hier!",
     "pfaueninselTitleUnlocked": "Pfaueninsel-Entdecker — Trophäe freigeschaltet!",
     "pfaueninselLabel": "Pfaueninsel (Insel-Rätsel) 🦚",
+    "europeIslandTitle": {
+      "canary_islands": "Wo liegen die Kanaren? Klicke hier!",
+      "azores_madeira": "Wo liegen Azoren & Madeira? Klicke hier!",
+      "caribbean_nl": "Wo liegen die Karibischen Niederlande? Klicke hier!",
+      "french_overseas": "Wo liegen die französischen Überseegebiete? Klicke hier!",
+      "svalbard": "Wo liegt Spitzbergen? Klicke hier!"
+    },
+    "europeIslandTitleUnlocked": {
+      "canary_islands": "Kanaren-Entdecker — Trophäe freigeschaltet!",
+      "azores_madeira": "Azoren-Entdecker — Trophäe freigeschaltet!",
+      "caribbean_nl": "Karibik-Entdecker — Trophäe freigeschaltet!",
+      "french_overseas": "Übersee-Entdecker — Trophäe freigeschaltet!",
+      "svalbard": "Spitzbergen-Entdecker — Trophäe freigeschaltet!"
+    },
     "zoomIn": "Vergrößern",
     "zoomOut": "Verkleinern",
     "zoomReset": "Zentrieren",
@@ -309,6 +329,101 @@
     "progressHint": "Ortsbezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Frankfurt-Rang"
   },
+  "cityRanksEurope": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Backpacker" },
+    "3": { "name": "Europa-Kenner" },
+    "4": { "name": "Karten-Reisender" },
+    "5": { "name": "Geografie-Profi" },
+    "6": { "name": "Europa-Experte" },
+    "7": { "name": "Kontinent-Kapitän" },
+    "8": { "name": "Herrscher über Europa" },
+    "fallback": "Tourist",
+    "maxReached": "Höchster Europa-Rang — alle Länder & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Länder {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Europa-Rang"
+  },
+  "trophiesEurope": {
+    "eu_founding_perfect": {
+      "name": "Gründerväter der EU",
+      "unlockTitle": "Gründerväter der EU 🇪🇺",
+      "desc": "Errate alle 6 EU-Gründungsstaaten fehlerfrei in einem Spiel.",
+      "unlockDesc": "Alle Gründungsstaaten der EU in einem Durchgang gemeistert!"
+    },
+    "eu_members_perfect": {
+      "name": "EU-Vollmitglied",
+      "unlockTitle": "EU-Vollmitglied 🌟",
+      "desc": "Errate alle 27 aktuellen EU-Mitgliedsstaaten fehlerfrei in einem Spiel.",
+      "unlockDesc": "Alle 27 EU-Mitgliedsstaaten in einem Durchgang gemeistert!"
+    },
+    "nordic_master": {
+      "name": "Nordlichter",
+      "unlockTitle": "Nordlichter ❄️",
+      "desc": "Alle nordischen Länder in einem perfekten Spiel.",
+      "unlockDesc": "Dänemark, Schweden, Norwegen, Finnland & Island — alles richtig!"
+    },
+    "baltic_master": {
+      "name": "Baltic Union",
+      "unlockTitle": "Baltic Union 🌊",
+      "desc": "Estland, Lettland & Litauen fehlerfrei in einem Spiel.",
+      "unlockDesc": "Alle drei baltischen Staaten in einem Durchgang!"
+    },
+    "benelux_master": {
+      "name": "Benelux-Trio",
+      "unlockTitle": "Benelux-Trio 🧇",
+      "desc": "Belgien, Niederlande & Luxemburg fehlerfrei in einem Spiel.",
+      "unlockDesc": "Das Benelux-Trio in einem perfekten Spiel!"
+    },
+    "canary_islands": {
+      "name": "Kanaren-Entdecker",
+      "unlockTitle": "Kanaren-Entdecker 🌋",
+      "desc": "Klicke auf das Kanaren-Rätsel oben rechts auf der Karte.",
+      "unlockDesc": "Du hast die Kanarischen Inseln entdeckt."
+    },
+    "azores_madeira": {
+      "name": "Azoren-Entdecker",
+      "unlockTitle": "Azoren-Entdecker 🌊",
+      "desc": "Klicke auf das Azoren-&-Madeira-Rätsel auf der Karte.",
+      "unlockDesc": "Du hast Azoren und Madeira entdeckt."
+    },
+    "caribbean_nl": {
+      "name": "Karibik-Entdecker",
+      "unlockTitle": "Karibik-Entdecker 🦜",
+      "desc": "Klicke auf das Karibik-Rätsel der Niederlande auf der Karte.",
+      "unlockDesc": "Du hast die Karibischen Niederlande entdeckt."
+    },
+    "french_overseas": {
+      "name": "Übersee-Entdecker",
+      "unlockTitle": "Übersee-Entdecker 🗼",
+      "desc": "Klicke auf das Rätsel der französischen Überseegebiete.",
+      "unlockDesc": "Du hast die französischen Überseegebiete entdeckt."
+    },
+    "svalbard": {
+      "name": "Spitzbergen-Entdecker",
+      "unlockTitle": "Spitzbergen-Entdecker 🐻‍❄️",
+      "desc": "Klicke auf das Spitzbergen-Rätsel oben rechts auf der Karte.",
+      "unlockDesc": "Du hast Spitzbergen entdeckt."
+    },
+    "paradise_explorer": {
+      "name": "Prager Frühling!",
+      "unlockTitle": "Prager Frühling! 🌴",
+      "desc": "Tippe „Prag“ zum ersten Mal richtig — in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Prag zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "Hauptstadt-Meister",
+      "unlockTitle": "Hauptstadt-Meister 👑",
+      "desc": "Benenne alle europäischen Hauptstädte in „Nenne alle Orte“.",
+      "unlockDesc": "Alle 44 Hauptstädte in der Sporcle-Challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Europa-Kartograph",
+      "unlockTitle": "Europa-Kartograph 🏛️",
+      "desc": "Benenne alle 44 europäischen Länder in der Challenge.",
+      "unlockDesc": "Alle 44 Länder in der Challenge benannt!"
+    }
+  },
   "trophiesBerlin": {
     "pfaueninsel_island": {
       "name": "Pfaueninsel-Entdecker",
@@ -404,6 +519,7 @@
     "defaultBezirk": "Ein bedeutender Bezirk Hamburgs.",
     "defaultBezirkBerlin": "Ein bedeutender Bezirk Berlins.",
     "defaultBezirkFrankfurt": "Ein bedeutender Ortsbezirk Frankfurts.",
+    "defaultCountryEurope": "Ein souveräner Staat in Europa.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
     "templates": {
       "Altona": [
@@ -640,6 +756,9 @@
     "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
     "emptyBezirkBerlin": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "emptyBezirkFrankfurt": "Klicke auf einen Ortsbezirk der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
+    "emptyCountryEurope": "Klicke auf ein Land der Europakarte, um Bevölkerung, Fläche und Hauptstadt zu entdecken!",
+    "emptyCapitalEurope": "Klicke auf ein Land, um die Hauptstadt und Fakten zu sehen!",
+    "capitalsEurope": "Hauptstadt",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
     "emptyStadtteilFrankfurt": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
     "emptyOrtsteil": "Klicke auf einen Ortsteil der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
@@ -687,6 +806,19 @@
     "quizBlinkStadtteil": "❔ Blinkender Stadtteil ❔",
     "quizBlinkOrtsteil": "❔ Blinkender Ortsteil ❔",
     "quizChoose": "Wähle die passende Antwort aus den Optionen!",
+    "locateCountry": "Finde das Land",
+    "locateClickCountry": "Klicke es auf der Europakarte an!",
+    "quizCountry": "Welches Land blinkt?",
+    "quizBlinkCountry": "❔ Blinkendes Land ❔",
+    "quizChooseCountry": "Wähle den richtigen Ländernamen!",
+    "typeCountry": "Land benennen",
+    "placeholderCountry": "Land eingeben…",
+    "quizCapital": "Welche Hauptstadt?",
+    "quizBlinkCapitalCountry": "❔ Blinkendes Land — welche Hauptstadt? ❔",
+    "quizChooseCapital": "Wähle die passende Hauptstadt!",
+    "typeCapital": "Hauptstadt benennen",
+    "typeCapitalHint": "Tippe die Hauptstadt ein — bei richtiger Eingabe zählt sie sofort.",
+    "placeholderCapital": "Hauptstadt eingeben…",
     "typeBezirk": "Bezirk benennen",
     "typeStadtteil": "Stadtteil benennen",
     "typeOrtsteil": "Ortsteil benennen",
@@ -865,6 +997,18 @@
       "singular": {
         "stadtbezirk": "Ortsbezirk",
         "stadtteil": "Stadtteil"
+      }
+    },
+    "europe": {
+      "greeting": "Willkommen in Europa!",
+      "blurb": "44 Länder · 44 Hauptstädte",
+      "levels": {
+        "countries": "Länder",
+        "capitals": "Hauptstädte"
+      },
+      "singular": {
+        "country": "Land",
+        "capital": "Hauptstadt"
       }
     }
   }
