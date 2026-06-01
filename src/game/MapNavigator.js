@@ -222,39 +222,63 @@ class MapNavigator {
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
   }
 
-  zoomToPaths(paths, { padding = 1.8, maxZoom = 6, minZoom = 1.2 } = {}) {
+  zoomToPaths(paths, { padding = 1.8, maxZoom = 8, minZoom = 0.8 } = {}) {
     if (!paths?.length || !this.container || !this.svg) return;
 
-    const containerRect = this.container.getBoundingClientRect();
-    const cw = containerRect.width;
-    const ch = containerRect.height;
+    const cw = this.container.clientWidth;
+    const ch = this.container.clientHeight;
+    const svgW = this.svg.clientWidth;
+    const svgH = this.svg.clientHeight;
+    if (!cw || !ch || !svgW || !svgH) return;
 
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
+    const promptBar = this.container.querySelector('.map-prompt-bar:not([hidden])');
+    const promptInset = promptBar ? promptBar.offsetHeight : 0;
+    const visibleH = Math.max(1, ch - promptInset);
+
+    let ux = Infinity;
+    let uy = Infinity;
+    let ux2 = -Infinity;
+    let uy2 = -Infinity;
     paths.forEach((path) => {
-      const r = path.getBoundingClientRect();
-      minX = Math.min(minX, r.left);
-      minY = Math.min(minY, r.top);
-      maxX = Math.max(maxX, r.right);
-      maxY = Math.max(maxY, r.bottom);
+      const b = path.getBBox();
+      ux = Math.min(ux, b.x);
+      uy = Math.min(uy, b.y);
+      ux2 = Math.max(ux2, b.x + b.width);
+      uy2 = Math.max(uy2, b.y + b.height);
     });
 
-    const bboxW = maxX - minX;
-    const bboxH = maxY - minY;
-    if (bboxW <= 0 || bboxH <= 0) return;
+    const ubw = ux2 - ux;
+    const ubh = uy2 - uy;
+    if (ubw <= 0 || ubh <= 0) return;
 
-    const bboxCx = (minX + maxX) / 2 - containerRect.left;
-    const bboxCy = (minY + maxY) / 2 - containerRect.top;
-    const fitZoom = Math.min(cw / (bboxW * padding), ch / (bboxH * padding));
-    const targetZoom = Math.min(maxZoom, Math.max(minZoom, this.zoom * fitZoom));
+    const vb = this.svg.viewBox.baseVal;
+    const scale = Math.min(svgW / (vb.width || svgW), svgH / (vb.height || svgH));
+    const renderW = (vb.width || svgW) * scale;
+    const renderH = (vb.height || svgH) * scale;
+    const offsetX = (svgW - renderW) / 2;
+    const offsetY = (svgH - renderH) / 2;
+    const bbW = ubw * scale;
+    const bbH = ubh * scale;
+    const localX = offsetX + (ux + ubw / 2 - vb.x) * scale;
+    const localY = offsetY + (uy + ubh / 2 - vb.y) * scale;
 
-    const oldZoom = this.zoom;
+    const svgLeft = (cw - svgW) / 2;
+    const svgTop = (ch - svgH) / 2;
+    const scX = svgLeft + svgW / 2;
+    const scY = svgTop + svgH / 2;
+    const pX = svgLeft + localX;
+    const pY = svgTop + localY;
+
+    const fitZoom = Math.min(cw / (bbW * padding), visibleH / (bbH * padding));
+    const targetZoom = Math.min(maxZoom, Math.max(minZoom, fitZoom));
+    const ccX = cw / 2;
+    const ccY = visibleH / 2;
+
+    // SVG uses transform-origin: center — pan must account for scaling around the SVG center.
     this.svg.classList.add('smooth-transition');
     this.zoom = targetZoom;
-    this.panX = bboxCx - (bboxCx - this.panX) * (this.zoom / oldZoom);
-    this.panY = bboxCy - (bboxCy - this.panY) * (this.zoom / oldZoom);
+    this.panX = ccX - scX - targetZoom * (pX - scX);
+    this.panY = ccY - scY - targetZoom * (pY - scY);
     this.updateTransform(false);
     this.snapPanToBounds();
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
