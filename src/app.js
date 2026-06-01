@@ -857,6 +857,8 @@ class KiezQuizGame {
       if (window.history.replaceState) {
         window.history.replaceState(null, '', window.location.pathname || '/');
       }
+      this.updateHeaderBadge();
+      window.kiezCityDashboard?.renderContextBar(this, document.getElementById('city-context-bar'));
       this._initCityPlay();
       return;
     }
@@ -957,6 +959,7 @@ class KiezQuizGame {
       if (city) window.cityRegistry.applyAccentVars(cityEl, city.hue);
       cityEl.dataset.city = this.activeCityId;
     }
+    this.updateHeaderBadge();
 
     this._loadCityMap().then(() => {
       this.mapWrapper = document.querySelector('.map-container-wrapper');
