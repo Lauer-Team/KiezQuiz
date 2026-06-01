@@ -122,7 +122,10 @@ function bezirkToTrophyCssKey(name) {
 function getCityDataArray(cityId) {
   const city = window.cityRegistry?.getCity(cityId || window.kiezQuizGame?.activeCityId || 'hamburg');
   const key = city?.dataGlobal || 'HAMBURG_DATA';
-  return window[key] || [];
+  if (window[key]) return window[key];
+  if (key === 'BERLIN_DATA' && typeof BERLIN_DATA !== 'undefined') return BERLIN_DATA;
+  if (typeof HAMBURG_DATA !== 'undefined') return HAMBURG_DATA;
+  return [];
 }
 
 function buildTrophyCatalog(cityId = 'hamburg') {
@@ -2245,15 +2248,13 @@ class KiezQuizGame {
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     group.setAttribute('class', 'bezirk-boundaries-group');
 
-    const glowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    glowPath.setAttribute('class', 'bezirk-boundary-glow');
-    glowPath.setAttribute('d', boundaryLines.map(([x1, y1, x2, y2]) => `M ${x1} ${y1} L ${x2} ${y2}`).join(' '));
+    const d = boundaryLines
+      .map(([x1, y1, x2, y2]) => `M ${snapCoord(x1)} ${snapCoord(y1)} L ${snapCoord(x2)} ${snapCoord(y2)}`)
+      .join(' ');
 
     const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     linePath.setAttribute('class', 'bezirk-boundary-line');
-    linePath.setAttribute('d', glowPath.getAttribute('d'));
-
-    group.appendChild(glowPath);
+    linePath.setAttribute('d', d);
     group.appendChild(linePath);
 
     const labels = this.svg.querySelector('#map-labels-group');

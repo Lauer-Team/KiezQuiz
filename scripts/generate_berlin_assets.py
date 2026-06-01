@@ -141,7 +141,7 @@ def main():
     with open(js_path, "w", encoding="utf-8") as f:
         f.write("const BERLIN_DATA = ")
         json.dump(db_entries, f, ensure_ascii=False, indent=2)
-        f.write(";\n")
+        f.write(";\nwindow.BERLIN_DATA = BERLIN_DATA;\n")
     print(f"Successfully saved {js_path}")
 
     svg_path = "src/data/berlin_map.svg"

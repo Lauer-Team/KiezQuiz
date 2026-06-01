@@ -589,3 +589,4 @@ const BERLIN_DATA = [
     "is_island": true
   }
 ];
+window.BERLIN_DATA = BERLIN_DATA;

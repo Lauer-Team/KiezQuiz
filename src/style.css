@@ -1345,33 +1345,22 @@ body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(
 /* Bezirk boundary overlay — always visible, thicker than Stadtteil lines */
 .bezirk-boundaries-group {
   pointer-events: none;
+  shape-rendering: crispEdges;
 }
 
 .bezirk-boundary-line {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.22);
-  stroke-width: 1.35px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.bezirk-boundary-glow {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.06);
-  stroke-width: 2.8px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: rgba(255, 255, 255, 0.42);
+  stroke-width: 1.75px;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
 }
 
 /* Berlin: Bezirksgrenzen deutlich dicker als Ortsteil-Grenzen */
 #city-view[data-city="berlin"] .bezirk-boundary-line {
-  stroke: rgba(255, 255, 255, 0.38);
-  stroke-width: 2.25px;
-}
-
-#city-view[data-city="berlin"] .bezirk-boundary-glow {
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 4.5px;
+  stroke: rgba(255, 255, 255, 0.62);
+  stroke-width: 2.75px;
 }
 
 #city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
