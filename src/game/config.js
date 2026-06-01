@@ -150,10 +150,29 @@ function getCityDataArray(cityId) {
   return [];
 }
 
-function buildTrophyCatalog(cityId = 'hamburg') {
+function getBezirkTrophyTexts(cityId, bezirkName) {
   const city = window.cityRegistry?.getCity(cityId);
-  const progression = window.cityRegistry.getBezirkeProgression(cityId);
   const unitLabel = t(city?.levels?.[1]?.singularKey || 'cities.hamburg.singular.stadtteil');
+  const cssKey = cityId === 'hamburg'
+    ? (HAMBURG_BEZIRK_TROPHY_KEYS[bezirkName] || bezirkToTrophyCssKey(bezirkName))
+    : bezirkToTrophyCssKey(bezirkName);
+  const id = `master_${cssKey}`;
+  if (cityId === 'hamburg' && HAMBURG_BEZIRK_TROPHY_KEYS[bezirkName]) {
+    return {
+      id,
+      name: t(`trophies.${id}.name`, { bezirk: bezirkName }),
+      desc: t(`trophies.${id}.desc`, { bezirk: bezirkName })
+    };
+  }
+  return {
+    id,
+    name: t('trophies.master_bezirk.name', { bezirk: bezirkName, unit: unitLabel }),
+    desc: t('trophies.master_bezirk.desc', { bezirk: bezirkName, unit: unitLabel })
+  };
+}
+
+function buildTrophyCatalog(cityId = 'hamburg') {
+  const progression = window.cityRegistry.getBezirkeProgression(cityId);
 
   const cfg = getCityConfig(cityId);
   const specialIds = cfg.specialIds;
@@ -174,26 +193,10 @@ function buildTrophyCatalog(cityId = 'hamburg') {
     desc: t(`${trophyNs}.${id}.desc`)
   }));
 
-  const bezirkTrophiesFixed = progression.map((bz) => {
-    const cssKey = cityId === 'hamburg'
-      ? (HAMBURG_BEZIRK_TROPHY_KEYS[bz.name] || bezirkToTrophyCssKey(bz.name))
-      : bezirkToTrophyCssKey(bz.name);
-    const id = `master_${cssKey}`;
-    if (cityId === 'hamburg' && HAMBURG_BEZIRK_TROPHY_KEYS[bz.name]) {
-      return {
-        id,
-        name: t(`trophies.${id}.name`, { bezirk: bz.name }),
-        icon: '🏆',
-        desc: t(`trophies.${id}.desc`, { bezirk: bz.name })
-      };
-    }
-    return {
-      id,
-      name: t('trophies.master_bezirk.name', { bezirk: bz.name, unit: unitLabel }),
-      icon: '🏆',
-      desc: t('trophies.master_bezirk.desc', { bezirk: bz.name, unit: unitLabel })
-    };
-  });
+  const bezirkTrophiesFixed = progression.map((bz) => ({
+    ...getBezirkTrophyTexts(cityId, bz.name),
+    icon: '🏆'
+  }));
   return [...specials, ...bezirkTrophiesFixed];
 }
 

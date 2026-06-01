@@ -1407,6 +1407,19 @@ body.in-round .map-container-wrapper {
   accent-color: var(--color-neutral-glow);
 }
 
+.bezirk-picker-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.bezirk-picker-action {
+  flex: 1;
+  min-width: 0;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+}
+
 .log-modal-content {
   max-width: 480px;
   max-height: 90vh;

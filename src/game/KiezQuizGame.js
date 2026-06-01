@@ -1035,10 +1035,11 @@ class KiezQuizGame {
       
       // Award special District Completion achievements
       if (solvedInDistrict === totalInDistrict && totalInDistrict > 0) {
+        const trophyTexts = getBezirkTrophyTexts(this.activeCityId, bz.name);
         this.unlockAchievement(
-          `master_${cssKey}`,
-          `${t(`trophies.master_${cssKey}.name`, { bezirk: bz.name })} 🏆`,
-          t(`trophies.master_${cssKey}.desc`, { bezirk: bz.name })
+          trophyTexts.id,
+          `${trophyTexts.name} 🏆`,
+          trophyTexts.desc
         );
       }
     });
@@ -2392,18 +2393,10 @@ class KiezQuizGame {
             ${this.progressionMode && !isBz ? `<br><strong style="color: var(--color-xp);">${t('game.unlockHint')}</strong>` : ''}
           </p>
           
-          ${!isBz ? `
-          <div style="text-align: left; display:flex; flex-direction:column; gap:0.35rem;">
-            <label style="font-size:0.75rem; color: var(--text-muted); font-weight:600;">${t('game.bezirkPicker')}</label>
-            <div class="bezirk-picker" id="bezirk-picker">
-              ${this.getUnlockedBezirke().map((b, i) => `
-                <label class="bezirk-picker-item">
-                  <input type="checkbox" value="${b}" ${i === 0 ? 'checked' : ''}>
-                  <span>${b}</span>
-                </label>
-              `).join('')}
-            </div>
-          </div>` : ''}
+          ${!isBz ? this.renderBezirkPickerHtml('bezirk-picker', this.getUnlockedBezirke(), {
+            allChecked: this.isEuropeCapitalsMode(),
+            showBulkActions: this.isEuropeCapitalsMode()
+          }) : ''}
 
           <button class="primary-btn" id="btn-start-round" style="margin-top:0.4rem; padding: 0.75rem;">${t('game.begin')}</button>
         </div>
@@ -2453,18 +2446,57 @@ class KiezQuizGame {
       this.startRound(selected);
     });
 
-    const bezirkPicker = document.getElementById('bezirk-picker');
-    if (bezirkPicker) {
-      bezirkPicker.addEventListener('change', (e) => {
-        if (e.target.matches('input[type="checkbox"]')) this.playSelectionSound();
-      });
-    }
+    this.bindBezirkPickerSound('bezirk-picker');
+    if (this.isEuropeCapitalsMode()) this.bindBezirkPickerBulkActions('bezirk-picker');
   }
 
   getSelectedRoundBezirke() {
     const picker = document.getElementById('bezirk-picker');
     if (!picker) return [];
     return Array.from(picker.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+  }
+
+  renderBezirkPickerHtml(pickerId, bezirke, { allChecked = false, showBulkActions = false } = {}) {
+    const pickerLabel = this.isEuropeCapitalsMode() ? t('game.countryPicker') : t('game.bezirkPicker');
+    const bulkActions = showBulkActions ? `
+      <div class="bezirk-picker-actions">
+        <button type="button" class="secondary-btn bezirk-picker-action" id="${pickerId}-select-all">${t('game.selectAllCountries')}</button>
+        <button type="button" class="secondary-btn bezirk-picker-action" id="${pickerId}-deselect-all">${t('game.deselectAllCountries')}</button>
+      </div>` : '';
+    return `
+      <div style="text-align: left; display:flex; flex-direction:column; gap:0.35rem;">
+        <label style="font-size:0.75rem; color: var(--text-muted); font-weight:600;">${pickerLabel}</label>
+        ${bulkActions}
+        <div class="bezirk-picker" id="${pickerId}">
+          ${bezirke.map((b, i) => `
+            <label class="bezirk-picker-item">
+              <input type="checkbox" value="${b}" ${allChecked || i === 0 ? 'checked' : ''}>
+              <span>${b}</span>
+            </label>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  bindBezirkPickerBulkActions(pickerId) {
+    const picker = document.getElementById(pickerId);
+    if (!picker) return;
+    document.getElementById(`${pickerId}-select-all`)?.addEventListener('click', () => {
+      picker.querySelectorAll('input[type="checkbox"]').forEach((cb) => { cb.checked = true; });
+      this.playSelectionSound();
+    });
+    document.getElementById(`${pickerId}-deselect-all`)?.addEventListener('click', () => {
+      picker.querySelectorAll('input[type="checkbox"]').forEach((cb) => { cb.checked = false; });
+      this.playSelectionSound();
+    });
+  }
+
+  bindBezirkPickerSound(pickerId) {
+    const picker = document.getElementById(pickerId);
+    if (!picker) return;
+    picker.addEventListener('change', (e) => {
+      if (e.target.matches('input[type="checkbox"]')) this.playSelectionSound();
+    });
   }
 
   // --- SPORCLE ROUND CONTROL FUNCTIONS ---
@@ -3220,18 +3252,10 @@ class KiezQuizGame {
           ${t('nameAll.introSuffix')}
           <br><strong>${t('nameAll.timeLimit')}</strong>
         </p>
-        ${!isBz ? `
-        <div style="text-align: left; display:flex; flex-direction:column; gap:0.35rem;">
-          <label style="font-size:0.75rem; color: var(--text-muted); font-weight:600;">${t('game.bezirkPicker')}</label>
-          <div class="bezirk-picker" id="nameall-bezirk-picker">
-            ${pickerBezirke.map(b => `
-              <label class="bezirk-picker-item">
-                <input type="checkbox" value="${b}" checked>
-                <span>${b}</span>
-              </label>
-            `).join('')}
-          </div>
-        </div>` : ''}
+        ${!isBz ? this.renderBezirkPickerHtml('nameall-bezirk-picker', pickerBezirke, {
+          allChecked: true,
+          showBulkActions: this.isEuropeCapitalsMode()
+        }) : ''}
         <button class="primary-btn" id="btn-start-nameall" style="padding:0.75rem;">${t('game.begin')}</button>
       </div>
 
@@ -3260,6 +3284,9 @@ class KiezQuizGame {
       }
       this.startNameAllChallenge(selected);
     };
+
+    this.bindBezirkPickerSound('nameall-bezirk-picker');
+    if (this.isEuropeCapitalsMode()) this.bindBezirkPickerBulkActions('nameall-bezirk-picker');
   }
 
   getSelectedNameAllBezirke() {
