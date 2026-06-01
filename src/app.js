@@ -1128,8 +1128,15 @@ class KiezQuizGame {
 
     // Game history & Settings
     const historyBtn = document.getElementById('btn-history');
-    if (historyBtn) historyBtn.addEventListener('click', () => this.showGameHistory());
-    document.getElementById('btn-settings').addEventListener('click', () => this.showSettings());
+    if (historyBtn && historyBtn.dataset.bound !== 'true') {
+      historyBtn.dataset.bound = 'true';
+      historyBtn.addEventListener('click', () => this.showGameHistory());
+    }
+    const settingsBtn = document.getElementById('btn-settings');
+    if (settingsBtn && settingsBtn.dataset.bound !== 'true') {
+      settingsBtn.dataset.bound = 'true';
+      settingsBtn.addEventListener('click', () => this.showSettings());
+    }
 
     const langBtn = document.getElementById('btn-lang');
     if (langBtn && langBtn.dataset.bound !== 'true') {
@@ -2187,12 +2194,12 @@ class KiezQuizGame {
         <button class="primary-btn" id="btn-settings-close" style="margin-top: 0.5rem;">${t('settings.close')}</button>
       </div>
     `, { closeOnBackdrop: true });
-    document.getElementById('btn-settings-close').addEventListener('click', () => closeOverlayModal(modal));
-    document.getElementById('btn-settings-reset').addEventListener('click', () => this.resetGame());
+    modal.querySelector('#btn-settings-close')?.addEventListener('click', () => closeOverlayModal(modal));
+    modal.querySelector('#btn-settings-reset')?.addEventListener('click', () => this.resetGame());
 
     window.cityWishes?.isAdmin?.().then((isAdmin) => {
       if (!isAdmin) return;
-      const slot = document.getElementById('settings-wish-admin-slot');
+      const slot = modal.querySelector('#settings-wish-admin-slot');
       if (!slot) return;
       slot.innerHTML = `
         <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.wishAdminTitle')}</strong>
