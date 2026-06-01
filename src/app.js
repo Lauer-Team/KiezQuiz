@@ -34,10 +34,15 @@ function getRanks() {
   }));
 }
 
-function getCityRanks() {
+function getCityRankLocaleKey(cityId) {
+  return cityId === 'berlin' ? 'cityRanksBerlin' : 'cityRanks';
+}
+
+function getCityRanks(cityId) {
+  const key = getCityRankLocaleKey(cityId || window.kiezQuizGame?.activeCityId || 'hamburg');
   return CITY_RANK_THRESHOLDS.map((rank) => ({
     ...rank,
-    name: t(`cityRanks.${rank.level}.name`)
+    name: t(`${key}.${rank.level}.name`)
   }));
 }
 
@@ -45,8 +50,9 @@ function getRankName(level) {
   return t(`ranks.${level}.name`) || t('ranks.fallback');
 }
 
-function getCityRankName(level) {
-  return t(`cityRanks.${level}.name`) || t('cityRanks.fallback');
+function getCityRankName(level, cityId) {
+  const key = getCityRankLocaleKey(cityId || window.kiezQuizGame?.activeCityId || 'hamburg');
+  return t(`${key}.${level}.name`) || t(`${key}.fallback`);
 }
 
 function getCityRankTotals(game, cityId) {
@@ -56,9 +62,16 @@ function getCityRankTotals(game, cityId) {
   }
   const progression = window.cityRegistry.getBezirkeProgression(cityId);
   const totalDistricts = progression.length;
-  const unlockedDistricts = game.unlockedBezirkIndex + 1;
-  const totalTrophies = typeof getTrophyCatalog === 'function' ? getTrophyCatalog().length : (city.totalTrophies || 0);
-  const trophies = game.trophies?.size || 0;
+  const branch = game._save?.cities?.[cityId];
+  const unlockedDistricts = cityId === game.activeCityId && game.view === 'city'
+    ? game.unlockedBezirkIndex + 1
+    : (parseInt(branch?.unlockedRegionIndex, 10) || 0) + 1;
+  const totalTrophies = typeof getTrophyCatalog === 'function'
+    ? getTrophyCatalog(cityId).length
+    : (city.totalTrophies || 0);
+  const trophies = cityId === game.activeCityId && game.view === 'city'
+    ? (game.trophies?.size || 0)
+    : (Array.isArray(branch?.trophies) ? branch.trophies.length : 0);
   return { unlockedDistricts, totalDistricts, trophies, totalTrophies };
 }
 
@@ -80,46 +93,85 @@ function calculateCityLevel(game, cityId) {
   return currentLvl;
 }
 
-function getTriviaTemplates(bezirk) {
+function getTriviaTemplates(bezirk, cityId) {
   const templates = tMap('trivia.templates', bezirk);
-  return Array.isArray(templates) ? templates : [t('trivia.defaultBezirk')];
+  if (Array.isArray(templates)) return templates;
+  const cid = cityId || window.kiezQuizGame?.activeCityId || 'hamburg';
+  return [t(cid === 'berlin' ? 'trivia.defaultBezirkBerlin' : 'trivia.defaultBezirk')];
 }
 
 function getSpecificTrivia(name) {
   return tMap('trivia.specific', name) || null;
 }
 
-function buildTrophyCatalog() {
-  const specials = [
-    { id: 'neuwerk_island', icon: '🏝️' },
-    { id: 'paradise_explorer', icon: '🌴' },
-    { id: 'meister_alle_stadtteile', icon: '👑' },
-    { id: 'meister_alle_bezirke', icon: '🏛️' }
-  ].map((item) => ({
-    id: item.id,
-    icon: item.icon,
-    name: t(`trophies.${item.id}.name`),
-    desc: t(`trophies.${item.id}.desc`)
+const MAP_SVG_CACHE = new Map();
+
+const HAMBURG_BEZIRK_TROPHY_KEYS = {
+  Altona: 'altona', Bergedorf: 'bergedorf', 'Eimsbüttel': 'eimsbuettel',
+  'Hamburg-Mitte': 'hamburg-mitte', 'Hamburg-Nord': 'hamburg-nord',
+  Harburg: 'harburg', Wandsbek: 'wandsbek'
+};
+
+function bezirkToTrophyCssKey(name) {
+  return name.toLowerCase()
+    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function getCityDataArray(cityId) {
+  const city = window.cityRegistry?.getCity(cityId || window.kiezQuizGame?.activeCityId || 'hamburg');
+  const key = city?.dataGlobal || 'HAMBURG_DATA';
+  if (window[key]) return window[key];
+  if (key === 'BERLIN_DATA' && typeof BERLIN_DATA !== 'undefined') return BERLIN_DATA;
+  if (typeof HAMBURG_DATA !== 'undefined') return HAMBURG_DATA;
+  return [];
+}
+
+function buildTrophyCatalog(cityId = 'hamburg') {
+  const city = window.cityRegistry?.getCity(cityId);
+  const progression = window.cityRegistry.getBezirkeProgression(cityId);
+  const unitLabel = t(city?.levels?.[1]?.singularKey || 'cities.hamburg.singular.stadtteil');
+
+  const specialIds = cityId === 'berlin'
+    ? ['pfaueninsel_island', 'paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke']
+    : ['neuwerk_island', 'paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'];
+  const specialIcons = { neuwerk_island: '🏝️', pfaueninsel_island: '🦚', paradise_explorer: '🌴', meister_alle_stadtteile: '👑', meister_alle_bezirke: '🏛️' };
+  const trophyNs = cityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
+
+  const specials = specialIds.map((id) => ({
+    id,
+    icon: specialIcons[id],
+    name: t(`${trophyNs}.${id}.name`),
+    desc: t(`${trophyNs}.${id}.desc`)
   }));
-  const bezirkTrophiesFixed = BEZIRKE_PROGRESSION.map((bz) => {
-    const cssKey = {
-      Altona: 'altona', Bergedorf: 'bergedorf', 'Eimsbüttel': 'eimsbuettel',
-      'Hamburg-Mitte': 'hamburg-mitte', 'Hamburg-Nord': 'hamburg-nord',
-      Harburg: 'harburg', Wandsbek: 'wandsbek'
-    }[bz.name] || bz.name.toLowerCase();
+
+  const bezirkTrophiesFixed = progression.map((bz) => {
+    const cssKey = cityId === 'hamburg'
+      ? (HAMBURG_BEZIRK_TROPHY_KEYS[bz.name] || bezirkToTrophyCssKey(bz.name))
+      : bezirkToTrophyCssKey(bz.name);
     const id = `master_${cssKey}`;
+    if (cityId === 'hamburg' && HAMBURG_BEZIRK_TROPHY_KEYS[bz.name]) {
+      return {
+        id,
+        name: t(`trophies.${id}.name`, { bezirk: bz.name }),
+        icon: '🏆',
+        desc: t(`trophies.${id}.desc`, { bezirk: bz.name })
+      };
+    }
     return {
       id,
-      name: t(`trophies.${id}.name`, { bezirk: bz.name }),
+      name: t('trophies.master_bezirk.name', { bezirk: bz.name, unit: unitLabel }),
       icon: '🏆',
-      desc: t(`trophies.${id}.desc`, { bezirk: bz.name })
+      desc: t('trophies.master_bezirk.desc', { bezirk: bz.name, unit: unitLabel })
     };
   });
   return [...specials, ...bezirkTrophiesFixed];
 }
 
-function getTrophyCatalog() {
-  return buildTrophyCatalog();
+function getTrophyCatalog(cityId) {
+  const id = cityId || window.kiezQuizGame?.activeCityId || 'hamburg';
+  return buildTrophyCatalog(id);
 }
 
 function getModeLabel(mode, segment) {
@@ -130,8 +182,6 @@ function getModeLabel(mode, segment) {
 }
 
 const ROUND_TIME_LIMIT = 600; // 10 minutes for all timed game modes
-
-const BEZIRKE_PROGRESSION = window.KQ_DATA.BEZIRKE_PROGRESSION;
 
 const MODE_ICONS = {
   EXPLORER: '🗺️',
@@ -682,7 +732,16 @@ class KiezQuizGame {
     this.nameAllIsActive = false;
     this.nameAllActiveBezirke = [];
     
+    this._hamburgSvgCache = null;
     this.loadState();
+  }
+
+  getProgression() {
+    return window.cityRegistry.getBezirkeProgression(this.activeCityId);
+  }
+
+  getCityData() {
+    return getCityDataArray(this.activeCityId);
   }
 
   init() {
@@ -698,11 +757,82 @@ class KiezQuizGame {
       if (cityEl) cityEl.hidden = true;
       window.kiezHub?.render(this, hubEl);
       if (window.authManager) window.authManager.updateHeaderUI();
-      if (this.xp === 0) this.showOnboarding(true);
       return;
     }
 
     this._initCityPlay();
+  }
+
+  _swapMapSvg(svgHtml, wrapper) {
+    const old = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
+    const temp = document.createElement('div');
+    temp.innerHTML = svgHtml.trim();
+    const newSvg = temp.querySelector('svg');
+    if (newSvg && old) old.replaceWith(newSvg);
+  }
+
+  ensureMapLabelsGroup() {
+    if (!this.svg) return null;
+    let labels = this.svg.querySelector('#map-labels-group');
+    if (!labels) {
+      labels = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      labels.setAttribute('id', 'map-labels-group');
+      labels.setAttribute('style', 'pointer-events: none;');
+      this.svg.appendChild(labels);
+    }
+    return labels;
+  }
+
+  _loadCityMap() {
+    return new Promise(async (resolve) => {
+      const wrapper = document.getElementById('map-wrapper');
+      const city = window.cityRegistry.getCity(this.activeCityId);
+      const nw = document.getElementById('neuwerk-anchor');
+      const pf = document.getElementById('pfaueninsel-anchor');
+      const islandEgg = city?.islandEasterEgg;
+      if (nw) nw.hidden = islandEgg !== 'neuwerk';
+      if (pf) pf.hidden = islandEgg !== 'pfaueninsel';
+
+      if (!wrapper || !city) {
+        this.svg = document.querySelector('.city-map-svg, .hamburg-map-svg');
+        this.ensureMapLabelsGroup();
+        resolve();
+        return;
+      }
+
+      if (this.activeCityId === 'hamburg') {
+        const inline = wrapper.querySelector('[data-city-map="hamburg"]');
+        if (inline) {
+          if (!this._hamburgSvgCache) this._hamburgSvgCache = inline.outerHTML;
+          this.svg = inline;
+          this.ensureMapLabelsGroup();
+          resolve();
+          return;
+        }
+        if (this._hamburgSvgCache) {
+          this._swapMapSvg(this._hamburgSvgCache, wrapper);
+          this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
+          this.ensureMapLabelsGroup();
+          resolve();
+          return;
+        }
+      }
+
+      const url = city.mapSvg;
+      try {
+        if (!MAP_SVG_CACHE.has(url)) {
+          const resp = await fetch(url);
+          MAP_SVG_CACHE.set(url, await resp.text());
+        }
+        this._swapMapSvg(MAP_SVG_CACHE.get(url), wrapper);
+        this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
+      } catch (err) {
+        console.error('Failed to load city map', err);
+        this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
+      }
+      this.ensureMapLabelsGroup();
+      resolve();
+    });
   }
 
   _initCityPlay() {
@@ -716,54 +846,70 @@ class KiezQuizGame {
       cityEl.dataset.city = this.activeCityId;
     }
 
-    this.svg = document.querySelector('.hamburg-map-svg');
-    this.mapWrapper = document.querySelector('.map-container-wrapper');
-    this.tooltip = document.getElementById('map-tooltip');
+    this._loadCityMap().then(() => {
+      this.mapWrapper = document.querySelector('.map-container-wrapper');
+      this.tooltip = document.getElementById('map-tooltip');
 
-    if (this.svg && this.mapWrapper) {
-      this.mapNav = new MapNavigator(this.svg, this.mapWrapper);
-      this.reorderMapLayers();
-    }
+      if (this.svg && this.mapWrapper) {
+        this.mapNav = new MapNavigator(this.svg, this.mapWrapper);
+        this.reorderMapLayers();
+      }
 
-    if (this.tooltip && this.tooltip.parentElement !== document.body) {
-      document.body.appendChild(this.tooltip);
-    }
+      if (this.tooltip && this.tooltip.parentElement !== document.body) {
+        document.body.appendChild(this.tooltip);
+      }
 
-    window.kiezCityDashboard?.enhanceSegmentSelector();
-    window.kiezCityDashboard?.renderContextBar(this, document.getElementById('city-context-bar'));
+      window.kiezCityDashboard?.enhanceSegmentSelector();
+      window.kiezCityDashboard?.renderContextBar(this, document.getElementById('city-context-bar'));
 
-    this.setupUIListeners();
-    this.setupMobileMapHint();
-    if (this.svg) {
-      this.initMapPaths();
-      this.buildBezirkBoundaries();
-    }
-    this.renderStats();
+      this.setupUIListeners();
+      this.setupMobileMapHint();
+      if (this.svg) {
+        this.initMapPaths();
+        this.buildBezirkBoundaries();
+      }
+      this.renderStats();
 
-    this.setupSegmentSelectors();
-    if (!this.isModeAllowedForSegment(this.currentMode)) {
-      this.currentMode = 'EXPLORER';
-    }
-    this.applySegmentUI();
-    this.updateModeLabels();
-    this.syncSegmentBodyClass();
-    this.setMode(this.resolveModeForCurrentSegment(this.currentMode));
+      this.setupSegmentSelectors();
+      if (!this.isModeAllowedForSegment(this.currentMode)) {
+        this.currentMode = 'EXPLORER';
+      }
+      this.applySegmentUI();
+      this.updateModeLabels();
+      this.syncSegmentBodyClass();
+      this.setMode(this.resolveModeForCurrentSegment(this.currentMode));
 
-    this.updateMapStates();
-    this.updateNeuwerkBadge();
+      this.updateMapStates();
+      this.updateIslandBadges();
 
-    if (!this._audioPrimed) {
-      const primeAudio = () => this.sounds.init();
-      document.addEventListener('click', primeAudio);
-      document.addEventListener('keydown', primeAudio);
-      document.addEventListener('touchstart', primeAudio, { passive: true });
-      document.addEventListener('keydown', (e) => this.handleQuizKeydown(e));
-      this._audioPrimed = true;
-    }
+      if (!this._audioPrimed) {
+        const primeAudio = () => this.sounds.init();
+        document.addEventListener('click', primeAudio);
+        document.addEventListener('keydown', primeAudio);
+        document.addEventListener('touchstart', primeAudio, { passive: true });
+        document.addEventListener('keydown', (e) => this.handleQuizKeydown(e));
+        this._audioPrimed = true;
+      }
 
-    if (this.xp === 0 && !this._save?.migratedFromV1) {
-      this.showOnboarding(true);
-    }
+      if (this.shouldShowOnboarding(this.activeCityId)) {
+        this.showOnboarding();
+      }
+    });
+  }
+
+  shouldShowOnboarding(cityId) {
+    const city = window.cityRegistry.getCity(cityId);
+    if (!city?.onboardingVersion) return false;
+    const branch = this._save?.cities?.[cityId];
+    const seen = parseInt(branch?.onboardingVersionSeen, 10) || 0;
+    return seen < city.onboardingVersion;
+  }
+
+  markOnboardingSeen(cityId) {
+    window.saveManager.ensureCityBranch(this._save, cityId);
+    const city = window.cityRegistry.getCity(cityId);
+    this._save.cities[cityId].onboardingVersionSeen = city?.onboardingVersion || 1;
+    window.saveManager.persistSave(this._save);
   }
 
   showHub(persistNav = true) {
@@ -795,10 +941,14 @@ class KiezQuizGame {
       this.showComingSoonToast(cityId);
       return;
     }
+    if (this.view === 'city' && cityId !== this.activeCityId) {
+      this._syncToSaveObject();
+    }
     this.activeCityId = cityId;
     this.view = 'city';
+    window.saveManager.ensureCityBranch(this._save, cityId);
+    this._applyCityBranch(this._save.cities[cityId]);
     if (persistNav) {
-      this._syncToSaveObject();
       this._save.lastCity = cityId;
       window.saveManager.persistSave(this._save);
     }
@@ -908,9 +1058,9 @@ class KiezQuizGame {
       muteBtn.innerHTML = isMuted ? '🔇' : '🔊';
     });
     
-    // Neuwerk Island Special Anchor
     const nwAnchor = document.getElementById('neuwerk-anchor');
-    if (nwAnchor) {
+    if (nwAnchor && nwAnchor.dataset.bound !== 'true') {
+      nwAnchor.dataset.bound = 'true';
       nwAnchor.addEventListener('click', () => {
         this.playSelectionSound();
         if (this.activeSegment === 'BEZIRKE') {
@@ -920,8 +1070,25 @@ class KiezQuizGame {
           if (btnSt) btnSt.classList.add('active');
           if (btnBz) btnBz.classList.remove('active');
         }
-        this.selectNeighbourhoodByName("Neuwerk");
+        this.selectNeighbourhoodByName('Neuwerk');
         this.unlockTrophy('neuwerk_island', t('trophies.neuwerk_island.unlockTitle'), t('trophies.neuwerk_island.unlockDesc'));
+      });
+    }
+
+    const pfAnchor = document.getElementById('pfaueninsel-anchor');
+    if (pfAnchor && pfAnchor.dataset.bound !== 'true') {
+      pfAnchor.dataset.bound = 'true';
+      pfAnchor.addEventListener('click', () => {
+        this.playSelectionSound();
+        if (this.activeSegment === 'BEZIRKE') {
+          this.activeSegment = 'STADTTEILE';
+          const btnSt = document.getElementById('btn-segment-stadtteile');
+          const btnBz = document.getElementById('btn-segment-bezirke');
+          if (btnSt) btnSt.classList.add('active');
+          if (btnBz) btnBz.classList.remove('active');
+        }
+        this.selectNeighbourhoodByName('Pfaueninsel');
+        this.unlockTrophy('pfaueninsel_island', t('trophies.pfaueninsel_island.unlockTitle'), t('trophies.pfaueninsel_island.unlockDesc'));
       });
     }
 
@@ -942,7 +1109,7 @@ class KiezQuizGame {
 
   _syncToSaveObject() {
     if (!this._save) this._save = window.saveManager.loadSave();
-    const progression = BEZIRKE_PROGRESSION;
+    const progression = this.getProgression();
     const regionProgress = {};
     progression.forEach((bz) => {
       regionProgress[bz.name] = [...(this.bezirkProgress[bz.name]?.solved || [])];
@@ -982,11 +1149,11 @@ class KiezQuizGame {
     if (cityData.unlockedRegionIndex != null) {
       this.unlockedBezirkIndex = Math.min(
         parseInt(cityData.unlockedRegionIndex, 10) || 0,
-        BEZIRKE_PROGRESSION.length - 1
+        this.getProgression().length - 1
       );
     } else if (this.xp > 0) {
-      for (let i = BEZIRKE_PROGRESSION.length - 1; i >= 0; i--) {
-        if (this.xp >= BEZIRKE_PROGRESSION[i].xpNeeded) {
+      for (let i = this.getProgression().length - 1; i >= 0; i--) {
+        if (this.xp >= this.getProgression()[i].xpNeeded) {
           this.unlockedBezirkIndex = i;
           break;
         }
@@ -1004,7 +1171,7 @@ class KiezQuizGame {
       });
     }
 
-    BEZIRKE_PROGRESSION.forEach((bz) => {
+    this.getProgression().forEach((bz) => {
       this.bezirkProgress[bz.name] = { solved: new Set() };
       const saved = cityData.regionProgress?.[bz.name] ?? cityData.bezirkProgress?.[bz.name];
       if (Array.isArray(saved)) {
@@ -1054,12 +1221,12 @@ class KiezQuizGame {
     if (data.unlockedBezirkIndex != null) {
       this.unlockedBezirkIndex = Math.min(
         parseInt(data.unlockedBezirkIndex, 10) || 0,
-        BEZIRKE_PROGRESSION.length - 1
+        this.getProgression().length - 1
       );
     } else {
       this.unlockedBezirkIndex = 0;
-      for (let i = BEZIRKE_PROGRESSION.length - 1; i >= 0; i--) {
-        if (this.xp >= BEZIRKE_PROGRESSION[i].xpNeeded) {
+      for (let i = this.getProgression().length - 1; i >= 0; i--) {
+        if (this.xp >= this.getProgression()[i].xpNeeded) {
           this.unlockedBezirkIndex = i;
           break;
         }
@@ -1079,7 +1246,7 @@ class KiezQuizGame {
       });
     }
 
-    BEZIRKE_PROGRESSION.forEach((bz) => {
+    this.getProgression().forEach((bz) => {
       this.bezirkProgress[bz.name] = { solved: new Set() };
       const saved = data.bezirkProgress?.[bz.name];
       if (Array.isArray(saved)) {
@@ -1165,7 +1332,7 @@ class KiezQuizGame {
   }
 
   getLastUnlockedBezirk() {
-    return BEZIRKE_PROGRESSION[this.unlockedBezirkIndex]?.name || BEZIRKE_PROGRESSION[0].name;
+    return this.getProgression()[this.unlockedBezirkIndex]?.name || this.getProgression()[0].name;
   }
 
   tryUnlockNextBezirk(frontierCorrect, frontierTotal) {
@@ -1173,9 +1340,9 @@ class KiezQuizGame {
     if (frontierTotal <= 0) return null;
     const frontierPercent = Math.round((frontierCorrect / frontierTotal) * 100);
     if (frontierPercent < 75) return null;
-    if (this.unlockedBezirkIndex >= BEZIRKE_PROGRESSION.length - 1) return null;
+    if (this.unlockedBezirkIndex >= this.getProgression().length - 1) return null;
 
-    const nextBezirk = BEZIRKE_PROGRESSION[this.unlockedBezirkIndex + 1];
+    const nextBezirk = this.getProgression()[this.unlockedBezirkIndex + 1];
     this.unlockedBezirkIndex++;
     this.saveState();
     this.updateMapStates();
@@ -1201,19 +1368,19 @@ class KiezQuizGame {
   // Get list of currently unlocked Bezirke based on progression
   getUnlockedBezirke() {
     if (!this.progressionMode) {
-      return BEZIRKE_PROGRESSION.map(b => b.name);
+      return this.getProgression().map(b => b.name);
     }
     if (this.activeSegment === 'BEZIRKE') {
-      return BEZIRKE_PROGRESSION.map(b => b.name);
+      return this.getProgression().map(b => b.name);
     }
-    return BEZIRKE_PROGRESSION
+    return this.getProgression()
       .slice(0, this.unlockedBezirkIndex + 1)
       .map(b => b.name);
   }
 
   // Check if a specific stadtteil name is in unlocked Bezirke
   isStadtteilUnlocked(name) {
-    const info = HAMBURG_DATA.find(d => d.name === name);
+    const info = this.getCityData().find(d => d.name === name);
     if (!info) return false;
     return this.getUnlockedBezirke().includes(info.bezirk);
   }
@@ -1226,7 +1393,7 @@ class KiezQuizGame {
   }
 
   markStadtteilSolved(name) {
-    const info = HAMBURG_DATA.find(d => d.name === name);
+    const info = this.getCityData().find(d => d.name === name);
     if (!info || info.is_island) return;
     const progress = this.bezirkProgress[info.bezirk];
     if (!progress) return;
@@ -1293,6 +1460,10 @@ class KiezQuizGame {
     this.updateLocateModeLabel();
   }
 
+  getDetailUnitSuffix() {
+    return this.activeCityId === 'berlin' ? 'Ortsteil' : 'Stadtteil';
+  }
+
   updateLocateModeLabel() {
     const locateBtn = document.getElementById('mode-locate');
     if (!locateBtn) return;
@@ -1300,14 +1471,22 @@ class KiezQuizGame {
     if (!labelRow) return;
     const spans = labelRow.querySelectorAll('span');
     if (spans[0]) {
-      spans[0].textContent = this.activeSegment === 'BEZIRKE'
-        ? t('modes.locate.labelBezirk')
-        : t('modes.locate.label');
+      if (this.activeSegment === 'BEZIRKE') {
+        spans[0].textContent = t('modes.locate.labelBezirk');
+      } else if (this.activeCityId === 'berlin') {
+        spans[0].textContent = t('modes.locate.labelOrtsteil');
+      } else {
+        spans[0].textContent = t('modes.locate.label');
+      }
     }
     if (spans[1]) {
-      spans[1].textContent = this.activeSegment === 'BEZIRKE'
-        ? t('modes.locate.descBezirk')
-        : t('modes.locate.desc');
+      if (this.activeSegment === 'BEZIRKE') {
+        spans[1].textContent = t('modes.locate.descBezirk');
+      } else if (this.activeCityId === 'berlin') {
+        spans[1].textContent = t('modes.locate.descOrtsteil');
+      } else {
+        spans[1].textContent = t('modes.locate.desc');
+      }
     }
   }
 
@@ -1347,7 +1526,7 @@ class KiezQuizGame {
     this.renderStats();
     this.applySegmentUI();
     this.updateModeLabels();
-    this.updateNeuwerkBadge();
+    this.updateIslandBadges();
     this.setupMobileMapHint();
     window.kiezCityDashboard?.updateBreadcrumb(this);
     if (!this.inRound && !this.nameAllIsActive) {
@@ -1430,11 +1609,11 @@ class KiezQuizGame {
     listContainer.innerHTML = '';
     const unlocked = this.getUnlockedBezirke();
     
-    BEZIRKE_PROGRESSION.forEach(bz => {
+    this.getProgression().forEach(bz => {
       const isUnlocked = unlocked.includes(bz.name);
       
       // Calculate how many stadtteile are solved out of total in this district
-      const totalInDistrict = HAMBURG_DATA.filter(d => d.bezirk === bz.name && !d.is_island).length;
+      const totalInDistrict = this.getCityData().filter(d => d.bezirk === bz.name && !d.is_island).length;
       const solvedInDistrict = this.bezirkProgress[bz.name].solved.size;
       const percent = totalInDistrict > 0 ? Math.round((solvedInDistrict / totalInDistrict) * 100) : 0;
       
@@ -1474,16 +1653,28 @@ class KiezQuizGame {
     this.achievements.add(id);
     this.saveState();
     this.showAchievementAlert(title, desc);
-    this.updateNeuwerkBadge();
+    this.updateIslandBadges();
   }
 
-  updateNeuwerkBadge() {
-    const anchor = document.getElementById('neuwerk-anchor');
-    const badge = anchor?.querySelector('.no-badge');
-    if (!badge || !anchor) return;
-    const unlocked = this.trophies.has('neuwerk_island');
-    badge.classList.toggle('is-unlocked', unlocked);
-    anchor.title = unlocked ? t('map.neuwerkTitleUnlocked') : t('map.neuwerkTitle');
+  updateIslandBadges() {
+    const city = window.cityRegistry.getCity(this.activeCityId);
+    const islandEgg = city?.islandEasterEgg;
+    const nwAnchor = document.getElementById('neuwerk-anchor');
+    const pfAnchor = document.getElementById('pfaueninsel-anchor');
+    if (nwAnchor) nwAnchor.hidden = islandEgg !== 'neuwerk';
+    if (pfAnchor) pfAnchor.hidden = islandEgg !== 'pfaueninsel';
+    const nwBadge = nwAnchor?.querySelector('.no-badge');
+    if (nwAnchor && nwBadge) {
+      const unlocked = this.trophies.has('neuwerk_island');
+      nwBadge.classList.toggle('is-unlocked', unlocked);
+      nwAnchor.title = unlocked ? t('map.neuwerkTitleUnlocked') : t('map.neuwerkTitle');
+    }
+    const pfBadge = pfAnchor?.querySelector('.no-badge');
+    if (pfAnchor && pfBadge) {
+      const unlocked = this.trophies.has('pfaueninsel_island');
+      pfBadge.classList.toggle('is-unlocked', unlocked);
+      pfAnchor.title = unlocked ? t('map.pfaueninselTitleUnlocked') : t('map.pfaueninselTitle');
+    }
   }
 
   playSelectionSound() {
@@ -1525,11 +1716,14 @@ class KiezQuizGame {
   }
 
   checkParadiseTrophy(stadtteilName) {
-    if (stadtteilName === 'Groß Flottbek') {
+    const city = window.cityRegistry.getCity(this.activeCityId);
+    const target = city?.paradiseTarget;
+    if (target && stadtteilName === target) {
+      const ns = this.activeCityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
       this.unlockTrophy(
         'paradise_explorer',
-        t('trophies.paradise_explorer.unlockTitle'),
-        t('trophies.paradise_explorer.unlockDesc')
+        t(`${ns}.paradise_explorer.unlockTitle`),
+        t(`${ns}.paradise_explorer.unlockDesc`)
       );
     }
   }
@@ -1667,14 +1861,14 @@ class KiezQuizGame {
       lastCity: null,
       lastLevelKey: 'stadtteile',
       lastMode: 'EXPLORER',
-      cities: { hamburg: window.saveManager.emptyCityState(BEZIRKE_PROGRESSION) }
+      cities: { hamburg: window.saveManager.emptyCityState(window.cityRegistry.getBezirkeProgression('hamburg')) }
     });
 
     if (!clearLocalOnly) {
       this.setMode('EXPLORER');
       this.renderStats();
       this.updateMapStates();
-      this.updateNeuwerkBadge();
+      this.updateIslandBadges();
     }
   }
 
@@ -1720,7 +1914,7 @@ class KiezQuizGame {
 
   getCityRankProgressInfo(cityId = this.activeCityId) {
     const cityLevel = calculateCityLevel(this, cityId);
-    const ranks = getCityRanks();
+    const ranks = getCityRanks(cityId);
     const currentRank = ranks.find(r => r.level === cityLevel) || ranks[0];
     const nextRank = ranks.find(r => r.level === cityLevel + 1);
     const totals = getCityRankTotals(this, cityId);
@@ -1906,41 +2100,45 @@ class KiezQuizGame {
     document.getElementById('btn-settings-reset').addEventListener('click', () => this.resetGame());
   }
 
-  showOnboarding(firstTime = false) {
+  showOnboarding() {
+    const prefix = this.activeCityId === 'berlin' ? 'onboardingBerlin' : 'onboarding';
     const modal = openOverlayModal(`
       <div class="modal-content" style="max-width: 550px;">
-        <h2>${t('onboarding.title')}</h2>
-        <p>${t('onboarding.intro')}</p>
+        <h2>${t(`${prefix}.title`)}</h2>
+        <p>${t(`${prefix}.intro`)}</p>
         
         <div class="modal-features">
           <div class="mf-item">
             <span class="mf-icon">🏢</span>
             <span class="mf-text">
-              <strong>${t('onboarding.feature1Title')}</strong>
-              ${t('onboarding.feature1Text')}
+              <strong>${t(`${prefix}.feature1Title`)}</strong>
+              ${t(`${prefix}.feature1Text`)}
             </span>
           </div>
           <div class="mf-item">
             <span class="mf-icon">⏱️</span>
             <span class="mf-text">
-              <strong>${t('onboarding.feature2Title')}</strong>
-              ${t('onboarding.feature2Text')}
+              <strong>${t(`${prefix}.feature2Title`)}</strong>
+              ${t(`${prefix}.feature2Text`)}
             </span>
           </div>
           <div class="mf-item">
             <span class="mf-icon">⌨️</span>
             <span class="mf-text">
-              <strong>${t('onboarding.feature3Title')}</strong>
-              ${t('onboarding.feature3Text')}
+              <strong>${t(`${prefix}.feature3Title`)}</strong>
+              ${t(`${prefix}.feature3Text`)}
             </span>
           </div>
         </div>
 
-        <p style="font-size: 0.8rem; color: var(--text-muted);">${t('onboarding.elbeTip')}</p>
-        <button class="primary-btn" id="btn-onboarding-dismiss">${t('onboarding.dismiss')}</button>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">${t(`${prefix}.mapTip`)}</p>
+        <button class="primary-btn" id="btn-onboarding-dismiss">${t(`${prefix}.dismiss`)}</button>
       </div>
     `);
-    document.getElementById('btn-onboarding-dismiss').addEventListener('click', () => closeOverlayModal(modal));
+    document.getElementById('btn-onboarding-dismiss').addEventListener('click', () => {
+      this.markOnboardingSeen(this.activeCityId);
+      closeOverlayModal(modal);
+    });
   }
 
   // Mode Setter
@@ -2069,15 +2267,13 @@ class KiezQuizGame {
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     group.setAttribute('class', 'bezirk-boundaries-group');
 
-    const glowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    glowPath.setAttribute('class', 'bezirk-boundary-glow');
-    glowPath.setAttribute('d', boundaryLines.map(([x1, y1, x2, y2]) => `M ${x1} ${y1} L ${x2} ${y2}`).join(' '));
+    const d = boundaryLines
+      .map(([x1, y1, x2, y2]) => `M ${snapCoord(x1)} ${snapCoord(y1)} L ${snapCoord(x2)} ${snapCoord(y2)}`)
+      .join(' ');
 
     const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     linePath.setAttribute('class', 'bezirk-boundary-line');
-    linePath.setAttribute('d', glowPath.getAttribute('d'));
-
-    group.appendChild(glowPath);
+    linePath.setAttribute('d', d);
     group.appendChild(linePath);
 
     const labels = this.svg.querySelector('#map-labels-group');
@@ -2189,6 +2385,7 @@ class KiezQuizGame {
 
   reorderMapLayers() {
     if (!this.svg) return;
+    this.ensureMapLabelsGroup();
     const water = this.svg.querySelector('.water-group');
     const stadtteile = this.svg.querySelector('.stadtteile-group');
     const boundaries = this.svg.querySelector('.bezirk-boundaries-group');
@@ -2267,10 +2464,14 @@ class KiezQuizGame {
   // --- MODE: EXPLORER (ENTDECKER) ---
   initExplorerMode(container) {
     const isBz = this.activeSegment === 'BEZIRKE';
+    const isBerlin = this.activeCityId === 'berlin';
+    const emptyKey = isBz
+      ? (isBerlin ? 'explorer.emptyBezirkBerlin' : 'explorer.emptyBezirk')
+      : (isBerlin ? 'explorer.emptyOrtsteil' : 'explorer.emptyStadtteil');
     container.innerHTML = `
       <div id="explorer-details" class="empty-info">
         <div class="ei-icon">${isBz ? '🏢' : '🗺️'}</div>
-        <p>${isBz ? t('explorer.emptyBezirk') : t('explorer.emptyStadtteil')}</p>
+        <p>${t(emptyKey)}</p>
       </div>
     `;
     this.updateMapStates();
@@ -2293,7 +2494,7 @@ class KiezQuizGame {
     this.activeSelectPath = path;
     
     // Find detailed stadtteil data
-    const info = HAMBURG_DATA.find(d => d.name === name) || {
+    const info = this.getCityData().find(d => d.name === name) || {
       population: t('explorer.na'),
       area_km2: t('explorer.na'),
       bezirk: bezirk
@@ -2356,7 +2557,7 @@ class KiezQuizGame {
     });
 
     // Compute collective statistics for Bezirk
-    const bzStadtteile = HAMBURG_DATA.filter(d => d.bezirk === bezirkName);
+    const bzStadtteile = this.getCityData().filter(d => d.bezirk === bezirkName);
     
     let totalPop = 0;
     let totalArea = 0;
@@ -2374,6 +2575,7 @@ class KiezQuizGame {
     const templates = getTriviaTemplates(bezirkName) || [t('trivia.defaultBezirk')];
     const trivia = templates[0];
 
+    const subKey = this.activeCityId === 'berlin' ? 'explorer.subdistrictsBerlin' : 'explorer.subdistricts';
     const container = document.getElementById('game-play-area');
     container.innerHTML = `
       <div class="info-details">
@@ -2398,7 +2600,7 @@ class KiezQuizGame {
           </div>
         </div>
         <div class="detail-stat" style="margin-top:0.25rem;">
-          <div class="ds-label">${t('explorer.subdistricts', { count: bzStadtteile.length })}</div>
+          <div class="ds-label">${t(subKey, { count: bzStadtteile.length })}</div>
           <div style="font-size:0.78rem; max-height: 80px; overflow-y:auto; color: var(--text-secondary); line-height: 1.35; padding-top:0.2rem;">
             ${bzStadtteile.map(s => s.name).sort().join(', ')}
           </div>
@@ -2411,16 +2613,15 @@ class KiezQuizGame {
   }
 
   getBezirkHue(bezirk) {
-    switch (bezirk) {
-      case "Altona": return 295;
-      case "Bergedorf": return 32;
-      case "Eimsbüttel": return 175;
-      case "Hamburg-Mitte": return 345;
-      case "Hamburg-Nord": return 210;
-      case "Harburg": return 100;
-      case "Wandsbek": return 260;
-      default: return 200;
-    }
+    const hues = {
+      Altona: 295, Bergedorf: 32, 'Eimsbüttel': 175, 'Hamburg-Mitte': 345,
+      'Hamburg-Nord': 210, Harburg: 100, Wandsbek: 260,
+      Mitte: 38, 'Friedrichshain-Kreuzberg': 350, Pankow: 160,
+      'Charlottenburg-Wilmersdorf': 280, Spandau: 200, 'Steglitz-Zehlendorf': 120,
+      'Tempelhof-Schöneberg': 310, Neukölln: 45, 'Treptow-Köpenick': 85,
+      'Marzahn-Hellersdorf': 15, Lichtenberg: 330, Reinickendorf: 190
+    };
+    return hues[bezirk] ?? 200;
   }
 
   // --- CORE GAME MODES & SPORCLE ROUNDS ---
@@ -2537,10 +2738,10 @@ class KiezQuizGame {
 
     // Build question pool
     if (this.activeSegment === 'BEZIRKE') {
-      this.roundQuestions = BEZIRKE_PROGRESSION.map(b => ({ name: b.name, type: 'Bezirk' })).sort(() => Math.random() - 0.5);
+      this.roundQuestions = this.getProgression().map(b => ({ name: b.name, type: 'Bezirk' })).sort(() => Math.random() - 0.5);
     } else {
       const bezirke = Array.isArray(districtSelection) ? districtSelection : [districtSelection];
-      const pool = HAMBURG_DATA.filter(d => !d.is_island && bezirke.includes(d.bezirk));
+      const pool = this.getCityData().filter(d => !d.is_island && bezirke.includes(d.bezirk));
       this.roundQuestions = pool.sort(() => Math.random() - 0.5);
     }
 
@@ -2596,18 +2797,19 @@ class KiezQuizGame {
     const isBz = this.activeSegment === 'BEZIRKE';
     let promptData = { title: '', target: '', sub: '', highlight: false, isHtml: false };
 
+    const unit = this.getDetailUnitSuffix();
     if (this.currentMode === 'LOCATE') {
       promptData = {
-        title: isBz ? t('game.locateBezirk') : t('game.locateStadtteil'),
+        title: isBz ? t('game.locateBezirk') : t(`game.locate${unit}`),
         target: this.currentTarget.name,
-        sub: isBz ? t('game.locateClickBezirk') : t('game.locateClickStadtteil', { bezirk: this.currentTarget.bezirk }),
+        sub: isBz ? t('game.locateClickBezirk') : t(`game.locateClick${unit}`, { bezirk: this.currentTarget.bezirk }),
         highlight: true
       };
     } 
     else if (this.currentMode === 'QUIZ') {
       promptData = {
-        title: isBz ? t('game.quizBezirk') : t('game.quizStadtteil'),
-        target: isBz ? t('game.quizBlinkBezirk') : t('game.quizBlinkStadtteil'),
+        title: isBz ? t('game.quizBezirk') : t(`game.quiz${unit}`),
+        target: isBz ? t('game.quizBlinkBezirk') : t(`game.quizBlink${unit}`),
         sub: t('game.quizChoose'),
         highlight: false,
         isHtml: true
@@ -2625,8 +2827,8 @@ class KiezQuizGame {
     }
     else if (this.currentMode === 'TYPE_NAME') {
       promptData = {
-        title: isBz ? t('game.typeBezirk') : t('game.typeStadtteil'),
-        target: isBz ? t('game.quizBezirk') : t('game.quizStadtteil'),
+        title: isBz ? t('game.typeBezirk') : t(`game.type${unit}`),
+        target: isBz ? t('game.quizBezirk') : t(`game.quiz${unit}`),
         sub: t('game.typeHint'),
         highlight: false
       };
@@ -2674,11 +2876,11 @@ class KiezQuizGame {
 
     let pool = [];
     if (isBz) {
-      pool = BEZIRKE_PROGRESSION.map(b => b.name).filter(n => !answered.has(n) && n !== this.currentTarget.name);
+      pool = this.getProgression().map(b => b.name).filter(n => !answered.has(n) && n !== this.currentTarget.name);
     } else {
       pool = this.roundQuestions.map(q => q.name).filter(n => !answered.has(n) && n !== this.currentTarget.name);
       if (pool.length < 3) {
-        pool = HAMBURG_DATA.filter(d => !d.is_island && !answered.has(d.name) && d.name !== this.currentTarget.name).map(d => d.name);
+        pool = this.getCityData().filter(d => !d.is_island && !answered.has(d.name) && d.name !== this.currentTarget.name).map(d => d.name);
       }
     }
 
@@ -2707,7 +2909,9 @@ class KiezQuizGame {
     const input = document.createElement('input');
     input.type = 'text';
     input.className = 'text-input-field';
-    input.placeholder = this.activeSegment === 'BEZIRKE' ? t('game.placeholderBezirk') : t('game.placeholderStadtteil');
+    input.placeholder = this.activeSegment === 'BEZIRKE'
+      ? t('game.placeholderBezirk')
+      : t(`game.placeholder${this.getDetailUnitSuffix()}`);
     input.id = 'type-name-input';
     input.setAttribute('autocomplete', 'off');
     
@@ -2747,9 +2951,9 @@ class KiezQuizGame {
     // Build suggestion list
     let pool = [];
     if (this.activeSegment === 'BEZIRKE') {
-      pool = BEZIRKE_PROGRESSION.map(b => b.name);
+      pool = this.getProgression().map(b => b.name);
     } else {
-      pool = HAMBURG_DATA.filter(d => !d.is_island).map(d => d.name);
+      pool = this.getCityData().filter(d => !d.is_island).map(d => d.name);
     }
 
     const matches = pool.filter(name => name.toLowerCase().includes(text)).slice(0, 5);
@@ -3067,7 +3271,7 @@ class KiezQuizGame {
 
   // --- SVG LABEL OVERLAY SYSTEM ---
   addMapTextLabel(targetKey, labelText, variant = 'neutral') {
-    const labelGroup = document.getElementById('map-labels-group');
+    const labelGroup = this.ensureMapLabelsGroup();
     if (!labelGroup) return;
 
     const id = this.labelIdForKey(targetKey);
@@ -3078,7 +3282,7 @@ class KiezQuizGame {
     const path = this.getPathByNeighbourhoodName(targetKey);
     if (path) {
       centroid = this.getPathCentroid(path);
-    } else if (BEZIRKE_PROGRESSION.some(b => b.name === targetKey)) {
+    } else if (this.getProgression().some(b => b.name === targetKey)) {
       centroid = this.getBezirkCentroid(targetKey);
     } else {
       return;
@@ -3095,7 +3299,7 @@ class KiezQuizGame {
   }
 
   clearMapTextLabels() {
-    const labelGroup = document.getElementById('map-labels-group');
+    const labelGroup = this.svg?.querySelector('#map-labels-group');
     if (labelGroup) labelGroup.innerHTML = '';
   }
 
@@ -3124,7 +3328,7 @@ class KiezQuizGame {
 
       if (unlockedNext) {
         unlockCongrat = `<br><h3 style="color: var(--color-xp); margin: 0.5rem 0;">${t('game.bezirkUnlocked', { name: unlockedNext })}</h3>`;
-      } else if (fTotal > 0 && frontierPercent < 75 && this.unlockedBezirkIndex < BEZIRKE_PROGRESSION.length - 1) {
+      } else if (fTotal > 0 && frontierPercent < 75 && this.unlockedBezirkIndex < this.getProgression().length - 1) {
         unlockCongrat = `<br><span style="color: var(--color-incorrect); font-weight:700;">${t('game.bezirkNeed75', { bezirk: this.getLastUnlockedBezirk(), percent: frontierPercent })}</span>`;
       }
     }
@@ -3201,7 +3405,7 @@ class KiezQuizGame {
     this.nameAllIsActive = false;
     this.nameAllTimeLeft = ROUND_TIME_LIMIT;
     const isBz = this.activeSegment === 'BEZIRKE';
-    const pickerBezirke = isBz ? BEZIRKE_PROGRESSION.map(b => b.name) : this.getUnlockedBezirke();
+    const pickerBezirke = isBz ? this.getProgression().map(b => b.name) : this.getUnlockedBezirke();
 
     container.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:center;" id="name-all-setup">
@@ -3245,7 +3449,7 @@ class KiezQuizGame {
     `;
 
     document.getElementById('btn-start-nameall').onclick = () => {
-      const selected = isBz ? BEZIRKE_PROGRESSION.map(b => b.name) : this.getSelectedNameAllBezirke();
+      const selected = isBz ? this.getProgression().map(b => b.name) : this.getSelectedNameAllBezirke();
       if (!selected.length) {
         alert(t('game.selectBezirkAlert'));
         return;
@@ -3264,7 +3468,7 @@ class KiezQuizGame {
     if (this.activeSegment === 'BEZIRKE') {
       return bezirke.map(name => ({ name, bezirk: name }));
     }
-    return HAMBURG_DATA.filter(d => !d.is_island && bezirke.includes(d.bezirk));
+    return this.getCityData().filter(d => !d.is_island && bezirke.includes(d.bezirk));
   }
 
   startNameAllChallenge(selectedBezirke) {
@@ -3370,12 +3574,12 @@ class KiezQuizGame {
 
     let matchName = null;
     if (isBz) {
-      const bz = BEZIRKE_PROGRESSION.find(b =>
+      const bz = this.getProgression().find(b =>
         cleanStr(b.name) === cleanVal && this.nameAllActiveBezirke.includes(b.name)
       );
       if (bz) matchName = bz.name;
     } else {
-      const match = HAMBURG_DATA.find(d =>
+      const match = this.getCityData().find(d =>
         cleanStr(d.name) === cleanVal &&
         !d.is_island &&
         this.nameAllActiveBezirke.includes(d.bezirk)
@@ -3458,16 +3662,18 @@ class KiezQuizGame {
       this.sounds.playLevelUp();
       launchConfetti(this.sounds);
       if (this.activeSegment === 'STADTTEILE') {
+        const ns = this.activeCityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
         this.unlockAchievement(
           'meister_alle_stadtteile',
-          t('trophies.meister_alle_stadtteile.unlockTitle'),
-          t('trophies.meister_alle_stadtteile.unlockDesc')
+          t(`${ns}.meister_alle_stadtteile.unlockTitle`),
+          t(`${ns}.meister_alle_stadtteile.unlockDesc`)
         );
       } else {
+        const ns = this.activeCityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
         this.unlockAchievement(
           'meister_alle_bezirke',
-          t('trophies.meister_alle_bezirke.unlockTitle'),
-          t('trophies.meister_alle_bezirke.unlockDesc')
+          t(`${ns}.meister_alle_bezirke.unlockTitle`),
+          t(`${ns}.meister_alle_bezirke.unlockDesc`)
         );
       }
     }
@@ -3557,7 +3763,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       game.reRenderCurrentView();
       if (game.view === 'city') {
         game.updateMapStates();
-        game.updateNeuwerkBadge();
+        game.updateIslandBadges();
       }
     } else if (_previousAuthUser !== undefined) {
       game.resetToGuestState();
@@ -3583,7 +3789,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     game.reRenderCurrentView();
     if (game.view === 'city') {
       game.updateMapStates();
-      game.updateNeuwerkBadge();
+      game.updateIslandBadges();
     }
   }
 });

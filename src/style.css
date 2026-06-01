@@ -883,8 +883,9 @@ body.overlay-open {
   }
 }
 
-/* SVG Hamburg Map Styling */
-.hamburg-map-svg {
+/* SVG city map styling */
+.hamburg-map-svg,
+.city-map-svg {
   width: 100%;
   height: 100%;
   max-height: 70vh;
@@ -892,7 +893,8 @@ body.overlay-open {
   will-change: transform;
 }
 
-.hamburg-map-svg.smooth-transition {
+.hamburg-map-svg.smooth-transition,
+.city-map-svg.smooth-transition {
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -1025,6 +1027,33 @@ body.overlay-open {
 .stadtteil-path[data-bezirk="Harburg"].selected { fill: hsla(100, 95%, 55%, 0.45); stroke: var(--color-harburg) !important; filter: drop-shadow(0 0 8px var(--color-harburg)) !important; }
 .stadtteil-path[data-bezirk="Wandsbek"].selected { fill: hsla(260, 100%, 65%, 0.45); stroke: var(--color-wandsbek) !important; filter: drop-shadow(0 0 8px var(--color-wandsbek)) !important; }
 
+/* Berlin Bezirk colors */
+[data-city="berlin"] .stadtteil-path[data-bezirk="Mitte"].discovered { fill: hsla(38, 95%, 58%, 0.15); stroke: hsla(38, 95%, 58%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Friedrichshain-Kreuzberg"].discovered { fill: hsla(350, 90%, 58%, 0.15); stroke: hsla(350, 90%, 58%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Pankow"].discovered { fill: hsla(160, 75%, 48%, 0.15); stroke: hsla(160, 75%, 48%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Charlottenburg-Wilmersdorf"].discovered { fill: hsla(270, 85%, 62%, 0.15); stroke: hsla(270, 85%, 62%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Spandau"].discovered { fill: hsla(200, 80%, 55%, 0.15); stroke: hsla(200, 80%, 55%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Steglitz-Zehlendorf"].discovered { fill: hsla(120, 70%, 48%, 0.15); stroke: hsla(120, 70%, 48%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Tempelhof-Schöneberg"].discovered { fill: hsla(45, 95%, 55%, 0.15); stroke: hsla(45, 95%, 55%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Neukölln"].discovered { fill: hsla(25, 100%, 55%, 0.15); stroke: hsla(25, 100%, 55%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Treptow-Köpenick"].discovered { fill: hsla(185, 80%, 45%, 0.15); stroke: hsla(185, 80%, 45%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Marzahn-Hellersdorf"].discovered { fill: hsla(300, 75%, 58%, 0.15); stroke: hsla(300, 75%, 58%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Lichtenberg"].discovered { fill: hsla(220, 85%, 58%, 0.15); stroke: hsla(220, 85%, 58%, 0.4); }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Reinickendorf"].discovered { fill: hsla(75, 85%, 52%, 0.15); stroke: hsla(75, 85%, 52%, 0.4); }
+
+[data-city="berlin"] .stadtteil-path[data-bezirk="Mitte"].selected { fill: hsla(38, 95%, 58%, 0.45); stroke: hsl(38, 95%, 58%) !important; filter: drop-shadow(0 0 8px hsl(38, 95%, 58%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Friedrichshain-Kreuzberg"].selected { fill: hsla(350, 90%, 58%, 0.45); stroke: hsl(350, 90%, 58%) !important; filter: drop-shadow(0 0 8px hsl(350, 90%, 58%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Pankow"].selected { fill: hsla(160, 75%, 48%, 0.45); stroke: hsl(160, 75%, 48%) !important; filter: drop-shadow(0 0 8px hsl(160, 75%, 48%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Charlottenburg-Wilmersdorf"].selected { fill: hsla(270, 85%, 62%, 0.45); stroke: hsl(270, 85%, 62%) !important; filter: drop-shadow(0 0 8px hsl(270, 85%, 62%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Spandau"].selected { fill: hsla(200, 80%, 55%, 0.45); stroke: hsl(200, 80%, 55%) !important; filter: drop-shadow(0 0 8px hsl(200, 80%, 55%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Steglitz-Zehlendorf"].selected { fill: hsla(120, 70%, 48%, 0.45); stroke: hsl(120, 70%, 48%) !important; filter: drop-shadow(0 0 8px hsl(120, 70%, 48%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Tempelhof-Schöneberg"].selected { fill: hsla(45, 95%, 55%, 0.45); stroke: hsl(45, 95%, 55%) !important; filter: drop-shadow(0 0 8px hsl(45, 95%, 55%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Neukölln"].selected { fill: hsla(25, 100%, 55%, 0.45); stroke: hsl(25, 100%, 55%) !important; filter: drop-shadow(0 0 8px hsl(25, 100%, 55%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Treptow-Köpenick"].selected { fill: hsla(185, 80%, 45%, 0.45); stroke: hsl(185, 80%, 45%) !important; filter: drop-shadow(0 0 8px hsl(185, 80%, 45%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Marzahn-Hellersdorf"].selected { fill: hsla(300, 75%, 58%, 0.45); stroke: hsl(300, 75%, 58%) !important; filter: drop-shadow(0 0 8px hsl(300, 75%, 58%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Lichtenberg"].selected { fill: hsla(220, 85%, 58%, 0.45); stroke: hsl(220, 85%, 58%) !important; filter: drop-shadow(0 0 8px hsl(220, 85%, 58%)) !important; }
+[data-city="berlin"] .stadtteil-path[data-bezirk="Reinickendorf"].selected { fill: hsla(75, 85%, 52%, 0.45); stroke: hsl(75, 85%, 52%) !important; filter: drop-shadow(0 0 8px hsl(75, 85%, 52%)) !important; }
+
 /* Blinking animation for Card quiz */
 .stadtteil-path.blink {
   animation: mapPulse 1.5s infinite ease-in-out;
@@ -1058,7 +1087,58 @@ body.overlay-open {
   cursor: not-allowed;
 }
 
-/* Floating Neuwerk Special Overlay box */
+/* Floating island Easter Egg overlays */
+.island-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  z-index: 50;
+
+  &[hidden] {
+    display: none !important;
+  }
+
+  .no-badge {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--color-incorrect);
+    box-shadow: 0 0 6px var(--color-incorrect);
+
+    &.is-unlocked {
+      background: var(--color-correct);
+      box-shadow: 0 0 6px var(--color-correct);
+    }
+  }
+}
+
+#city-view[data-city="hamburg"] .pfaueninsel-overlay {
+  display: none !important;
+}
+
+#city-view[data-city="berlin"] .neuwerk-overlay {
+  display: none !important;
+}
+
+.pfaueninsel-overlay {
+  top: 3.75rem;
+}
+
+#city-view[data-city="berlin"] .pfaueninsel-overlay {
+  top: 1rem;
+}
+
 .neuwerk-overlay {
   position: absolute;
   top: 1rem;
@@ -1074,20 +1154,6 @@ body.overlay-open {
   cursor: pointer;
   transition: var(--transition-fast);
   z-index: 50;
-  
-  .no-badge {
-    background: var(--color-hamburg-mitte);
-    color: #fff;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    box-shadow: 0 0 6px var(--color-hamburg-mitte);
-
-    &.is-unlocked {
-      background: var(--color-correct);
-      box-shadow: 0 0 6px var(--color-correct);
-    }
-  }
   
   &:hover {
     border-color: rgba(255, 255, 255, 0.2);
@@ -1290,22 +1356,27 @@ body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(
 /* Bezirk boundary overlay — always visible, thicker than Stadtteil lines */
 .bezirk-boundaries-group {
   pointer-events: none;
+  shape-rendering: crispEdges;
 }
 
 .bezirk-boundary-line {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.22);
-  stroke-width: 1.35px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: rgba(255, 255, 255, 0.42);
+  stroke-width: 1.75px;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  vector-effect: non-scaling-stroke;
 }
 
-.bezirk-boundary-glow {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.06);
-  stroke-width: 2.8px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+/* Berlin: Bezirksgrenzen deutlich dicker als Ortsteil-Grenzen */
+#city-view[data-city="berlin"] .bezirk-boundary-line {
+  stroke: rgba(255, 255, 255, 0.62);
+  stroke-width: 2.75px;
+}
+
+#city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+  stroke-width: 0.25px;
+  stroke: rgba(255, 255, 255, 0.12);
 }
 
 /* Grayed-out Bezirke when not included in active game */
@@ -1752,7 +1823,8 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     min-height: 420px;
   }
   
-  .hamburg-map-svg {
+  .hamburg-map-svg,
+  .city-map-svg {
     max-height: 55vh;
     max-height: 55dvh;
   }

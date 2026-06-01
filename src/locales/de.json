@@ -37,6 +37,8 @@
     "locate": {
       "label": "Stadtteil-Detektiv",
       "desc": "Finde den Ort auf der Karte",
+      "labelOrtsteil": "Ortsteil-Detektiv",
+      "descOrtsteil": "Finde den Ortsteil auf der Karte",
       "labelBezirk": "Bezirks-Detektiv",
       "descBezirk": "Finde den Bezirk auf der Karte"
     },
@@ -69,6 +71,9 @@
     "neuwerkTitle": "Wo liegt eigentlich Neuwerk? Klicke hier!",
     "neuwerkTitleUnlocked": "Neuwerk-Insulaner — Trophäe freigeschaltet!",
     "neuwerkLabel": "Neuwerk (Insel-Rätsel) 🏝️",
+    "pfaueninselTitle": "Wo liegt die Pfaueninsel? Klicke hier!",
+    "pfaueninselTitleUnlocked": "Pfaueninsel-Entdecker — Trophäe freigeschaltet!",
+    "pfaueninselLabel": "Pfaueninsel (Insel-Rätsel) 🦚",
     "zoomIn": "Vergrößern",
     "zoomOut": "Verkleinern",
     "zoomReset": "🏠 Zentrieren & Reset",
@@ -158,12 +163,63 @@
     "progressHint": "Bezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Stadtrang"
   },
+  "cityRanksBerlin": {
+    "1": { "name": "Touri" },
+    "2": { "name": "Woss" },
+    "3": { "name": "Berliner Jung / Maus" },
+    "4": { "name": "Spree-Kapitän" },
+    "5": { "name": "Berlin-Experte" },
+    "6": { "name": "Urberliner" },
+    "7": { "name": "Bezirks-Babo" },
+    "8": { "name": "König von Berlin" },
+    "fallback": "Touri",
+    "maxReached": "Höchster Berlin-Rang erreicht — alle Bezirke & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Bezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Berlin-Rang"
+  },
+  "trophiesBerlin": {
+    "pfaueninsel_island": {
+      "name": "Pfaueninsel-Entdecker",
+      "unlockTitle": "Pfaueninsel-Entdecker 🦚",
+      "desc": "Klicke auf das Pfaueninsel-Rätsel oben rechts auf der Karte.",
+      "unlockDesc": "Du hast das Pfaueninsel-Rätsel gelöst."
+    },
+    "paradise_explorer": {
+      "name": "Entdecker des Paradieses!",
+      "unlockTitle": "Entdecker des Paradieses! 🌴",
+      "desc": "Tippe „Teufelsberg“ zum ersten Mal richtig – in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Teufelsberg zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "König von Berlin",
+      "unlockTitle": "König von Berlin 👑",
+      "desc": "Benenne alle Ortsteile in „Nenne alle Orte“.",
+      "unlockDesc": "Finde alle Ortsteile in der Sporcle-Challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Bezirks-Babo",
+      "unlockTitle": "Bezirks-Babo 🏛️",
+      "desc": "Benenne alle zwölf Bezirke in der Challenge.",
+      "unlockDesc": "Benenne alle zwölf Bezirke in der Challenge!"
+    }
+  },
   "trophies": {
     "neuwerk_island": {
       "name": "Neuwerk-Insulaner",
       "unlockTitle": "Neuwerk-Insulaner 🏝️",
       "desc": "Klicke auf das Neuwerk-Rätsel oben rechts auf der Karte.",
       "unlockDesc": "Du hast das Neuwerk-Rätsel gelöst."
+    },
+    "pfaueninsel_island": {
+      "name": "Pfaueninsel-Entdecker",
+      "unlockTitle": "Pfaueninsel-Entdecker 🦚",
+      "desc": "Klicke auf das Pfaueninsel-Rätsel oben rechts auf der Karte.",
+      "unlockDesc": "Du hast das Pfaueninsel-Rätsel gelöst."
+    },
+    "master_bezirk": {
+      "name": "{bezirk}-Entdecker",
+      "desc": "Meistere alle {unit} im Bezirk {bezirk}."
     },
     "paradise_explorer": {
       "name": "Entdecker des Paradieses!",
@@ -193,7 +249,9 @@
   },
   "trivia": {
     "defaultStadtteil": "Ein charmanter Hamburger Stadtteil mit ganz eigenem Flair.",
+    "defaultOrtsteil": "Ein Berliner Ortsteil mit ganz eigenem Kiez-Flair.",
     "defaultBezirk": "Ein bedeutender Bezirk Hamburgs.",
+    "defaultBezirkBerlin": "Ein bedeutender Bezirk Berlins.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
     "templates": {
       "Altona": [
@@ -230,6 +288,66 @@
         "Der einwohnerstärkste Bezirk Hamburgs mit vielen grünen Wohngebieten.",
         "Verbindet dörfliche Idylle im Alstertal mit urbanen Zentren.",
         "Benannt nach dem historischen Dichter Matthias Claudius (Wandsbecker Bote)."
+      ],
+      "Mitte": [
+        "Das politische und historische Zentrum Berlins mit Reichstag, Museumsinsel und Alexanderplatz.",
+        "Hier treffen Regierungsviertel, Kultur und Tourismus aufeinander.",
+        "Der Bezirk ist flächenmäßig klein, aber urban extrem dicht."
+      ],
+      "Friedrichshain-Kreuzberg": [
+        "Berlins jüngster Bezirk — entstanden 2001 aus der Fusion zweier Szene-Kieze.",
+        "Bekannt für RAW-Gelände, East Side Gallery und lebendiges Nachtleben.",
+        "Hoher Anteil junger Bevölkerung und kreativer Wirtschaft."
+      ],
+      "Pankow": [
+        "Der bevölkerungsreichste Berliner Bezirk mit Prenzlauer Berg und Weißensee.",
+        "Verbindet gründerzeitliche Altbauten mit villenartigen Wohnlagen im Norden.",
+        "Sitz des Berliner Senats im Bezirksamt Pankow."
+      ],
+      "Charlottenburg-Wilmersdorf": [
+        "Westberlins traditionelles Zentrum mit Ku'damm und Schloss Charlottenburg.",
+        "Heimat der Technischen Universität und des Messegeländes.",
+        "Mix aus Gründerzeit, Nachkriegsmoderne und City-West."
+      ],
+      "Spandau": [
+        "Der westlichste Bezirk mit Altstadt, Zitadelle und Havelufern.",
+        "Historisch eine eigenständige Stadt, 1920 nach Berlin eingegliedert.",
+        "Wichtiger Industrie- und Logistikstandort im Berliner Westen."
+      ],
+      "Steglitz-Zehlendorf": [
+        "Der südwestliche Grüngürtel mit Wannsee, Grunewald und Villenvierteln.",
+        "Beheimatet die Freie Universität Berlin in Dahlem.",
+        "Flächenmäßig groß, aber überwiegend Wohngebiet und Naherholung."
+      ],
+      "Tempelhof-Schöneberg": [
+        "Entstanden aus dem ehemaligen Flughafengebiet Tempelhof und dem Kiez Schöneberg.",
+        "Bekannt für das Regenbogen-Zentrum und das lebhafte Bergmannkiez.",
+        "Der stillgelegte Flughafen ist heute eine riesige Freifläche."
+      ],
+      "Neukölln": [
+        "Ein vielfältiger Bezirk mit starkem Migrationsanteil und aufstrebenden Kiezen.",
+        "Britzer Garten und Tempelhofer Feld grenzen an den Bezirk.",
+        "Von Richardstraße bis Nord-Neukölln — extrem unterschiedliche Mikrolagen."
+      ],
+      "Treptow-Köpenick": [
+        "Der flächenmäßig größte Bezirk mit Müggelsee, Köpenicker Altstadt und Grünanlagen.",
+        "Südöstlich gelegen — viel Wasser, Wald und Einfamilienhausgebiete.",
+        "Treptower Park mit sowjetischem Ehrenmal ist ein Wahrzeichen."
+      ],
+      "Marzahn-Hellersdorf": [
+        "Geprägt von Plattenbauten der DDR und großen Siedlungen wie Marzahn.",
+        "Gärten der Welt ziehen Besucher aus aller Welt an.",
+        "Im Osten Berlins mit viel Grün zwischen den Wohnblöcken."
+      ],
+      "Lichtenberg": [
+        "Ostberliner Bezirk mit Tierpark Berlin und Hohenschönhausener Gedenkstätte.",
+        "Verbindet Plattenbau- und Einzelhausgebiete.",
+        "Wichtige Verkehrsachse Richtung Berliner Ring."
+      ],
+      "Reinickendorf": [
+        "Nordwestlicher Bezirk mit Tegeler See und Luftschiffhalle.",
+        "Viele Wohngebiete aus den 1920er- und 1970er-Jahren.",
+        "Grenzt an Brandenburg und Spandau."
       ]
     },
     "specific": {
@@ -242,7 +360,24 @@
       "Rothenburgsort": "Historisch ein Arbeiterquartier, das im Zweiten Weltkrieg fast vollständig zerstört wurde und heute ein kreativer Hotspot ist.",
       "Wilhelmsburg": "Die größte Flussinsel Europas, gelegen zwischen Norder- und Süderelbe, ein multikultureller und grüner Stadtteil.",
       "Finkenwerder": "Heimat der Airbus-Werke und des traditionellen Obstanbaus (Altes Land).",
-      "Speicherstadt": "Das größte zusammenhängende Lagerhausensemble der Welt und UNESCO-Weltkulturerbe."
+      "Speicherstadt": "Das größte zusammenhängende Lagerhausensemble der Welt und UNESCO-Weltkulturerbe.",
+      "Kreuzberg": "Bekannt für das Kottbusser Tor, Görlitzer Park und multikulturelles Straßenleben.",
+      "Prenzlauer Berg": "Einstes Szeneviertel, heute beliebt für Altbauten, Cafés und der Mauerpark-Flohmarkt.",
+      "Mitte": "Regierungsviertel, Museumsinsel und Hackescher Markt — das touristische Herz Berlins.",
+      "Schöneberg": "Heimat des Rathaus Schöneberg, von dem Kennedy „Ich bin ein Berliner“ sagte.",
+      "Neukölln": "Von Reuterkiez bis Britz — einer der dynamischsten Bezirke der Hauptstadt.",
+      "Köpenick": "„Köpenick erobert Berlin“ — berühmt durch die Hauptmann-Von-Köpenick-Geschichte.",
+      "Charlottenburg": "Ku'damm, Lietzensee und Schloss Charlottenburg prägen den Westen.",
+      "Wannsee": "Beliebtes Ausflugsziel am See — und Startpunkt für die Pfaueninsel.",
+      "Teufelsberg": "Ehemalige US-Abhörstation auf einem Trümmerberg — heute Street-Art-Hotspot.",
+      "Mauerpark": "Sonntags Flohmarkt und Karaoke am ehemaligen Grenzstreifen.",
+      "Alexanderplatz": "Berlins bekanntester Platz mit Fernsehturm und Verkehrsknoten.",
+      "Friedrichshain": "RAW-Gelände, Warschauer Straße und Szene-Kneipen am Spreeufer.",
+      "Spandau": "Zitadelle Spandau und malerische Altstadt an der Havel.",
+      "Tempelhof": "Der legendäre Flughafen — heute riesiger Park für Berlinerinnen und Berliner.",
+      "Marzahn": "Gärten der Welt und typische Plattenbausiedlungen im Berliner Osten.",
+      "Lichtenberg": "Tierpark und Gedenkstätte Hohenschönhausen erinnern an DDR-Geschichte.",
+      "Reinickendorf": "Tegeler See lädt zum Baden ein — mit Blick auf die Luftschiffhalle."
     }
   },
   "onboarding": {
@@ -254,12 +389,27 @@
     "feature2Text": "Starte strukturierte Runden! Falsche Klicks bleiben dauerhaft rot markiert, richtige grün. Meistere einen Bezirk mit mindestens <strong>75%</strong>, um weiterzukommen! Oder nenne alle Orte im Countdown-Timer.",
     "feature3Title": "3. Namen eingeben (Neu!)",
     "feature3Text": "Erhöhe die Schwierigkeit! Tippe im neuen Eingabemodus die blinkenden Stadtteil-Namen direkt per Tastatur ein (mit smarter Autocomplete-Vorschlagsliste).",
+    "mapTip": "Tipp: Die Elbe fließt als breiter hellblauer Strom durch Hamburg und hilft dir perfekt bei der Orientierung auf der Karte!",
     "elbeTip": "Tipp: Die Elbe fließt als breiter hellblauer Strom durch Hamburg und hilft dir perfekt bei der Orientierung auf der Karte!",
     "dismiss": "Leinen los!"
   },
+  "onboardingBerlin": {
+    "title": "Willkommen in Berlin! 🐻",
+    "intro": "Lerne spielerisch alle 12 Bezirke und 97 Ortsteile Berlins kennen. Du startest im Bezirk <strong>Mitte</strong> und arbeitest dich Schritt für Schritt durch die Stadt.",
+    "feature1Title": "1. Bezirke & Ortsteile",
+    "feature1Text": "Lerne alle 97 Ortsteile im Detail oder schalte oben auf \"Bezirke\" um, um zuerst die 12 Berliner Bezirke zu meistern.",
+    "feature2Title": "2. Sporcle-Durchläufe & Challenges",
+    "feature2Text": "Strukturierte Runden mit dauerhaft grünen/roten Markierungen. Meistere einen Bezirk mit mindestens <strong>75%</strong>, um den nächsten freizuschalten!",
+    "feature3Title": "3. Namen eingeben",
+    "feature3Text": "Tippe Ortsteil-Namen direkt per Tastatur ein — mit smarter Autocomplete-Vorschlagsliste.",
+    "mapTip": "Tipp: Die Spree und große Grünflächen wie der Tiergarten helfen dir bei der Orientierung auf der Berlin-Karte!",
+    "dismiss": "Los geht's!"
+  },
   "explorer": {
     "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
+    "emptyBezirkBerlin": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
+    "emptyOrtsteil": "Klicke auf einen Ortsteil der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "residents": "Einwohner",
     "area": "Fläche",
     "density": "Bevölkerungsdichte",
@@ -270,7 +420,8 @@
     "totalResidents": "Gesamt-Einwohner",
     "totalArea": "Gesamt-Fläche",
     "avgDensity": "Durchschnittliche Dichte",
-    "subdistricts": "Stadtteile ({count})"
+    "subdistricts": "Stadtteile ({count})",
+    "subdistrictsBerlin": "Ortsteile ({count})"
   },
   "game": {
     "roundStartTitle": "Durchlauf starten",
@@ -291,18 +442,24 @@
     "confirmReset": "Wirklich alles zurücksetzen? XP, Streak, Fortschritt und Achievements werden gelöscht. Das kann nicht rückgängig gemacht werden.",
     "locateBezirk": "Finde den Bezirk",
     "locateStadtteil": "Finde den Stadtteil",
+    "locateOrtsteil": "Finde den Ortsteil",
     "locateClickBezirk": "Klicke ihn auf der Karte an!",
     "locateClickStadtteil": "Liegt im Bezirk {bezirk}. Klicke ihn an!",
+    "locateClickOrtsteil": "Liegt im Bezirk {bezirk}. Klicke ihn an!",
     "quizBezirk": "Welcher Bezirk blinkt?",
     "quizStadtteil": "Welcher Stadtteil blinkt?",
+    "quizOrtsteil": "Welcher Ortsteil blinkt?",
     "quizBlinkBezirk": "❔ Blinkender Bezirk ❔",
     "quizBlinkStadtteil": "❔ Blinkender Stadtteil ❔",
+    "quizBlinkOrtsteil": "❔ Blinkender Ortsteil ❔",
     "quizChoose": "Wähle die passende Antwort aus den Optionen!",
     "typeBezirk": "Bezirk benennen",
     "typeStadtteil": "Stadtteil benennen",
+    "typeOrtsteil": "Ortsteil benennen",
     "typeHint": "Tippe den Namen ein — bei richtiger Eingabe zählt er sofort.",
     "placeholderBezirk": "Bezirksname eingeben...",
     "placeholderStadtteil": "Stadtteilname eingeben...",
+    "placeholderOrtsteil": "Ortsteilname eingeben...",
     "correctXp": "Richtig! +{xp} XP",
     "wrongAnswer": "Falsch! Richtig wäre: {answer}",
     "locateCorrect": "Korrekt gefunden! +{xp} XP",
@@ -422,7 +579,7 @@
     },
     "berlin": {
       "greeting": "Hallo Berlin!",
-      "blurb": "12 Bezirke · 96 Ortsteile",
+      "blurb": "12 Bezirke · 97 Ortsteile",
       "levels": {
         "bezirke": "Bezirke",
         "ortsteile": "Ortsteile"

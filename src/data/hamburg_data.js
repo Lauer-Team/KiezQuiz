@@ -625,3 +625,4 @@ const HAMBURG_DATA = [
     "is_island": true
   }
 ];
+window.HAMBURG_DATA = HAMBURG_DATA;

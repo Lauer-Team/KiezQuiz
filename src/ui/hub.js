@@ -27,18 +27,43 @@
       </div>`;
   }
 
+  function getBranchState(game, cityId) {
+    if (cityId === game.activeCityId && game.view === 'city') {
+      return {
+        unlockedBezirkIndex: game.unlockedBezirkIndex,
+        bezirkProgress: game.bezirkProgress,
+        trophies: game.trophies
+      };
+    }
+    const branch = game._save?.cities?.[cityId];
+    const progression = window.cityRegistry.getBezirkeProgression(cityId);
+    const bezirkProgress = {};
+    progression.forEach((bz) => {
+      bezirkProgress[bz.name] = {
+        solved: new Set(branch?.regionProgress?.[bz.name] || [])
+      };
+    });
+    return {
+      unlockedBezirkIndex: parseInt(branch?.unlockedRegionIndex, 10) || 0,
+      bezirkProgress,
+      trophies: new Set(branch?.trophies || [])
+    };
+  }
+
   function computeCityStats(game, city) {
-    if (city.id !== 'hamburg' || city.status !== 'playable') {
+    if (city.status !== 'playable') {
       return { completion: 0, trophies: { won: 0, total: city.totalTrophies || 0 }, levels: {} };
     }
-    const progression = window.cityRegistry.getBezirkeProgression('hamburg');
+    const progression = window.cityRegistry.getBezirkeProgression(city.id);
+    const cityData = window[city.dataGlobal] || [];
+    const state = getBranchState(game, city.id);
     let mastered = 0;
     let total = 0;
     const levels = {};
 
     city.levels.forEach((lv) => {
-      if (lv.key === 'bezirke') {
-        const unlocked = game.unlockedBezirkIndex + 1;
+      if (lv.key === 'bezirke' || window.cityRegistry.levelKeyToSegment(lv.key) === 'BEZIRKE') {
+        const unlocked = state.unlockedBezirkIndex + 1;
         const pct = Math.round((unlocked / lv.count) * 100);
         levels[lv.key] = pct;
         mastered += unlocked;
@@ -46,7 +71,7 @@
       } else {
         let solved = 0;
         progression.forEach((bz) => {
-          solved += game.bezirkProgress[bz.name]?.solved?.size || 0;
+          solved += state.bezirkProgress[bz.name]?.solved?.size || 0;
         });
         const pct = lv.count > 0 ? Math.round((solved / lv.count) * 100) : 0;
         levels[lv.key] = pct;
@@ -55,10 +80,12 @@
       }
     });
 
-    const trophyTotal = typeof getTrophyCatalog === 'function' ? getTrophyCatalog().length : 11;
+    const trophyTotal = typeof getTrophyCatalog === 'function'
+      ? getTrophyCatalog(city.id).length
+      : (city.totalTrophies || 0);
     return {
       completion: total ? Math.round((mastered / total) * 100) : 0,
-      trophies: { won: game.trophies.size, total: trophyTotal },
+      trophies: { won: state.trophies.size, total: trophyTotal },
       levels
     };
   }
@@ -94,7 +121,7 @@
   function renderCityTile(city, stats, onEnter) {
     const loc = window.cityRegistry.localizeCity(city);
     const isComingSoon = city.status === 'coming_soon';
-    const isFresh = city.id !== 'hamburg' || stats.completion === 0;
+    const isFresh = stats.completion === 0;
     const cta = isComingSoon ? t('hub.comingSoon') : (isFresh ? t('hub.startCity') : t('hub.continueCity'));
     const badge = isComingSoon ? `<span class="badge coming-soon-badge">${t('hub.comingSoonBadge')}</span>` : '';
 
