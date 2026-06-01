@@ -1229,9 +1229,17 @@ class KiezQuizGame {
       circle.setAttribute('cy', String(cy));
       circle.setAttribute('r', String(radius));
       group.appendChild(circle);
+      this.bindMapPath(circle);
 
       entry.paths.forEach((p) => p.classList.add('micro-state-visible'));
     });
+  }
+
+  _resolveMapPath(path) {
+    if (!path?.classList.contains('micro-hit-target')) return path;
+    const bezirk = path.getAttribute('data-bezirk');
+    const real = document.querySelector(`.stadtteil-path[data-bezirk="${bezirk}"]:not(.micro-hit-target)`);
+    return real || path;
   }
 
   activateEuropeMicrostate(bezirk) {
@@ -2154,74 +2162,72 @@ class KiezQuizGame {
 
   // Initialize Map paths and binding event listeners
   initMapPaths() {
-    const paths = document.querySelectorAll('.stadtteil-path');
-    
-    paths.forEach(path => {
-      // Hover Tooltip binding
-      path.addEventListener('mousemove', (e) => {
-        this.showMapTooltipForPath(path, e.clientX, e.clientY);
-      });
+    document.querySelectorAll('.stadtteil-path').forEach((path) => this.bindMapPath(path));
+  }
 
-      path.addEventListener('mouseleave', () => {
-        this.tooltip.style.display = 'none';
-      });
+  bindMapPath(path) {
+    path.addEventListener('mousemove', (e) => {
+      this.showMapTooltipForPath(path, e.clientX, e.clientY);
+    });
 
-      path.addEventListener('touchstart', (e) => {
-        if (e.touches.length !== 1) return;
-        this.showMapTooltipForPath(path, e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
+    path.addEventListener('mouseleave', () => {
+      this.tooltip.style.display = 'none';
+    });
 
-      // Collective hover highlight for BEZIRKE segment
-      path.addEventListener('mouseenter', () => {
-        if (this.activeSegment === 'BEZIRKE' && !path.classList.contains('locked-path')) {
-          const bz = path.getAttribute('data-bezirk');
-          document.querySelectorAll(`.stadtteil-path[data-bezirk="${bz}"]`).forEach(p => {
-            p.classList.add('bezirk-hover-highlight');
-          });
-        }
-      });
-      
-      path.addEventListener('mouseleave', () => {
+    path.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      this.showMapTooltipForPath(path, e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    path.addEventListener('mouseenter', () => {
+      if (this.activeSegment === 'BEZIRKE' && !path.classList.contains('locked-path')) {
+        const bz = path.getAttribute('data-bezirk');
+        document.querySelectorAll(`.stadtteil-path[data-bezirk="${bz}"]`).forEach((p) => {
+          p.classList.add('bezirk-hover-highlight');
+        });
+      }
+    });
+
+    path.addEventListener('mouseleave', () => {
+      if (this.activeSegment === 'BEZIRKE') {
+        const bz = path.getAttribute('data-bezirk');
+        document.querySelectorAll(`.stadtteil-path[data-bezirk="${bz}"]`).forEach((p) => {
+          p.classList.remove('bezirk-hover-highlight');
+        });
+      }
+    });
+
+    path.addEventListener('mousedown', () => {
+      if (this.mapNav) this.mapNav.didDrag = false;
+    });
+
+    path.addEventListener('click', () => {
+      if (this.mapNav && this.mapNav.didDrag) return;
+      const name = path.getAttribute('data-name');
+      const bezirk = path.getAttribute('data-bezirk');
+      const mapPath = this._resolveMapPath(path);
+
+      if (path.classList.contains('locked-path') && !this.nameAllIsActive) {
+        this.sounds.init();
+        this.sounds.playIncorrect();
+        return;
+      }
+
+      if (this.currentMode === 'EXPLORER') {
         if (this.activeSegment === 'BEZIRKE') {
-          const bz = path.getAttribute('data-bezirk');
-          document.querySelectorAll(`.stadtteil-path[data-bezirk="${bz}"]`).forEach(p => {
-            p.classList.remove('bezirk-hover-highlight');
-          });
+          this.selectBezirk(bezirk);
+        } else {
+          this.selectNeighbourhood(mapPath, name, bezirk);
         }
-      });
-
-      path.addEventListener('mousedown', () => {
-        if (this.mapNav) this.mapNav.didDrag = false;
-      });
-
-      // Selection / Click logic
-      path.addEventListener('click', (e) => {
-        if (this.mapNav && this.mapNav.didDrag) return;
-        const name = path.getAttribute('data-name');
-        const bezirk = path.getAttribute('data-bezirk');
-        
-        if (path.classList.contains('locked-path') && !this.nameAllIsActive) {
-          this.sounds.init();
-          this.sounds.playIncorrect();
-          return;
+      } else if (this.inRound && this.currentMode === 'LOCATE') {
+        if (this.activeSegment === 'BEZIRKE') {
+          this.handleBezirkLocateClick(bezirk);
+        } else {
+          this.handleLocateClick(mapPath, name, bezirk);
         }
-        
-        if (this.currentMode === 'EXPLORER') {
-          if (this.activeSegment === 'BEZIRKE') {
-            this.selectBezirk(bezirk);
-          } else {
-            this.selectNeighbourhood(path, name, bezirk);
-          }
-        } else if (this.inRound && this.currentMode === 'LOCATE') {
-          if (this.activeSegment === 'BEZIRKE') {
-            this.handleBezirkLocateClick(bezirk);
-          } else {
-            this.handleLocateClick(path, name, bezirk);
-          }
-        } else if (this.inRound && this.currentMode === 'QUIZ') {
-          this.handleRoundAnswer(name, null);
-        }
-      });
+      } else if (this.inRound && this.currentMode === 'QUIZ') {
+        this.handleRoundAnswer(name, null);
+      }
     });
   }
 
