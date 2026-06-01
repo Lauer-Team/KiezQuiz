@@ -2,6 +2,19 @@
 
 All notable changes to KiezQuiz. The in-app “Was ist neu?” view shows the same history (newest first).
 
+## [1.3.0] — 2026-06-01
+
+### Added
+- Quick-pick bar for small European countries (Luxembourg, Malta, Andorra, Monaco, San Marino, Liechtenstein, Vatican City)
+- Enlarged tap circles on the Europe map for hard-to-reach countries
+- Auto-zoom to microstates in Locate and Quiz modes
+
+### Changed
+- Sharp focus zoom via SVG viewBox instead of blurry CSS scaling
+
+### Fixed
+- Tap circles on small countries now respond to clicks in all game modes
+
 ## [1.2.0] — 2026-06-01
 
 ### Added

@@ -278,6 +278,30 @@
           'Available in the footer and settings — always there when you need it'
         ]
       }
+    },
+    {
+      date: '2026-06-01',
+      version: '1.3.0',
+      de: {
+        title: 'Europa: Kleine Länder',
+        items: [
+          'Schnellzugriff-Leiste „Kleine Länder“ für Luxemburg, Malta, Andorra, Monaco, San Marino, Liechtenstein und Vatikanstadt',
+          'Vergrößerte Antipp-Kreise auf der Karte für schwer erreichbare Länder',
+          'Auto-Zoom auf Kleinstaaten in Detektiv- und Quiz-Modus',
+          'Scharfer Fokus-Zoom per viewBox statt unscharfer CSS-Skalierung',
+          'Klick auf die Antipp-Kreise funktioniert jetzt in allen Spielmodi'
+        ]
+      },
+      en: {
+        title: 'Europe: small countries',
+        items: [
+          'Quick-pick bar for Luxembourg, Malta, Andorra, Monaco, San Marino, Liechtenstein, and Vatican City',
+          'Enlarged tap circles on the map for hard-to-reach countries',
+          'Auto-zoom to microstates in Locate and Quiz modes',
+          'Sharp focus zoom via viewBox instead of blurry CSS scaling',
+          'Tap circles now respond to clicks in all game modes'
+        ]
+      }
     }
   ];
 
