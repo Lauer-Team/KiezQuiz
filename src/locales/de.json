@@ -110,7 +110,13 @@
   },
   "footer": {
     "privacy": "Datenschutz:",
-    "privacyText": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte."
+    "privacyText": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.",
+    "changelog": "Was ist neu?"
+  },
+  "changelog": {
+    "title": "📋 Was ist neu?",
+    "intro": "Alle Updates und Fixes seit dem Start — neueste zuerst.",
+    "close": "Schließen"
   },
   "settings": {
     "title": "⚙️ Einstellungen",
@@ -133,7 +139,10 @@
     "wishAdminBtn": "Admin-Bereich öffnen",
     "profileTitle": "👤 Profil",
     "profileBody": "Erfolge, Freunde und Bestenliste für deinen Account.",
-    "profileBtn": "Profil öffnen"
+    "profileBtn": "Profil öffnen",
+    "changelogTitle": "📋 Was ist neu?",
+    "changelogBody": "Alle Updates, neuen Städte und Bugfixes seit dem Start.",
+    "changelogBtn": "Changelog anzeigen"
   },
   "adminPage": {
     "title": "Admin",
@@ -738,18 +747,18 @@
     }
   },
   "appNews": {
-    "title": "",
-    "intro": "",
-    "feature1Icon": "✨",
-    "feature1Title": "",
-    "feature1Text": "",
-    "feature2Icon": "✨",
-    "feature2Title": "",
-    "feature2Text": "",
-    "feature3Icon": "✨",
-    "feature3Title": "",
-    "feature3Text": "",
-    "footerTip": "",
+    "title": "🌍 Mehr Kiez, mehr Welt!",
+    "intro": "Seit deinem letzten Besuch ist einiges passiert — und wir haben uns offiziell <strong>KiezQuiz.de</strong> genannt. Vier Karten, ein Account, null Langeweile.",
+    "feature1Icon": "🗺️",
+    "feature1Title": "Vier Spielwelten: ",
+    "feature1Text": "Hamburg, Berlin, Frankfurt — und brandneu die <strong>Europa-Karte</strong> mit 44 Ländern und Hauptstädten.",
+    "feature2Icon": "👥",
+    "feature2Title": "Profil, Freunde & Ranglisten: ",
+    "feature2Text": "Freunde finden, vergleichen, dominieren. Pokale, Bestzeiten und wer wirklich regiert — alles an einem Ort.",
+    "feature3Icon": "🌐",
+    "feature3Title": "KiezQuiz.de & Englisch: ",
+    "feature3Text": "Neue offizielle Heimatadresse — bookmarken statt suchen. Bonus: Die App spricht jetzt auch <strong>Englisch</strong>.",
+    "footerTip": "Alle Details findest du jederzeit unter „Was ist neu?“ im Footer. Deine Stadt fehlt noch? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
     "dismiss": "Verstanden"
   },
   "explorer": {

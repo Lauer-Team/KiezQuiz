@@ -18,7 +18,7 @@ const RANK_THRESHOLDS = [
 ];
 
 /** Bump when publishing release notes; set matching copy in locales `appNews` (de + en). */
-const APP_NEWS_VERSION = 0;
+const APP_NEWS_VERSION = 1;
 
 const CITY_RANK_THRESHOLDS = [
   { level: 1, minDistricts: 0, minTrophies: 0 },
