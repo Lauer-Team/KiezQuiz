@@ -25,6 +25,53 @@
     { name: 'Lichtenberg', xpNeeded: 2250 }
   ];
 
+  const EUROPE_COUNTRIES_PROGRESSION = [
+    { name: 'Deutschland', xpNeeded: 0 },
+    { name: 'Österreich', xpNeeded: 50 },
+    { name: 'Schweiz', xpNeeded: 100 },
+    { name: 'Frankreich', xpNeeded: 150 },
+    { name: 'Belgien', xpNeeded: 200 },
+    { name: 'Niederlande', xpNeeded: 250 },
+    { name: 'Luxemburg', xpNeeded: 300 },
+    { name: 'Italien', xpNeeded: 350 },
+    { name: 'Spanien', xpNeeded: 400 },
+    { name: 'Portugal', xpNeeded: 450 },
+    { name: 'Vereinigtes Königreich', xpNeeded: 500 },
+    { name: 'Irland', xpNeeded: 550 },
+    { name: 'Dänemark', xpNeeded: 600 },
+    { name: 'Schweden', xpNeeded: 650 },
+    { name: 'Norwegen', xpNeeded: 700 },
+    { name: 'Finnland', xpNeeded: 750 },
+    { name: 'Island', xpNeeded: 800 },
+    { name: 'Polen', xpNeeded: 850 },
+    { name: 'Tschechien', xpNeeded: 900 },
+    { name: 'Slowakei', xpNeeded: 950 },
+    { name: 'Ungarn', xpNeeded: 1000 },
+    { name: 'Rumänien', xpNeeded: 1050 },
+    { name: 'Bulgarien', xpNeeded: 1100 },
+    { name: 'Griechenland', xpNeeded: 1150 },
+    { name: 'Kroatien', xpNeeded: 1200 },
+    { name: 'Slowenien', xpNeeded: 1250 },
+    { name: 'Serbien', xpNeeded: 1300 },
+    { name: 'Bosnien und Herzegowina', xpNeeded: 1350 },
+    { name: 'Montenegro', xpNeeded: 1400 },
+    { name: 'Albanien', xpNeeded: 1450 },
+    { name: 'Nordmazedonien', xpNeeded: 1500 },
+    { name: 'Ukraine', xpNeeded: 1550 },
+    { name: 'Belarus', xpNeeded: 1600 },
+    { name: 'Moldawien', xpNeeded: 1650 },
+    { name: 'Litauen', xpNeeded: 1700 },
+    { name: 'Lettland', xpNeeded: 1750 },
+    { name: 'Estland', xpNeeded: 1800 },
+    { name: 'Zypern', xpNeeded: 1850 },
+    { name: 'Malta', xpNeeded: 1900 },
+    { name: 'Andorra', xpNeeded: 1950 },
+    { name: 'Monaco', xpNeeded: 2000 },
+    { name: 'San Marino', xpNeeded: 2050 },
+    { name: 'Liechtenstein', xpNeeded: 2100 },
+    { name: 'Vatikanstadt', xpNeeded: 2150 }
+  ];
+
   const FRANKFURT_BEZIRKE_PROGRESSION = [
     { name: 'Innenstadt I', xpNeeded: 0 },
     { name: 'Innenstadt II', xpNeeded: 50 },
@@ -101,6 +148,25 @@
       trophyCatalog: 'frankfurt',
       totalTrophies: 19,
       paradiseTarget: 'Westend-Süd'
+    },
+    {
+      id: 'europe',
+      name: 'Europa',
+      greetingKey: 'cities.europe.greeting',
+      blurbKey: 'cities.europe.blurb',
+      hue: 145,
+      status: 'playable',
+      levels: [
+        { key: 'countries', labelKey: 'cities.europe.levels.countries', singularKey: 'cities.europe.singular.country', tierKey: 'cities.tier.overview', count: 44 },
+        { key: 'capitals', labelKey: 'cities.europe.levels.capitals', singularKey: 'cities.europe.singular.capital', tierKey: 'cities.tier.detail', count: 44 }
+      ],
+      dataGlobal: 'EUROPE_DATA',
+      mapSvg: 'src/data/europe_map.svg',
+      progression: EUROPE_COUNTRIES_PROGRESSION,
+      trophyCatalog: 'europe',
+      totalTrophies: 57,
+      paradiseTarget: 'Prag',
+      islandEasterEgg: 'europe'
     }
   ];
 
@@ -109,6 +175,7 @@
     BEZIRKE_PROGRESSION: HAMBURG_BEZIRKE_PROGRESSION,
     HAMBURG_BEZIRKE_PROGRESSION,
     BERLIN_BEZIRKE_PROGRESSION,
-    FRANKFURT_BEZIRKE_PROGRESSION
+    FRANKFURT_BEZIRKE_PROGRESSION,
+    EUROPE_COUNTRIES_PROGRESSION
   };
 })();

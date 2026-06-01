@@ -143,9 +143,14 @@ class KiezQuizGame {
       const city = window.cityRegistry.getCity(this.activeCityId);
       const nw = document.getElementById('neuwerk-anchor');
       const pf = document.getElementById('pfaueninsel-anchor');
+      const europeStack = document.getElementById('europe-islands-stack');
       const islandEgg = city?.islandEasterEgg;
       if (nw) nw.hidden = islandEgg !== 'neuwerk';
       if (pf) pf.hidden = islandEgg !== 'pfaueninsel';
+      if (europeStack) {
+        europeStack.hidden = islandEgg !== 'europe';
+        if (islandEgg === 'europe') this.renderEuropeIslandEggs(europeStack);
+      }
 
       if (!wrapper || !city) {
         this.svg = document.querySelector('.city-map-svg, .hamburg-map-svg');
@@ -740,6 +745,10 @@ class KiezQuizGame {
     if (this.activeSegment === 'BEZIRKE') {
       return this.getProgression().map(b => b.name);
     }
+    // Europe capitals: all countries available without Bezirk progression
+    if (this.activeCityId === 'europe' && this.activeSegment === 'STADTTEILE') {
+      return this.getProgression().map(b => b.name);
+    }
     return this.getProgression()
       .slice(0, this.unlockedBezirkIndex + 1)
       .map(b => b.name);
@@ -785,6 +794,8 @@ class KiezQuizGame {
     if (this.activeSegment === 'BEZIRKE') {
       return !BEZIRKE_SEGMENT_HIDDEN_MODES.includes(mode);
     }
+    const cfg = getCityConfig(this.activeCityId);
+    if (cfg.hideLocateInCapitals && mode === 'LOCATE') return false;
     return true;
   }
 
@@ -795,11 +806,8 @@ class KiezQuizGame {
   updateModeVisibility() {
     document.querySelectorAll('.mode-btn').forEach(btn => {
       const mode = btn.dataset.mode;
-      if (this.activeSegment === 'BEZIRKE' && BEZIRKE_SEGMENT_HIDDEN_MODES.includes(mode)) {
-        btn.style.display = 'none';
-      } else {
-        btn.style.display = '';
-      }
+      const hidden = !this.isModeAllowedForSegment(mode);
+      btn.style.display = hidden ? 'none' : '';
     });
   }
 
@@ -820,7 +828,8 @@ class KiezQuizGame {
       } else {
         btnSt.classList.add('active');
         btnBz.classList.remove('active');
-        if (lockCard) lockCard.style.display = 'block';
+        const hideUnlock = this.activeCityId === 'europe';
+        if (lockCard) lockCard.style.display = hideUnlock ? 'none' : 'block';
       }
     }
     this.updateModeVisibility();
@@ -839,18 +848,26 @@ class KiezQuizGame {
     const spans = labelRow.querySelectorAll('span');
     if (spans[0]) {
       if (this.activeSegment === 'BEZIRKE') {
-        spans[0].textContent = t('modes.locate.labelBezirk');
+        spans[0].textContent = this.isEuropeCountriesMode()
+          ? t('modes.locate.labelCountry')
+          : t('modes.locate.labelBezirk');
       } else if (getCityConfig(this.activeCityId).detailUnit === 'Ortsteil') {
         spans[0].textContent = t('modes.locate.labelOrtsteil');
+      } else if (getCityConfig(this.activeCityId).detailUnit === 'Capital') {
+        spans[0].textContent = t('modes.locate.labelCapital');
       } else {
         spans[0].textContent = t('modes.locate.label');
       }
     }
     if (spans[1]) {
       if (this.activeSegment === 'BEZIRKE') {
-        spans[1].textContent = t('modes.locate.descBezirk');
+        spans[1].textContent = this.isEuropeCountriesMode()
+          ? t('modes.locate.descCountry')
+          : t('modes.locate.descBezirk');
       } else if (getCityConfig(this.activeCityId).detailUnit === 'Ortsteil') {
         spans[1].textContent = t('modes.locate.descOrtsteil');
+      } else if (getCityConfig(this.activeCityId).detailUnit === 'Capital') {
+        spans[1].textContent = t('modes.locate.descCapital');
       } else {
         spans[1].textContent = t('modes.locate.desc');
       }
@@ -877,6 +894,13 @@ class KiezQuizGame {
       if (spans[0]) spans[0].textContent = t(keys[0]);
       if (spans[1]) spans[1].textContent = t(keys[1]);
     });
+    if (this.isEuropeCapitalsMode()) {
+      const quizBtn = document.getElementById('mode-quiz');
+      const col = quizBtn?.querySelector(':scope > div');
+      const spans = col?.querySelectorAll(':scope > span');
+      if (spans?.[0]) spans[0].textContent = t('modes.quiz.labelCapital');
+      if (spans?.[1]) spans[1].textContent = t('modes.quiz.descCapital');
+    }
     this.updateLocateModeLabel();
   }
 
@@ -1034,8 +1058,10 @@ class KiezQuizGame {
     const islandEgg = city?.islandEasterEgg;
     const nwAnchor = document.getElementById('neuwerk-anchor');
     const pfAnchor = document.getElementById('pfaueninsel-anchor');
+    const europeStack = document.getElementById('europe-islands-stack');
     if (nwAnchor) nwAnchor.hidden = islandEgg !== 'neuwerk';
     if (pfAnchor) pfAnchor.hidden = islandEgg !== 'pfaueninsel';
+    if (europeStack) europeStack.hidden = islandEgg !== 'europe';
     const nwBadge = nwAnchor?.querySelector('.no-badge');
     if (nwAnchor && nwBadge) {
       const unlocked = this.trophies.has('neuwerk_island');
@@ -1048,6 +1074,91 @@ class KiezQuizGame {
       pfBadge.classList.toggle('is-unlocked', unlocked);
       pfAnchor.title = unlocked ? t('map.pfaueninselTitleUnlocked') : t('map.pfaueninselTitle');
     }
+    if (europeStack && islandEgg === 'europe') {
+      europeStack.querySelectorAll('.island-overlay[data-island-id]').forEach((anchor) => {
+        const id = anchor.dataset.islandId;
+        const badge = anchor.querySelector('.no-badge');
+        const unlocked = this.trophies.has(id);
+        if (badge) badge.classList.toggle('is-unlocked', unlocked);
+        anchor.title = unlocked
+          ? t(`map.europeIslandTitleUnlocked.${id}`)
+          : t(`map.europeIslandTitle.${id}`);
+      });
+    }
+  }
+
+  renderEuropeIslandEggs(container) {
+    if (!container || container.dataset.rendered === 'true') return;
+    const eggs = typeof EUROPE_ISLAND_EGGS !== 'undefined' ? EUROPE_ISLAND_EGGS : [];
+    const icons = {
+      canary_islands: '🌋',
+      azores_madeira: '🌊',
+      caribbean_nl: '🦜',
+      french_overseas: '🗼',
+      svalbard: '🐻‍❄️'
+    };
+    container.innerHTML = eggs.map((egg) => `
+      <div class="island-overlay europe-island-overlay" data-island-id="${egg.id}" title="${t(`map.europeIslandTitle.${egg.id}`)}">
+        <div class="no-badge"></div>
+        <span>${egg.name} ${icons[egg.id] || '🏝️'}</span>
+      </div>
+    `).join('');
+    container.dataset.rendered = 'true';
+    eggs.forEach((egg) => {
+      const anchor = container.querySelector(`[data-island-id="${egg.id}"]`);
+      if (!anchor || anchor.dataset.bound === 'true') return;
+      anchor.dataset.bound = 'true';
+      anchor.addEventListener('click', () => {
+        this.playSelectionSound();
+        this.selectEuropeIsland(egg);
+        const ns = getCityConfig('europe').trophyNs;
+        this.unlockTrophy(
+          egg.id,
+          t(`${ns}.${egg.id}.unlockTitle`),
+          t(`${ns}.${egg.id}.unlockDesc`)
+        );
+      });
+    });
+    this.updateIslandBadges();
+  }
+
+  selectEuropeIsland(island) {
+    this.resetMapClasses();
+    let density = t('explorer.na');
+    const popInt = parseInt(String(island.population).replace(/\./g, '').replace(/,/g, ''));
+    const areaFloat = parseFloat(String(island.area_km2).replace(/,/g, '.'));
+    if (!isNaN(popInt) && !isNaN(areaFloat) && areaFloat > 0) {
+      density = `${formatNumber(Math.round(popInt / areaFloat))} ${t('explorer.densityUnit')}`;
+    }
+
+    const container = document.getElementById('game-play-area');
+    container.innerHTML = `
+      <div class="info-details">
+        <div class="detail-header">
+          <h2>${island.name}</h2>
+          <span class="bezirk-tag" style="background: hsla(${this.getBezirkHue(island.country)}, 100%, 65%, 0.15); color: hsla(${this.getBezirkHue(island.country)}, 100%, 65%, 1); border: 1px solid hsla(${this.getBezirkHue(island.country)}, 100%, 65%, 0.3)">
+            ${island.country}
+          </span>
+        </div>
+        <div class="detail-stats-grid">
+          <div class="detail-stat">
+            <div class="ds-label">${t('explorer.residents')}</div>
+            <div class="ds-value">${island.population}</div>
+          </div>
+          <div class="detail-stat">
+            <div class="ds-label">${t('explorer.area')}</div>
+            <div class="ds-value">${island.area_km2} km²</div>
+          </div>
+          <div class="detail-stat" style="grid-column: span 2;">
+            <div class="ds-label">${t('explorer.density')}</div>
+            <div class="ds-value">${density}</div>
+          </div>
+        </div>
+        <div class="detail-trivia">
+          ${island.trivia}
+        </div>
+      </div>
+    `;
   }
 
   playSelectionSound() {
@@ -1099,6 +1210,99 @@ class KiezQuizGame {
         t(`${ns}.paradise_explorer.unlockDesc`)
       );
     }
+  }
+
+  isEuropeCapitalsMode() {
+    return this.activeCityId === 'europe' && this.activeSegment === 'STADTTEILE';
+  }
+
+  isEuropeCountriesMode() {
+    return this.activeCityId === 'europe' && this.activeSegment === 'BEZIRKE';
+  }
+
+  blinkRoundTarget() {
+    if (!this.currentTarget) return;
+    const isBz = this.activeSegment === 'BEZIRKE';
+    if (isBz) {
+      document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.add('blink'));
+    } else if (this.isEuropeCapitalsMode()) {
+      document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.bezirk}"]`).forEach(p => p.classList.add('blink'));
+    } else {
+      const targetPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
+      if (targetPath) targetPath.classList.add('blink');
+    }
+  }
+
+  unblinkRoundTarget() {
+    if (!this.currentTarget) return;
+    const isBz = this.activeSegment === 'BEZIRKE';
+    if (isBz) {
+      document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.remove('blink'));
+    } else if (this.isEuropeCapitalsMode()) {
+      document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.bezirk}"]`).forEach(p => p.classList.remove('blink'));
+    } else {
+      const targetPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
+      if (targetPath) targetPath.classList.remove('blink', 'selected');
+    }
+  }
+
+  checkEuropeGroupTrophies(correctNames, poolNames) {
+    if (this.activeCityId !== 'europe' || !poolNames?.length) return;
+    const ns = getCityConfig('europe').trophyNs;
+    const data = this.getCityData();
+    const isCountries = this.activeSegment === 'BEZIRKE';
+
+    const toCountry = (name) => {
+      if (isCountries) return name;
+      return data.find(d => d.name === name)?.bezirk || null;
+    };
+
+    const poolCountries = new Set(poolNames.map(toCountry).filter(Boolean));
+    const correctCountries = new Set(correctNames.map(toCountry).filter(Boolean));
+
+    const checkCountryGroup = (id, countryNames) => {
+      if (!countryNames.every(c => poolCountries.has(c))) return;
+      if (countryNames.every(c => correctCountries.has(c))) {
+        this.unlockAchievement(
+          id,
+          t(`${ns}.${id}.unlockTitle`),
+          t(`${ns}.${id}.unlockDesc`)
+        );
+      }
+    };
+
+    checkCountryGroup('eu_founding_perfect', data.filter(d => d.eu_founding).map(d => d.bezirk));
+    checkCountryGroup('eu_members_perfect', data.filter(d => d.eu_member).map(d => d.bezirk));
+    checkCountryGroup('nordic_master', ['Dänemark', 'Schweden', 'Norwegen', 'Finnland', 'Island']);
+    checkCountryGroup('baltic_master', ['Estland', 'Lettland', 'Litauen']);
+    checkCountryGroup('benelux_master', ['Belgien', 'Niederlande', 'Luxemburg']);
+  }
+
+  getEuropeRoundPrompts(mode) {
+    const isBz = this.activeSegment === 'BEZIRKE';
+    if (mode === 'LOCATE') {
+      return isBz
+        ? { title: t('game.locateCountry'), target: this.currentTarget.name, sub: t('game.locateClickCountry'), highlight: true }
+        : null;
+    }
+    if (mode === 'QUIZ') {
+      return isBz
+        ? { title: t('game.quizCountry'), target: t('game.quizBlinkCountry'), sub: t('game.quizChooseCountry'), highlight: false, isHtml: true }
+        : { title: t('game.quizCapital'), target: t('game.quizBlinkCapitalCountry'), sub: t('game.quizChooseCapital'), highlight: false, isHtml: true };
+    }
+    if (mode === 'TYPE_NAME') {
+      return isBz
+        ? { title: t('game.typeCountry'), target: t('game.quizCountry'), sub: t('game.typeHint'), highlight: false }
+        : { title: t('game.typeCapital'), target: t('game.quizCapital'), sub: t('game.typeCapitalHint'), highlight: false };
+    }
+    return null;
+  }
+
+  normalizeGuess(str) {
+    return (str || '').toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9äöüß]/g, '');
   }
 
   stopActiveTimer() {
@@ -1673,8 +1877,18 @@ class KiezQuizGame {
     document.querySelectorAll('.stadtteil-path').forEach(path => {
       path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect', 'bezirk-excluded');
       path.style.pointerEvents = '';
+      path.style.removeProperty('--map-h');
     });
     this.activeSelectPath = null;
+  }
+
+  /** Visible explorer highlight on Europe map (no per-country CSS rules). */
+  applyExplorerMapHighlight(paths, hueSource) {
+    const hue = this.getBezirkHue(hueSource);
+    paths.forEach((p) => {
+      p.classList.add('selected');
+      p.style.setProperty('--map-h', String(hue));
+    });
   }
 
   applyActiveBezirkFilter(activeBezirke) {
@@ -1891,7 +2105,12 @@ class KiezQuizGame {
     if (path.classList.contains('locked-path') && !this.nameAllIsActive) {
       this.tooltip.innerHTML = `<div>${t('map.tooltipLocked')}</div><div class="tooltip-bezirk">${t('map.tooltipLockedHint')}</div>`;
     } else if (this.activeSegment === 'BEZIRKE') {
-      this.tooltip.innerHTML = `<div>${t('map.tooltipBezirk', { bezirk })}</div><div class="tooltip-bezirk">${t('map.tooltipTapLearn')}</div>`;
+      const label = this.isEuropeCountriesMode()
+        ? bezirk
+        : t('map.tooltipBezirk', { bezirk });
+      this.tooltip.innerHTML = `<div>${label}</div><div class="tooltip-bezirk">${t('map.tooltipTapLearn')}</div>`;
+    } else if (this.isEuropeCapitalsMode()) {
+      this.tooltip.innerHTML = `<div>${name}</div><div class="tooltip-bezirk">${bezirk}</div>`;
     } else {
       this.tooltip.innerHTML = `<div>${name}</div><div class="tooltip-bezirk">${bezirk}</div>`;
     }
@@ -1924,9 +2143,10 @@ class KiezQuizGame {
     const isBz = this.activeSegment === 'BEZIRKE';
     const cfg = getCityConfig(this.activeCityId);
     const emptyKey = isBz ? cfg.emptyBezirk : cfg.emptyDetail;
+    const icon = this.isEuropeCountriesMode() ? '🌍' : (isBz ? '🏢' : '🗺️');
     container.innerHTML = `
       <div id="explorer-details" class="empty-info">
-        <div class="ei-icon">${isBz ? '🏢' : '🗺️'}</div>
+        <div class="ei-icon">${icon}</div>
         <p>${t(emptyKey)}</p>
       </div>
     `;
@@ -1946,7 +2166,11 @@ class KiezQuizGame {
   selectNeighbourhood(path, name, bezirk) {
     this.playSelectionSound();
     this.resetMapClasses();
-    path.classList.add('selected');
+    if (this.activeCityId === 'europe') {
+      this.applyExplorerMapHighlight([path], bezirk);
+    } else {
+      path.classList.add('selected');
+    }
     this.activeSelectPath = path;
     
     // Find detailed stadtteil data
@@ -2004,13 +2228,19 @@ class KiezQuizGame {
   }
 
   selectBezirk(bezirkName) {
+    if (this.isEuropeCountriesMode()) {
+      this.selectCountry(bezirkName);
+      return;
+    }
     this.playSelectionSound();
     this.resetMapClasses();
     
-    // Highlight all paths in this Bezirk
-    document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirkName}"]`).forEach(p => {
-      p.classList.add('selected');
-    });
+    const paths = document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirkName}"]`);
+    if (this.activeCityId === 'europe') {
+      this.applyExplorerMapHighlight(paths, bezirkName);
+    } else {
+      paths.forEach((p) => p.classList.add('selected'));
+    }
 
     // Compute collective statistics for Bezirk
     const bzStadtteile = this.getCityData().filter(d => d.bezirk === bezirkName);
@@ -2068,6 +2298,62 @@ class KiezQuizGame {
     `;
   }
 
+  selectCountry(countryName) {
+    this.playSelectionSound();
+    this.resetMapClasses();
+
+    const paths = document.querySelectorAll(`.stadtteil-path[data-bezirk="${countryName}"]`);
+    this.applyExplorerMapHighlight(paths, countryName);
+
+    const countryData = this.getCityData().filter(d => d.bezirk === countryName);
+    const info = countryData[0] || {};
+
+    let totalPop = 0;
+    let totalArea = 0;
+    countryData.forEach(d => {
+      const popVal = parseInt(d.population.replace(/\./g, '').replace(/,/g, ''));
+      const areaVal = parseFloat(d.area_km2.replace(/,/g, '.'));
+      if (!isNaN(popVal)) totalPop += popVal;
+      if (!isNaN(areaVal)) totalArea += areaVal;
+    });
+
+    const formattedPop = formatNumber(totalPop);
+    const formattedArea = totalArea.toLocaleString(getFormatLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const density = totalArea > 0 ? `${formatNumber(Math.round(totalPop / totalArea))} ${t('explorer.densityUnit')}` : t('explorer.na');
+    const capital = info.name || countryData.map(d => d.name).join(', ');
+    const templates = getTriviaTemplates(countryName) || [t(getCityConfig(this.activeCityId).defaultBezirkTrivia)];
+    const trivia = templates[0];
+
+    const container = document.getElementById('game-play-area');
+    container.innerHTML = `
+      <div class="info-details">
+        <div class="detail-header">
+          <h2>${countryName}</h2>
+          <span class="bezirk-tag" style="background: hsla(${this.getBezirkHue(countryName)}, 100%, 65%, 0.15); color: hsla(${this.getBezirkHue(countryName)}, 100%, 65%, 1); border: 1px solid hsla(${this.getBezirkHue(countryName)}, 100%, 65%, 0.3)">
+            ${t('explorer.capitalsEurope')}: ${capital}
+          </span>
+        </div>
+        <div class="detail-stats-grid">
+          <div class="detail-stat">
+            <div class="ds-label">${t('explorer.totalResidents')}</div>
+            <div class="ds-value">${formattedPop}</div>
+          </div>
+          <div class="detail-stat">
+            <div class="ds-label">${t('explorer.totalArea')}</div>
+            <div class="ds-value">${formattedArea} km²</div>
+          </div>
+          <div class="detail-stat" style="grid-column: span 2;">
+            <div class="ds-label">${t('explorer.avgDensity')}</div>
+            <div class="ds-value">${density}</div>
+          </div>
+        </div>
+        <div class="detail-trivia">
+          ${trivia}
+        </div>
+      </div>
+    `;
+  }
+
   getBezirkHue(bezirk) {
     const hues = {
       Altona: 295, Bergedorf: 32, 'Eimsbüttel': 175, 'Hamburg-Mitte': 345,
@@ -2082,7 +2368,12 @@ class KiezQuizGame {
       'Kalbach-Riedberg': 130, 'Nieder-Erlenbach': 95, Harheim: 160,
       'Nieder-Eschbach': 220, 'Bergen-Enkheim': 15
     };
-    return hues[bezirk] ?? 200;
+    if (hues[bezirk] !== undefined) return hues[bezirk];
+    let hash = 0;
+    for (let i = 0; i < bezirk.length; i++) {
+      hash = bezirk.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash) % 360;
   }
 
   // --- CORE GAME MODES & SPORCLE ROUNDS ---
@@ -2260,47 +2551,40 @@ class KiezQuizGame {
 
     const unit = this.getDetailUnitSuffix();
     if (this.currentMode === 'LOCATE') {
-      promptData = {
-        title: isBz ? t('game.locateBezirk') : t(`game.locate${unit}`),
-        target: this.currentTarget.name,
-        sub: isBz ? t('game.locateClickBezirk') : t(`game.locateClick${unit}`, { bezirk: this.currentTarget.bezirk }),
-        highlight: true
-      };
-    } 
+      promptData = this.activeCityId === 'europe'
+        ? this.getEuropeRoundPrompts('LOCATE')
+        : {
+          title: isBz ? t('game.locateBezirk') : t(`game.locate${unit}`),
+          target: this.currentTarget.name,
+          sub: isBz ? t('game.locateClickBezirk') : t(`game.locateClick${unit}`, { bezirk: this.currentTarget.bezirk }),
+          highlight: true
+        };
+    }
     else if (this.currentMode === 'QUIZ') {
-      promptData = {
-        title: isBz ? t('game.quizBezirk') : t(`game.quiz${unit}`),
-        target: isBz ? t('game.quizBlinkBezirk') : t(`game.quizBlink${unit}`),
-        sub: t('game.quizChoose'),
-        highlight: false,
-        isHtml: true
-      };
-      
-      // Blink target path
-      if (isBz) {
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.add('blink'));
-      } else {
-        const targetPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
-        if (targetPath) targetPath.classList.add('blink');
-      }
+      promptData = this.activeCityId === 'europe'
+        ? this.getEuropeRoundPrompts('QUIZ')
+        : {
+          title: isBz ? t('game.quizBezirk') : t(`game.quiz${unit}`),
+          target: isBz ? t('game.quizBlinkBezirk') : t(`game.quizBlink${unit}`),
+          sub: t('game.quizChoose'),
+          highlight: false,
+          isHtml: true
+        };
 
+      this.blinkRoundTarget();
       this.generateMCROptions(optionsContainer);
     }
     else if (this.currentMode === 'TYPE_NAME') {
-      promptData = {
-        title: isBz ? t('game.typeBezirk') : t(`game.type${unit}`),
-        target: isBz ? t('game.quizBezirk') : t(`game.quiz${unit}`),
-        sub: t('game.typeHint'),
-        highlight: false
-      };
+      promptData = this.activeCityId === 'europe'
+        ? this.getEuropeRoundPrompts('TYPE_NAME')
+        : {
+          title: isBz ? t('game.typeBezirk') : t(`game.type${unit}`),
+          target: isBz ? t('game.quizBezirk') : t(`game.quiz${unit}`),
+          sub: t('game.typeHint'),
+          highlight: false
+        };
 
-      if (isBz) {
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.add('blink'));
-      } else {
-        const targetPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
-        if (targetPath) targetPath.classList.add('blink');
-      }
-
+      this.blinkRoundTarget();
       this.generateTypingField(optionsContainer);
     }
 
@@ -2333,6 +2617,17 @@ class KiezQuizGame {
       return [...this.nameAllActiveBezirke];
     }
     if (!this.inRound || !this.currentTarget) return [];
+
+    // Detective mode: never zoom to the answer — keep continent overview
+    if (this.currentMode === 'LOCATE') {
+      if (Array.isArray(this.roundDistrict) && this.roundDistrict.length > 0) {
+        const allUnlocked = this.getUnlockedBezirke();
+        if (this.roundDistrict.length < allUnlocked.length) {
+          return [...this.roundDistrict];
+        }
+      }
+      return [];
+    }
 
     const isBz = this.activeSegment === 'BEZIRKE';
     if (isBz) return [this.currentTarget.name];
@@ -2414,7 +2709,7 @@ class KiezQuizGame {
     input.type = 'text';
     input.className = 'text-input-field';
     input.placeholder = this.activeSegment === 'BEZIRKE'
-      ? t('game.placeholderBezirk')
+      ? (this.isEuropeCountriesMode() ? t('game.placeholderCountry') : t('game.placeholderBezirk'))
       : t(`game.placeholder${this.getDetailUnitSuffix()}`);
     input.id = 'type-name-input';
     input.setAttribute('autocomplete', 'off');
@@ -2424,7 +2719,7 @@ class KiezQuizGame {
 
     input.focus();
 
-    const cleanStr = str => str.toLowerCase().replace(/[^a-z0-9äöüß]/g, '');
+    const cleanStr = str => this.normalizeGuess(str);
 
     input.addEventListener('input', () => {
       const val = input.value.trim();
@@ -2534,7 +2829,7 @@ class KiezQuizGame {
     this.sounds.init();
 
     const correctAnswer = this.currentTarget.name;
-    const cleanStr = str => str.toLowerCase().replace(/[^a-z0-9äöüß]/g, '');
+    const cleanStr = str => this.normalizeGuess(str);
     const isCorrect = cleanStr(typedValue) === cleanStr(correctAnswer);
     const input = document.getElementById('type-name-input');
     const isBz = this.activeSegment === 'BEZIRKE';
@@ -2601,13 +2896,7 @@ class KiezQuizGame {
 
     const isBz = this.activeSegment === 'BEZIRKE';
     
-    // Stop blinking
-    if (isBz) {
-      document.querySelectorAll(`.stadtteil-path[data-bezirk="${this.currentTarget.name}"]`).forEach(p => p.classList.remove('blink'));
-    } else {
-      const targetPath = this.getPathByNeighbourhoodName(this.currentTarget.name);
-      if (targetPath) targetPath.classList.remove('blink', 'selected');
-    }
+    this.unblinkRoundTarget();
 
     if (isCorrect) {
       this.roundCorrect++;
@@ -2825,7 +3114,9 @@ class KiezQuizGame {
     const isBz = this.activeSegment === 'BEZIRKE';
     const roundBezirke = Array.isArray(this.roundDistrict) ? this.roundDistrict : [this.roundDistrict];
 
-    if (this.progressionMode) {
+    const useBezirkProgression = this.progressionMode
+      && !(this.activeCityId === 'europe' && this.activeSegment === 'STADTTEILE');
+    if (useBezirkProgression) {
       const { correct: fCorrect, total: fTotal } = this.getFrontierRoundScore();
       const frontierPercent = fTotal > 0 ? Math.round((fCorrect / fTotal) * 100) : 0;
       const unlockedNext = this.tryUnlockNextBezirk(fCorrect, fTotal);
@@ -2867,6 +3158,14 @@ class KiezQuizGame {
 
     if (percent === 100) launchConfetti(this.sounds);
     else if (percent < 50) launchSadEffects(this.sounds);
+
+    if (percent === 100 && this.activeCityId === 'europe') {
+      const correctNames = Object.entries(this.roundHistory)
+        .filter(([, v]) => v.correct)
+        .map(([name]) => name);
+      const poolNames = this.roundQuestions.map(q => q.name);
+      this.checkEuropeGroupTrophies(correctNames, poolNames);
+    }
 
     this.recordGameHistory({
       mode: this.currentMode,
@@ -3074,7 +3373,7 @@ class KiezQuizGame {
     const val = input.value.trim();
     if (val.length < 2) return;
 
-    const cleanStr = str => str.toLowerCase().replace(/[^a-z0-9äöüß]/g, '');
+    const cleanStr = str => this.normalizeGuess(str);
     const cleanVal = cleanStr(val);
     const isBz = this.activeSegment === 'BEZIRKE';
 
@@ -3182,9 +3481,13 @@ class KiezQuizGame {
           t(`${ns}.meister_alle_bezirke.unlockDesc`)
         );
       }
+      if (this.activeCityId === 'europe') {
+        const pool = this.getNameAllPool(this.nameAllActiveBezirke);
+        this.checkEuropeGroupTrophies([...this.nameAllFound], pool.map(d => d.name));
+      }
     }
 
-    if (this.progressionMode && this.activeSegment === 'STADTTEILE') {
+    if (this.progressionMode && this.activeSegment === 'STADTTEILE' && this.activeCityId !== 'europe') {
       const frontierBezirk = this.getLastUnlockedBezirk();
       const frontierPool = this.getNameAllPool([frontierBezirk]);
       const frontierFound = frontierPool.filter(d => this.nameAllFound.has(d.name)).length;

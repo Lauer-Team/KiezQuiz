@@ -61,6 +61,22 @@ const CITY_LOCALE_CONFIG = {
     subdistricts: 'explorer.subdistrictsFrankfurt',
     specialIds: ['paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
     detailUnit: 'Stadtteil'
+  },
+  europe: {
+    rankKey: 'cityRanksEurope',
+    trophyNs: 'trophiesEurope',
+    defaultBezirkTrivia: 'trivia.defaultCountryEurope',
+    emptyBezirk: 'explorer.emptyCountryEurope',
+    emptyDetail: 'explorer.emptyCapitalEurope',
+    subdistricts: 'explorer.capitalsEurope',
+    specialIds: [
+      'eu_founding_perfect', 'eu_members_perfect', 'nordic_master', 'baltic_master',
+      'benelux_master', 'canary_islands', 'azores_madeira', 'caribbean_nl',
+      'french_overseas', 'svalbard', 'paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'
+    ],
+    detailUnit: 'Capital',
+    capitalsBlinkCountry: true,
+    hideLocateInCapitals: true
   }
 };
 
@@ -128,6 +144,8 @@ function getCityDataArray(cityId) {
   if (window[key]) return window[key];
   if (key === 'BERLIN_DATA' && typeof BERLIN_DATA !== 'undefined') return BERLIN_DATA;
   if (key === 'FRANKFURT_DATA' && typeof FRANKFURT_DATA !== 'undefined') return FRANKFURT_DATA;
+  if (key === 'EUROPE_DATA' && typeof EUROPE_DATA !== 'undefined') return EUROPE_DATA;
+  if (key === 'EUROPE_ISLAND_EGGS' && typeof EUROPE_ISLAND_EGGS !== 'undefined') return EUROPE_ISLAND_EGGS;
   if (typeof HAMBURG_DATA !== 'undefined') return HAMBURG_DATA;
   return [];
 }
@@ -139,7 +157,14 @@ function buildTrophyCatalog(cityId = 'hamburg') {
 
   const cfg = getCityConfig(cityId);
   const specialIds = cfg.specialIds;
-  const specialIcons = { neuwerk_island: '🏝️', pfaueninsel_island: '🦚', paradise_explorer: '🌴', meister_alle_stadtteile: '👑', meister_alle_bezirke: '🏛️' };
+  const specialIcons = {
+    neuwerk_island: '🏝️', pfaueninsel_island: '🦚', paradise_explorer: '🌴',
+    meister_alle_stadtteile: '👑', meister_alle_bezirke: '🏛️',
+    eu_founding_perfect: '🇪🇺', eu_members_perfect: '🌟', nordic_master: '❄️',
+    baltic_master: '🌊', benelux_master: '🧇',
+    canary_islands: '🌋', azores_madeira: '🌊', caribbean_nl: '🦜',
+    french_overseas: '🗼', svalbard: '🐻‍❄️'
+  };
   const trophyNs = cfg.trophyNs;
 
   const specials = specialIds.map((id) => ({

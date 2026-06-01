@@ -10,6 +10,7 @@ URLS = [
     "/hamburg/",
     "/berlin/",
     "/frankfurt/",
+    "/europe/",
 ]
 
 ROOT = Path(__file__).resolve().parent.parent

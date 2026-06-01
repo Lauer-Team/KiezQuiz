@@ -1046,6 +1046,13 @@ body.in-round .map-container-wrapper {
   stroke-width: 2px !important;
   z-index: 20;
 }
+
+/* Europe: per-country hue via --map-h set in JS */
+#city-view[data-city="europe"] .stadtteil-path.selected {
+  fill: hsl(var(--map-h, 200) 85% 58% / 0.45) !important;
+  stroke: hsl(var(--map-h, 200) 85% 58%) !important;
+  filter: drop-shadow(0 0 8px hsl(var(--map-h, 200) 85% 58%)) !important;
+}
 .stadtteil-path[data-bezirk="Altona"].selected { fill: hsla(295, 100%, 65%, 0.45); stroke: var(--color-altona) !important; filter: drop-shadow(0 0 8px var(--color-altona)) !important; }
 .stadtteil-path[data-bezirk="Bergedorf"].selected { fill: hsla(32, 100%, 55%, 0.45); stroke: var(--color-bergedorf) !important; filter: drop-shadow(0 0 8px var(--color-bergedorf)) !important; }
 .stadtteil-path[data-bezirk="Eimsbüttel"].selected { fill: hsla(175, 100%, 45%, 0.45); stroke: var(--color-eimsbuettel) !important; filter: drop-shadow(0 0 8px var(--color-eimsbuettel)) !important; }
@@ -1194,6 +1201,29 @@ body.in-round .map-container-wrapper {
 
 .pfaueninsel-overlay {
   top: 3.75rem;
+}
+
+.islands-stack {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  z-index: 50;
+  max-width: min(16rem, 42vw);
+
+  &[hidden] {
+    display: none !important;
+  }
+
+  .europe-island-overlay {
+    position: relative;
+    top: auto;
+    right: auto;
+    font-size: 0.7rem;
+    padding: 0.45rem 0.65rem;
+  }
 }
 
 #city-view[data-city="berlin"] .pfaueninsel-overlay {

@@ -43,11 +43,17 @@
       "labelOrtsteil": "Neighbourhood Detective",
       "descOrtsteil": "Find the neighbourhood on the map",
       "labelBezirk": "Borough Detective",
-      "descBezirk": "Find the borough on the map"
+      "descBezirk": "Find the borough on the map",
+      "labelCountry": "Country Detective",
+      "descCountry": "Find the country on the map of Europe",
+      "labelCapital": "Capital Detective",
+      "descCapital": "Find the capital on the map"
     },
     "quiz": {
       "label": "Map Quiz",
-      "desc": "Identify the blinking place"
+      "desc": "Identify the blinking place",
+      "labelCapital": "Capital Quiz",
+      "descCapital": "Country blinks — pick the capital"
     },
     "typeName": {
       "label": "Type the name",
@@ -77,6 +83,20 @@
     "pfaueninselTitle": "Where is Peacock Island? Click here!",
     "pfaueninselTitleUnlocked": "Peacock Island Explorer — trophy unlocked!",
     "pfaueninselLabel": "Peacock Island (island puzzle) 🦚",
+    "europeIslandTitle": {
+      "canary_islands": "Where are the Canary Islands? Click here!",
+      "azores_madeira": "Where are the Azores & Madeira? Click here!",
+      "caribbean_nl": "Where are the Caribbean Netherlands? Click here!",
+      "french_overseas": "Where are France's overseas territories? Click here!",
+      "svalbard": "Where is Svalbard? Click here!"
+    },
+    "europeIslandTitleUnlocked": {
+      "canary_islands": "Canary Explorer — trophy unlocked!",
+      "azores_madeira": "Azores Explorer — trophy unlocked!",
+      "caribbean_nl": "Caribbean Explorer — trophy unlocked!",
+      "french_overseas": "Overseas Explorer — trophy unlocked!",
+      "svalbard": "Svalbard Explorer — trophy unlocked!"
+    },
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
     "zoomReset": "Center",
@@ -309,6 +329,101 @@
     "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "Frankfurt rank"
   },
+  "cityRanksEurope": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Backpacker" },
+    "3": { "name": "Europe Buff" },
+    "4": { "name": "Map Traveller" },
+    "5": { "name": "Geography Pro" },
+    "6": { "name": "Europe Expert" },
+    "7": { "name": "Continent Captain" },
+    "8": { "name": "Ruler of Europe" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Europe rank — all countries & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Countries {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Europe rank"
+  },
+  "trophiesEurope": {
+    "eu_founding_perfect": {
+      "name": "EU Founding Fathers",
+      "unlockTitle": "EU Founding Fathers 🇪🇺",
+      "desc": "Get all 6 EU founding states correct in one game.",
+      "unlockDesc": "All EU founding states mastered in one run!"
+    },
+    "eu_members_perfect": {
+      "name": "Full EU Member",
+      "unlockTitle": "Full EU Member 🌟",
+      "desc": "Get all 27 current EU member states correct in one game.",
+      "unlockDesc": "All 27 EU member states mastered in one run!"
+    },
+    "nordic_master": {
+      "name": "Northern Lights",
+      "unlockTitle": "Northern Lights ❄️",
+      "desc": "All Nordic countries perfect in one game.",
+      "unlockDesc": "Denmark, Sweden, Norway, Finland & Iceland — all correct!"
+    },
+    "baltic_master": {
+      "name": "Baltic Union",
+      "unlockTitle": "Baltic Union 🌊",
+      "desc": "Estonia, Latvia & Lithuania perfect in one game.",
+      "unlockDesc": "All three Baltic states in one run!"
+    },
+    "benelux_master": {
+      "name": "Benelux Trio",
+      "unlockTitle": "Benelux Trio 🧇",
+      "desc": "Belgium, Netherlands & Luxembourg perfect in one game.",
+      "unlockDesc": "The Benelux trio in a perfect game!"
+    },
+    "canary_islands": {
+      "name": "Canary Explorer",
+      "unlockTitle": "Canary Explorer 🌋",
+      "desc": "Click the Canary Islands puzzle at the top-right of the map.",
+      "unlockDesc": "You discovered the Canary Islands."
+    },
+    "azores_madeira": {
+      "name": "Azores Explorer",
+      "unlockTitle": "Azores Explorer 🌊",
+      "desc": "Click the Azores & Madeira puzzle on the map.",
+      "unlockDesc": "You discovered the Azores and Madeira."
+    },
+    "caribbean_nl": {
+      "name": "Caribbean Explorer",
+      "unlockTitle": "Caribbean Explorer 🦜",
+      "desc": "Click the Caribbean Netherlands puzzle on the map.",
+      "unlockDesc": "You discovered the Caribbean Netherlands."
+    },
+    "french_overseas": {
+      "name": "Overseas Explorer",
+      "unlockTitle": "Overseas Explorer 🗼",
+      "desc": "Click the French overseas territories puzzle.",
+      "unlockDesc": "You discovered France's overseas territories."
+    },
+    "svalbard": {
+      "name": "Svalbard Explorer",
+      "unlockTitle": "Svalbard Explorer 🐻‍❄️",
+      "desc": "Click the Svalbard puzzle at the top-right of the map.",
+      "unlockDesc": "You discovered Svalbard."
+    },
+    "paradise_explorer": {
+      "name": "Prague Spring!",
+      "unlockTitle": "Prague Spring! 🌴",
+      "desc": "Correctly tap \"Prague\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Prague for the first time."
+    },
+    "meister_alle_stadtteile": {
+      "name": "Capital Master",
+      "unlockTitle": "Capital Master 👑",
+      "desc": "Name all European capitals in \"Name all places\".",
+      "unlockDesc": "All 44 capitals in the Sporcle challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Europe Cartographer",
+      "unlockTitle": "Europe Cartographer 🏛️",
+      "desc": "Name all 44 European countries in the challenge.",
+      "unlockDesc": "All 44 countries named in the challenge!"
+    }
+  },
   "trophiesBerlin": {
     "pfaueninsel_island": {
       "name": "Peacock Island Explorer",
@@ -404,6 +519,7 @@
     "defaultBezirk": "A significant borough of Hamburg.",
     "defaultBezirkBerlin": "A significant borough of Berlin.",
     "defaultBezirkFrankfurt": "A significant district of Frankfurt.",
+    "defaultCountryEurope": "A sovereign state in Europe.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
     "templates": {
       "Altona": [
@@ -528,6 +644,9 @@
     "emptyBezirk": "Click a borough on the map to see fascinating metadata and Hanseatic facts!",
     "emptyBezirkBerlin": "Click a borough on the map to see fascinating metadata and Berlin facts!",
     "emptyBezirkFrankfurt": "Click a district on the map to see fascinating metadata and Frankfurt facts!",
+    "emptyCountryEurope": "Click a country on the map of Europe to discover population, area and capital!",
+    "emptyCapitalEurope": "Click a country to see its capital and facts!",
+    "capitalsEurope": "Capital",
     "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
     "emptyStadtteilFrankfurt": "Click a neighbourhood on the map to see fascinating metadata and Frankfurt facts!",
     "emptyOrtsteil": "Click a neighbourhood on the map to see fascinating metadata and Berlin facts!",
@@ -575,6 +694,19 @@
     "quizBlinkStadtteil": "❔ Blinking district ❔",
     "quizBlinkOrtsteil": "❔ Blinking neighbourhood ❔",
     "quizChoose": "Choose the correct answer from the options!",
+    "locateCountry": "Find the country",
+    "locateClickCountry": "Click it on the map of Europe!",
+    "quizCountry": "Which country is blinking?",
+    "quizBlinkCountry": "❔ Blinking country ❔",
+    "quizChooseCountry": "Pick the correct country name!",
+    "typeCountry": "Name the country",
+    "placeholderCountry": "Enter country…",
+    "quizCapital": "Which capital city?",
+    "quizBlinkCapitalCountry": "❔ Blinking country — which capital? ❔",
+    "quizChooseCapital": "Pick the matching capital!",
+    "typeCapital": "Name the capital",
+    "typeCapitalHint": "Type the capital — a correct entry counts immediately.",
+    "placeholderCapital": "Enter capital…",
     "typeBezirk": "Name the borough",
     "typeStadtteil": "Name the district",
     "typeOrtsteil": "Name the neighbourhood",
@@ -753,6 +885,18 @@
       "singular": {
         "stadtbezirk": "District",
         "stadtteil": "Neighbourhood"
+      }
+    },
+    "europe": {
+      "greeting": "Welcome to Europe!",
+      "blurb": "44 countries · 44 capitals",
+      "levels": {
+        "countries": "Countries",
+        "capitals": "Capitals"
+      },
+      "singular": {
+        "country": "Country",
+        "capital": "Capital"
       }
     }
   }

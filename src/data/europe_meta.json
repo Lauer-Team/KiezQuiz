@@ -1,0 +1,354 @@
+[
+  {
+    "name": "Deutschland",
+    "capital": "Berlin",
+    "iso": "DE",
+    "xpNeeded": 0,
+    "eu_member": true,
+    "eu_founding": true
+  },
+  {
+    "name": "Österreich",
+    "capital": "Wien",
+    "iso": "AT",
+    "xpNeeded": 50,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Schweiz",
+    "capital": "Bern",
+    "iso": "CH",
+    "xpNeeded": 100,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Frankreich",
+    "capital": "Paris",
+    "iso": "FR",
+    "xpNeeded": 150,
+    "eu_member": true,
+    "eu_founding": true
+  },
+  {
+    "name": "Belgien",
+    "capital": "Brüssel",
+    "iso": "BE",
+    "xpNeeded": 200,
+    "eu_member": true,
+    "eu_founding": true
+  },
+  {
+    "name": "Niederlande",
+    "capital": "Amsterdam",
+    "iso": "NL",
+    "xpNeeded": 250,
+    "eu_member": true,
+    "eu_founding": true
+  },
+  {
+    "name": "Luxemburg",
+    "capital": "Luxemburg",
+    "iso": "LU",
+    "xpNeeded": 300,
+    "eu_member": true,
+    "eu_founding": true
+  },
+  {
+    "name": "Italien",
+    "capital": "Rom",
+    "iso": "IT",
+    "xpNeeded": 350,
+    "eu_member": true,
+    "eu_founding": true
+  },
+  {
+    "name": "Spanien",
+    "capital": "Madrid",
+    "iso": "ES",
+    "xpNeeded": 400,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Portugal",
+    "capital": "Lissabon",
+    "iso": "PT",
+    "xpNeeded": 450,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Vereinigtes Königreich",
+    "capital": "London",
+    "iso": "GB",
+    "xpNeeded": 500,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Irland",
+    "capital": "Dublin",
+    "iso": "IE",
+    "xpNeeded": 550,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Dänemark",
+    "capital": "Kopenhagen",
+    "iso": "DK",
+    "xpNeeded": 600,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Schweden",
+    "capital": "Stockholm",
+    "iso": "SE",
+    "xpNeeded": 650,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Norwegen",
+    "capital": "Oslo",
+    "iso": "NO",
+    "xpNeeded": 700,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Finnland",
+    "capital": "Helsinki",
+    "iso": "FI",
+    "xpNeeded": 750,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Island",
+    "capital": "Reykjavík",
+    "iso": "IS",
+    "xpNeeded": 800,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Polen",
+    "capital": "Warschau",
+    "iso": "PL",
+    "xpNeeded": 850,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Tschechien",
+    "capital": "Prag",
+    "iso": "CZ",
+    "xpNeeded": 900,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Slowakei",
+    "capital": "Bratislava",
+    "iso": "SK",
+    "xpNeeded": 950,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Ungarn",
+    "capital": "Budapest",
+    "iso": "HU",
+    "xpNeeded": 1000,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Rumänien",
+    "capital": "Bukarest",
+    "iso": "RO",
+    "xpNeeded": 1050,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Bulgarien",
+    "capital": "Sofia",
+    "iso": "BG",
+    "xpNeeded": 1100,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Griechenland",
+    "capital": "Athen",
+    "iso": "GR",
+    "xpNeeded": 1150,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Kroatien",
+    "capital": "Zagreb",
+    "iso": "HR",
+    "xpNeeded": 1200,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Slowenien",
+    "capital": "Ljubljana",
+    "iso": "SI",
+    "xpNeeded": 1250,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Serbien",
+    "capital": "Belgrad",
+    "iso": "RS",
+    "xpNeeded": 1300,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Bosnien und Herzegowina",
+    "capital": "Sarajevo",
+    "iso": "BA",
+    "xpNeeded": 1350,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Montenegro",
+    "capital": "Podgorica",
+    "iso": "ME",
+    "xpNeeded": 1400,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Albanien",
+    "capital": "Tirana",
+    "iso": "AL",
+    "xpNeeded": 1450,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Nordmazedonien",
+    "capital": "Skopje",
+    "iso": "MK",
+    "xpNeeded": 1500,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Ukraine",
+    "capital": "Kiew",
+    "iso": "UA",
+    "xpNeeded": 1550,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Belarus",
+    "capital": "Minsk",
+    "iso": "BY",
+    "xpNeeded": 1600,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Moldawien",
+    "capital": "Kischinau",
+    "iso": "MD",
+    "xpNeeded": 1650,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Litauen",
+    "capital": "Vilnius",
+    "iso": "LT",
+    "xpNeeded": 1700,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Lettland",
+    "capital": "Riga",
+    "iso": "LV",
+    "xpNeeded": 1750,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Estland",
+    "capital": "Tallinn",
+    "iso": "EE",
+    "xpNeeded": 1800,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Zypern",
+    "capital": "Nikosia",
+    "iso": "CY",
+    "xpNeeded": 1850,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Malta",
+    "capital": "Valletta",
+    "iso": "MT",
+    "xpNeeded": 1900,
+    "eu_member": true,
+    "eu_founding": false
+  },
+  {
+    "name": "Andorra",
+    "capital": "Andorra la Vella",
+    "iso": "AD",
+    "xpNeeded": 1950,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Monaco",
+    "capital": "Monaco",
+    "iso": "MC",
+    "xpNeeded": 2000,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "San Marino",
+    "capital": "San Marino",
+    "iso": "SM",
+    "xpNeeded": 2050,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Liechtenstein",
+    "capital": "Vaduz",
+    "iso": "LI",
+    "xpNeeded": 2100,
+    "eu_member": false,
+    "eu_founding": false
+  },
+  {
+    "name": "Vatikanstadt",
+    "capital": "Vatikanstadt",
+    "iso": "VA",
+    "xpNeeded": 2150,
+    "eu_member": false,
+    "eu_founding": false
+  }
+]
