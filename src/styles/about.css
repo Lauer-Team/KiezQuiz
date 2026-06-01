@@ -113,7 +113,7 @@
 }
 
 .about-kalle-figure {
-  width: min(160px, 72%);
+  width: min(240px, 88%);
   height: auto;
   flex-shrink: 0;
   align-self: center;
@@ -132,9 +132,9 @@
   }
 
   .about-kalle-figure {
-    flex: 0 0 min(220px, 32%);
-    width: min(220px, 32%);
-    max-width: 220px;
+    flex: 0 0 min(300px, 38%);
+    width: min(300px, 38%);
+    max-width: 300px;
     align-self: center;
     margin: 0;
   }
@@ -206,7 +206,7 @@
 
   .about-kalle-figure {
     order: 2;
-    width: min(140px, 60%);
+    width: min(220px, 78%);
     margin: 0.25rem auto 0;
   }
 }

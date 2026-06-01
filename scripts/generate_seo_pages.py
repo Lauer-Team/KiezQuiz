@@ -166,19 +166,19 @@ def render_city_head(city: dict) -> str:
   <link rel="alternate" hreflang="x-default" href="{page_url}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KiezQuiz">
-  <meta property="og:title" content="{title}">
+  <meta property="og:title" content="KiezQuiz">
   <meta property="og:description" content="{desc}">
   <meta property="og:url" content="{page_url}">
   <meta property="og:locale" content="de_DE">
-  <meta property="og:image" content="{BASE_URL}/assets/og-image.png">
+  <meta property="og:image" content="{BASE_URL}/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:type" content="image/jpeg">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{title}">
+  <meta name="twitter:title" content="KiezQuiz">
   <meta name="twitter:description" content="{desc}">
-  <meta name="twitter:image" content="{BASE_URL}/assets/og-image.png">
+  <meta name="twitter:image" content="{BASE_URL}/assets/og-image.jpg">
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">

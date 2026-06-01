@@ -1,9 +1,10 @@
 {
   "meta": {
     "title": "KiezQuiz · Besser wissen als Besserwissen.",
+    "ogTitle": "KiezQuiz",
     "slogan": "Besser wissen als Besserwissen.",
     "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
-    "ogDescription": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
+    "ogDescription": "Besser wissen als Besserwissen. Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
     "manifestDescription": "Hamburg, Berlin & Frankfurt — Bezirke und Stadtteile spielerisch lernen"
   },
   "header": {

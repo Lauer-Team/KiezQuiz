@@ -18,19 +18,19 @@
   <link rel="alternate" hreflang="x-default" href="https://kiezquiz.de/hamburg/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KiezQuiz">
-  <meta property="og:title" content="Besser wissen als Besserwissen.">
-  <meta property="og:description" content="Lerne alle 104 Hamburger Stadtteile und 7 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
+  <meta property="og:title" content="KiezQuiz">
+  <meta property="og:description" content="Besser wissen als Besserwissen. Lerne alle 104 Hamburger Stadtteile und 7 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
   <meta property="og:url" content="https://kiezquiz.de/hamburg/">
   <meta property="og:locale" content="de_DE">
-  <meta property="og:image" content="https://kiezquiz.de/assets/og-image.png">
+  <meta property="og:image" content="https://kiezquiz.de/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:type" content="image/jpeg">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Besser wissen als Besserwissen.">
+  <meta name="twitter:title" content="KiezQuiz">
   <meta name="twitter:description" content="Lerne alle 104 Hamburger Stadtteile und 7 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
-  <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.png">
+  <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.jpg">
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="/icons/favicon.ico" sizes="32x32">
@@ -269,10 +269,7 @@
 
         <button type="button" class="control-btn map-center-btn" id="btn-zoom-reset" data-i18n-title="map.zoomResetTitle" data-i18n="map.zoomReset" title="Karte zentrieren">Zentrieren</button>
 
-        <!-- Bounding Box for SVG Map -->
-        <div class="map-container-wrapper" id="map-wrapper" role="img" aria-label="Interaktive Stadtkarte zum Erkunden von Bezirken und Stadtteilen">
-          
-          <!-- Floating island Easter Eggs (city-specific) -->
+        <div class="map-island-dock" id="map-island-dock">
           <div class="island-overlay neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!" hidden>
             <div class="no-badge"></div>
             <span data-i18n="map.neuwerkLabel">Neuwerk (Insel-Rätsel) 🏝️</span>
@@ -282,6 +279,10 @@
             <span data-i18n="map.pfaueninselLabel">Pfaueninsel (Insel-Rätsel) 🦚</span>
           </div>
           <div class="islands-stack" id="europe-islands-stack" hidden></div>
+        </div>
+
+        <div class="map-container-wrapper" id="map-wrapper" role="img" aria-label="Interaktive Stadtkarte zum Erkunden von Bezirken und Stadtteilen">
+
           <div class="europe-microstates-bar" id="europe-microstates-bar" hidden aria-label="Kleine Länder — Schnellzugriff"></div>
 
           <div id="map-prompt-bar" class="map-prompt-bar" hidden aria-live="polite">

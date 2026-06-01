@@ -1042,6 +1042,28 @@ body.in-round .map-container-wrapper {
   height: auto;
 }
 
+.map-island-dock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: stretch;
+}
+
+.map-island-dock .island-overlay,
+.map-island-dock .islands-stack .europe-island-overlay {
+  position: static;
+  top: auto;
+  right: auto;
+}
+
+.map-island-dock .islands-stack {
+  position: static;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: none;
+  gap: 0.45rem;
+}
+
 .map-center-btn {
   align-self: stretch;
   background: rgba(0, 162, 255, 0.08);
@@ -1463,10 +1485,6 @@ body.in-round .map-container-wrapper {
   display: none !important;
 }
 
-.pfaueninsel-overlay {
-  top: 3.75rem;
-}
-
 .islands-stack {
   position: absolute;
   top: 1rem;
@@ -1595,33 +1613,6 @@ body.in-round .map-container-wrapper {
   stroke: hsla(var(--map-h, 200), 100%, 65%, 0.45);
   stroke-width: 1.25px !important;
   filter: drop-shadow(0 0 4px hsla(var(--map-h, 200), 100%, 55%, 0.35));
-}
-
-#city-view[data-city="berlin"] .pfaueninsel-overlay {
-  top: 1rem;
-}
-
-.neuwerk-overlay {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(17, 24, 39, 0.85);
-  border: 1px solid var(--border-color);
-  padding: 0.6rem 0.8rem;
-  border-radius: var(--radius-md);
-  font-size: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  z-index: 50;
-  
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(17, 24, 39, 0.95);
-    transform: translateY(-1px);
-  }
 }
 
 /* Map Controls (Zoom / Help) */
@@ -2463,11 +2454,10 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     line-height: 1.35;
   }
   
-  .neuwerk-overlay {
-    top: max(0.5rem, env(safe-area-inset-top));
-    right: 0.5rem;
+  .map-island-dock .island-overlay {
     font-size: 0.7rem;
     padding: 0.5rem 0.65rem;
+    flex: 1 1 100%;
   }
   
   .primary-btn,
