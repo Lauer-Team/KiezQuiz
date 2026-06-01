@@ -476,6 +476,8 @@ def main():
 
       <!-- Right Panel: Interactive SVG Map -->
       <section class="map-panel">
+
+        <button type="button" class="control-btn map-center-btn" id="btn-zoom-reset" title="Karte zentrieren">Zentrieren</button>
         
         <!-- Bounding Box for SVG Map -->
         <div class="map-container-wrapper" id="map-wrapper">
@@ -499,7 +501,6 @@ def main():
           <div class="zoom-btns">
             <button class="control-btn" id="btn-zoom-in" title="Vergrößern">+</button>
             <button class="control-btn" id="btn-zoom-out" title="Verkleinern">-</button>
-            <button class="control-btn" id="btn-zoom-reset" title="Originalgröße und Zentrierung" style="color: var(--color-neutral-glow); font-weight: 800; border-color: rgba(0, 162, 255, 0.3);">🏠 Zentrieren & Reset</button>
           </div>
           <div class="map-hint" id="map-hint-text">
             💡 Tipp: Ziehe zum Verschieben. Pinch oder Mausrad zum Zoomen.

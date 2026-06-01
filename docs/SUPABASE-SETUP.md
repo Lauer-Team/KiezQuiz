@@ -146,6 +146,92 @@ grant execute on function public.get_email_for_username(text) to anon, authentic
 
 ---
 
+## 2b. Stadt-Wünsche (optional)
+
+Damit Wünsche zentral gespeichert werden (Gäste und Accounts), im SQL Editor ausführen:
+
+```sql
+-- Wünsche / Votes für neue Städte
+create table public.city_wish_requests (
+  id uuid primary key default gen_random_uuid(),
+  city_name text not null,
+  user_id uuid references auth.users(id) on delete set null,
+  guest_id text,
+  request_type text not null check (request_type in ('vote', 'proposal')),
+  created_at timestamptz default now(),
+  constraint city_wish_actor check (user_id is not null or guest_id is not null)
+);
+
+create unique index city_wish_unique_user
+  on public.city_wish_requests (user_id, lower(city_name))
+  where user_id is not null;
+
+create unique index city_wish_unique_guest
+  on public.city_wish_requests (guest_id, lower(city_name))
+  where guest_id is not null;
+
+alter table public.city_wish_requests enable row level security;
+
+create policy "wish_insert" on public.city_wish_requests for insert
+with check (
+  (auth.uid() is not null and user_id = auth.uid())
+  or (auth.uid() is null and user_id is null and guest_id is not null)
+);
+
+-- Admin-Tabelle (nur per SQL Editor befüllen)
+create table public.city_wish_admins (
+  user_id uuid primary key references auth.users(id) on delete cascade
+);
+
+alter table public.city_wish_admins enable row level security;
+
+create or replace function public.is_city_wish_admin()
+returns boolean language sql stable security definer set search_path = public as $$
+  select exists (select 1 from public.city_wish_admins where user_id = auth.uid());
+$$;
+
+grant execute on function public.is_city_wish_admin() to authenticated;
+
+create policy "wish_select_admin" on public.city_wish_requests for select
+using (public.is_city_wish_admin());
+
+-- Öffentliche Vote-Zähler (ohne Account-Infos)
+create or replace function public.get_city_wish_totals()
+returns table(city_name text, vote_count bigint)
+language sql stable security definer set search_path = public as $$
+  select city_name, count(*)::bigint
+  from public.city_wish_requests
+  group by city_name
+  order by 2 desc;
+$$;
+
+grant execute on function public.get_city_wish_totals() to anon, authenticated;
+
+-- Eigene Votes abfragen (Account oder Gast-ID)
+create or replace function public.get_my_city_wishes(p_guest_id text default null)
+returns setof text
+language sql stable security definer set search_path = public as $$
+  select cwr.city_name
+  from public.city_wish_requests cwr
+  where (auth.uid() is not null and cwr.user_id = auth.uid())
+     or (auth.uid() is null and p_guest_id is not null and cwr.guest_id = p_guest_id and cwr.user_id is null);
+$$;
+
+grant execute on function public.get_my_city_wishes(text) to anon, authenticated;
+```
+
+**Admin eintragen** (deine User-UUID aus Authentication → Users):
+
+```sql
+insert into public.city_wish_admins (user_id) values ('DEINE-USER-UUID');
+```
+
+Alternativ in `src/supabaseConfig.js`: `adminUserIds: ['DEINE-USER-UUID']`.
+
+**Wünsche einsehen:** Einstellungen (⚙️) → „Wünsche anzeigen“ (nur als Admin), oder Supabase **Table Editor** → `city_wish_requests`.
+
+---
+
 ## 3. E-Mail-Auth konfigurieren
 
 1. Links **Authentication** → **Providers**.

@@ -231,7 +231,7 @@
 
   function enhanceSegmentSelector() {
     const selector = document.querySelector('#city-view .segment-selector');
-    if (!selector || selector.dataset.adaptive === 'true') return;
+    if (!selector) return;
 
     const game = window.hamburgGame || window.kiezQuizGame;
     if (!game) return;
@@ -239,7 +239,6 @@
     if (!city) return;
 
     selector.classList.add('adaptive');
-    selector.dataset.adaptive = 'true';
     selector.dataset.bound = 'false';
     selector.innerHTML = city.levels.map((lv, i) => {
       const segment = window.cityRegistry.levelKeyToSegment(lv.key);

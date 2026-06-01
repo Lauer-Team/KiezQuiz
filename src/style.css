@@ -777,6 +777,25 @@ body.overlay-open {
   height: 100%;
 }
 
+.map-center-btn {
+  align-self: stretch;
+  background: rgba(0, 162, 255, 0.08);
+  border: 1px solid rgba(0, 162, 255, 0.3);
+  color: var(--color-neutral-glow);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 0.85rem;
+  transition: var(--transition-fast);
+
+  &:hover {
+    background: rgba(0, 162, 255, 0.15);
+    border-color: rgba(0, 162, 255, 0.5);
+    color: #fff;
+  }
+}
+
 .map-container-wrapper {
   flex: 1;
   background: var(--bg-surface);
@@ -1231,6 +1250,26 @@ body.overlay-open {
   .map-hint {
     color: var(--text-muted);
     font-weight: 500;
+  }
+}
+
+.wish-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+
+  th, td {
+    padding: 0.45rem 0.6rem;
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+  }
+
+  th {
+    color: var(--text-secondary);
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    background: var(--bg-surface);
   }
 }
 
@@ -2039,10 +2078,10 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     padding: 0.5rem 0.85rem;
     font-size: 1.1rem;
   }
-  
-  .map-controls .control-btn#btn-zoom-reset {
-    flex: 1;
+
+  .map-center-btn {
     min-height: 44px;
+    font-size: 0.95rem;
   }
   
   .map-hint {

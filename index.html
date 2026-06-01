@@ -191,7 +191,9 @@
 
       <!-- Right Panel: Interactive SVG Map -->
       <section class="map-panel">
-        
+
+        <button type="button" class="control-btn map-center-btn" id="btn-zoom-reset" data-i18n-title="map.zoomResetTitle" data-i18n="map.zoomReset" title="Karte zentrieren">Zentrieren</button>
+
         <!-- Bounding Box for SVG Map -->
         <div class="map-container-wrapper" id="map-wrapper">
           
@@ -362,7 +364,6 @@
           <div class="zoom-btns">
             <button class="control-btn" id="btn-zoom-in" data-i18n-title="map.zoomIn" title="Vergrößern">+</button>
             <button class="control-btn" id="btn-zoom-out" data-i18n-title="map.zoomOut" title="Verkleinern">-</button>
-            <button class="control-btn" id="btn-zoom-reset" data-i18n-title="map.zoomReset" data-i18n="map.zoomReset" title="Originalgröße und Zentrierung" style="color: var(--color-neutral-glow); font-weight: 800; border-color: rgba(0, 162, 255, 0.3);">🏠 Zentrieren & Reset</button>
           </div>
           <div class="map-hint" id="map-hint-text" data-i18n="map.hintDesktop">
             💡 Tipp: Ziehe zum Verschieben. Pinch oder Mausrad zum Zoomen.
@@ -395,6 +396,7 @@
   <script src="src/ui/cityDashboard.js"></script>
   <script src="src/ui/modals.js"></script>
   <script src="src/cloudSync.js"></script>
+  <script src="src/cityWishes.js"></script>
   <script src="src/data/hamburg_data.js"></script>
   <script src="src/data/berlin_data.js"></script>
   <script src="src/data/frankfurt_data.js"></script>
