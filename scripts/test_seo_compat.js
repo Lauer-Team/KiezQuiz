@@ -42,6 +42,9 @@ assert(routerSrc.includes('hasV1Save'), 'viewRouter detects v1 migration candida
 assert(fs.existsSync(path.join(root, 'index.html')), 'index.html exists');
 const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert(indexHtml.includes('src/viewRouter.js'), 'index.html loads viewRouter.js');
+assert(bootSrc.includes('kiezHubShell'), 'bootView injects hub shell before paint');
+assert(routerSrc.includes('isHomePath'), 'viewRouter always opens hub on homepage');
+assert(indexHtml.includes('src/ui/hubShell.js'), 'index.html loads hubShell.js');
 assert(indexHtml.includes('src/bootView.js'), 'index.html loads bootView.js');
 assert(indexHtml.includes('src/bootstrap.js'), 'index.html loads bootstrap.js');
 assert(!indexHtml.includes('src/data/hamburg_data.js'), 'city data not in initial HTML scripts');

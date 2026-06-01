@@ -203,8 +203,8 @@
   }
 
   function updateStats(game) {
-    /* stats updated via shared header #stat-xp / #stat-streak in game.renderStats() */
-    if (game && typeof game.renderStats === 'function') game.renderStats();
+    /* Header pills are updated inside game.renderStats() before syncHubStats().
+       Avoid calling renderStats here — that caused infinite recursion with hub.render(). */
   }
 
   window.kiezHub = { render, updateStats, computeCityStats, progressRingHtml };

@@ -65,13 +65,24 @@
     return fullPromise;
   };
 
+  window.loadGameCore = loadGameCore;
+
   function needsCityOnBoot() {
     var cityEl = document.getElementById('city-view');
     return !!(cityEl && !cityEl.hidden);
   }
 
+  function needsHubOnBoot() {
+    var hubEl = document.getElementById('hub-view');
+    return !!(hubEl && !hubEl.hidden);
+  }
+
   window.addEventListener('DOMContentLoaded', function () {
     void (async function () {
+      var hubBoot = needsHubOnBoot() && typeof window.loadGameCore === 'function'
+        ? window.loadGameCore()
+        : Promise.resolve();
+
       await initI18n();
       if (window.kiezChangelog?.bindTriggers) {
         window.kiezChangelog.bindTriggers(document);
@@ -84,7 +95,7 @@
       if (needsCityOnBoot()) {
         await window.loadGameBundle();
       } else {
-        await loadGameCore();
+        await hubBoot;
       }
       if (typeof window.startKiezQuizGame === 'function') {
         window.startKiezQuizGame();

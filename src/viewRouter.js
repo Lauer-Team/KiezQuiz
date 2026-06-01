@@ -53,6 +53,11 @@
     return segment && PLAYABLE[segment] ? segment : '';
   }
 
+  function isHomePath(pathname) {
+    var path = (pathname || '/').replace(/\/+$/, '') || '/';
+    return path === '/';
+  }
+
   function resolveInitialView(opts) {
     opts = opts || {};
     var searchParams = opts.searchParams;
@@ -71,6 +76,10 @@
     }
     if (cityParam && PLAYABLE[cityParam]) {
       return { view: 'city', cityId: cityParam };
+    }
+
+    if (typeof window !== 'undefined' && isHomePath(window.location.pathname)) {
+      return { view: 'hub', cityId: (save && save.lastCity) || 'hamburg' };
     }
 
     var view = 'hub';
@@ -95,6 +104,7 @@
     getInitialViewFromSave: getInitialViewFromSave,
     loadSaveSnapshot: loadSaveSnapshot,
     cityFromPathname: cityFromPathname,
+    isHomePath: isHomePath,
     resolveInitialView: resolveInitialView
   };
 })();

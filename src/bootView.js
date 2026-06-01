@@ -19,6 +19,9 @@
     } else {
       hub.hidden = false;
       city.hidden = true;
+      if (window.kiezHubShell) {
+        window.kiezHubShell.inject(hub);
+      }
     }
   }
 
