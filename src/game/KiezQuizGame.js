@@ -71,7 +71,7 @@ class KiezQuizGame {
     this.activeCityId = this._save.lastCity || 'hamburg';
 
     const params = new URLSearchParams(window.location.search);
-    const cityParam = (params.get('city') || '').trim().toLowerCase();
+    const cityParam = (params.get('city') || window.kiezViewRouter?.cityFromPathname(window.location.pathname) || '').trim().toLowerCase();
     if (cityParam && window.cityRegistry.isPlayable(cityParam)) {
       this.view = 'city';
       this.activeCityId = cityParam;

@@ -47,6 +47,12 @@
     }
   }
 
+  function cityFromPathname(pathname) {
+    var path = (pathname || '/').replace(/\/+$/, '') || '/';
+    var segment = path.split('/').filter(Boolean)[0] || '';
+    return segment && PLAYABLE[segment] ? segment : '';
+  }
+
   function resolveInitialView(opts) {
     opts = opts || {};
     var searchParams = opts.searchParams;
@@ -59,6 +65,9 @@
     var cityParam = '';
     if (searchParams && searchParams.get) {
       cityParam = (searchParams.get('city') || '').trim().toLowerCase();
+    }
+    if (!cityParam && typeof window !== 'undefined') {
+      cityParam = cityFromPathname(window.location.pathname);
     }
     if (cityParam && PLAYABLE[cityParam]) {
       return { view: 'city', cityId: cityParam };
@@ -85,6 +94,7 @@
     hasProgressInSave: hasProgressInSave,
     getInitialViewFromSave: getInitialViewFromSave,
     loadSaveSnapshot: loadSaveSnapshot,
+    cityFromPathname: cityFromPathname,
     resolveInitialView: resolveInitialView
   };
 })();

@@ -50,7 +50,8 @@ Die SEO-Updates ändern **nicht** das Save-Schema:
 - Spielstand bleibt unter `localStorage`-Key `kiezquiz_save_v2` (plus Legacy-Keys für Hamburg).
 - Wer `https://kiezquiz.de/` ohne URL-Parameter öffnet, landet wie bisher: **Hub** ohne Fortschritt, **letzte Stadt** mit gespeichertem Fortschritt.
 - Deep-Links (`/?city=berlin`) öffnen die gewählte Stadt **nur für diese Sitzung**, wenn bereits Fortschritt in einer anderen Stadt besteht — `lastCity` wird dann **nicht** überschrieben.
-- Stadt-Landingpages (`/berlin/` etc.) sind separate SEO-Seiten; der Link „Jetzt spielen“ führt zur App unter `/` mit `?city=…`.
+- Stadt-URLs (`/hamburg/` etc.) laden die **Spiel-App direkt** mit passender Stadt; SEO-Meta, FAQ-Schema und `<noscript>`-Fallback bleiben im `<head>` bzw. für Crawler ohne JS.
+- Deep-Links (`/?city=berlin`) funktionieren weiterhin und leiten auf `/` um (Query wird entfernt); Pfad-URLs (`/berlin/`) bleiben in der Adresszeile.
 - `src/bootView.js` stellt vor dem ersten Paint die richtige Ansicht wieder her (kein SEO-Text-Flash für Spieler mit Fortschritt).
 
 **Redirect kiezquiz.lauer.team:** GitHub Pages kann nur eine Custom Domain (`CNAME` → `kiezquiz.de`) bedienen. Die Weiterleitung von `kiezquiz.lauer.team` muss beim DNS-Provider als Redirect/301 auf `https://kiezquiz.de/` konfiguriert bleiben.

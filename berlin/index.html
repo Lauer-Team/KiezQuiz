@@ -2,14 +2,22 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Berlin Ortsteile lernen – Kostenloses Karten-Quiz | KiezQuiz</title>
   <meta name="description" content="Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
+  <meta name="theme-color" content="#0f1118">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KiezQuiz">
+  <meta name="format-detection" content="telephone=no">
+
   <link rel="canonical" href="https://kiezquiz.de/berlin/">
   <link rel="alternate" hreflang="de" href="https://kiezquiz.de/berlin/">
   <link rel="alternate" hreflang="en" href="https://kiezquiz.de/berlin/?lang=en">
   <link rel="alternate" hreflang="x-default" href="https://kiezquiz.de/berlin/">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="KiezQuiz">
   <meta property="og:title" content="Berlin Ortsteile lernen – Kostenloses Karten-Quiz | KiezQuiz">
   <meta property="og:description" content="Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
   <meta property="og:url" content="https://kiezquiz.de/berlin/">
@@ -18,29 +26,17 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:type" content="image/jpeg">
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Berlin Ortsteile lernen – Kostenloses Karten-Quiz | KiezQuiz">
   <meta name="twitter:description" content="Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
   <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.jpg">
-  <style>
-:root { --bg: #0f1118; --text: #e8eaef; --muted: #9aa3b2; --acc: hsl(205 100% 62%); --border: rgba(255,255,255,0.1); }
-* { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
-a { color: var(--acc); }
-.wrap { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
-header.site { margin-bottom: 2rem; }
-header.site a.logo { font-weight: 800; font-size: 1.1rem; color: var(--text); text-decoration: none; }
-h1 { font-size: clamp(1.6rem, 4vw, 2.1rem); line-height: 1.25; margin: 0 0 1rem; }
-.lead { color: var(--muted); font-size: 1.05rem; margin-bottom: 1.5rem; }
-.cta { display: inline-block; margin: 1.5rem 0 2rem; padding: 0.85rem 1.5rem; background: var(--acc); color: #0f1118; font-weight: 700; text-decoration: none; border-radius: 8px; }
-.cta:hover { filter: brightness(1.08); }
-.intro h3 { margin-top: 1.75rem; font-size: 1.05rem; }
-.nav-cities { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1rem 0 2rem; font-size: 0.95rem; }
-.district-list { columns: 2; column-gap: 2rem; font-size: 0.9rem; margin: 1rem 0 2rem; padding-left: 1.2rem; }
-@media (max-width: 520px) { .district-list { columns: 1; } }
-.district-list li { break-inside: avoid; margin-bottom: 0.25rem; }
-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--muted); }
-</style>
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="src/styles/base.css">
+  <link rel="stylesheet" href="src/styles/hub.css">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -92,68 +88,257 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--bord
   </script>
 </head>
 <body>
-  <div class="wrap">
-    <header class="site">
-      <a class="logo" href="/">⚓ KiezQuiz</a>
-    </header>
+  <noscript>
+    <div style="max-width:720px;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.6;">
+      <h1>Berlin Ortsteile und Bezirke spielerisch lernen</h1>
+      <p>Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.</p>
+      <p>JavaScript ist für die interaktive Karte erforderlich.</p>
+      <p><a href="/hamburg/">Hamburg</a> · <a href="/frankfurt/">Frankfurt am Main</a> · <a href="/">Alle Städte</a></p>
+    </div>
+  </noscript>
 
-    <h1>Berlin Ortsteile und Bezirke spielerisch lernen</h1>
-    <p class="lead">Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.</p>
-
-    <nav class="nav-cities" aria-label="Städte-Navigation">
-      <a href="/hamburg/">Hamburg</a> · <a href="/frankfurt/">Frankfurt am Main</a> · <a href="/">Alle Städte</a>
-    </nav>
-
-    <a class="cta" href="https://kiezquiz.de/?city=berlin">Jetzt Berlin spielen →</a>
-
-    <div class="intro">
-      
-<p>Berlin ist eine Metropole mit zwölf Bezirken und 97 Ortsteilen — eine Struktur, die selbst langjährige Berliner
-oft nur bruchstückhaft kennen. KiezQuiz verwandelt diese komplexe Geografie in ein spielerisches Karten-Quiz:
-Du erkundest Mitte, Kreuzberg, Pankow, Charlottenburg und alle weiteren Bezirke auf einer interaktiven Karte.</p>
-
-<p>Die Berliner Verwaltungsgliederung entstand 2001 aus der Bezirksreform und verbindet historisch gewachsene
-Kieze zu größeren Einheiten. Wer weiß schon spontan, ob Plänterwald zu Treptow-Köpenick gehört oder wo genau
-Rudow liegt? Mit KiezQuiz trainierst du Ortsteil für Ortsteil — mit visuellem Feedback, Trivia und klaren Grenzen
-auf der Karte.</p>
-
-<h3>Fünf Spielmodi für echtes Kartenwissen</h3>
-<p>Starte im <strong>Entdecker-Modus</strong>, um jeden Ortsteil anzuklicken und Hintergrundwissen zu sammeln.
-Im <strong>Ortsteil-Detektiv</strong> bekommst du einen Namen und musst die passende Fläche finden — perfekt für
-aktives Abrufen. Das <strong>Karten-Quiz</strong> testet dein Erkennungsvermögen bei blinkenden Bezirken und Ortsteilen.
-<strong>Namen eingeben</strong> fordert dein Schreibwissen, und die <strong>„Nenne alle Orte"</strong>-Challenge
-simuliert eine Sporcle-Runde gegen die Uhr.</p>
-
-<h3>Progression, XP und Berlin-Pokale</h3>
-<p>Bezirke schaltest du schrittweise frei: 75&nbsp;% Meisterschaft im aktuellen Bezirk öffnet den nächsten.
-Sammle XP, halte Streaks für Bonus-Multiplikatoren und verdiene stadtspezifische Trophäen — von
-Bezirks-Meister bis Pfaueninsel-Entdecker. Dein globaler Rang wächst über alle Städte hinweg; Berlin-Fortschritt
-und Pokale werden separat gespeichert.</p>
-
-<h3>Gratis, ohne Anmeldung, PWA-fähig</h3>
-<p>Berlin lernen war noch nie so unkompliziert: Kein Download aus dem App Store, keine Registrierungspflicht.
-KiezQuiz läuft im Browser, funktioniert offline als installierbare Web App und speichert deinen Stand lokal.
-Optional synchronisierst du über ein Konto in der EU-Cloud.</p>
-
-<p>Spring direkt ins Berlin-Quiz — oder entdecke auch <a href="/hamburg/">Hamburg</a> und
-<a href="/frankfurt/">Frankfurt am Main</a>.</p>
-
+<div class="app-shell density-compact">
+    <div id="hub-view" class="hub-view-root" hidden>
+      <article class="seo-hub-fallback">
+        <h1>KiezQuiz – Bezirke und Stadtteile spielerisch lernen</h1>
+        <p>Kostenloses Karten-Quiz für Hamburg, Berlin und Frankfurt am Main. Lerne alle Bezirke und Ortsteile auf interaktiven Karten — mit XP, Streaks, Trivia und Pokalen. Keine Anmeldung nötig, mobil und offline spielbar.</p>
+        <nav aria-label="Städte">
+          <a href="/hamburg/">Hamburg (104 Stadtteile)</a> ·
+          <a href="/berlin/">Berlin (97 Ortsteile)</a> ·
+          <a href="/frankfurt/">Frankfurt (46 Stadtteile)</a>
+        </nav>
+        <h2>Hamburg</h2>
+        <p>Hamburg gliedert sich in 7 Bezirke und 104 Stadtteile — vom Hafen bis nach Bergedorf. KiezQuiz zeigt jeden Stadtteil auf einer zoombaren Karte und trainiert dein Orientierungswissen mit Entdecker-Modus, Detektiv, Quiz und Sporcle-Challenge.</p>
+        <h2>Berlin</h2>
+        <p>Berlin hat 12 Bezirke und 97 Ortsteile — von Mitte über Kreuzberg bis Marzahn-Hellersdorf. Lerne die Hauptstadt spielerisch: Klicke Ortsteile an, finde sie auf der Karte oder tippe Namen unter Zeitdruck ein.</p>
+        <h2>Frankfurt am Main</h2>
+        <p>Frankfurt umfasst 16 Ortsbezirke und 46 Stadtteile — von der Innenstadt bis Bergen-Enkheim. Das kostenlose Quiz hilft dir, Mainmetropole und Finanzstadt geografisch wirklich zu kennen.</p>
+      </article>
     </div>
 
-    <h2>Alle 97 Ortsteile von Berlin</h2>
-    <p style="color:var(--muted); font-size:0.95rem;">
-      12 Bezirke · 97 Ortsteile — vollständige Liste:
-    </p>
-    <ul class="district-list">
-      <li>Adlershof <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Alt-Hohenschönhausen <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Alt-Treptow <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Altglienicke <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Baumschulenweg <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Biesdorf <span style="color:var(--muted)">(Marzahn-Hellersdorf)</span></li><li>Blankenburg <span style="color:var(--muted)">(Pankow)</span></li><li>Blankenfelde <span style="color:var(--muted)">(Pankow)</span></li><li>Bohnsdorf <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Borsigwalde <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Britz <span style="color:var(--muted)">(Neukölln)</span></li><li>Buch <span style="color:var(--muted)">(Pankow)</span></li><li>Buckow <span style="color:var(--muted)">(Neukölln)</span></li><li>Charlottenburg <span style="color:var(--muted)">(Charlottenburg-Wilmersdorf)</span></li><li>Charlottenburg-Nord <span style="color:var(--muted)">(Charlottenburg-Wilmersdorf)</span></li><li>Dahlem <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Falkenberg <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Falkenhagener Feld <span style="color:var(--muted)">(Spandau)</span></li><li>Fennpfuhl <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Französisch Buchholz <span style="color:var(--muted)">(Pankow)</span></li><li>Friedenau <span style="color:var(--muted)">(Tempelhof-Schöneberg)</span></li><li>Friedrichsfelde <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Friedrichshagen <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Friedrichshain <span style="color:var(--muted)">(Friedrichshain-Kreuzberg)</span></li><li>Frohnau <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Gatow <span style="color:var(--muted)">(Spandau)</span></li><li>Gesundbrunnen <span style="color:var(--muted)">(Mitte)</span></li><li>Gropiusstadt <span style="color:var(--muted)">(Neukölln)</span></li><li>Grunewald <span style="color:var(--muted)">(Charlottenburg-Wilmersdorf)</span></li><li>Grünau <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Hakenfelde <span style="color:var(--muted)">(Spandau)</span></li><li>Halensee <span style="color:var(--muted)">(Charlottenburg-Wilmersdorf)</span></li><li>Hansaviertel <span style="color:var(--muted)">(Mitte)</span></li><li>Haselhorst <span style="color:var(--muted)">(Spandau)</span></li><li>Heiligensee <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Heinersdorf <span style="color:var(--muted)">(Pankow)</span></li><li>Hellersdorf <span style="color:var(--muted)">(Marzahn-Hellersdorf)</span></li><li>Hermsdorf <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Johannisthal <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Karlshorst <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Karow <span style="color:var(--muted)">(Pankow)</span></li><li>Kaulsdorf <span style="color:var(--muted)">(Marzahn-Hellersdorf)</span></li><li>Kladow <span style="color:var(--muted)">(Spandau)</span></li><li>Konradshöhe <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Kreuzberg <span style="color:var(--muted)">(Friedrichshain-Kreuzberg)</span></li><li>Köpenick <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Lankwitz <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Lichtenberg <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Lichtenrade <span style="color:var(--muted)">(Tempelhof-Schöneberg)</span></li><li>Lichterfelde <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Lübars <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Mahlsdorf <span style="color:var(--muted)">(Marzahn-Hellersdorf)</span></li><li>Malchow <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Mariendorf <span style="color:var(--muted)">(Tempelhof-Schöneberg)</span></li><li>Marienfelde <span style="color:var(--muted)">(Tempelhof-Schöneberg)</span></li><li>Marzahn <span style="color:var(--muted)">(Marzahn-Hellersdorf)</span></li><li>Mitte <span style="color:var(--muted)">(Mitte)</span></li><li>Moabit <span style="color:var(--muted)">(Mitte)</span></li><li>Märkisches Viertel <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Müggelheim <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Neu-Hohenschönhausen <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Neukölln <span style="color:var(--muted)">(Neukölln)</span></li><li>Niederschöneweide <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Niederschönhausen <span style="color:var(--muted)">(Pankow)</span></li><li>Nikolassee <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Oberschöneweide <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Pankow <span style="color:var(--muted)">(Pankow)</span></li><li>Pfaueninsel <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Plänterwald <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Prenzlauer Berg <span style="color:var(--muted)">(Pankow)</span></li><li>Rahnsdorf <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Reinickendorf <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Rosenthal <span style="color:var(--muted)">(Pankow)</span></li><li>Rudow <span style="color:var(--muted)">(Neukölln)</span></li><li>Rummelsburg <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Schlachtensee <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Schmargendorf <span style="color:var(--muted)">(Charlottenburg-Wilmersdorf)</span></li><li>Schmöckwitz <span style="color:var(--muted)">(Treptow-Köpenick)</span></li><li>Schöneberg <span style="color:var(--muted)">(Tempelhof-Schöneberg)</span></li><li>Siemensstadt <span style="color:var(--muted)">(Spandau)</span></li><li>Spandau <span style="color:var(--muted)">(Spandau)</span></li><li>Staaken <span style="color:var(--muted)">(Spandau)</span></li><li>Stadtrandsiedlung Malchow <span style="color:var(--muted)">(Pankow)</span></li><li>Steglitz <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Tegel <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Tempelhof <span style="color:var(--muted)">(Tempelhof-Schöneberg)</span></li><li>Tiergarten <span style="color:var(--muted)">(Mitte)</span></li><li>Waidmannslust <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Wannsee <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li><li>Wartenberg <span style="color:var(--muted)">(Lichtenberg)</span></li><li>Wedding <span style="color:var(--muted)">(Mitte)</span></li><li>Weißensee <span style="color:var(--muted)">(Pankow)</span></li><li>Westend <span style="color:var(--muted)">(Charlottenburg-Wilmersdorf)</span></li><li>Wilhelmsruh <span style="color:var(--muted)">(Pankow)</span></li><li>Wilhelmstadt <span style="color:var(--muted)">(Spandau)</span></li><li>Wilmersdorf <span style="color:var(--muted)">(Charlottenburg-Wilmersdorf)</span></li><li>Wittenau <span style="color:var(--muted)">(Reinickendorf)</span></li><li>Zehlendorf <span style="color:var(--muted)">(Steglitz-Zehlendorf)</span></li>
-    </ul>
+    <div id="city-view" class="city-view-root" data-city="hamburg" hidden>
+  <div class="app-container">
+    
+    <!-- App Header & Stats Bar -->
+    <header class="app-header global-header">
+      <div class="brand">
+        <h2 class="brand-title">KiezQuiz ⚓</h2>
+        <span class="badge" id="header-badge">Hamburg</span>
+      </div>
+      
+      <div class="stats-bar">
+        <!-- Streak Pill -->
+        <div class="stat-pill streak-pill" data-i18n-title="header.streakTitle" title="Deine aktuelle Antwortserie">
+          <div class="streak-info">
+            <div class="streak-current">
+              <span class="label" data-i18n="header.streakLabel">Serie 🔥:</span>
+              <span class="value" id="stat-streak">0x</span>
+            </div>
+            <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
+          </div>
+        </div>
 
-    <a class="cta" href="https://kiezquiz.de/?city=berlin">Kostenlos spielen — ohne Anmeldung</a>
+        <!-- XP Pill -->
+        <div class="stat-pill xp-pill" data-i18n-title="header.xpTitle" title="Deine Erfahrungspunkte">
+          <span class="label" data-i18n="header.xpLabel">XP:</span>
+          <span class="value" id="stat-xp">0</span>
+        </div>
+        
+        <!-- Level & Rank tracker -->
+        <div class="level-tracker">
+          <div class="level-info">
+            <span class="rank-name" id="stat-rank">Neuling</span>
+          </div>
+          <div class="progress-bg">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+        
+        <!-- Auth / Cloud sync -->
+        <button type="button" class="auth-pill" id="auth-pill" data-i18n-title="header.authTitle" title="Cloud-Speicherung: optional anmelden">
+          <span class="auth-pill-icon">👤</span>
+          <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
+          <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
+        </button>
 
-    <footer>
-      <p><a href="/">KiezQuiz Startseite</a> · <a href="/hamburg/">Hamburg</a> · <a href="/frankfurt/">Frankfurt am Main</a> · <a href="/">Alle Städte</a></p>
-      <p>© KiezQuiz — Bezirke und Stadtteile spielerisch lernen.</p>
+        <!-- Audio Synthesizer toggle -->
+        <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
+        <!-- Game history -->
+        <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf">📋</button>
+        <!-- Settings -->
+        <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
+        <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
+      </div>
+    </header>
+
+    <div id="city-context-bar"></div>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard-grid">
+      
+      <!-- Left Panel: Gameplay Console -->
+      <section class="console-panel">
+        
+        <!-- Segment selector (Lerne Stadtteile vs Bezirke) -->
+        <div class="segment-selector">
+          <button class="segment-btn active" id="btn-segment-stadtteile">
+            <span data-i18n="segment.stadtteile">🏙️ Stadtteile</span>
+          </button>
+          <button class="segment-btn" id="btn-segment-bezirke">
+            <span data-i18n="segment.bezirke">🏢 Bezirke lernen</span>
+          </button>
+        </div>
+
+        <!-- Game Mode Selection -->
+        <div class="glass-card mode-selector">
+          <h3 data-i18n="modes.selectTitle">Spielmodus wählen</h3>
+          <div class="modes-list">
+            <button class="mode-btn active" data-mode="EXPLORER" id="mode-explorer">
+              <span class="mode-icon">🗺️</span>
+              <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:700;" data-i18n="modes.explorer.label">Entdecker-Modus</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.explorer.desc">Frei erkunden & Infos lernen</span>
+              </div>
+            </button>
+            <button class="mode-btn" data-mode="LOCATE" id="mode-locate">
+              <span class="mode-icon">🕵️</span>
+              <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:700;" data-i18n="modes.locate.label">Stadtteil-Detektiv</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.locate.desc">Finde den Ort auf der Karte</span>
+              </div>
+            </button>
+            <button class="mode-btn" data-mode="QUIZ" id="mode-quiz">
+              <span class="mode-icon">⚡</span>
+              <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:700;" data-i18n="modes.quiz.label">Karten-Quiz</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.quiz.desc">Erkenne den blinkenden Ort</span>
+              </div>
+            </button>
+            <button class="mode-btn" data-mode="TYPE_NAME" id="mode-typename">
+              <span class="mode-icon">⌨️</span>
+              <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:700;" data-i18n="modes.typeName.label">Namen eingeben</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.typeName.desc">Blinkenden Ort eintippen</span>
+              </div>
+            </button>
+            <button class="mode-btn" data-mode="NAME_ALL" id="mode-nameall">
+              <span class="mode-icon">⏱️</span>
+              <div style="display:flex; flex-direction:column;">
+                <span style="font-weight:700;" data-i18n="modes.nameAll.label">Nenne alle Orte</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.nameAll.desc">Sporcle-Challenge gegen die Zeit</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- City progress (Pokale, Freischaltung — nur diese Stadt) -->
+        <div id="city-progress-card"></div>
+
+        <!-- Gameplay Interactive Area (Dynamic) -->
+        <div class="glass-card game-play-area" id="game-play-area-card">
+          <div id="game-play-area">
+            <!-- Appended dynamically by app.js -->
+          </div>
+        </div>
+
+        <!-- Progression & Bezirk Lock Status -->
+        <div class="glass-card unlocker-card" id="unlocker-card-container">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:0.5rem; margin-bottom:0.5rem;">
+            <h3 style="font-family:var(--font-display); font-size:1rem; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em;" data-i18n="progress.title">Bezirks-Fortschritt</h3>
+          </div>
+          <div class="district-progress-list" id="district-progress-list">
+            <!-- Appended dynamically by app.js -->
+          </div>
+        </div>
+
+        <!-- Bypass progression Toggle -->
+        <div class="glass-card" style="padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+          <div style="display: flex; flex-direction: column;">
+            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;" data-i18n="progress.unlockAll">Alle Bezirke freischalten</span>
+            <span style="font-size: 0.75rem; color: var(--text-secondary);" data-i18n="progress.unlockAllHint">Bypass für Profis (keine Progression)</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-progression">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+      </section>
+
+      <!-- Right Panel: Interactive SVG Map -->
+      <section class="map-panel">
+
+        <button type="button" class="control-btn map-center-btn" id="btn-zoom-reset" data-i18n-title="map.zoomResetTitle" data-i18n="map.zoomReset" title="Karte zentrieren">Zentrieren</button>
+
+        <!-- Bounding Box for SVG Map -->
+        <div class="map-container-wrapper" id="map-wrapper" role="img" aria-label="Interaktive Stadtkarte zum Erkunden von Bezirken und Stadtteilen">
+          
+          <!-- Floating island Easter Eggs (city-specific) -->
+          <div class="island-overlay neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!" hidden>
+            <div class="no-badge"></div>
+            <span data-i18n="map.neuwerkLabel">Neuwerk (Insel-Rätsel) 🏝️</span>
+          </div>
+          <div class="island-overlay pfaueninsel-overlay" id="pfaueninsel-anchor" data-i18n-title="map.pfaueninselTitle" title="Wo liegt die Pfaueninsel? Klicke hier!" hidden>
+            <div class="no-badge"></div>
+            <span data-i18n="map.pfaueninselLabel">Pfaueninsel (Insel-Rätsel) 🦚</span>
+          </div>
+
+          <div id="map-prompt-bar" class="map-prompt-bar" hidden aria-live="polite">
+            <div class="map-prompt-title" id="map-prompt-title"></div>
+            <div class="map-prompt-target" id="map-prompt-target"></div>
+            <div class="map-prompt-sub" id="map-prompt-sub"></div>
+          </div>
+          
+          <!-- SVG wird per fetch eingefügt -->
+
+          
+          <!-- Floating Tooltip -->
+          <div class="map-tooltip" id="map-tooltip"></div>
+          
+        </div>
+
+        <!-- Map Navigation Controls -->
+        <div class="map-controls">
+          <div class="zoom-btns">
+            <button class="control-btn" id="btn-zoom-in" data-i18n-title="map.zoomIn" title="Vergrößern">+</button>
+            <button class="control-btn" id="btn-zoom-out" data-i18n-title="map.zoomOut" title="Verkleinern">-</button>
+          </div>
+          <div class="map-hint" id="map-hint-text" data-i18n="map.hintDesktop">
+            💡 Tipp: Ziehe zum Verschieben. Pinch oder Mausrad zum Zoomen.
+          </div>
+        </div>
+
+      </section>
+      
+    </main>
+
+    <footer class="app-footer">
+      <p class="privacy-notice">
+        <strong data-i18n="footer.privacy">Datenschutz:</strong> <span data-i18n="footer.privacyText">Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.</span>
+      </p>
+      <p class="footer-credit">Courtesy of Jeremiah J. Lauer, LL.M.</p>
     </footer>
   </div>
+    </div><!-- /city-view -->
+  </div><!-- /app-shell -->
+
+  <script src="src/viewRouter.js"></script>
+  <script src="src/bootView.js"></script>
+
+  <!-- Hub core (defer) -->
+  <script src="src/i18n.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="src/supabaseConfig.js" defer></script>
+  <script src="src/auth.js" defer></script>
+  <script src="src/data/cities.js" defer></script>
+  <script src="src/cityRegistry.js" defer></script>
+  <script src="src/saveManager.js" defer></script>
+  <script src="src/loadScript.js" defer></script>
+  <script src="src/ui/globalHeader.js" defer></script>
+  <script src="src/ui/hub.js" defer></script>
+  <script src="src/cloudSync.js" defer></script>
+  <script src="src/cityWishes.js" defer></script>
+  <script src="src/game/init.js" defer></script>
+  <script src="src/bootstrap.js" defer></script>
 </body>
 </html>

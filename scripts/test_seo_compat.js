@@ -37,6 +37,7 @@ assert(gameSrc.includes('_loadedMapCityId'), 'map tracks loaded city for resync'
 assert(gameSrc.includes('history.replaceState'), 'deep link cleans URL after load');
 assert(bootSrc.includes('kiezViewRouter'), 'bootView delegates to viewRouter');
 assert(routerSrc.includes('kiezquiz_save_v2'), 'viewRouter reads v2 save');
+assert(routerSrc.includes('cityFromPathname'), 'viewRouter detects city from pathname');
 assert(routerSrc.includes('hasV1Save'), 'viewRouter detects v1 migration candidates');
 assert(fs.existsSync(path.join(root, 'index.html')), 'index.html exists');
 const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -55,6 +56,11 @@ for (const slug of ['hamburg', 'berlin', 'frankfurt']) {
   const cityHtml = fs.readFileSync(path.join(root, slug, 'index.html'), 'utf8');
   assert(cityHtml.includes('twitter:image'), `${slug} has twitter:image`);
   assert(cityHtml.includes('og:image:width'), `${slug} has og:image dimensions`);
+  assert(cityHtml.includes('<base href="/">'), `${slug} has base href for assets`);
+  assert(cityHtml.includes('src/viewRouter.js'), `${slug} loads viewRouter`);
+  assert(cityHtml.includes('src/bootstrap.js'), `${slug} loads bootstrap`);
+  assert(cityHtml.includes('FAQPage'), `${slug} has FAQ schema`);
+  assert(!cityHtml.includes('Jetzt Hamburg spielen'), `${slug} is not a text-only landing page`);
 }
 
 if (failed) {
