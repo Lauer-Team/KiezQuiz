@@ -35,6 +35,10 @@
     return (window.KQ_DATA?.cities || []).filter((c) => c.status === 'playable');
   }
 
+  function getLeaderboardCities() {
+    return getPlayableCities().filter((c) => ['hamburg', 'berlin', 'frankfurt'].includes(c.id));
+  }
+
   function buildProfileGameContext(save) {
     return {
       _save: save,
@@ -230,7 +234,10 @@
   }
 
   function renderLeaderboardSection() {
-    const cities = getPlayableCities();
+    const cities = getLeaderboardCities();
+    if (!cities.some((c) => c.id === leaderboardCity)) {
+      leaderboardCity = cities[0]?.id || 'hamburg';
+    }
     const options = cities.map((c) =>
       `<option value="${escapeHtml(c.id)}" ${c.id === leaderboardCity ? 'selected' : ''}>${escapeHtml(c.name)}</option>`
     ).join('');
@@ -377,8 +384,14 @@
     clearFriendSearchTimer();
     main.innerHTML = renderSectionContent();
     bindSectionEvents();
-    if (activeSection === 'leaderboard') {
-      void loadLeaderboards();
+    if (activeSection === 'friends' || activeSection === 'leaderboard') {
+      void loadSocialData().then(() => {
+        if (activeSection === 'friends') {
+          updateFriendsListsInDom();
+        } else if (activeSection === 'leaderboard') {
+          void loadLeaderboards();
+        }
+      });
     }
   }
 
@@ -405,15 +418,19 @@
     const timeoutMs = 15000;
 
     try {
+      await window.authManager?.waitForPendingAuthTasks?.();
+
       const [pub, fr] = await Promise.all([
         Promise.race([
           window.kiezSocial?.getCityLeaderboard?.(leaderboardCity, 50) ?? Promise.resolve(emptyResult),
           new Promise((resolve) => setTimeout(() => resolve({ rows: [], error: new Error('timeout') }), timeoutMs))
         ]),
-        Promise.race([
-          window.kiezSocial?.getFriendsLeaderboard?.(leaderboardCity, 50) ?? Promise.resolve(emptyResult),
-          new Promise((resolve) => setTimeout(() => resolve({ rows: [], error: new Error('timeout') }), timeoutMs))
-        ])
+        window.authManager?.isLoggedIn?.()
+          ? Promise.race([
+            window.kiezSocial?.getFriendsLeaderboard?.(leaderboardCity, 50) ?? Promise.resolve(emptyResult),
+            new Promise((resolve) => setTimeout(() => resolve({ rows: [], error: new Error('timeout') }), timeoutMs))
+          ])
+          : Promise.resolve({ rows: [], error: null })
       ]);
 
       if (loadToken !== leaderboardLoadToken) return;
@@ -657,7 +674,7 @@
 
   async function boot() {
     await initI18n();
-    document.title = t('profilePage.title') + ' · KiezQuiz';
+    applyPageMeta('profilePage');
     applyToDom();
     setShellVisible(true);
 
@@ -683,6 +700,10 @@
     }
 
     await refreshAccess();
+
+    onLocaleChange(() => {
+      applyPageMeta('profilePage');
+    });
   }
 
   if (document.readyState === 'loading') {

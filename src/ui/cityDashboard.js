@@ -2,6 +2,14 @@
 (function () {
   let switcherOpen = false;
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
   function getModeLabelForBreadcrumb(game) {
     const city = window.cityRegistry.getCity(game.activeCityId);
     const levelKey = window.cityRegistry.segmentToLevelKey(game.activeSegment, game.activeCityId);
@@ -41,23 +49,26 @@
 
     container.innerHTML = `
       <div class="city-context-bar" id="city-context-bar-inner">
-        <div class="ccb-left">
-          <button type="button" class="ccb-hub-btn" id="btn-back-hub" title="${t('hub.backToHub')}">
-            <span style="font-size:1rem">◀</span> ${t('hub.citiesNav')}
-          </button>
-          <div class="ccb-switch-wrap">
-            <button type="button" class="city-pill" id="btn-city-switcher">
-              <span class="city-pill-dot"></span>
-              <span class="city-pill-name">${city.name}</span>
-              <span class="city-pill-greet">${city.greeting}</span>
-              <span class="city-pill-chev" id="city-pill-chev" style="transform:${switcherOpen ? 'rotate(180deg)' : 'none'}">▾</span>
+        <div class="ccb-row">
+          <div class="ccb-left">
+            <button type="button" class="ccb-hub-btn" id="btn-back-hub" title="${t('hub.backToHub')}">
+              <span style="font-size:1rem">◀</span> ${t('hub.citiesNav')}
             </button>
-            <div class="city-switcher${switcherOpen ? ' is-open' : ''}" id="city-switcher-menu" ${switcherOpen ? '' : 'hidden'}>
-              <div class="city-switcher-title">${t('hub.switchCity')}</div>
-              ${switcherItems}
-              <button type="button" class="city-switcher-hub" id="btn-switcher-hub">${t('hub.viewAllCities')}</button>
+            <div class="ccb-switch-wrap">
+              <button type="button" class="city-pill" id="btn-city-switcher">
+                <span class="city-pill-dot"></span>
+                <span class="city-pill-name">${city.name}</span>
+                <span class="city-pill-greet">${city.greeting}</span>
+                <span class="city-pill-chev" id="city-pill-chev" style="transform:${switcherOpen ? 'rotate(180deg)' : 'none'}">▾</span>
+              </button>
+              <div class="city-switcher${switcherOpen ? ' is-open' : ''}" id="city-switcher-menu" ${switcherOpen ? '' : 'hidden'}>
+                <div class="city-switcher-title">${t('hub.switchCity')}</div>
+                ${switcherItems}
+                <button type="button" class="city-switcher-hub" id="btn-switcher-hub">${t('hub.viewAllCities')}</button>
+              </div>
             </div>
           </div>
+          <div class="ccb-right" id="city-progress-card"></div>
         </div>
         <div class="ccb-breadcrumb" id="city-breadcrumb">
           <span class="bc-step bc-city">${city.name}</span>
@@ -96,6 +107,8 @@
         if (id !== game.activeCityId) game.enterCity(id);
       });
     });
+
+    renderCityProgressCard(game);
   }
 
   function updateBreadcrumb(game) {
@@ -174,60 +187,39 @@
     const levelKey = window.cityRegistry.segmentToLevelKey(game.activeSegment, game.activeCityId);
     const level = city.levels.find((l) => l.key === levelKey) || city.levels[0];
     const prog = computeLevelProgress(game, city, levelKey);
-    const singular = t(level.singularKey || `cities.${city.id}.singular.${levelKey}`);
 
     const catalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(game.activeCityId) : [];
     const won = game.trophies.size;
     const total = catalog.length;
-    const { currentRank, nextRank, percent, totals } = game.getCityRankProgressInfo();
+    const { currentRank, percent, totals } = game.getCityRankProgressInfo();
     const cityRankKey = typeof getCityRankLocaleKey === 'function'
       ? getCityRankLocaleKey(game.activeCityId)
       : 'cityRanks';
-    const cityRankNote = nextRank
-      ? t(`${cityRankKey}.progressTo`, { percent: Math.round(percent), name: nextRank.name })
-      : t(`${cityRankKey}.maxReached`);
-    const stripItems = catalog.slice(0, 4).map((tr) => {
-      const earned = game.trophies.has(tr.id);
-      return `<button type="button" class="cpc-tro-chip${earned ? ' earned' : ' locked'}" data-trophy-id="${tr.id}" aria-label="${tr.name}"><span class="cpc-tro-icon">${tr.icon}</span></button>`;
-    }).join('');
+    const progressHint = t(`${cityRankKey}.progressHint`, {
+      districts: totals.unlockedDistricts,
+      totalDistricts: totals.totalDistricts,
+      trophies: totals.trophies,
+      totalTrophies: totals.totalTrophies
+    });
 
     container.innerHTML = `
-      <div class="glass-card city-progress-card">
-        <div class="cpc-head">
-          <h3>${city.name} · ${t('cityProgress.title')}</h3>
-          <span class="cpc-badge">${t('cityProgress.cityOnly')}</span>
+      <div class="city-progress-compact" title="${escapeHtml(city.name)} · ${t('cityProgress.title')}">
+        <div class="cpc-compact-rank">
+          <span class="cpc-compact-label">${t('cityProgress.cityRank')}</span>
+          <span class="cpc-compact-name">${currentRank.name}</span>
+          <div class="cpc-compact-bar"><div class="cpc-compact-fill" style="width:${percent}%"></div></div>
+          <span class="cpc-compact-meta">${progressHint}</span>
         </div>
-        <div class="cpc-rank-row">
-          <div class="cpc-rank-info">
-            <span class="cpc-rank-label">${t('cityProgress.cityRank')}</span>
-            <span class="cpc-rank-name">${currentRank.name}</span>
-          </div>
-          <div class="cpc-rank-bar"><div class="cpc-rank-fill" style="width:${percent}%"></div></div>
-          <span class="cpc-rank-hint">${cityRankNote}</span>
-          <span class="cpc-rank-meta">${t(`${cityRankKey}.progressHint`, totals)}</span>
+        <div class="cpc-compact-stats">
+          <span class="cpc-compact-stat" title="${level.label} ${t('cityProgress.unlocked')}">${prog.unlocked}/${prog.total}</span>
+          <span class="cpc-compact-stat" title="${t('cityProgress.trophies')}">🏆 ${won}/${total}</span>
         </div>
-        <div class="cpc-unlock-row">
-          <div class="cpc-unlock">
-            <span class="cpc-unlock-num">${prog.unlocked}<span class="cpc-unlock-den">/${prog.total}</span></span>
-            <span class="cpc-unlock-lbl">${level.label} ${t('cityProgress.unlocked')}</span>
-          </div>
-          <div class="cpc-unlock">
-            <span class="cpc-unlock-num">${prog.mastered}</span>
-            <span class="cpc-unlock-lbl">${t('cityProgress.mastered')}</span>
-          </div>
-        </div>
-        <div class="cpc-gate-hint">${t('cityProgress.gateHint', { singular })}</div>
-        <div class="cpc-trophies">
-          <div class="cpc-tro-head"><span>🏆 ${t('cityProgress.trophies')}</span><span class="cpc-tro-count">${won}/${total}</span></div>
-          <div class="cpc-tro-strip">${stripItems}</div>
-        </div>
-        <button type="button" class="secondary-btn" id="btn-city-progress-log">${t('cityProgress.viewLog')}</button>
+        <button type="button" class="cpc-compact-btn" id="btn-city-progress-log">${t('cityProgress.viewLog')}</button>
       </div>`;
 
     container.querySelector('#btn-city-progress-log')?.addEventListener('click', () => {
       if (window.kiezModals?.showLogModal) window.kiezModals.showLogModal(game);
     });
-    window.kiezModals?.bindTrophyClicks?.(container.querySelector('.cpc-tro-strip'), game);
   }
 
   function enhanceSegmentSelector() {

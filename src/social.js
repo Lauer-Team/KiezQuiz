@@ -16,9 +16,29 @@
     return String(value || '').trim().replace(/^@+/, '');
   }
 
+  function hasSupabaseClient() {
+    return window.authManager?.isConfigured?.() && getSupabase();
+  }
+
+  async function ensureAuthReady() {
+    await window.authManager?.waitForPendingAuthTasks?.();
+  }
+
   async function rpc(name, params) {
     if (!isEnabled()) return { data: null, error: new Error('not_configured') };
     try {
+      await ensureAuthReady();
+      const { data, error } = await getSupabase().rpc(name, params || {});
+      return { data, error: error || null };
+    } catch (err) {
+      return { data: null, error: err };
+    }
+  }
+
+  async function rpcPublic(name, params) {
+    if (!hasSupabaseClient()) return { data: null, error: new Error('not_configured') };
+    try {
+      await ensureAuthReady();
       const { data, error } = await getSupabase().rpc(name, params || {});
       return { data, error: error || null };
     } catch (err) {
@@ -63,9 +83,15 @@
     return { rows: Array.isArray(data) ? data : [], error: null };
   }
 
+  const LEADERBOARD_CITIES = new Set(['hamburg', 'berlin', 'frankfurt']);
+
   async function getCityLeaderboard(cityId, limit) {
-    const { data, error } = await rpc('get_city_leaderboard', {
-      p_city_id: cityId,
+    const city = String(cityId || '').toLowerCase().trim();
+    if (!LEADERBOARD_CITIES.has(city)) {
+      return { rows: [], error: null };
+    }
+    const { data, error } = await rpcPublic('get_city_leaderboard', {
+      p_city_id: city,
       p_limit: limit || 50
     });
     if (error) return { rows: [], error };

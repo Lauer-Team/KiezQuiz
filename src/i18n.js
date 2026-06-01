@@ -81,6 +81,9 @@ function applyToDom(root = document) {
 
   document.documentElement.lang = _locale;
 
+  const pageScope = document.body?.dataset?.i18nScope;
+  if (pageScope) return;
+
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.content = t('meta.description');
 
@@ -100,6 +103,21 @@ function applyToDom(root = document) {
   if (twitterDesc) twitterDesc.content = t('meta.ogDescription');
 
   document.title = t('meta.title') || (t('meta.slogan') ? 'KiezQuiz · ' + t('meta.slogan') : 'KiezQuiz');
+}
+
+function applyPageMeta(prefix) {
+  if (!prefix) return;
+  document.title = t(`${prefix}.title`);
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.content = t(`${prefix}.metaDescription`);
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.content = t(`${prefix}.title`);
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.content = t(`${prefix}.metaDescription`);
+  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twitterTitle) twitterTitle.content = t(`${prefix}.title`);
+  const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+  if (twitterDesc) twitterDesc.content = t(`${prefix}.metaDescription`);
 }
 
 function notifyLocaleListeners() {
@@ -142,5 +160,6 @@ window.formatDate = formatDate;
 window.formatTime = formatTime;
 window.setLocale = setLocale;
 window.applyToDom = applyToDom;
+window.applyPageMeta = applyPageMeta;
 window.onLocaleChange = onLocaleChange;
 window.initI18n = initI18n;

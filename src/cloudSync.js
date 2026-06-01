@@ -8,7 +8,9 @@ class CloudSync {
     this._saveTimer = null;
     this._pendingData = null;
     this._saveInFlight = false;
+    this._lastMergeToastAt = 0;
     this.SAVE_DEBOUNCE_MS = 2000;
+    this.MERGE_TOAST_COOLDOWN_MS = 60000;
   }
 
   isEnabled() {
@@ -216,6 +218,14 @@ class CloudSync {
     return data?.save_data ? this._normalizeToV2(data.save_data) : null;
   }
 
+  _showMergeToast(message) {
+    if (!message || typeof this.game?.showSyncToast !== 'function') return;
+    const now = Date.now();
+    if (now - this._lastMergeToastAt < this.MERGE_TOAST_COOLDOWN_MS) return;
+    this._lastMergeToastAt = now;
+    this.game.showSyncToast(message);
+  }
+
   async handleLoginMerge() {
     if (!this.isEnabled() || !this.game?.serializeState) return;
 
@@ -228,7 +238,7 @@ class CloudSync {
       this.game.deserializeState(cloudState);
       this.game.saveState();
       if (typeof this.game.showSyncToast === 'function') {
-        this.game.showSyncToast(t('sync.restored'));
+        this._showMergeToast(t('sync.restored'));
       }
       return;
     }
@@ -249,14 +259,14 @@ class CloudSync {
         this.game.deserializeState(merged);
         this.game.saveState();
         if (typeof this.game.showSyncToast === 'function') {
-          this.game.showSyncToast(t('sync.restored'));
+          this._showMergeToast(t('sync.restored'));
         }
       } else if (localXp > cloudXp || (localXp === cloudXp && localTime > cloudTime)) {
         this.game.deserializeState(merged);
         this.game.saveState();
         await this.flushSaveNow();
         if (typeof this.game.showSyncToast === 'function') {
-          this.game.showSyncToast(t('sync.uploaded'));
+          this._showMergeToast(t('sync.uploaded'));
         }
       } else {
         this.game.deserializeState(merged);

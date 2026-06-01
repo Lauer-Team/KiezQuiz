@@ -288,7 +288,7 @@
           'Neues Corporate Identity: Kiez-Signal-Farben, Bricolage Grotesque & Hanken Grotesk, Q-Pin-Logo',
           'Neue Über-uns-Seite mit Kalle der Kieztaube als Maskottchen und Entwickler-Pseudonym',
           'Einheitlicher Header in Städte-Übersicht und Spiel: Logo, XP, Serie, Rang, alle Steuerungen',
-          'KiezQuiz-Logo führt zur Über-uns-Seite, XP-Anzeige zur Profilseite mit Fortschritt pro Stadt',
+          'KiezQuiz-Logo führt zur Startseite, XP-Anzeige zur Profilseite mit Fortschritt pro Stadt',
           'Neues Favicon, neues OG-Bild für Messenger-Vorschau, Tab-Titel „KiezQuiz · Slogan“',
           'Footer: „Über das KiezQuiz“ und „Von Kalle der Kieztaube“'
         ]
@@ -299,7 +299,7 @@
           'New corporate identity: Kiez-Signal colors, Bricolage Grotesque & Hanken Grotesk, Q-Pin logo',
           'New about page featuring Kalle the Kiez Pigeon as mascot and developer pseudonym',
           'Unified header in city hub and game: logo, XP, streak, rank, all controls',
-          'KiezQuiz logo links to about page, XP pill links to profile with per-city progress',
+          'KiezQuiz logo links to home page, XP pill links to profile with per-city progress',
           'New favicon, new OG image for messenger previews, tab title “KiezQuiz · slogan”',
           'Footer: “About KiezQuiz” and “By Kalle the Kiez Pigeon”'
         ]
@@ -346,8 +346,23 @@
     return CHANGELOG_ENTRIES.map(localizeEntry);
   }
 
+  function parseVersionParts(version) {
+    return String(version || '0').split('.').map((part) => parseInt(part, 10) || 0);
+  }
+
+  function compareEntriesNewestFirst(a, b) {
+    const av = parseVersionParts(a.version);
+    const bv = parseVersionParts(b.version);
+    const len = Math.max(av.length, bv.length);
+    for (let i = 0; i < len; i += 1) {
+      const diff = (bv[i] || 0) - (av[i] || 0);
+      if (diff !== 0) return diff;
+    }
+    return String(b.date || '').localeCompare(String(a.date || ''));
+  }
+
   function getChangelogEntriesNewestFirst() {
-    return getChangelogEntries().reverse();
+    return [...CHANGELOG_ENTRIES].sort(compareEntriesNewestFirst).map(localizeEntry);
   }
 
   window.kiezChangelogData = {

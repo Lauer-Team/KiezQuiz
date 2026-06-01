@@ -24,6 +24,7 @@
     "globalRankLabel": "Globaler Rang",
     "profileLink": "Profil",
     "profileTitle": "Profil & Bestenliste öffnen",
+    "homeTitle": "Zur Startseite",
     "streakTitle": "Deine aktuelle Antwortserie",
     "xpTitle": "Deine Erfahrungspunkte",
     "changelogTitle": "Alle Updates und Neuerungen anzeigen"
@@ -183,6 +184,7 @@
   },
   "profilePage": {
     "title": "Profil",
+    "metaDescription": "Dein KiezQuiz-Profil: Erfolge pro Stadt, Freunde, Bestenliste und Konto.",
     "subtitle": "Dein Account",
     "navAchievements": "Erfolge",
     "navFriends": "Freunde",

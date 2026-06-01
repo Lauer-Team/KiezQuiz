@@ -34,9 +34,11 @@
   <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.png">
 
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="icon" href="icons/icon.svg" sizes="any">
-  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="icon" href="/icons/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="src/styles/base.css">
   <link rel="stylesheet" href="src/styles/hub.css">
   <script type="application/ld+json">
@@ -100,7 +102,7 @@
 
   <div class="app-shell density-compact">
     <header class="app-header global-header" id="app-header">
-      <a href="/about/" class="brand brand-link" data-i18n-title="footer.about" title="Über das KiezQuiz">
+      <a href="/" class="brand brand-link" data-i18n-title="header.homeTitle" title="Zur Startseite">
         <img class="brand-pin" src="assets/brand/marke/qpin-signal.svg" width="36" height="45" alt="">
         <h1 class="brand-title">KiezQuiz</h1>
         <span class="badge" id="header-badge">Städte</span>
@@ -150,7 +152,7 @@
     </header>
 
     <div id="hub-view" class="hub-view-root" hidden>
-      <article class="seo-hub-fallback">
+      <article class="seo-hub-fallback" hidden aria-hidden="true">
         <h1>KiezQuiz – Bezirke und Stadtteile spielerisch lernen</h1>
         <p>Kostenloses Karten-Quiz für Hamburg, Berlin und Frankfurt am Main. Lerne alle Bezirke und Ortsteile auf interaktiven Karten — mit XP, Streaks, Trivia und Pokalen. Keine Anmeldung nötig, mobil und offline spielbar.</p>
         <nav aria-label="Städte">
@@ -236,9 +238,6 @@
             <!-- Appended dynamically by app.js -->
           </div>
         </div>
-
-        <!-- City progress (Pokale, Freischaltung — nur diese Stadt) -->
-        <div id="city-progress-card"></div>
 
         <!-- Progression & Bezirk Lock Status -->
         <div class="glass-card unlocker-card" id="unlocker-card-container">
@@ -330,6 +329,7 @@
   </div><!-- /app-shell -->
 
   <script src="src/viewRouter.js"></script>
+  <script src="src/ui/hubShell.js"></script>
   <script src="src/bootView.js"></script>
 
   <!-- Hub core (defer) -->

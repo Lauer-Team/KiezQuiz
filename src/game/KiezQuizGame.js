@@ -67,8 +67,9 @@ class KiezQuizGame {
 
   init() {
     this._save = window.saveManager.loadSave();
-    this.view = window.saveManager.getInitialView(this._save);
-    this.activeCityId = this._save.lastCity || 'hamburg';
+    const route = window.kiezViewRouter?.resolveInitialView({ save: this._save }) || {};
+    this.view = route.view || window.saveManager.getInitialView(this._save);
+    this.activeCityId = route.cityId || this._save.lastCity || 'hamburg';
 
     const params = new URLSearchParams(window.location.search);
     const cityParam = (params.get('city') || window.kiezViewRouter?.cityFromPathname(window.location.pathname) || '').trim().toLowerCase();
@@ -1865,6 +1866,15 @@ class KiezQuizGame {
   }
 
   showSyncToast(message) {
+    if (!message) return;
+    const now = Date.now();
+    if (!this._syncToastState) this._syncToastState = { lastMsg: '', lastAt: 0 };
+    if (this._syncToastState.lastMsg === message && now - this._syncToastState.lastAt < 8000) return;
+    this._syncToastState = { lastMsg: message, lastAt: now };
+
+    const existing = document.querySelector('.sync-toast');
+    if (existing) existing.remove();
+
     const toast = document.createElement('div');
     toast.className = 'sync-toast';
     toast.textContent = message;

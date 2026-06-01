@@ -24,6 +24,7 @@
     "globalRankLabel": "Global rank",
     "profileLink": "Profile",
     "profileTitle": "Open profile & leaderboards",
+    "homeTitle": "Back to home",
     "streakTitle": "Your current answer streak",
     "xpTitle": "Your experience points",
     "changelogTitle": "View all updates and what's new"
@@ -183,6 +184,7 @@
   },
   "profilePage": {
     "title": "Profile",
+    "metaDescription": "Your KiezQuiz profile: per-city achievements, friends, leaderboards, and account.",
     "subtitle": "Your account",
     "navAchievements": "Achievements",
     "navFriends": "Friends",

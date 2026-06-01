@@ -2257,6 +2257,25 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     max-height: min(58vh, 58dvh);
     height: auto;
   }
+
+  body.in-round #round-active-ui .prompt-box {
+    display: none;
+  }
+
+  body.in-round #game-play-area-card {
+    max-height: min(36vh, 36dvh, 280px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body.in-round .console-panel {
+    order: 3;
+  }
+
+  body.in-round .map-panel {
+    order: 1;
+    min-height: min(52vh, 52dvh);
+  }
 }
 
 @media (min-width: 1025px) {

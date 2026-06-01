@@ -20,13 +20,16 @@
   <meta name="twitter:description" content="Was ist KiezQuiz? Wer ist Kalle die Kieztaube?">
   <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.png">
   <link rel="manifest" href="../manifest.webmanifest">
-  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="../icons/icon.svg">
+  <link rel="icon" href="/icons/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <link rel="stylesheet" href="../src/styles/base.css">
   <link rel="stylesheet" href="../src/styles/about.css">
   <script>window.KIEZ_SRC_BASE = '../src/';</script>
 </head>
-<body class="about-page-body">
+<body class="about-page-body" data-i18n-scope="about">
   <div class="about-shell">
     <header class="about-topbar">
       <a href="/" class="about-back-link" data-i18n="aboutPage.backLink">← Zurück zum Quiz</a>
@@ -81,17 +84,8 @@
   <script>
     (async function () {
       await initI18n();
-      document.title = t('aboutPage.title');
-      var metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.content = t('aboutPage.metaDescription');
-      var ogTitle = document.querySelector('meta[property="og:title"]');
-      if (ogTitle) ogTitle.content = t('aboutPage.title');
-      var ogDesc = document.querySelector('meta[property="og:description"]');
-      if (ogDesc) ogDesc.content = t('aboutPage.metaDescription');
-      var twitterTitle = document.querySelector('meta[name="twitter:title"]');
-      if (twitterTitle) twitterTitle.content = t('aboutPage.title');
-      var twitterDesc = document.querySelector('meta[name="twitter:description"]');
-      if (twitterDesc) twitterDesc.content = t('aboutPage.metaDescription');
+      applyPageMeta('aboutPage');
+      applyToDom();
 
       var langBtn = document.getElementById('about-lang-toggle');
       function syncLangBtn() {
@@ -102,11 +96,14 @@
       syncLangBtn();
       langBtn.addEventListener('click', function () {
         setLocale(getLocale() === 'de' ? 'en' : 'de').then(function () {
-          document.title = t('aboutPage.title');
+          applyPageMeta('aboutPage');
           syncLangBtn();
         });
       });
-      onLocaleChange(syncLangBtn);
+      onLocaleChange(function () {
+        applyPageMeta('aboutPage');
+        syncLangBtn();
+      });
     })();
   </script>
 </body>
