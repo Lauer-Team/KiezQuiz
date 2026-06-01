@@ -103,6 +103,7 @@ class KiezQuizGame {
       if (cityEl) cityEl.hidden = true;
       window.kiezHub?.render(this, hubEl);
       if (window.authManager) window.authManager.updateHeaderUI();
+      this._maybeShowAppNews();
       return;
     }
 
@@ -228,25 +229,34 @@ class KiezQuizGame {
         this._audioPrimed = true;
       }
 
-      if (this.shouldShowOnboarding(this.activeCityId)) {
-        this.showOnboarding();
-      }
+      this._maybeShowAppNews();
     });
   }
 
-  shouldShowOnboarding(cityId) {
-    const city = window.cityRegistry.getCity(cityId);
-    if (!city?.onboardingVersion) return false;
-    const branch = this._save?.cities?.[cityId];
-    const seen = parseInt(branch?.onboardingVersionSeen, 10) || 0;
-    return seen < city.onboardingVersion;
+  _hasAppNewsContent() {
+    const title = t('appNews.title');
+    return !!(title && title !== 'appNews.title' && String(title).trim());
   }
 
-  markOnboardingSeen(cityId) {
-    window.saveManager.ensureCityBranch(this._save, cityId);
-    const city = window.cityRegistry.getCity(cityId);
-    this._save.cities[cityId].onboardingVersionSeen = city?.onboardingVersion || 1;
+  shouldShowAppNews() {
+    const version = typeof APP_NEWS_VERSION === 'number' ? APP_NEWS_VERSION : 0;
+    if (!version || !this._hasAppNewsContent()) return false;
+    const seen = parseInt(this._save?.global?.newsVersionSeen, 10) || 0;
+    return seen < version;
+  }
+
+  markAppNewsSeen() {
+    const version = typeof APP_NEWS_VERSION === 'number' ? APP_NEWS_VERSION : 0;
+    if (!this._save.global) this._save.global = {};
+    this._save.global.newsVersionSeen = version;
     window.saveManager.persistSave(this._save);
+  }
+
+  _maybeShowAppNews() {
+    if (this._appNewsShownThisSession) return;
+    if (!this.shouldShowAppNews()) return;
+    this._appNewsShownThisSession = true;
+    this.showAppNews();
   }
 
   showHub(persistNav = true) {
@@ -1264,7 +1274,7 @@ class KiezQuizGame {
 
     this.deserializeState({
       saveVersion: 2,
-      global: { xp: 0, streak: 0, bestStreak: 0, rankSeen: 1, muted: false },
+      global: { xp: 0, streak: 0, bestStreak: 0, rankSeen: 1, newsVersionSeen: 0, muted: false },
       lastCity: null,
       lastLevelKey: 'stadtteile',
       lastMode: 'EXPLORER',
@@ -1518,43 +1528,42 @@ class KiezQuizGame {
     });
   }
 
-  showOnboarding() {
-    const prefix = getCityConfig(this.activeCityId).onboarding;
+  showAppNews() {
     const modal = openOverlayModal(`
       <div class="modal-content" style="max-width: 550px;">
-        <h2>${t(`${prefix}.title`)}</h2>
-        <p>${t(`${prefix}.intro`)}</p>
+        <h2>${t('appNews.title')}</h2>
+        <p>${t('appNews.intro')}</p>
         
         <div class="modal-features">
           <div class="mf-item">
-            <span class="mf-icon">🏢</span>
+            <span class="mf-icon">${t('appNews.feature1Icon')}</span>
             <span class="mf-text">
-              <strong>${t(`${prefix}.feature1Title`)}</strong>
-              ${t(`${prefix}.feature1Text`)}
+              <strong>${t('appNews.feature1Title')}</strong>
+              ${t('appNews.feature1Text')}
             </span>
           </div>
           <div class="mf-item">
-            <span class="mf-icon">⏱️</span>
+            <span class="mf-icon">${t('appNews.feature2Icon')}</span>
             <span class="mf-text">
-              <strong>${t(`${prefix}.feature2Title`)}</strong>
-              ${t(`${prefix}.feature2Text`)}
+              <strong>${t('appNews.feature2Title')}</strong>
+              ${t('appNews.feature2Text')}
             </span>
           </div>
           <div class="mf-item">
-            <span class="mf-icon">⌨️</span>
+            <span class="mf-icon">${t('appNews.feature3Icon')}</span>
             <span class="mf-text">
-              <strong>${t(`${prefix}.feature3Title`)}</strong>
-              ${t(`${prefix}.feature3Text`)}
+              <strong>${t('appNews.feature3Title')}</strong>
+              ${t('appNews.feature3Text')}
             </span>
           </div>
         </div>
 
-        <p style="font-size: 0.8rem; color: var(--text-muted);">${t(`${prefix}.mapTip`)}</p>
-        <button class="primary-btn" id="btn-onboarding-dismiss">${t(`${prefix}.dismiss`)}</button>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">${t('appNews.footerTip')}</p>
+        <button class="primary-btn" id="btn-app-news-dismiss">${t('appNews.dismiss')}</button>
       </div>
     `);
-    document.getElementById('btn-onboarding-dismiss').addEventListener('click', () => {
-      this.markOnboardingSeen(this.activeCityId);
+    document.getElementById('btn-app-news-dismiss').addEventListener('click', () => {
+      this.markAppNewsSeen();
       closeOverlayModal(modal);
     });
   }

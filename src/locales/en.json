@@ -429,42 +429,20 @@
       "Gallus": "Up-and-coming quarter west of the main station with multicultural flair."
     }
   },
-  "onboarding": {
-    "title": "Welcome to Hamburg! ⚓",
-    "intro": "Learn all 7 boroughs and 104 districts of Hamburg through play. You start small as an <strong>Outsider</strong> (non-Hamburger) and work your way up!",
-    "feature1Title": "1. Learn boroughs (New!)",
-    "feature1Text": "Learn all 104 districts in detail, or switch to \"Boroughs\" top-left to master the 7 main boroughs first.",
-    "feature2Title": "2. Sporcle runs & challenges (New!)",
-    "feature2Text": "Start structured rounds! Wrong clicks stay marked red, correct ones green. Score at least <strong>75%</strong> in a borough to unlock the next! Or name all places against the clock.",
-    "feature3Title": "3. Type the name (New!)",
-    "feature3Text": "Raise the difficulty! Type blinking district names directly from the keyboard (with smart autocomplete suggestions).",
-    "mapTip": "Tip: The Elbe flows as a bright blue river through Hamburg and helps you orient yourself on the map!",
-    "elbeTip": "Tip: The Elbe flows as a bright blue river through Hamburg and helps you orient yourself on the map!",
-    "dismiss": "Let's go!"
-  },
-  "onboardingBerlin": {
-    "title": "Welcome to Berlin! 🐻",
-    "intro": "Learn all 12 boroughs and 97 neighbourhoods through play. You start in <strong>Mitte</strong> and unlock the city step by step.",
-    "feature1Title": "1. Boroughs & neighbourhoods",
-    "feature1Text": "Learn all 97 neighbourhoods in detail, or switch to \"Boroughs\" to master Berlin's 12 boroughs first.",
-    "feature2Title": "2. Sporcle runs & challenges",
-    "feature2Text": "Structured rounds with permanent green/red marks. Score at least <strong>75%</strong> in a borough to unlock the next!",
-    "feature3Title": "3. Type the name",
-    "feature3Text": "Type neighbourhood names from the keyboard — with smart autocomplete suggestions.",
-    "mapTip": "Tip: The Spree and large green spaces like Tiergarten help you orient yourself on the Berlin map!",
-    "dismiss": "Let's go!"
-  },
-  "onboardingFrankfurt": {
-    "title": "Welcome to Frankfurt! 🍎",
-    "intro": "Learn all 16 districts and 46 neighbourhoods through play. You start in <strong>Innenstadt I</strong> and unlock the Main metropolis step by step.",
-    "feature1Title": "1. Districts & neighbourhoods",
-    "feature1Text": "Learn all 46 neighbourhoods in detail, or switch to \"Districts\" to master Frankfurt's 16 districts first.",
-    "feature2Title": "2. Sporcle runs & challenges",
-    "feature2Text": "Structured rounds with permanent green/red marks. Score at least <strong>75%</strong> in a district to unlock the next!",
-    "feature3Title": "3. Type the name",
-    "feature3Text": "Type neighbourhood names from the keyboard — with smart autocomplete suggestions.",
-    "mapTip": "Tip: The Main river runs through Frankfurt — Sachsenhausen lies south of the river!",
-    "dismiss": "Let's go!"
+  "appNews": {
+    "title": "",
+    "intro": "",
+    "feature1Icon": "✨",
+    "feature1Title": "",
+    "feature1Text": "",
+    "feature2Icon": "✨",
+    "feature2Title": "",
+    "feature2Text": "",
+    "feature3Icon": "✨",
+    "feature3Title": "",
+    "feature3Text": "",
+    "footerTip": "",
+    "dismiss": "Got it"
   },
   "explorer": {
     "emptyBezirk": "Click a borough on the map to see fascinating metadata and Hanseatic facts!",

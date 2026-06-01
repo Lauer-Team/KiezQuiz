@@ -38,6 +38,7 @@
         streak: 0,
         bestStreak: 0,
         rankSeen: 1,
+        newsVersionSeen: 0,
         muted: false
       },
       lastCity: null,
@@ -98,6 +99,7 @@
         streak: parseInt(localStorage.getItem('hh_streak'), 10) || 0,
         bestStreak: parseInt(localStorage.getItem('hh_best_streak'), 10) || 0,
         rankSeen: 1,
+        newsVersionSeen: 1,
         muted: localStorage.getItem('hamburg_muted') === 'true'
       },
       lastCity: 'hamburg',
@@ -117,6 +119,18 @@
       migratedFromV1: true,
       savedAt: new Date().toISOString()
     };
+  }
+
+  function migrateNewsSeen(save) {
+    if (!save.global) save.global = {};
+    const seen = parseInt(save.global.newsVersionSeen, 10) || 0;
+    if (seen > 0) return;
+    const hadLegacyOnboarding = Object.values(save.cities || {}).some(
+      (c) => (parseInt(c.onboardingVersionSeen, 10) || 0) >= 1
+    );
+    if (hadLegacyOnboarding) {
+      save.global.newsVersionSeen = 1;
+    }
   }
 
   function ensureCityBranch(save, cityId) {
@@ -140,6 +154,7 @@
           if (parsed.cities.hamburg) {
             parsed.cities.hamburg.trophies = normalizeTrophyIds(parsed.cities.hamburg.trophies);
           }
+          migrateNewsSeen(parsed);
           return parsed;
         }
       } catch (e) { /* fall through to migration */ }

@@ -541,42 +541,20 @@
       "Gallus": "Aufstrebendes Viertel westlich des Hauptbahnhofs mit multikulturellem Flair."
     }
   },
-  "onboarding": {
-    "title": "Moin Moin in Hamburg! ⚓",
-    "intro": "Lerne spielerisch alle 7 Bezirke und 104 Stadtteile Hamburgs kennen. Du fängst ganz klein als <strong>Quiddje</strong> (Nicht-Hamburger) an und arbeitest dich hoch!",
-    "feature1Title": "1. Bezirke lernen (Neu!)",
-    "feature1Text": "Lerne entweder alle 104 Stadtteile im Detail oder schalte oben links auf \"Bezirke\" um, um erst einmal die 7 großen Hauptbezirke spielerisch zu meistern.",
-    "feature2Title": "2. Sporcle-Durchläufe & Challenges (Neu!)",
-    "feature2Text": "Starte strukturierte Runden! Falsche Klicks bleiben dauerhaft rot markiert, richtige grün. Meistere einen Bezirk mit mindestens <strong>75%</strong>, um weiterzukommen! Oder nenne alle Orte im Countdown-Timer.",
-    "feature3Title": "3. Namen eingeben (Neu!)",
-    "feature3Text": "Erhöhe die Schwierigkeit! Tippe im neuen Eingabemodus die blinkenden Stadtteil-Namen direkt per Tastatur ein (mit smarter Autocomplete-Vorschlagsliste).",
-    "mapTip": "Tipp: Die Elbe fließt als breiter hellblauer Strom durch Hamburg und hilft dir perfekt bei der Orientierung auf der Karte!",
-    "elbeTip": "Tipp: Die Elbe fließt als breiter hellblauer Strom durch Hamburg und hilft dir perfekt bei der Orientierung auf der Karte!",
-    "dismiss": "Leinen los!"
-  },
-  "onboardingBerlin": {
-    "title": "Willkommen in Berlin! 🐻",
-    "intro": "Lerne spielerisch alle 12 Bezirke und 97 Ortsteile Berlins kennen. Du startest im Bezirk <strong>Mitte</strong> und arbeitest dich Schritt für Schritt durch die Stadt.",
-    "feature1Title": "1. Bezirke & Ortsteile",
-    "feature1Text": "Lerne alle 97 Ortsteile im Detail oder schalte oben auf \"Bezirke\" um, um zuerst die 12 Berliner Bezirke zu meistern.",
-    "feature2Title": "2. Sporcle-Durchläufe & Challenges",
-    "feature2Text": "Strukturierte Runden mit dauerhaft grünen/roten Markierungen. Meistere einen Bezirk mit mindestens <strong>75%</strong>, um den nächsten freizuschalten!",
-    "feature3Title": "3. Namen eingeben",
-    "feature3Text": "Tippe Ortsteil-Namen direkt per Tastatur ein — mit smarter Autocomplete-Vorschlagsliste.",
-    "mapTip": "Tipp: Die Spree und große Grünflächen wie der Tiergarten helfen dir bei der Orientierung auf der Berlin-Karte!",
-    "dismiss": "Los geht's!"
-  },
-  "onboardingFrankfurt": {
-    "title": "Ei gude in Frankfurt! 🍎",
-    "intro": "Lerne spielerisch alle 16 Ortsbezirke und 46 Stadtteile Frankfurts kennen. Du startest im Ortsbezirk <strong>Innenstadt I</strong> und arbeitest dich Schritt für Schritt durch die Mainmetropole.",
-    "feature1Title": "1. Ortsbezirke & Stadtteile",
-    "feature1Text": "Lerne alle 46 Stadtteile im Detail oder schalte oben auf \"Ortsbezirke\" um, um zuerst die 16 Frankfurter Ortsbezirke zu meistern.",
-    "feature2Title": "2. Sporcle-Durchläufe & Challenges",
-    "feature2Text": "Strukturierte Runden mit dauerhaft grünen/roten Markierungen. Meistere einen Ortsbezirk mit mindestens <strong>75%</strong>, um den nächsten freizuschalten!",
-    "feature3Title": "3. Namen eingeben",
-    "feature3Text": "Tippe Stadtteil-Namen direkt per Tastatur ein — mit smarter Autocomplete-Vorschlagsliste.",
-    "mapTip": "Tipp: Der Main fließt durch Frankfurt und hilft dir bei der Orientierung — südlich des Flusses liegt Sachsenhausen!",
-    "dismiss": "Los geht's!"
+  "appNews": {
+    "title": "",
+    "intro": "",
+    "feature1Icon": "✨",
+    "feature1Title": "",
+    "feature1Text": "",
+    "feature2Icon": "✨",
+    "feature2Title": "",
+    "feature2Text": "",
+    "feature3Icon": "✨",
+    "feature3Title": "",
+    "feature3Text": "",
+    "footerTip": "",
+    "dismiss": "Verstanden"
   },
   "explorer": {
     "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
