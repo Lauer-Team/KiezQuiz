@@ -203,40 +203,7 @@
   }
 
   async function showWishAdminModal() {
-    const rows = await window.cityWishes?.fetchAdminList?.() || [];
-    const listHtml = rows.length
-      ? rows.map((row) => {
-          const who = row.username
-            ? `@${row.username}`
-            : (row.guestId ? t('hub.wishAdminGuest', { id: row.guestId.slice(0, 8) }) : t('hub.wishAdminUnknown'));
-          const when = row.createdAt ? new Date(row.createdAt).toLocaleString(getLocale()) : '';
-          const typeLabel = row.requestType === 'proposal' ? t('hub.wishAdminProposal') : t('hub.wishAdminVote');
-          return `<tr><td>${row.cityName}</td><td>${who}</td><td>${typeLabel}</td><td>${when}</td></tr>`;
-        }).join('')
-      : `<tr><td colspan="4">${t('hub.wishAdminEmpty')}</td></tr>`;
-
-    const modal = openOverlayModal(`
-      <div class="modal-content" style="max-width: 720px; text-align: left;">
-        <button type="button" class="modal-x" id="btn-wish-admin-x">✕</button>
-        <h2 style="text-align: center;">${t('hub.wishAdminTitle')}</h2>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">${t('hub.wishAdminBody')}</p>
-        <div style="overflow-x: auto; max-height: 60vh; margin-top: 1rem;">
-          <table class="wish-admin-table">
-            <thead><tr>
-              <th>${t('hub.wishAdminColCity')}</th>
-              <th>${t('hub.wishAdminColAccount')}</th>
-              <th>${t('hub.wishAdminColType')}</th>
-              <th>${t('hub.wishAdminColWhen')}</th>
-            </tr></thead>
-            <tbody>${listHtml}</tbody>
-          </table>
-        </div>
-        <button type="button" class="primary-btn" id="btn-wish-admin-close" style="margin-top: 1rem; width: 100%;">${t('settings.close')}</button>
-      </div>
-    `, { closeOnBackdrop: true });
-
-    modal.querySelector('#btn-wish-admin-x')?.addEventListener('click', () => closeOverlayModal(modal));
-    modal.querySelector('#btn-wish-admin-close')?.addEventListener('click', () => closeOverlayModal(modal));
+    window.location.assign('/admin/');
   }
 
   window.kiezModals = { showLogModal, showWishModal, showWishAdminModal };
