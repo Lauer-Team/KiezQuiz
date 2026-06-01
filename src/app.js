@@ -840,7 +840,7 @@ class KiezQuizGame {
     this.activeCityId = this._save.lastCity || 'hamburg';
 
     const params = new URLSearchParams(window.location.search);
-    const cityParam = params.get('city');
+    const cityParam = (params.get('city') || '').trim().toLowerCase();
     if (cityParam && window.cityRegistry.isPlayable(cityParam)) {
       this.view = 'city';
       this.activeCityId = cityParam;
@@ -3955,10 +3955,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     _previousAuthUser = user;
   });
 
-  await window.authManager.init();
-  await window.authManager.waitForPendingAuthTasks();
-  window.authManager.initUI();
-
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden' && window.cloudSync?.isEnabled()) {
       window.cloudSync.flushSaveNow();
@@ -3967,13 +3963,24 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   onLocaleChange(() => game.reRenderCurrentView());
 
+  // Start game immediately — do not block on Supabase (can hang on slow networks).
   game.init();
 
-  if (window.authManager.isLoggedIn()) {
-    game.reRenderCurrentView();
-    if (game.view === 'city') {
-      game.updateMapStates();
-      game.updateIslandBadges();
+  void (async () => {
+    try {
+      await window.authManager.init();
+      await window.authManager.waitForPendingAuthTasks();
+      window.authManager.initUI();
+      if (window.authManager.isLoggedIn()) {
+        game.reRenderCurrentView();
+        if (game.view === 'city') {
+          game.updateMapStates();
+          game.updateIslandBadges();
+        }
+      }
+    } catch (err) {
+      console.warn('Auth startup failed:', err);
+      window.authManager.initUI();
     }
-  }
+  })();
 });

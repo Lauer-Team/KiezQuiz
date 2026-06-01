@@ -53,7 +53,7 @@
     if (!hub || !city) return;
 
     var params = new URLSearchParams(window.location.search);
-    var cityParam = params.get('city');
+    var cityParam = (params.get('city') || '').trim().toLowerCase();
 
     if (cityParam && PLAYABLE[cityParam]) {
       hub.hidden = true;

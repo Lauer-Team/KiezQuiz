@@ -68,7 +68,17 @@ class AuthManager {
 
     this.supabase = supabase.createClient(this.config.url, this.config.anonKey);
 
-    const { data: { session } } = await this.supabase.auth.getSession();
+    const AUTH_INIT_MS = 8000;
+    const sessionResult = await Promise.race([
+      this.supabase.auth.getSession(),
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Supabase getSession timeout')), AUTH_INIT_MS);
+      })
+    ]).catch((err) => {
+      console.warn('Auth session check skipped:', err.message || err);
+      return { data: { session: null } };
+    });
+    const { data: { session } } = sessionResult;
     if (session?.user) {
       const profile = await this._loadProfile(session.user.id);
       this._notify(session.user, profile);
