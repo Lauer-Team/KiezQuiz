@@ -1514,11 +1514,7 @@ class KiezQuizGame {
       slot.innerHTML = `
         <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.wishAdminTitle')}</strong>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.wishAdminBody')}</p>
-        <button type="button" id="btn-settings-wish-admin" class="secondary-btn">${t('settings.wishAdminBtn')}</button>`;
-      slot.querySelector('#btn-settings-wish-admin')?.addEventListener('click', () => {
-        closeOverlayModal(modal);
-        window.kiezModals?.showWishAdminModal?.();
-      });
+        <a href="/admin/" class="secondary-btn" style="display:inline-block;text-decoration:none;text-align:center;">${t('settings.wishAdminBtn')}</a>`;
     });
   }
 

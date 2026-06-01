@@ -103,28 +103,113 @@
     }
   }
 
+  function mapAdminRow(row) {
+    return {
+      id: row.id,
+      cityName: row.city_name,
+      username: row.profiles?.username || null,
+      guestId: row.guest_id,
+      userId: row.user_id,
+      requestType: row.request_type,
+      createdAt: row.created_at
+    };
+  }
+
+  function getUserKey(row) {
+    if (row.userId) return `user:${row.userId}`;
+    if (row.guestId) return `guest:${row.guestId}`;
+    return 'unknown';
+  }
+
+  function getUserLabel(row) {
+    if (row.username) return `@${row.username}`;
+    if (row.guestId) return row.guestId.slice(0, 8) + '…';
+    return '';
+  }
+
   async function fetchAdminList() {
     if (!isCloudEnabled() || !(await isAdmin())) return [];
     try {
-      const { data, error } = await getSupabase()
-        .from('city_wish_requests')
-        .select('id, city_name, user_id, guest_id, request_type, created_at, profiles(username)')
-        .order('created_at', { ascending: false })
-        .limit(500);
-      if (error) throw error;
-      return (data || []).map((row) => ({
-        id: row.id,
-        cityName: row.city_name,
-        username: row.profiles?.username || null,
-        guestId: row.guest_id,
-        userId: row.user_id,
-        requestType: row.request_type,
-        createdAt: row.created_at
-      }));
+      const pageSize = 1000;
+      let from = 0;
+      const all = [];
+
+      while (true) {
+        const { data, error } = await getSupabase()
+          .from('city_wish_requests')
+          .select('id, city_name, user_id, guest_id, request_type, created_at, profiles(username)')
+          .order('created_at', { ascending: false })
+          .range(from, from + pageSize - 1);
+        if (error) throw error;
+        if (!data?.length) break;
+        all.push(...data.map(mapAdminRow));
+        if (data.length < pageSize) break;
+        from += pageSize;
+      }
+
+      return all;
     } catch (e) {
       console.warn('City wish admin list failed:', e);
       return [];
     }
+  }
+
+  function aggregateByCity(rows) {
+    const map = new Map();
+    rows.forEach((row) => {
+      const name = row.cityName?.trim();
+      if (!name) return;
+      const entry = map.get(name) || { cityName: name, votes: 0, proposals: 0, total: 0 };
+      if (row.requestType === 'proposal') {
+        entry.proposals += 1;
+      } else {
+        entry.votes += 1;
+      }
+      entry.total += 1;
+      map.set(name, entry);
+    });
+    return Array.from(map.values()).sort((a, b) => b.total - a.total || a.cityName.localeCompare(b.cityName, 'de'));
+  }
+
+  function aggregateByUser(rows) {
+    const map = new Map();
+    rows.forEach((row) => {
+      const key = getUserKey(row);
+      let entry = map.get(key);
+      if (!entry) {
+        entry = {
+          userKey: key,
+          label: getUserLabel(row),
+          username: row.username,
+          isGuest: !row.userId,
+          totalRequests: 0,
+          cities: new Map()
+        };
+        map.set(key, entry);
+      }
+      entry.totalRequests += 1;
+      const cityName = row.cityName?.trim();
+      if (!cityName) return;
+      const cityEntry = entry.cities.get(cityName) || { cityName, votes: 0, proposals: 0, total: 0 };
+      if (row.requestType === 'proposal') {
+        cityEntry.proposals += 1;
+      } else {
+        cityEntry.votes += 1;
+      }
+      cityEntry.total += 1;
+      entry.cities.set(cityName, cityEntry);
+    });
+
+    return Array.from(map.values())
+      .map((entry) => ({
+        userKey: entry.userKey,
+        label: entry.label,
+        username: entry.username,
+        isGuest: entry.isGuest,
+        totalRequests: entry.totalRequests,
+        cities: Array.from(entry.cities.values()).sort((a, b) => b.total - a.total || a.cityName.localeCompare(b.cityName, 'de'))
+      }))
+      .sort((a, b) => b.totalRequests - a.totalRequests || a.label.localeCompare(b.label, 'de'));
   }
 
   window.cityWishes = {
@@ -132,6 +217,8 @@
     submitWish,
     isAdmin,
     fetchAdminList,
+    aggregateByCity,
+    aggregateByUser,
     getGuestId
   };
 })();

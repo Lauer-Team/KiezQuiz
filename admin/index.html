@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KiezQuiz Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0f1118">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../src/styles/base.css">
+  <link rel="stylesheet" href="../src/styles/admin.css">
+  <script>window.KIEZ_SRC_BASE = '../src/';</script>
+</head>
+<body class="admin-page-body">
+  <div class="admin-shell">
+    <header class="admin-header">
+      <div class="admin-header-brand">
+        <a href="/" class="admin-back-link">← KiezQuiz</a>
+        <h1 data-i18n="adminPage.title">Admin</h1>
+      </div>
+      <div class="admin-header-actions">
+        <button type="button" class="auth-pill admin-auth-pill" data-i18n-title="header.authTitle" title="">
+          <span class="auth-pill-icon">👤</span>
+          <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
+          <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="admin-main" class="admin-main">
+      <div class="admin-state admin-state--loading" id="admin-state-loading">
+        <p data-i18n="adminPage.loading">Wird geladen…</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="../src/i18n.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../src/supabaseConfig.js"></script>
+  <script src="../src/auth.js"></script>
+  <script src="../src/game/effects.js"></script>
+  <script src="../src/cityWishes.js"></script>
+  <script src="../src/ui/adminPage.js"></script>
+</body>
+</html>
