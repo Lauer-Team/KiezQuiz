@@ -141,17 +141,16 @@
 
   async function showWishModal() {
     let votes = await window.cityWishes?.fetchTotals?.() || {};
-    let voted = await window.cityWishes?.fetchUserVotedCities?.() || {};
 
     function renderVoteList() {
       const sorted = Object.entries(votes).sort((a, b) => b[1] - a[1]);
       const max = Math.max(...Object.values(votes), 1);
       return sorted.map(([name, count]) => `
-        <button type="button" class="wish-vote-item${voted[name] ? ' voted' : ''}" data-vote="${name}">
+        <button type="button" class="wish-vote-item" data-vote="${name}">
           <div class="wvi-bar" style="width:${(count / max) * 100}%"></div>
           <span class="wvi-name">${name}</span>
           <span class="wvi-count">${count.toLocaleString(getLocale())}</span>
-          <span class="wvi-action">${voted[name] ? t('hub.wishVoted') : t('hub.wishVote')}</span>
+          <span class="wvi-action">${t('hub.wishVote')}</span>
         </button>`).join('');
     }
 
@@ -173,11 +172,9 @@
     const refresh = () => { listEl.innerHTML = renderVoteList(); bindVotes(); };
 
     async function castVote(name, type = 'vote') {
-      if (voted[name]) return;
       const result = await window.cityWishes?.submitWish?.(name, type);
       if (!result?.ok) return;
       votes = result.votes || votes;
-      voted = result.voted || voted;
       refresh();
       const thanks = modal.querySelector('#wish-thanks');
       if (thanks) {

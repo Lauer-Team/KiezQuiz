@@ -162,14 +162,6 @@ create table public.city_wish_requests (
   constraint city_wish_actor check (user_id is not null or guest_id is not null)
 );
 
-create unique index city_wish_unique_user
-  on public.city_wish_requests (user_id, lower(city_name))
-  where user_id is not null;
-
-create unique index city_wish_unique_guest
-  on public.city_wish_requests (guest_id, lower(city_name))
-  where guest_id is not null;
-
 alter table public.city_wish_requests enable row level security;
 
 create policy "wish_insert" on public.city_wish_requests for insert
@@ -206,18 +198,14 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 grant execute on function public.get_city_wish_totals() to anon, authenticated;
+```
 
--- Eigene Votes abfragen (Account oder Gast-ID)
-create or replace function public.get_my_city_wishes(p_guest_id text default null)
-returns setof text
-language sql stable security definer set search_path = public as $$
-  select cwr.city_name
-  from public.city_wish_requests cwr
-  where (auth.uid() is not null and cwr.user_id = auth.uid())
-     or (auth.uid() is null and p_guest_id is not null and cwr.guest_id = p_guest_id and cwr.user_id is null);
-$$;
+Falls du die Unique-Indizes aus einer früheren Version bereits angelegt hast, einmal entfernen:
 
-grant execute on function public.get_my_city_wishes(text) to anon, authenticated;
+```sql
+drop index if exists public.city_wish_unique_user;
+drop index if exists public.city_wish_unique_guest;
+drop function if exists public.get_my_city_wishes(text);
 ```
 
 **Admin eintragen** (deine User-UUID aus Authentication → Users):

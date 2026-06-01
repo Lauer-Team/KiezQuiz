@@ -5,7 +5,6 @@
 (function () {
   const GUEST_KEY = 'kiezquiz_guest_id';
   const LOCAL_VOTES_KEY = 'kiezquiz_city_wishes';
-  const LOCAL_VOTED_KEY = 'kiezquiz_city_wishes_voted';
   const DEFAULT_VOTES = { Köln: 312, München: 287, Leipzig: 176, Stuttgart: 143, Dresden: 121 };
 
   function getSupabase() {
@@ -38,19 +37,9 @@
     return votes;
   }
 
-  function loadLocalVoted() {
-    try {
-      const saved = localStorage.getItem(LOCAL_VOTED_KEY);
-      return saved ? JSON.parse(saved) : {};
-    } catch (e) {
-      return {};
-    }
-  }
-
-  function persistLocal(votes, voted) {
+  function persistLocal(votes) {
     try {
       localStorage.setItem(LOCAL_VOTES_KEY, JSON.stringify(votes));
-      localStorage.setItem(LOCAL_VOTED_KEY, JSON.stringify(voted));
     } catch (e) { /* ignore */ }
   }
 
@@ -70,33 +59,15 @@
     }
   }
 
-  async function fetchUserVotedCities() {
-    if (!isCloudEnabled()) return loadLocalVoted();
-    try {
-      const guestId = window.authManager?.user?.id ? null : getGuestId();
-      const { data, error } = await getSupabase().rpc('get_my_city_wishes', { p_guest_id: guestId });
-      if (error) throw error;
-      const voted = {};
-      (data || []).forEach((name) => { voted[name] = true; });
-      return voted;
-    } catch (e) {
-      console.warn('City wish voted fetch failed:', e);
-      return loadLocalVoted();
-    }
-  }
-
   async function submitWish(cityName, requestType = 'vote') {
     const name = cityName?.trim();
     if (!name) return { ok: false };
 
     if (!isCloudEnabled()) {
       const votes = loadLocalVotes();
-      const voted = loadLocalVoted();
-      if (voted[name]) return { ok: false, reason: 'already_voted' };
       votes[name] = (votes[name] || 0) + 1;
-      voted[name] = true;
-      persistLocal(votes, voted);
-      return { ok: true, votes, voted };
+      persistLocal(votes);
+      return { ok: true, votes };
     }
 
     const userId = window.authManager?.user?.id || null;
@@ -110,14 +81,9 @@
 
     try {
       const { error } = await getSupabase().from('city_wish_requests').insert(row);
-      if (error) {
-        if (error.code === '23505') return { ok: false, reason: 'already_voted' };
-        throw error;
-      }
+      if (error) throw error;
       const votes = await fetchTotals();
-      const voted = await fetchUserVotedCities();
-      voted[name] = true;
-      return { ok: true, votes, voted };
+      return { ok: true, votes };
     } catch (e) {
       console.warn('City wish submit failed:', e);
       return { ok: false, reason: 'error' };
@@ -163,7 +129,6 @@
 
   window.cityWishes = {
     fetchTotals,
-    fetchUserVotedCities,
     submitWish,
     isAdmin,
     fetchAdminList,
