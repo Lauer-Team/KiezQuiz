@@ -218,7 +218,7 @@ class AuthManager {
 
     const loggedInHtml = `
         <span class="auth-pill-icon">👤</span>
-        <span class="auth-pill-name">${this._escapeHtml(this.getDisplayName())}</span>
+        <a href="/profile/" class="auth-pill-name auth-pill-profile-link" title="${t('header.profileTitle')}">${this._escapeHtml(this.getDisplayName())}</a>
         <button type="button" class="auth-pill-action btn-auth-logout" title="${t('header.logout')}">${t('header.logout')}</button>
       `;
     const guestHtml = `
@@ -256,6 +256,7 @@ class AuthManager {
       const pill = e.target.closest('.auth-pill');
       if (!pill) return;
       if (e.target.closest('.btn-auth-logout')) return;
+      if (e.target.closest('.auth-pill-profile-link')) return;
       if (this.isLoggedIn()) return;
       this.showAuthModal();
     });

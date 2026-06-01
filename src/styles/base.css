@@ -2070,6 +2070,15 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   color: var(--color-neutral-glow);
 }
 
+a.auth-pill-profile-link {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a.auth-pill-profile-link:hover {
+  color: var(--acc, hsl(205 100% 62%));
+}
+
 .auth-pill-action {
   color: var(--color-neutral-glow);
   font-size: 0.8rem;

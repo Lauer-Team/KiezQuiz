@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>KiezQuiz Profil</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0f1118">
+  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../src/styles/base.css">
+  <link rel="stylesheet" href="../src/styles/profile.css">
+  <script>window.KIEZ_SRC_BASE = '../src/';</script>
+</head>
+<body class="profile-page-body">
+  <div class="profile-app" id="profile-app">
+    <aside class="profile-sidebar" id="profile-sidebar" hidden>
+      <div class="profile-sidebar-brand">
+        <a href="/" class="profile-back-link">← KiezQuiz</a>
+        <p class="profile-sidebar-title" data-i18n="profilePage.title">Profil</p>
+      </div>
+      <nav class="profile-nav" aria-label="Profil">
+        <button type="button" class="profile-nav-item is-active" data-section="achievements" data-i18n="profilePage.navAchievements">Erfolge</button>
+        <button type="button" class="profile-nav-item" data-section="friends" data-i18n="profilePage.navFriends">Freunde</button>
+        <button type="button" class="profile-nav-item" data-section="leaderboard" data-i18n="profilePage.navLeaderboard">Bestenliste</button>
+        <button type="button" class="profile-nav-item" data-section="account" data-i18n="profilePage.navAccount">Konto</button>
+      </nav>
+    </aside>
+
+    <div class="profile-main-column">
+      <header class="profile-topbar">
+        <div class="profile-topbar-text">
+          <p class="profile-topbar-eyebrow" data-i18n="profilePage.subtitle">Dein Account</p>
+          <h1 id="profile-page-title" data-i18n="profilePage.navAchievements">Erfolge</h1>
+        </div>
+        <div class="profile-topbar-actions">
+          <button type="button" class="auth-pill profile-auth-pill" data-i18n-title="header.authTitle" title="">
+            <span class="auth-pill-icon">👤</span>
+            <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
+            <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
+          </button>
+        </div>
+      </header>
+
+      <main id="profile-main" class="profile-main">
+        <div class="profile-state profile-state--loading" id="profile-state-loading">
+          <p data-i18n="profilePage.loading">Wird geladen…</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../src/i18n.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../src/supabaseConfig.js"></script>
+  <script src="../src/auth.js"></script>
+  <script src="../src/data/cities.js"></script>
+  <script src="../src/cityRegistry.js"></script>
+  <script src="../src/saveManager.js"></script>
+  <script src="../src/game/config.js"></script>
+  <script src="../src/game/progress.js"></script>
+  <script src="../src/game/effects.js"></script>
+  <script src="../src/social.js"></script>
+  <script src="../src/ui/profilePage.js"></script>
+</body>
+</html>

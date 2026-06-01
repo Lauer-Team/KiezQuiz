@@ -1289,9 +1289,15 @@ class KiezQuizGame {
     }
   }
 
+  _gameHistoryKey() {
+    const cityId = this.activeCityId || 'hamburg';
+    return window.kiezLeaderboard?.gameHistoryStorageKey?.(cityId)
+      || (cityId === 'hamburg' ? 'hh_game_history' : `kq_history_${cityId}`);
+  }
+
   loadGameHistory() {
     try {
-      const raw = localStorage.getItem('hh_game_history');
+      const raw = localStorage.getItem(this._gameHistoryKey());
       return raw ? JSON.parse(raw) : [];
     } catch (e) {
       return [];
@@ -1302,8 +1308,18 @@ class KiezQuizGame {
     const history = this.loadGameHistory();
     history.unshift({ ...entry, date: new Date().toISOString() });
     if (history.length > 50) history.length = 50;
-    localStorage.setItem('hh_game_history', JSON.stringify(history));
+    localStorage.setItem(this._gameHistoryKey(), JSON.stringify(history));
     this.saveState();
+  }
+
+  _submitLeaderboardBest(correct, total, durationSec, mode) {
+    const cityId = this.activeCityId || 'hamburg';
+    void window.kiezLeaderboard?.submitBestScore?.(cityId, {
+      correct,
+      total,
+      durationSec,
+      mode: mode || this.currentMode || ''
+    });
   }
 
   getModeDisplayName(mode, segment) {
@@ -1516,6 +1532,17 @@ class KiezQuizGame {
     `, { closeOnBackdrop: true });
     modal.querySelector('#btn-settings-close')?.addEventListener('click', () => closeOverlayModal(modal));
     modal.querySelector('#btn-settings-reset')?.addEventListener('click', () => this.resetGame());
+
+    if (loggedIn) {
+      const profileSlot = document.createElement('div');
+      profileSlot.style.marginBottom = '1.2rem';
+      profileSlot.innerHTML = `
+        <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.profileTitle')}</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.profileBody')}</p>
+        <a href="/profile/" class="secondary-btn" style="display:inline-block;text-decoration:none;text-align:center;">${t('settings.profileBtn')}</a>`;
+      const cloudBlock = modal.querySelector('.settings-cloud-block');
+      cloudBlock?.insertAdjacentElement('afterend', profileSlot);
+    }
 
     window.cityWishes?.isAdmin?.().then((isAdmin) => {
       if (!isAdmin) return;
@@ -2804,6 +2831,7 @@ class KiezQuizGame {
       passed,
       durationSec
     });
+    this._submitLeaderboardBest(this.roundCorrect, total, durationSec, this.currentMode);
 
     document.getElementById('btn-restart-round').onclick = () => {
       this.resetMapClasses();
@@ -3129,6 +3157,7 @@ class KiezQuizGame {
       passed: !surrender && foundCount === totalCount,
       durationSec
     });
+    this._submitLeaderboardBest(foundCount, totalCount, durationSec, 'NAME_ALL');
 
     const container = document.getElementById('game-play-area');
     const isBzSegment = this.activeSegment === 'BEZIRKE';
