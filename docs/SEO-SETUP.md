@@ -27,11 +27,11 @@ Manual steps for search-engine registration and community launch. Code deploys `
 
 ## After deploy checklist
 
-- [ ] Confirm `https://kiezquiz.de/robots.txt` is reachable and references the sitemap.
-- [ ] Confirm `https://kiezquiz.de/sitemap.xml` lists all four URLs.
-- [ ] Confirm city pages load: `/hamburg/`, `/berlin/`, `/frankfurt/`.
-- [ ] Test deep links: `https://kiezquiz.de/?city=berlin` opens Berlin in the app.
-- [ ] Confirm `https://kiezquiz.lauer.team/` redirects to `https://kiezquiz.de/` (DNS/hosting — not in this repo).
+- [x] Confirm `https://kiezquiz.de/robots.txt` is reachable and references the sitemap. (verified 2026-06-01)
+- [x] Confirm `https://kiezquiz.de/sitemap.xml` lists all four URLs. (verified 2026-06-01)
+- [x] Confirm city pages load: `/hamburg/`, `/berlin/`, `/frankfurt/`. (verified 2026-06-01)
+- [ ] Test deep links: `https://kiezquiz.de/?city=berlin` opens Berlin in the app (manual in browser).
+- [x] Confirm `https://kiezquiz.lauer.team/` redirects to `https://kiezquiz.de/` (301, verified 2026-06-01).
 - [ ] Re-run sitemap submission after adding new static pages.
 
 ## Bestandsnutzer & Spielstand (Kompatibilität)
