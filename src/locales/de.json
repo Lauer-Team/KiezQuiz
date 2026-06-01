@@ -178,6 +178,21 @@
     "progressHint": "Bezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Berlin-Rang"
   },
+  "cityRanksFrankfurt": {
+    "1": { "name": "Touri" },
+    "2": { "name": "Mainufer-Neuling" },
+    "3": { "name": "Frankfurter Jung / Maus" },
+    "4": { "name": "Main-Kapitän" },
+    "5": { "name": "Frankfurt-Experte" },
+    "6": { "name": "Urfrankfurter" },
+    "7": { "name": "Ortsbezirks-Babo" },
+    "8": { "name": "König von Frankfurt" },
+    "fallback": "Touri",
+    "maxReached": "Höchster Frankfurt-Rang erreicht — alle Ortsbezirke & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Ortsbezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Frankfurt-Rang"
+  },
   "trophiesBerlin": {
     "pfaueninsel_island": {
       "name": "Pfaueninsel-Entdecker",
@@ -202,6 +217,26 @@
       "unlockTitle": "Bezirks-Babo 🏛️",
       "desc": "Benenne alle zwölf Bezirke in der Challenge.",
       "unlockDesc": "Benenne alle zwölf Bezirke in der Challenge!"
+    }
+  },
+  "trophiesFrankfurt": {
+    "paradise_explorer": {
+      "name": "Skyline-Entdecker!",
+      "unlockTitle": "Skyline-Entdecker! 🌴",
+      "desc": "Tippe „Westend-Süd“ zum ersten Mal richtig – in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Westend-Süd zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "König von Frankfurt",
+      "unlockTitle": "König von Frankfurt 👑",
+      "desc": "Benenne alle Stadtteile in „Nenne alle Orte“.",
+      "unlockDesc": "Finde alle Stadtteile in der Sporcle-Challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Ortsbezirks-Babo",
+      "unlockTitle": "Ortsbezirks-Babo 🏛️",
+      "desc": "Benenne alle 16 Ortsbezirke in der Challenge.",
+      "unlockDesc": "Benenne alle 16 Ortsbezirke in der Challenge!"
     }
   },
   "trophies": {
@@ -252,6 +287,7 @@
     "defaultOrtsteil": "Ein Berliner Ortsteil mit ganz eigenem Kiez-Flair.",
     "defaultBezirk": "Ein bedeutender Bezirk Hamburgs.",
     "defaultBezirkBerlin": "Ein bedeutender Bezirk Berlins.",
+    "defaultBezirkFrankfurt": "Ein bedeutender Ortsbezirk Frankfurts.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
     "templates": {
       "Altona": [
@@ -348,6 +384,86 @@
         "Nordwestlicher Bezirk mit Tegeler See und Luftschiffhalle.",
         "Viele Wohngebiete aus den 1920er- und 1970er-Jahren.",
         "Grenzt an Brandenburg und Spandau."
+      ],
+      "Innenstadt I": [
+        "Das historische Zentrum mit Römer, Dom und Altstadt.",
+        "Bankenviertel und Bahnhofsviertel prägen das Stadtbild.",
+        "Kleinster Ortsbezirk, aber urban am dichtesten."
+      ],
+      "Innenstadt II": [
+        "Westend mit Gründerzeitvillen und dem Messegelände.",
+        "Bockenheim beheimatet die Goethe-Universität.",
+        "Traditionelles Wohnviertel der Frankfurter Oberschicht."
+      ],
+      "Innenstadt III": [
+        "Nordend mit prächtigen Jugendstil-Altbauten.",
+        "Beliebtes Wohnviertel mit Cafés und kleinen Läden.",
+        "Verbindet Innenstadt und nördliche Stadtteile."
+      ],
+      "Bornheim/Ostend": [
+        "Lebendiger Bezirk östlich der Innenstadt.",
+        "Bornheim bekannt für Berger Straße und Wochenmarkt.",
+        "Ostend mit Ostendstraße und aufstrebenden Kiezen."
+      ],
+      "Süd": [
+        "Sachsenhausen südlich des Mains — Apfelwein-Kultur und Museumsufer.",
+        "Flughafen Frankfurt am Main liegt hier.",
+        "Niederrad und Oberrad am Mainufer gelegen."
+      ],
+      "West": [
+        "Der größte Ortsbezirk mit Höchst, Griesheim und Schwanheim.",
+        "Industrielle Tradition und Mainufer-Lage.",
+        "Höchst mit Altstadt und Justinuskirche — UNESCO-Welterbe."
+      ],
+      "Mitte-West": [
+        "Rödelheim, Hausen und Praunheim westlich der Innenstadt.",
+        "Gemischte Wohn- und Gewerbegebiete.",
+        "Gute Anbindung an die Innenstadt."
+      ],
+      "Nord-West": [
+        "Heddernheim und Niederursel am Niddaufer.",
+        "Römerstadt Heddernheim — ehemalige römische Siedlung.",
+        "Grüne Wohnlagen im Nordwesten."
+      ],
+      "Mitte-Nord": [
+        "Dornbusch, Eschersheim und Ginnheim.",
+        "Starkes Wachstum in den Nachkriegsjahren.",
+        "Gute Infrastruktur und Nahversorgung."
+      ],
+      "Nord-Ost": [
+        "Der bevölkerungsreichste Ortsbezirk Frankfurts.",
+        "Eckenheim, Preungesheim und Frankfurter Berg.",
+        "Viele Einfamilienhausgebiete und Grünflächen."
+      ],
+      "Ost": [
+        "Fechenheim, Riederwald und Seckbach am Main.",
+        "Industrielle Vergangenheit und moderne Wohngebiete.",
+        "Östlich gelegen mit Main-Nähe."
+      ],
+      "Kalbach-Riedberg": [
+        "Jüngster Stadtteil Frankfurts auf der Riedberg-Hochebene.",
+        "Campus Westend der Goethe-Universität in der Nähe.",
+        "Moderne Wohnbebauung und Forschungseinrichtungen."
+      ],
+      "Nieder-Erlenbach": [
+        "Kleinstadt-Charakter im Frankfurter Norden.",
+        "Ländliche Idylle mit Obstwiesen und Feldern.",
+        "Ehemals eigenständige Gemeinde, 1910 eingemeindet."
+      ],
+      "Harheim": [
+        "Nördlichster Stadtteil Frankfurts am Rande der Wetterau.",
+        "Ländliches Flair mit Feldern und Obstplantagen.",
+        "1928 nach Frankfurt eingegliedert."
+      ],
+      "Nieder-Eschbach": [
+        "Ruhiger Wohnbezirk im Nordosten.",
+        "Viele Einfamilienhäuser und Grünflächen.",
+        "Grenzt an Bad Vilbel und den Taunus."
+      ],
+      "Bergen-Enkheim": [
+        "Östlichster Ortsbezirk mit Weinbergen und Apfelwein.",
+        "Bergen-Enkheimer Markt zieht Besucher an.",
+        "Ländlicher Charakter trotz Großstadt-Zugehörigkeit."
       ]
     },
     "specific": {
@@ -377,7 +493,16 @@
       "Tempelhof": "Der legendäre Flughafen — heute riesiger Park für Berlinerinnen und Berliner.",
       "Marzahn": "Gärten der Welt und typische Plattenbausiedlungen im Berliner Osten.",
       "Lichtenberg": "Tierpark und Gedenkstätte Hohenschönhausen erinnern an DDR-Geschichte.",
-      "Reinickendorf": "Tegeler See lädt zum Baden ein — mit Blick auf die Luftschiffhalle."
+      "Reinickendorf": "Tegeler See lädt zum Baden ein — mit Blick auf die Luftschiffhalle.",
+      "Altstadt": "Historisches Zentrum mit Römer, Kaiserdom und dem berühmten Römerberg.",
+      "Westend-Süd": "Bankenviertel und Skyline — Frankfurts Wahrzeichen mit den Hochhäusern.",
+      "Sachsenhausen": "Apfelwein-Kneipen, Museumsufer und das lebendige Dörfchen.",
+      "Höchst": "Altstadt mit Justinuskirche — Teil des UNESCO-Welterbes Limes.",
+      "Flughafen": "Frankfurt Airport — einer der größten Flughäfen Europas und Drehkreuz der Welt.",
+      "Bockenheim": "Studentenviertel mit Goethe-Universität und lebhafter Bockenheimer Landstraße.",
+      "Bornheim": "Beliebtes Wohnviertel mit Berger Straße, Wochenmarkt und gemütlichen Cafés.",
+      "Nordend": "Gründerzeit-Altbauten und das Herz des Frankfurter Nordends.",
+      "Gallus": "Aufstrebendes Viertel westlich des Hauptbahnhofs mit multikulturellem Flair."
     }
   },
   "onboarding": {
@@ -405,10 +530,24 @@
     "mapTip": "Tipp: Die Spree und große Grünflächen wie der Tiergarten helfen dir bei der Orientierung auf der Berlin-Karte!",
     "dismiss": "Los geht's!"
   },
+  "onboardingFrankfurt": {
+    "title": "Ei gude in Frankfurt! 🍎",
+    "intro": "Lerne spielerisch alle 16 Ortsbezirke und 46 Stadtteile Frankfurts kennen. Du startest im Ortsbezirk <strong>Innenstadt I</strong> und arbeitest dich Schritt für Schritt durch die Mainmetropole.",
+    "feature1Title": "1. Ortsbezirke & Stadtteile",
+    "feature1Text": "Lerne alle 46 Stadtteile im Detail oder schalte oben auf \"Ortsbezirke\" um, um zuerst die 16 Frankfurter Ortsbezirke zu meistern.",
+    "feature2Title": "2. Sporcle-Durchläufe & Challenges",
+    "feature2Text": "Strukturierte Runden mit dauerhaft grünen/roten Markierungen. Meistere einen Ortsbezirk mit mindestens <strong>75%</strong>, um den nächsten freizuschalten!",
+    "feature3Title": "3. Namen eingeben",
+    "feature3Text": "Tippe Stadtteil-Namen direkt per Tastatur ein — mit smarter Autocomplete-Vorschlagsliste.",
+    "mapTip": "Tipp: Der Main fließt durch Frankfurt und hilft dir bei der Orientierung — südlich des Flusses liegt Sachsenhausen!",
+    "dismiss": "Los geht's!"
+  },
   "explorer": {
     "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
     "emptyBezirkBerlin": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
+    "emptyBezirkFrankfurt": "Klicke auf einen Ortsbezirk der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
+    "emptyStadtteilFrankfurt": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
     "emptyOrtsteil": "Klicke auf einen Ortsteil der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "residents": "Einwohner",
     "area": "Fläche",
@@ -421,7 +560,8 @@
     "totalArea": "Gesamt-Fläche",
     "avgDensity": "Durchschnittliche Dichte",
     "subdistricts": "Stadtteile ({count})",
-    "subdistrictsBerlin": "Ortsteile ({count})"
+    "subdistrictsBerlin": "Ortsteile ({count})",
+    "subdistrictsFrankfurt": "Stadtteile ({count})"
   },
   "game": {
     "roundStartTitle": "Durchlauf starten",
@@ -591,13 +731,13 @@
     },
     "frankfurt": {
       "greeting": "Ei gude!",
-      "blurb": "16 Stadtbezirke · 46 Stadtteile",
+      "blurb": "16 Ortsbezirke · 46 Stadtteile",
       "levels": {
-        "stadtbezirke": "Stadtbezirke",
+        "stadtbezirke": "Ortsbezirke",
         "stadtteile": "Stadtteile"
       },
       "singular": {
-        "stadtbezirk": "Stadtbezirk",
+        "stadtbezirk": "Ortsbezirk",
         "stadtteil": "Stadtteil"
       }
     }

@@ -1054,6 +1054,40 @@ body.overlay-open {
 [data-city="berlin"] .stadtteil-path[data-bezirk="Lichtenberg"].selected { fill: hsla(220, 85%, 58%, 0.45); stroke: hsl(220, 85%, 58%) !important; filter: drop-shadow(0 0 8px hsl(220, 85%, 58%)) !important; }
 [data-city="berlin"] .stadtteil-path[data-bezirk="Reinickendorf"].selected { fill: hsla(75, 85%, 52%, 0.45); stroke: hsl(75, 85%, 52%) !important; filter: drop-shadow(0 0 8px hsl(75, 85%, 52%)) !important; }
 
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Innenstadt I"].discovered { fill: hsla(352, 95%, 58%, 0.15); stroke: hsla(352, 95%, 58%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Innenstadt II"].discovered { fill: hsla(5, 90%, 58%, 0.15); stroke: hsla(5, 90%, 58%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Innenstadt III"].discovered { fill: hsla(20, 85%, 55%, 0.15); stroke: hsla(20, 85%, 55%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Bornheim/Ostend"].discovered { fill: hsla(340, 90%, 58%, 0.15); stroke: hsla(340, 90%, 58%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Süd"].discovered { fill: hsla(25, 100%, 55%, 0.15); stroke: hsla(25, 100%, 55%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="West"].discovered { fill: hsla(210, 80%, 55%, 0.15); stroke: hsla(210, 80%, 55%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Mitte-West"].discovered { fill: hsla(280, 85%, 62%, 0.15); stroke: hsla(280, 85%, 62%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nord-West"].discovered { fill: hsla(175, 75%, 48%, 0.15); stroke: hsla(175, 75%, 48%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Mitte-Nord"].discovered { fill: hsla(310, 80%, 58%, 0.15); stroke: hsla(310, 80%, 58%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nord-Ost"].discovered { fill: hsla(45, 95%, 55%, 0.15); stroke: hsla(45, 95%, 55%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Ost"].discovered { fill: hsla(185, 80%, 45%, 0.15); stroke: hsla(185, 80%, 45%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Kalbach-Riedberg"].discovered { fill: hsla(130, 70%, 48%, 0.15); stroke: hsla(130, 70%, 48%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nieder-Erlenbach"].discovered { fill: hsla(95, 85%, 52%, 0.15); stroke: hsla(95, 85%, 52%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Harheim"].discovered { fill: hsla(160, 75%, 48%, 0.15); stroke: hsla(160, 75%, 48%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nieder-Eschbach"].discovered { fill: hsla(220, 85%, 58%, 0.15); stroke: hsla(220, 85%, 58%, 0.4); }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Bergen-Enkheim"].discovered { fill: hsla(15, 100%, 55%, 0.15); stroke: hsla(15, 100%, 55%, 0.4); }
+
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Innenstadt I"].selected { fill: hsla(352, 95%, 58%, 0.45); stroke: hsl(352, 95%, 58%) !important; filter: drop-shadow(0 0 8px hsl(352, 95%, 58%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Innenstadt II"].selected { fill: hsla(5, 90%, 58%, 0.45); stroke: hsl(5, 90%, 58%) !important; filter: drop-shadow(0 0 8px hsl(5, 90%, 58%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Innenstadt III"].selected { fill: hsla(20, 85%, 55%, 0.45); stroke: hsl(20, 85%, 55%) !important; filter: drop-shadow(0 0 8px hsl(20, 85%, 55%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Bornheim/Ostend"].selected { fill: hsla(340, 90%, 58%, 0.45); stroke: hsl(340, 90%, 58%) !important; filter: drop-shadow(0 0 8px hsl(340, 90%, 58%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Süd"].selected { fill: hsla(25, 100%, 55%, 0.45); stroke: hsl(25, 100%, 55%) !important; filter: drop-shadow(0 0 8px hsl(25, 100%, 55%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="West"].selected { fill: hsla(210, 80%, 55%, 0.45); stroke: hsl(210, 80%, 55%) !important; filter: drop-shadow(0 0 8px hsl(210, 80%, 55%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Mitte-West"].selected { fill: hsla(280, 85%, 62%, 0.45); stroke: hsl(280, 85%, 62%) !important; filter: drop-shadow(0 0 8px hsl(280, 85%, 62%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nord-West"].selected { fill: hsla(175, 75%, 48%, 0.45); stroke: hsl(175, 75%, 48%) !important; filter: drop-shadow(0 0 8px hsl(175, 75%, 48%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Mitte-Nord"].selected { fill: hsla(310, 80%, 58%, 0.45); stroke: hsl(310, 80%, 58%) !important; filter: drop-shadow(0 0 8px hsl(310, 80%, 58%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nord-Ost"].selected { fill: hsla(45, 95%, 55%, 0.45); stroke: hsl(45, 95%, 55%) !important; filter: drop-shadow(0 0 8px hsl(45, 95%, 55%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Ost"].selected { fill: hsla(185, 80%, 45%, 0.45); stroke: hsl(185, 80%, 45%) !important; filter: drop-shadow(0 0 8px hsl(185, 80%, 45%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Kalbach-Riedberg"].selected { fill: hsla(130, 70%, 48%, 0.45); stroke: hsl(130, 70%, 48%) !important; filter: drop-shadow(0 0 8px hsl(130, 70%, 48%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nieder-Erlenbach"].selected { fill: hsla(95, 85%, 52%, 0.45); stroke: hsl(95, 85%, 52%) !important; filter: drop-shadow(0 0 8px hsl(95, 85%, 52%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Harheim"].selected { fill: hsla(160, 75%, 48%, 0.45); stroke: hsl(160, 75%, 48%) !important; filter: drop-shadow(0 0 8px hsl(160, 75%, 48%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Nieder-Eschbach"].selected { fill: hsla(220, 85%, 58%, 0.45); stroke: hsl(220, 85%, 58%) !important; filter: drop-shadow(0 0 8px hsl(220, 85%, 58%)) !important; }
+[data-city="frankfurt"] .stadtteil-path[data-bezirk="Bergen-Enkheim"].selected { fill: hsla(15, 100%, 55%, 0.45); stroke: hsl(15, 100%, 55%) !important; filter: drop-shadow(0 0 8px hsl(15, 100%, 55%)) !important; }
+
 /* Blinking animation for Card quiz */
 .stadtteil-path.blink {
   animation: mapPulse 1.5s infinite ease-in-out;
@@ -1374,7 +1408,17 @@ body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(
   stroke-width: 2.75px;
 }
 
+#city-view[data-city="frankfurt"] .bezirk-boundary-line {
+  stroke: rgba(255, 255, 255, 0.62);
+  stroke-width: 2.75px;
+}
+
 #city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+  stroke-width: 0.25px;
+  stroke: rgba(255, 255, 255, 0.12);
+}
+
+#city-view[data-city="frankfurt"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
   stroke-width: 0.25px;
   stroke: rgba(255, 255, 255, 0.12);
 }

@@ -27,6 +27,46 @@ const CITY_RANK_THRESHOLDS = [
   { level: 8, minDistricts: 7, minTrophies: 11 }
 ];
 
+const CITY_LOCALE_CONFIG = {
+  hamburg: {
+    rankKey: 'cityRanks',
+    trophyNs: 'trophies',
+    defaultBezirkTrivia: 'trivia.defaultBezirk',
+    onboarding: 'onboarding',
+    emptyBezirk: 'explorer.emptyBezirk',
+    emptyDetail: 'explorer.emptyStadtteil',
+    subdistricts: 'explorer.subdistricts',
+    specialIds: ['neuwerk_island', 'paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
+    detailUnit: 'Stadtteil'
+  },
+  berlin: {
+    rankKey: 'cityRanksBerlin',
+    trophyNs: 'trophiesBerlin',
+    defaultBezirkTrivia: 'trivia.defaultBezirkBerlin',
+    onboarding: 'onboardingBerlin',
+    emptyBezirk: 'explorer.emptyBezirkBerlin',
+    emptyDetail: 'explorer.emptyOrtsteil',
+    subdistricts: 'explorer.subdistrictsBerlin',
+    specialIds: ['pfaueninsel_island', 'paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
+    detailUnit: 'Ortsteil'
+  },
+  frankfurt: {
+    rankKey: 'cityRanksFrankfurt',
+    trophyNs: 'trophiesFrankfurt',
+    defaultBezirkTrivia: 'trivia.defaultBezirkFrankfurt',
+    onboarding: 'onboardingFrankfurt',
+    emptyBezirk: 'explorer.emptyBezirkFrankfurt',
+    emptyDetail: 'explorer.emptyStadtteilFrankfurt',
+    subdistricts: 'explorer.subdistrictsFrankfurt',
+    specialIds: ['paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
+    detailUnit: 'Stadtteil'
+  }
+};
+
+function getCityConfig(cityId) {
+  return CITY_LOCALE_CONFIG[cityId] || CITY_LOCALE_CONFIG.hamburg;
+}
+
 function getRanks() {
   return RANK_THRESHOLDS.map((rank) => ({
     ...rank,
@@ -35,7 +75,7 @@ function getRanks() {
 }
 
 function getCityRankLocaleKey(cityId) {
-  return cityId === 'berlin' ? 'cityRanksBerlin' : 'cityRanks';
+  return getCityConfig(cityId).rankKey;
 }
 
 function getCityRanks(cityId) {
@@ -97,7 +137,7 @@ function getTriviaTemplates(bezirk, cityId) {
   const templates = tMap('trivia.templates', bezirk);
   if (Array.isArray(templates)) return templates;
   const cid = cityId || window.kiezQuizGame?.activeCityId || 'hamburg';
-  return [t(cid === 'berlin' ? 'trivia.defaultBezirkBerlin' : 'trivia.defaultBezirk')];
+  return [t(getCityConfig(cid).defaultBezirkTrivia)];
 }
 
 function getSpecificTrivia(name) {
@@ -124,6 +164,7 @@ function getCityDataArray(cityId) {
   const key = city?.dataGlobal || 'HAMBURG_DATA';
   if (window[key]) return window[key];
   if (key === 'BERLIN_DATA' && typeof BERLIN_DATA !== 'undefined') return BERLIN_DATA;
+  if (key === 'FRANKFURT_DATA' && typeof FRANKFURT_DATA !== 'undefined') return FRANKFURT_DATA;
   if (typeof HAMBURG_DATA !== 'undefined') return HAMBURG_DATA;
   return [];
 }
@@ -133,11 +174,10 @@ function buildTrophyCatalog(cityId = 'hamburg') {
   const progression = window.cityRegistry.getBezirkeProgression(cityId);
   const unitLabel = t(city?.levels?.[1]?.singularKey || 'cities.hamburg.singular.stadtteil');
 
-  const specialIds = cityId === 'berlin'
-    ? ['pfaueninsel_island', 'paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke']
-    : ['neuwerk_island', 'paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'];
+  const cfg = getCityConfig(cityId);
+  const specialIds = cfg.specialIds;
   const specialIcons = { neuwerk_island: '🏝️', pfaueninsel_island: '🦚', paradise_explorer: '🌴', meister_alle_stadtteile: '👑', meister_alle_bezirke: '🏛️' };
-  const trophyNs = cityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
+  const trophyNs = cfg.trophyNs;
 
   const specials = specialIds.map((id) => ({
     id,
@@ -1461,7 +1501,7 @@ class KiezQuizGame {
   }
 
   getDetailUnitSuffix() {
-    return this.activeCityId === 'berlin' ? 'Ortsteil' : 'Stadtteil';
+    return getCityConfig(this.activeCityId).detailUnit;
   }
 
   updateLocateModeLabel() {
@@ -1473,7 +1513,7 @@ class KiezQuizGame {
     if (spans[0]) {
       if (this.activeSegment === 'BEZIRKE') {
         spans[0].textContent = t('modes.locate.labelBezirk');
-      } else if (this.activeCityId === 'berlin') {
+      } else if (getCityConfig(this.activeCityId).detailUnit === 'Ortsteil') {
         spans[0].textContent = t('modes.locate.labelOrtsteil');
       } else {
         spans[0].textContent = t('modes.locate.label');
@@ -1482,7 +1522,7 @@ class KiezQuizGame {
     if (spans[1]) {
       if (this.activeSegment === 'BEZIRKE') {
         spans[1].textContent = t('modes.locate.descBezirk');
-      } else if (this.activeCityId === 'berlin') {
+      } else if (getCityConfig(this.activeCityId).detailUnit === 'Ortsteil') {
         spans[1].textContent = t('modes.locate.descOrtsteil');
       } else {
         spans[1].textContent = t('modes.locate.desc');
@@ -1719,7 +1759,7 @@ class KiezQuizGame {
     const city = window.cityRegistry.getCity(this.activeCityId);
     const target = city?.paradiseTarget;
     if (target && stadtteilName === target) {
-      const ns = this.activeCityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
+      const ns = getCityConfig(this.activeCityId).trophyNs;
       this.unlockTrophy(
         'paradise_explorer',
         t(`${ns}.paradise_explorer.unlockTitle`),
@@ -2101,7 +2141,7 @@ class KiezQuizGame {
   }
 
   showOnboarding() {
-    const prefix = this.activeCityId === 'berlin' ? 'onboardingBerlin' : 'onboarding';
+    const prefix = getCityConfig(this.activeCityId).onboarding;
     const modal = openOverlayModal(`
       <div class="modal-content" style="max-width: 550px;">
         <h2>${t(`${prefix}.title`)}</h2>
@@ -2464,10 +2504,8 @@ class KiezQuizGame {
   // --- MODE: EXPLORER (ENTDECKER) ---
   initExplorerMode(container) {
     const isBz = this.activeSegment === 'BEZIRKE';
-    const isBerlin = this.activeCityId === 'berlin';
-    const emptyKey = isBz
-      ? (isBerlin ? 'explorer.emptyBezirkBerlin' : 'explorer.emptyBezirk')
-      : (isBerlin ? 'explorer.emptyOrtsteil' : 'explorer.emptyStadtteil');
+    const cfg = getCityConfig(this.activeCityId);
+    const emptyKey = isBz ? cfg.emptyBezirk : cfg.emptyDetail;
     container.innerHTML = `
       <div id="explorer-details" class="empty-info">
         <div class="ei-icon">${isBz ? '🏢' : '🗺️'}</div>
@@ -2575,7 +2613,7 @@ class KiezQuizGame {
     const templates = getTriviaTemplates(bezirkName) || [t('trivia.defaultBezirk')];
     const trivia = templates[0];
 
-    const subKey = this.activeCityId === 'berlin' ? 'explorer.subdistrictsBerlin' : 'explorer.subdistricts';
+    const subKey = getCityConfig(this.activeCityId).subdistricts;
     const container = document.getElementById('game-play-area');
     container.innerHTML = `
       <div class="info-details">
@@ -2619,7 +2657,12 @@ class KiezQuizGame {
       Mitte: 38, 'Friedrichshain-Kreuzberg': 350, Pankow: 160,
       'Charlottenburg-Wilmersdorf': 280, Spandau: 200, 'Steglitz-Zehlendorf': 120,
       'Tempelhof-Schöneberg': 310, Neukölln: 45, 'Treptow-Köpenick': 85,
-      'Marzahn-Hellersdorf': 15, Lichtenberg: 330, Reinickendorf: 190
+      'Marzahn-Hellersdorf': 15, Lichtenberg: 330, Reinickendorf: 190,
+      'Innenstadt I': 352, 'Innenstadt II': 5, 'Innenstadt III': 20,
+      'Bornheim/Ostend': 340, Süd: 25, West: 210, 'Mitte-West': 280,
+      'Nord-West': 175, 'Mitte-Nord': 310, 'Nord-Ost': 45, Ost: 185,
+      'Kalbach-Riedberg': 130, 'Nieder-Erlenbach': 95, Harheim: 160,
+      'Nieder-Eschbach': 220, 'Bergen-Enkheim': 15
     };
     return hues[bezirk] ?? 200;
   }
@@ -3662,14 +3705,14 @@ class KiezQuizGame {
       this.sounds.playLevelUp();
       launchConfetti(this.sounds);
       if (this.activeSegment === 'STADTTEILE') {
-        const ns = this.activeCityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
+        const ns = getCityConfig(this.activeCityId).trophyNs;
         this.unlockAchievement(
           'meister_alle_stadtteile',
           t(`${ns}.meister_alle_stadtteile.unlockTitle`),
           t(`${ns}.meister_alle_stadtteile.unlockDesc`)
         );
       } else {
-        const ns = this.activeCityId === 'berlin' ? 'trophiesBerlin' : 'trophies';
+        const ns = getCityConfig(this.activeCityId).trophyNs;
         this.unlockAchievement(
           'meister_alle_bezirke',
           t(`${ns}.meister_alle_bezirke.unlockTitle`),
