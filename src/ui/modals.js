@@ -139,24 +139,18 @@
     document.getElementById('btn-history-close')?.addEventListener('click', () => closeOverlayModal(modal));
   }
 
-  function showWishModal() {
-    const defaultVotes = { Köln: 312, München: 287, Leipzig: 176, Stuttgart: 143, Dresden: 121 };
-    let votes = { ...defaultVotes };
-    try {
-      const saved = localStorage.getItem('kiezquiz_city_wishes');
-      if (saved) votes = { ...defaultVotes, ...JSON.parse(saved) };
-    } catch (e) { /* ignore */ }
-    const voted = {};
+  async function showWishModal() {
+    let votes = await window.cityWishes?.fetchTotals?.() || {};
 
     function renderVoteList() {
       const sorted = Object.entries(votes).sort((a, b) => b[1] - a[1]);
       const max = Math.max(...Object.values(votes), 1);
       return sorted.map(([name, count]) => `
-        <button type="button" class="wish-vote-item${voted[name] ? ' voted' : ''}" data-vote="${name}">
+        <button type="button" class="wish-vote-item" data-vote="${name}">
           <div class="wvi-bar" style="width:${(count / max) * 100}%"></div>
           <span class="wvi-name">${name}</span>
           <span class="wvi-count">${count.toLocaleString(getLocale())}</span>
-          <span class="wvi-action">${voted[name] ? t('hub.wishVoted') : t('hub.wishVote')}</span>
+          <span class="wvi-action">${t('hub.wishVote')}</span>
         </button>`).join('');
     }
 
@@ -176,18 +170,22 @@
 
     const listEl = modal.querySelector('#wish-vote-list');
     const refresh = () => { listEl.innerHTML = renderVoteList(); bindVotes(); };
-    const persist = () => localStorage.setItem('kiezquiz_city_wishes', JSON.stringify(votes));
+
+    async function castVote(name, type = 'vote') {
+      const result = await window.cityWishes?.submitWish?.(name, type);
+      if (!result?.ok) return;
+      votes = result.votes || votes;
+      refresh();
+      const thanks = modal.querySelector('#wish-thanks');
+      if (thanks) {
+        thanks.hidden = false;
+        setTimeout(() => { thanks.hidden = true; }, 2200);
+      }
+    }
 
     function bindVotes() {
       listEl.querySelectorAll('[data-vote]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const name = btn.dataset.vote;
-          if (voted[name]) return;
-          votes[name] = (votes[name] || 0) + 1;
-          voted[name] = true;
-          persist();
-          refresh();
-        });
+        btn.addEventListener('click', () => castVote(btn.dataset.vote, 'vote'));
       });
     }
     bindVotes();
@@ -197,21 +195,49 @@
       const input = modal.querySelector('#wish-proposal-input');
       const n = input?.value?.trim();
       if (!n) return;
-      votes[n] = (votes[n] || 0) + 1;
-      voted[n] = true;
-      persist();
-      input.value = '';
-      refresh();
-      const thanks = modal.querySelector('#wish-thanks');
-      if (thanks) {
-        thanks.hidden = false;
-        setTimeout(() => { thanks.hidden = true; }, 2200);
-      }
+      castVote(n, 'proposal').then(() => { if (input) input.value = ''; });
     });
     modal.querySelector('#wish-proposal-input')?.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') modal.querySelector('#btn-wish-propose')?.click();
     });
   }
 
-  window.kiezModals = { showLogModal, showWishModal };
+  async function showWishAdminModal() {
+    const rows = await window.cityWishes?.fetchAdminList?.() || [];
+    const listHtml = rows.length
+      ? rows.map((row) => {
+          const who = row.username
+            ? `@${row.username}`
+            : (row.guestId ? t('hub.wishAdminGuest', { id: row.guestId.slice(0, 8) }) : t('hub.wishAdminUnknown'));
+          const when = row.createdAt ? new Date(row.createdAt).toLocaleString(getLocale()) : '';
+          const typeLabel = row.requestType === 'proposal' ? t('hub.wishAdminProposal') : t('hub.wishAdminVote');
+          return `<tr><td>${row.cityName}</td><td>${who}</td><td>${typeLabel}</td><td>${when}</td></tr>`;
+        }).join('')
+      : `<tr><td colspan="4">${t('hub.wishAdminEmpty')}</td></tr>`;
+
+    const modal = openOverlayModal(`
+      <div class="modal-content" style="max-width: 720px; text-align: left;">
+        <button type="button" class="modal-x" id="btn-wish-admin-x">✕</button>
+        <h2 style="text-align: center;">${t('hub.wishAdminTitle')}</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">${t('hub.wishAdminBody')}</p>
+        <div style="overflow-x: auto; max-height: 60vh; margin-top: 1rem;">
+          <table class="wish-admin-table">
+            <thead><tr>
+              <th>${t('hub.wishAdminColCity')}</th>
+              <th>${t('hub.wishAdminColAccount')}</th>
+              <th>${t('hub.wishAdminColType')}</th>
+              <th>${t('hub.wishAdminColWhen')}</th>
+            </tr></thead>
+            <tbody>${listHtml}</tbody>
+          </table>
+        </div>
+        <button type="button" class="primary-btn" id="btn-wish-admin-close" style="margin-top: 1rem; width: 100%;">${t('settings.close')}</button>
+      </div>
+    `, { closeOnBackdrop: true });
+
+    modal.querySelector('#btn-wish-admin-x')?.addEventListener('click', () => closeOverlayModal(modal));
+    modal.querySelector('#btn-wish-admin-close')?.addEventListener('click', () => closeOverlayModal(modal));
+  }
+
+  window.kiezModals = { showLogModal, showWishModal, showWishAdminModal };
 })();

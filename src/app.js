@@ -550,9 +550,47 @@ class MapNavigator {
     this.startX = 0;
     this.startY = 0;
     this.lastPinchDistance = 0;
+    this._wheelSnapTimer = null;
+    this.RUBBER_RESISTANCE = 0.32;
     
     this.setupListeners();
     this.updateTransform();
+  }
+
+  getPanBounds() {
+    const cw = this.container.clientWidth;
+    const ch = this.container.clientHeight;
+    const baseW = this.svg.offsetWidth || cw;
+    const baseH = this.svg.offsetHeight || ch;
+    const scaledW = baseW * this.zoom;
+    const scaledH = baseH * this.zoom;
+    const overscroll = Math.min(cw, ch) * 0.12;
+    const maxPanX = Math.max(overscroll, (scaledW - cw) / 2 + overscroll);
+    const maxPanY = Math.max(overscroll, (scaledH - ch) / 2 + overscroll);
+    return { minX: -maxPanX, maxX: maxPanX, minY: -maxPanY, maxY: maxPanY };
+  }
+
+  applyRubberBand(value, min, max) {
+    if (value >= min && value <= max) return value;
+    const edge = value < min ? min : max;
+    return edge + (value - edge) * this.RUBBER_RESISTANCE;
+  }
+
+  snapPanToBounds() {
+    const b = this.getPanBounds();
+    const nx = Math.min(b.maxX, Math.max(b.minX, this.panX));
+    const ny = Math.min(b.maxY, Math.max(b.minY, this.panY));
+    if (nx === this.panX && ny === this.panY) return;
+    this.svg.classList.add('smooth-transition');
+    this.panX = nx;
+    this.panY = ny;
+    this.updateTransform(false);
+    setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
+  }
+
+  scheduleWheelSnap() {
+    clearTimeout(this._wheelSnapTimer);
+    this._wheelSnapTimer = setTimeout(() => this.snapPanToBounds(), 120);
   }
 
   getPinchDistance(e) {
@@ -590,6 +628,7 @@ class MapNavigator {
       if (this.isDragging) {
         this.isDragging = false;
         this.container.style.cursor = 'grab';
+        this.snapPanToBounds();
       }
     };
 
@@ -605,7 +644,7 @@ class MapNavigator {
       if (!this.isDragging) return;
       this.panX = e.clientX - this.startX;
       this.panY = e.clientY - this.startY;
-      this.updateTransform();
+      this.updateTransform(true);
     });
 
     window.addEventListener('mouseup', endDrag);
@@ -641,7 +680,7 @@ class MapNavigator {
           const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
           this.panX = cx - (cx - this.panX) * (this.zoom / oldZoom);
           this.panY = cy - (cy - this.panY) * (this.zoom / oldZoom);
-          this.updateTransform();
+          this.updateTransform(true);
         }
         this.lastPinchDistance = dist;
         this.didDrag = true;
@@ -653,12 +692,13 @@ class MapNavigator {
       if (!this.isDragging) return;
       this.panX = e.touches[0].clientX - this.startX;
       this.panY = e.touches[0].clientY - this.startY;
-      this.updateTransform();
+      this.updateTransform(true);
       e.preventDefault();
     }, { passive: false });
 
     this.container.addEventListener('touchend', (e) => {
       if (e.touches.length < 2) {
+        if (this.isPinching) this.snapPanToBounds();
         this.isPinching = false;
         this.lastPinchDistance = 0;
       }
@@ -687,21 +727,24 @@ class MapNavigator {
       this.panX = mouseX - (mouseX - this.panX) * (this.zoom / oldZoom);
       this.panY = mouseY - (mouseY - this.panY) * (this.zoom / oldZoom);
       
-      this.updateTransform();
+      this.updateTransform(true);
+      this.scheduleWheelSnap();
     }, { passive: false });
   }
 
   zoomIn() {
     this.svg.classList.add('smooth-transition');
     this.zoom = Math.min(this.zoom * 1.3, 8);
-    this.updateTransform();
+    this.updateTransform(false);
+    this.snapPanToBounds();
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
   }
 
   zoomOut() {
     this.svg.classList.add('smooth-transition');
     this.zoom = Math.max(this.zoom / 1.3, 0.8);
-    this.updateTransform();
+    this.updateTransform(false);
+    this.snapPanToBounds();
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
   }
 
@@ -710,12 +753,19 @@ class MapNavigator {
     this.zoom = 1;
     this.panX = 0;
     this.panY = 0;
-    this.updateTransform();
+    this.updateTransform(false);
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
   }
 
-  updateTransform() {
-    this.svg.style.transform = `translate(${this.panX}px, ${this.panY}px) scale(${this.zoom})`;
+  updateTransform(rubberBand = false) {
+    let px = this.panX;
+    let py = this.panY;
+    if (rubberBand) {
+      const b = this.getPanBounds();
+      px = this.applyRubberBand(px, b.minX, b.maxX);
+      py = this.applyRubberBand(py, b.minY, b.maxY);
+    }
+    this.svg.style.transform = `translate(${px}px, ${py}px) scale(${this.zoom})`;
   }
 }
 
@@ -2124,6 +2174,7 @@ class KiezQuizGame {
           <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.cloudTitle')}</strong>
           ${cloudStatusHtml}
         </div>
+        <div id="settings-wish-admin-slot" style="margin-bottom: 1.2rem;"></div>
         <div class="settings-privacy-block" style="margin-bottom: 1.2rem;">
           <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.privacyTitle')}</strong>
           <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">${t('settings.privacyBody')}</p>
@@ -2138,6 +2189,20 @@ class KiezQuizGame {
     `, { closeOnBackdrop: true });
     document.getElementById('btn-settings-close').addEventListener('click', () => closeOverlayModal(modal));
     document.getElementById('btn-settings-reset').addEventListener('click', () => this.resetGame());
+
+    window.cityWishes?.isAdmin?.().then((isAdmin) => {
+      if (!isAdmin) return;
+      const slot = document.getElementById('settings-wish-admin-slot');
+      if (!slot) return;
+      slot.innerHTML = `
+        <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.wishAdminTitle')}</strong>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.wishAdminBody')}</p>
+        <button type="button" id="btn-settings-wish-admin" class="secondary-btn">${t('settings.wishAdminBtn')}</button>`;
+      slot.querySelector('#btn-settings-wish-admin')?.addEventListener('click', () => {
+        closeOverlayModal(modal);
+        window.kiezModals?.showWishAdminModal?.();
+      });
+    });
   }
 
   showOnboarding() {
