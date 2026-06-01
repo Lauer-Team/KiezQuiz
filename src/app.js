@@ -771,17 +771,31 @@ class KiezQuizGame {
     if (newSvg && old) old.replaceWith(newSvg);
   }
 
+  ensureMapLabelsGroup() {
+    if (!this.svg) return null;
+    let labels = this.svg.querySelector('#map-labels-group');
+    if (!labels) {
+      labels = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      labels.setAttribute('id', 'map-labels-group');
+      labels.setAttribute('style', 'pointer-events: none;');
+      this.svg.appendChild(labels);
+    }
+    return labels;
+  }
+
   _loadCityMap() {
     return new Promise(async (resolve) => {
       const wrapper = document.getElementById('map-wrapper');
       const city = window.cityRegistry.getCity(this.activeCityId);
       const nw = document.getElementById('neuwerk-anchor');
       const pf = document.getElementById('pfaueninsel-anchor');
-      if (nw) nw.hidden = this.activeCityId !== 'hamburg';
-      if (pf) pf.hidden = this.activeCityId !== 'berlin';
+      const islandEgg = city?.islandEasterEgg;
+      if (nw) nw.hidden = islandEgg !== 'neuwerk';
+      if (pf) pf.hidden = islandEgg !== 'pfaueninsel';
 
       if (!wrapper || !city) {
         this.svg = document.querySelector('.city-map-svg, .hamburg-map-svg');
+        this.ensureMapLabelsGroup();
         resolve();
         return;
       }
@@ -791,12 +805,14 @@ class KiezQuizGame {
         if (inline) {
           if (!this._hamburgSvgCache) this._hamburgSvgCache = inline.outerHTML;
           this.svg = inline;
+          this.ensureMapLabelsGroup();
           resolve();
           return;
         }
         if (this._hamburgSvgCache) {
           this._swapMapSvg(this._hamburgSvgCache, wrapper);
           this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
+          this.ensureMapLabelsGroup();
           resolve();
           return;
         }
@@ -814,6 +830,7 @@ class KiezQuizGame {
         console.error('Failed to load city map', err);
         this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
       }
+      this.ensureMapLabelsGroup();
       resolve();
     });
   }
@@ -1640,10 +1657,12 @@ class KiezQuizGame {
   }
 
   updateIslandBadges() {
+    const city = window.cityRegistry.getCity(this.activeCityId);
+    const islandEgg = city?.islandEasterEgg;
     const nwAnchor = document.getElementById('neuwerk-anchor');
-    if (nwAnchor) nwAnchor.hidden = this.activeCityId !== 'hamburg';
     const pfAnchor = document.getElementById('pfaueninsel-anchor');
-    if (pfAnchor) pfAnchor.hidden = this.activeCityId !== 'berlin';
+    if (nwAnchor) nwAnchor.hidden = islandEgg !== 'neuwerk';
+    if (pfAnchor) pfAnchor.hidden = islandEgg !== 'pfaueninsel';
     const nwBadge = nwAnchor?.querySelector('.no-badge');
     if (nwAnchor && nwBadge) {
       const unlocked = this.trophies.has('neuwerk_island');
@@ -2366,6 +2385,7 @@ class KiezQuizGame {
 
   reorderMapLayers() {
     if (!this.svg) return;
+    this.ensureMapLabelsGroup();
     const water = this.svg.querySelector('.water-group');
     const stadtteile = this.svg.querySelector('.stadtteile-group');
     const boundaries = this.svg.querySelector('.bezirk-boundaries-group');
@@ -3251,7 +3271,7 @@ class KiezQuizGame {
 
   // --- SVG LABEL OVERLAY SYSTEM ---
   addMapTextLabel(targetKey, labelText, variant = 'neutral') {
-    const labelGroup = document.getElementById('map-labels-group');
+    const labelGroup = this.ensureMapLabelsGroup();
     if (!labelGroup) return;
 
     const id = this.labelIdForKey(targetKey);
@@ -3279,7 +3299,7 @@ class KiezQuizGame {
   }
 
   clearMapTextLabels() {
-    const labelGroup = document.getElementById('map-labels-group');
+    const labelGroup = this.svg?.querySelector('#map-labels-group');
     if (labelGroup) labelGroup.innerHTML = '';
   }
 

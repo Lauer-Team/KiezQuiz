@@ -150,6 +150,7 @@ def main():
   <g class="stadtteile-group">
 \t{joined_paths}
   </g>
+  <g id="map-labels-group" style="pointer-events: none;"></g>
 </svg>'''
     with open(svg_path, "w", encoding="utf-8") as f:
         f.write(svg_content)

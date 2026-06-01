@@ -1103,15 +1103,40 @@ body.overlay-open {
   cursor: pointer;
   transition: var(--transition-fast);
   z-index: 50;
+
+  &[hidden] {
+    display: none !important;
+  }
+
+  .no-badge {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--color-incorrect);
+    box-shadow: 0 0 6px var(--color-incorrect);
+
+    &.is-unlocked {
+      background: var(--color-correct);
+      box-shadow: 0 0 6px var(--color-correct);
+    }
+  }
+}
+
+#city-view[data-city="hamburg"] .pfaueninsel-overlay {
+  display: none !important;
+}
+
+#city-view[data-city="berlin"] .neuwerk-overlay {
+  display: none !important;
 }
 
 .pfaueninsel-overlay {
   top: 3.75rem;
 }
 
-.pfaueninsel-overlay .no-badge {
-  background: hsl(38, 95%, 58%);
-  box-shadow: 0 0 6px hsl(38, 95%, 58% / 0.6);
+#city-view[data-city="berlin"] .pfaueninsel-overlay {
+  top: 1rem;
 }
 
 .neuwerk-overlay {
@@ -1129,20 +1154,6 @@ body.overlay-open {
   cursor: pointer;
   transition: var(--transition-fast);
   z-index: 50;
-  
-  .no-badge {
-    background: var(--color-hamburg-mitte);
-    color: #fff;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    box-shadow: 0 0 6px var(--color-hamburg-mitte);
-
-    &.is-unlocked {
-      background: var(--color-correct);
-      box-shadow: 0 0 6px var(--color-correct);
-    }
-  }
   
   &:hover {
     border-color: rgba(255, 255, 255, 0.2);
