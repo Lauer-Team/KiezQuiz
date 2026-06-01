@@ -269,6 +269,18 @@
   }
 
   function renderSectionContent() {
+    const needsLogin = activeSection !== 'achievements';
+    if (needsLogin && !window.authManager?.isConfigured?.()) {
+      return `<section class="profile-panel"><p class="profile-empty">${t('profilePage.noCloudBody')}</p><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToApp')}</a></section>`;
+    }
+    if (needsLogin && !window.authManager?.isLoggedIn?.()) {
+      return `
+        <section class="profile-panel">
+          <p class="profile-panel-intro">${t('profilePage.loginRequiredBody')}</p>
+          <button type="button" class="primary-btn" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
+          <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToApp')}</a></p>
+        </section>`;
+    }
     switch (activeSection) {
       case 'friends': return renderFriendsSection();
       case 'leaderboard': return renderLeaderboardSection();
@@ -437,6 +449,10 @@
   function bindSectionEvents() {
     const main = document.getElementById('profile-main');
     if (!main) return;
+
+    main.querySelector('#profile-btn-login')?.addEventListener('click', () => {
+      window.authManager?.showAuthModal?.();
+    });
 
     main.querySelector('#profile-btn-signout')?.addEventListener('click', async () => {
       await window.authManager?.signOut?.();
@@ -623,6 +639,10 @@
   }
 
   async function refreshAccess() {
+    if (activeSection === 'achievements') {
+      renderDashboard();
+      return;
+    }
     if (!window.authManager?.isConfigured?.()) {
       renderNoCloud();
       return;
@@ -637,8 +657,9 @@
 
   async function boot() {
     await initI18n();
-    document.title = t('profilePage.title') + ' – KiezQuiz';
+    document.title = t('profilePage.title') + ' · KiezQuiz';
     applyToDom();
+    setShellVisible(true);
 
     document.querySelectorAll('.profile-nav-item').forEach((btn) => {
       btn.addEventListener('click', () => {

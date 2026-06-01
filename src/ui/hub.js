@@ -142,7 +142,6 @@
 
     container.innerHTML = `
       <div class="city-hub">
-        ${renderHubHeader(game)}
         <div class="hub-intro">
           <h2>${t('hub.title')}</h2>
           <p>${t('hub.subtitle')}</p>
@@ -176,8 +175,9 @@
       });
     }
 
-    const settingsBtn = container.querySelector('#hub-btn-settings');
-    if (settingsBtn) {
+    const settingsBtn = document.getElementById('btn-settings');
+    if (settingsBtn && !settingsBtn.dataset.hubBound) {
+      settingsBtn.dataset.hubBound = 'true';
       settingsBtn.addEventListener('click', () => {
         const open = () => game.showSettings();
         if (typeof window.loadGameBundle === 'function') {
@@ -188,24 +188,23 @@
       });
     }
 
-    const langBtn = container.querySelector('#hub-btn-lang');
-    if (langBtn) {
+    const langBtn = document.getElementById('btn-lang');
+    if (langBtn && !langBtn.dataset.hubBound) {
+      langBtn.dataset.hubBound = 'true';
       game.updateLangButton(langBtn);
       langBtn.addEventListener('click', () => {
         setLocale(getLocale() === 'de' ? 'en' : 'de');
       });
     }
 
-    game.syncHubStats();
+    game.renderStats();
     if (typeof applyToDom === 'function') applyToDom(container);
     if (window.kiezChangelog?.bindTriggers) window.kiezChangelog.bindTriggers(container);
   }
 
   function updateStats(game) {
-    const xpEl = document.getElementById('hub-stat-xp');
-    const streakEl = document.getElementById('hub-stat-streak');
-    if (xpEl) xpEl.textContent = game.xp;
-    if (streakEl) streakEl.textContent = game.streak;
+    /* stats updated via shared header #stat-xp / #stat-streak in game.renderStats() */
+    if (game && typeof game.renderStats === 'function') game.renderStats();
   }
 
   window.kiezHub = { render, updateStats, computeCityStats, progressRingHtml };

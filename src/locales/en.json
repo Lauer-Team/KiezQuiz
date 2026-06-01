@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "KiezQuiz – Learn Hamburg, Berlin & Frankfurt districts through play",
+    "title": "KiezQuiz · Don't be a Know-it-all. Know it all.",
     "slogan": "Don't be a Know-it-all. Know it all.",
     "description": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
     "ogDescription": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
@@ -114,7 +114,9 @@
   "footer": {
     "privacy": "Privacy:",
     "privacyText": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username, and save data are encrypted via TLS and stored with Supabase (EU) — no sharing with third parties.",
-    "changelog": "What's new?"
+    "changelog": "What's new?",
+    "about": "About KiezQuiz",
+    "credit": "By Kalle the Kiez Pigeon"
   },
   "changelog": {
     "title": "📋 What's new?",
@@ -914,5 +916,27 @@
         "capital": "Capital"
       }
     }
+  },
+  "aboutPage": {
+    "title": "About KiezQuiz",
+    "metaDescription": "What is KiezQuiz? Who is Kalle the Kiez Pigeon? Everything about the free map quiz for Hamburg, Berlin, Frankfurt and Europe.",
+    "backLink": "← Back to the quiz",
+    "heroClaim": "Don't be a Know-it-all. Know it all.",
+    "whatTitle": "What is KiezQuiz?",
+    "whatBody": "KiezQuiz is a free map quiz that helps you learn boroughs, neighbourhoods and capitals through play. Click on the map, find places or type names under time pressure — with XP, streaks, trivia and a rank system. No ads, no mandatory account. Works offline as a Progressive Web App.",
+    "kalleTitle": "Who is Kalle the Kiez Pigeon?",
+    "kalleIntro": "May I introduce: Kalle, the Kiez Pigeon.",
+    "kalleBody1": "Every city has them, nobody looks twice: the pigeon. Kalle is at home everywhere, knows every bench, every bakery, every shortcut. The perfect local — and the face of KiezQuiz.",
+    "kalleBody2": "Behind Kalle is the developer who builds and maintains KiezQuiz. The attitude: Know it already? Come on, I'll show you — never preachy, always curious. Kalle celebrates your streaks, gives trivia tips and is happy when you really know your city.",
+    "kalleRole": "City pigeon · Developer pseudonym · Mascot",
+    "modesTitle": "Game modes",
+    "modesBody": "Explorer mode for free discovery, map quiz for clicking, detective for searching, challenge under time pressure and typing mode — something for every learning style.",
+    "citiesTitle": "Cities & wishes",
+    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
+    "privacyTitle": "Privacy",
+    "privacyBody": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username and save data are encrypted via TLS and stored with Supabase (EU) — no sharing with third parties.",
+    "ctaPlay": "Play now →",
+    "langSwitchToEn": "Switch to English",
+    "langSwitchToDe": "Switch to German"
   }
 }

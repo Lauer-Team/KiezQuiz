@@ -1,41 +1,56 @@
 /* -------------------------------------------------------------
- * Cyber-Alster Neon-Dark UI Design System
- * Highly optimized, responsive, and compatible with modern Safari.
+ * Kiez-Signal Design System
+ * Brand CI 2026 — highly optimized, responsive, Safari-compatible.
  * ------------------------------------------------------------- */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
-  /* Theme Base Colors */
-  --bg-main: hsl(230, 28%, 7%);
-  --bg-surface: rgba(17, 24, 39, 0.65);
-  --bg-surface-hover: rgba(26, 36, 56, 0.8);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-glow: rgba(255, 255, 255, 0.16);
-  
-  --text-primary: hsl(210, 40%, 98%);
-  --text-secondary: hsl(215, 20%, 75%);
-  --text-muted: hsl(215, 12%, 50%);
+  /* Brand palette */
+  --signal: #FF5233;
+  --signal-tief: #E23E22;
+  --tinte: #0F1118;
+  --strom: #C6F24E;
+  --himmel: #5AA9FF;
+  --papier: #F1ECE0;
+  --kreide: #FCFBF8;
+  --beton: #252938;
+  --nebel: #9AA0B0;
+  --bernstein: #F4B53C;
+  --pflaume: #9B7BFF;
+  --tuerkis: #2BC4B4;
 
-  /* Neon Glow Districts */
-  --color-altona: hsl(295, 100%, 65%);       /* Purple/Magenta */
-  --color-bergedorf: hsl(32, 100%, 55%);     /* Warm Orange */
-  --color-eimsbuettel: hsl(175, 100%, 45%);   /* Turquoise Cyan */
-  --color-hamburg-mitte: hsl(345, 100%, 60%); /* Rose Red */
-  --color-hamburg-nord: hsl(210, 100%, 60%);  /* electric Blue */
-  --color-harburg: hsl(100, 95%, 55%);       /* Lime Green */
-  --color-wandsbek: hsl(260, 100%, 65%);     /* Deep Violet */
-  --color-default-path: hsl(225, 20%, 18%);
-  --color-neutral-glow: hsl(200, 100%, 60%);
+  /* Theme Base Colors (aliases) */
+  --bg-main: var(--tinte);
+  --bg-surface: rgba(37, 41, 56, 0.72);
+  --bg-surface-hover: rgba(37, 41, 56, 0.88);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-glow: rgba(255, 82, 51, 0.25);
+  
+  --text-primary: var(--kreide);
+  --text-secondary: var(--nebel);
+  --text-muted: #6B7289;
+
+  /* District tints (CI d1–d7) */
+  --color-altona: var(--signal);
+  --color-bergedorf: var(--bernstein);
+  --color-eimsbuettel: var(--tuerkis);
+  --color-hamburg-mitte: #FF8A5B;
+  --color-hamburg-nord: var(--himmel);
+  --color-harburg: var(--strom);
+  --color-wandsbek: var(--pflaume);
+  --color-default-path: var(--beton);
+  --color-neutral-glow: var(--himmel);
 
   /* UI Game Colors */
-  --color-correct: hsl(142, 76%, 45%);
-  --color-incorrect: hsl(350, 89%, 60%);
-  --color-xp: hsl(47, 95%, 55%);
+  --color-correct: #3DD68C;
+  --color-incorrect: #FF4D6D;
+  --color-xp: var(--strom);
   
   /* Fonts */
-  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-display: 'Space Grotesk', var(--font-sans);
+  --font-sans: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Bricolage Grotesque', var(--font-sans);
+  --font-mono: 'Space Mono', ui-monospace, monospace;
   
   /* Radii & Transitions */
   --radius-lg: 16px;
@@ -60,9 +75,9 @@ html {
 body {
   background-color: var(--bg-main);
   background-image: 
-    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(220,53%,10%,1) 0, transparent 50%),
-    radial-gradient(at 50% 100%, hsla(280,30%,8%,1) 0, transparent 60%);
+    radial-gradient(at 0% 0%, rgba(255, 82, 51, 0.08) 0, transparent 45%),
+    radial-gradient(at 100% 0%, rgba(90, 169, 255, 0.07) 0, transparent 45%),
+    radial-gradient(at 50% 100%, rgba(37, 41, 56, 0.9) 0, transparent 60%);
   background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-sans);
@@ -124,24 +139,51 @@ body.overlay-open {
   opacity: 0.75;
 }
 
+.footer-credit a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer-credit a:hover {
+  color: var(--signal);
+}
+
 .footer-links {
   margin: 0.5rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+}
+
+.footer-links-sep {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  user-select: none;
 }
 
 .footer-link-btn {
-  background: none;
-  border: none;
-  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
   font: inherit;
   font-size: 0.78rem;
-  color: var(--color-neutral-glow);
+  font-weight: 600;
+  color: var(--text-secondary);
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  text-decoration: none;
+  transition: var(--transition-fast);
 }
 
 .footer-link-btn:hover {
-  color: #fff;
+  color: var(--kreide);
+  border-color: var(--border-color-glow);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 /* “Was ist neu?” — header & footer entry points */
@@ -328,26 +370,51 @@ body.overlay-open {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+
+  &.brand-link {
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+  }
+
+  &.brand-link:hover {
+    opacity: 0.92;
+  }
+
+  &.brand-link:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  .brand-pin {
+    width: 2.25rem;
+    height: auto;
+    flex-shrink: 0;
+  }
   
-  h1 {
+  h1,
+  h2.brand-title {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.5rem;
+    font-weight: 800;
+    font-size: 1.65rem;
     letter-spacing: -0.5px;
-    background: linear-gradient(135deg, #fff 30%, var(--color-neutral-glow) 100%);
+    background: linear-gradient(135deg, var(--kreide) 30%, var(--himmel) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
   }
   
   .badge {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 82, 51, 0.12);
+    border: 1px solid rgba(255, 82, 51, 0.35);
     padding: 0.25rem 0.6rem;
     font-size: 0.75rem;
     font-weight: 700;
     border-radius: 9999px;
     letter-spacing: 0.05em;
-    color: var(--color-neutral-glow);
+    color: var(--signal);
     text-transform: uppercase;
   }
 }
@@ -369,6 +436,18 @@ body.overlay-open {
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 600;
+
+  &.stat-pill-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: var(--transition-fast);
+  }
+
+  &.stat-pill-link:hover {
+    border-color: var(--border-color-glow);
+    background: rgba(198, 242, 78, 0.08);
+  }
   
   .label {
     color: var(--text-secondary);
@@ -2726,18 +2805,19 @@ a.auth-pill-profile-link:hover {
 
 .global-header .brand h1,
 .global-header .brand h2.brand-title {
-  background: linear-gradient(135deg, #fff 30%, var(--color-neutral-glow) 110%);
+  background: linear-gradient(135deg, var(--kreide) 30%, var(--himmel) 110%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0;
-  font-size: inherit;
+  font-size: 1.65rem;
   font-family: var(--font-display);
   font-weight: 800;
 }
 
 .global-header .badge {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: var(--text-secondary);
+  background: rgba(255, 82, 51, 0.12);
+  border-color: rgba(255, 82, 51, 0.35);
+  color: var(--signal);
 }
 

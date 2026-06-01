@@ -99,7 +99,7 @@ function applyToDom(root = document) {
   const twitterDesc = document.querySelector('meta[name="twitter:description"]');
   if (twitterDesc) twitterDesc.content = t('meta.ogDescription');
 
-  document.title = t('meta.slogan') || t('meta.title');
+  document.title = t('meta.title') || (t('meta.slogan') ? 'KiezQuiz · ' + t('meta.slogan') : 'KiezQuiz');
 }
 
 function notifyLocaleListeners() {

@@ -280,6 +280,32 @@
       }
     },
     {
+      date: '2026-06-02',
+      version: '2.0.0',
+      de: {
+        title: 'Kiez-Signal Rebranding',
+        items: [
+          'Neues Corporate Identity: Kiez-Signal-Farben, Bricolage Grotesque & Hanken Grotesk, Q-Pin-Logo',
+          'Neue Über-uns-Seite mit Kalle der Kieztaube als Maskottchen und Entwickler-Pseudonym',
+          'Einheitlicher Header in Städte-Übersicht und Spiel: Logo, XP, Serie, Rang, alle Steuerungen',
+          'KiezQuiz-Logo führt zur Über-uns-Seite, XP-Anzeige zur Profilseite mit Fortschritt pro Stadt',
+          'Neues Favicon, neues OG-Bild für Messenger-Vorschau, Tab-Titel „KiezQuiz · Slogan“',
+          'Footer: „Über das KiezQuiz“ und „Von Kalle der Kieztaube“'
+        ]
+      },
+      en: {
+        title: 'Kiez-Signal rebrand',
+        items: [
+          'New corporate identity: Kiez-Signal colors, Bricolage Grotesque & Hanken Grotesk, Q-Pin logo',
+          'New about page featuring Kalle the Kiez Pigeon as mascot and developer pseudonym',
+          'Unified header in city hub and game: logo, XP, streak, rank, all controls',
+          'KiezQuiz logo links to about page, XP pill links to profile with per-city progress',
+          'New favicon, new OG image for messenger previews, tab title “KiezQuiz · slogan”',
+          'Footer: “About KiezQuiz” and “By Kalle the Kiez Pigeon”'
+        ]
+      }
+    },
+    {
       date: '2026-06-01',
       version: '1.3.0',
       de: {

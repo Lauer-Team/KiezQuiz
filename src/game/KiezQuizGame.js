@@ -101,6 +101,8 @@ class KiezQuizGame {
     if (this.view === 'hub') {
       if (hubEl) hubEl.hidden = false;
       if (cityEl) cityEl.hidden = true;
+      this.updateHeaderBadge();
+      this.renderStats();
       window.kiezHub?.render(this, hubEl);
       if (window.authManager) window.authManager.updateHeaderUI();
       this._maybeShowAppNews();
@@ -956,14 +958,18 @@ class KiezQuizGame {
   }
 
   updateHeaderBadge() {
-    const badge = document.getElementById('header-badge') || document.querySelector('#city-view .brand .badge');
+    const badge = document.getElementById('header-badge');
     if (!badge) return;
+    if (this.view === 'hub') {
+      badge.textContent = t('hub.badge');
+      return;
+    }
     const city = window.cityRegistry.localizeCity(window.cityRegistry.getCity(this.activeCityId));
     badge.textContent = city?.name || this.activeCityId;
   }
 
   updateLangButton(btn) {
-    const el = btn || document.getElementById('btn-lang') || document.getElementById('hub-btn-lang');
+    const el = btn || document.getElementById('btn-lang');
     if (!el) return;
     el.textContent = getLocale() === 'de' ? '🇩🇪' : '🇬🇧';
     el.title = getLocale() === 'de' ? t('header.langSwitchToEn') : t('header.langSwitchToDe');
@@ -977,21 +983,23 @@ class KiezQuizGame {
     const rankName = document.getElementById('stat-rank');
     const progFill = document.getElementById('progress-fill');
     
-    xpVal.textContent = this.xp;
-    streakVal.textContent = `${this.streak}x`;
+    xpVal && (xpVal.textContent = this.xp);
+    streakVal && (streakVal.textContent = `${this.streak}x`);
     if (bestStreakVal) bestStreakVal.textContent = t('header.streakBest', { count: this.bestStreak });
     
     const currentRank = getRanks().find(r => r.level === this.level);
-    rankName.textContent = currentRank ? currentRank.name : t('ranks.fallback');
+    rankName && (rankName.textContent = currentRank ? currentRank.name : t('ranks.fallback'));
     
     // Global rank progress bar (XP-based)
     const nextRank = getRanks().find(r => r.level === this.level + 1);
-    if (nextRank && currentRank) {
-      const span = nextRank.minXp - currentRank.minXp;
-      const progressPercent = span > 0 ? ((this.xp - currentRank.minXp) / span) * 100 : 0;
-      progFill.style.width = `${Math.min(progressPercent, 100)}%`;
-    } else {
-      progFill.style.width = '100%';
+    if (progFill && currentRank) {
+      if (nextRank) {
+        const span = nextRank.minXp - currentRank.minXp;
+        const progressPercent = span > 0 ? ((this.xp - currentRank.minXp) / span) * 100 : 0;
+        progFill.style.width = `${Math.min(progressPercent, 100)}%`;
+      } else {
+        progFill.style.width = '100%';
+      }
     }
 
     this.updateHeaderBadge();

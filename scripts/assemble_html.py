@@ -344,7 +344,7 @@ def main():
     <!-- App Header & Stats Bar -->
     <header class="app-header">
       <div class="brand">
-        <h1>KiezQuiz ⚓</h1>
+        <h1>KiezQuiz</h1>
         <span class="badge">Gamified Learning</span>
       </div>
       
@@ -515,7 +515,7 @@ def main():
       <p class="privacy-notice">
         <strong>Datenschutz:</strong> Keine Server, keine Accounts — dein Spielstand (XP, Streak, Fortschritt) wird nur lokal im Browser gespeichert und nicht an uns übertragen.
       </p>
-      <p class="footer-credit">Courtesy of Jeremiah J. Lauer, LL.M.</p>
+      <p class="footer-credit"><a href="/about/">Von Kalle der Kieztaube</a></p>
     </footer>
   </div>
 

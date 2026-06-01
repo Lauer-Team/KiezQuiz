@@ -22,15 +22,15 @@
   <meta property="og:description" content="Lerne alle 104 Hamburger Stadtteile und 7 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
   <meta property="og:url" content="https://kiezquiz.de/hamburg/">
   <meta property="og:locale" content="de_DE">
-  <meta property="og:image" content="https://kiezquiz.de/assets/og-image.jpg">
+  <meta property="og:image" content="https://kiezquiz.de/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:type" content="image/png">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Besser wissen als Besserwissen.">
   <meta name="twitter:description" content="Lerne alle 104 Hamburger Stadtteile und 7 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
-  <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.jpg">
+  <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.png">
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -98,6 +98,56 @@
   </noscript>
 
 <div class="app-shell density-compact">
+    <header class="app-header global-header" id="app-header">
+      <a href="/about/" class="brand brand-link" data-i18n-title="footer.about" title="Über das KiezQuiz">
+        <img class="brand-pin" src="assets/brand/marke/qpin-signal.svg" width="36" height="45" alt="">
+        <h1 class="brand-title">KiezQuiz</h1>
+        <span class="badge" id="header-badge">Städte</span>
+      </a>
+
+      <div class="stats-bar">
+        <div class="stat-pill streak-pill" data-i18n-title="header.streakTitle" title="Deine aktuelle Antwortserie">
+          <div class="streak-info">
+            <div class="streak-current">
+              <span class="label" data-i18n="header.streakLabel">Serie 🔥:</span>
+              <span class="value" id="stat-streak">0x</span>
+            </div>
+            <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
+          </div>
+        </div>
+
+        <a href="/profile/" class="stat-pill xp-pill stat-pill-link" data-i18n-title="header.profileTitle" title="Profil & Bestenliste öffnen">
+          <span class="label" data-i18n="header.xpLabel">XP:</span>
+          <span class="value" id="stat-xp">0</span>
+        </a>
+
+        <div class="level-tracker">
+          <div class="level-info">
+            <span class="rank-name" id="stat-rank">Neuling</span>
+          </div>
+          <div class="progress-bg">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <button type="button" class="auth-pill" id="auth-pill" data-i18n-title="header.authTitle" title="Cloud-Speicherung: optional anmelden">
+          <span class="auth-pill-icon">👤</span>
+          <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
+          <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
+        </button>
+
+        <button type="button" class="changelog-header-btn" data-changelog-trigger data-i18n-title="header.changelogTitle" title="Alle Updates und Neuerungen">
+          <span class="changelog-header-icon" aria-hidden="true">✨</span>
+          <span class="changelog-header-label" data-i18n="footer.changelog">Was ist neu?</span>
+        </button>
+
+        <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
+        <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf">📋</button>
+        <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
+        <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
+      </div>
+    </header>
+
     <div id="hub-view" class="hub-view-root" hidden>
       <article class="seo-hub-fallback">
         <h1>KiezQuiz – Bezirke und Stadtteile spielerisch lernen</h1>
@@ -118,64 +168,6 @@
 
     <div id="city-view" class="city-view-root" data-city="hamburg" hidden>
   <div class="app-container">
-    
-    <!-- App Header & Stats Bar -->
-    <header class="app-header global-header">
-      <div class="brand">
-        <h2 class="brand-title">KiezQuiz ⚓</h2>
-        <span class="badge" id="header-badge">Hamburg</span>
-      </div>
-      
-      <div class="stats-bar">
-        <!-- Streak Pill -->
-        <div class="stat-pill streak-pill" data-i18n-title="header.streakTitle" title="Deine aktuelle Antwortserie">
-          <div class="streak-info">
-            <div class="streak-current">
-              <span class="label" data-i18n="header.streakLabel">Serie 🔥:</span>
-              <span class="value" id="stat-streak">0x</span>
-            </div>
-            <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
-          </div>
-        </div>
-
-        <!-- XP Pill -->
-        <div class="stat-pill xp-pill" data-i18n-title="header.xpTitle" title="Deine Erfahrungspunkte">
-          <span class="label" data-i18n="header.xpLabel">XP:</span>
-          <span class="value" id="stat-xp">0</span>
-        </div>
-        
-        <!-- Level & Rank tracker -->
-        <div class="level-tracker">
-          <div class="level-info">
-            <span class="rank-name" id="stat-rank">Neuling</span>
-          </div>
-          <div class="progress-bg">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-        </div>
-        
-        <!-- Auth / Cloud sync -->
-        <button type="button" class="auth-pill" id="auth-pill" data-i18n-title="header.authTitle" title="Cloud-Speicherung: optional anmelden">
-          <span class="auth-pill-icon">👤</span>
-          <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
-          <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
-        </button>
-
-        <!-- What's new -->
-        <button type="button" class="changelog-header-btn" data-changelog-trigger data-i18n-title="header.changelogTitle" title="Alle Updates und Neuerungen">
-          <span class="changelog-header-icon" aria-hidden="true">✨</span>
-          <span class="changelog-header-label" data-i18n="footer.changelog">Was ist neu?</span>
-        </button>
-
-        <!-- Audio Synthesizer toggle -->
-        <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
-        <!-- Game history -->
-        <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf">📋</button>
-        <!-- Settings -->
-        <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
-        <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
-      </div>
-    </header>
 
     <div id="city-context-bar"></div>
 
@@ -288,7 +280,6 @@
             <div class="no-badge"></div>
             <span data-i18n="map.pfaueninselLabel">Pfaueninsel (Insel-Rätsel) 🦚</span>
           </div>
-
           <div class="islands-stack" id="europe-islands-stack" hidden></div>
           <div class="europe-microstates-bar" id="europe-microstates-bar" hidden aria-label="Kleine Länder — Schnellzugriff"></div>
 
@@ -329,9 +320,11 @@
         <strong data-i18n="footer.privacy">Datenschutz:</strong> <span data-i18n="footer.privacyText">Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.</span>
       </p>
       <p class="footer-links">
+        <a href="/about/" class="footer-link-btn" data-i18n="footer.about">Über das KiezQuiz</a>
+        <span class="footer-links-sep" aria-hidden="true">·</span>
         <button type="button" class="changelog-footer-btn" data-changelog-trigger data-i18n="footer.changelog">Was ist neu?</button>
       </p>
-      <p class="footer-credit">Courtesy of Jeremiah J. Lauer, LL.M.</p>
+      <p class="footer-credit"><a href="/about/" data-i18n="footer.credit">Von Kalle der Kieztaube</a></p>
     </footer>
   </div><!-- /app-shell -->
 

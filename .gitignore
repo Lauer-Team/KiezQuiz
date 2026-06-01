@@ -2,6 +2,8 @@
 .cursor/
 *.log
 LOCAL-INFO.md
+node_modules/
+test-results/
 
 # Lokale Supabase-Keys (Vorlage: src/supabaseConfig.example.js)
 src/supabaseConfig.js

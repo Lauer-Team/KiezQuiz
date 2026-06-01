@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "KiezQuiz – Hamburg, Berlin & Frankfurt Bezirke und Stadtteile spielerisch lernen",
+    "title": "KiezQuiz · Besser wissen als Besserwissen.",
     "slogan": "Besser wissen als Besserwissen.",
     "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
     "ogDescription": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
@@ -114,7 +114,9 @@
   "footer": {
     "privacy": "Datenschutz:",
     "privacyText": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.",
-    "changelog": "Was ist neu?"
+    "changelog": "Was ist neu?",
+    "about": "Über das KiezQuiz",
+    "credit": "Von Kalle der Kieztaube"
   },
   "changelog": {
     "title": "📋 Was ist neu?",
@@ -1026,5 +1028,27 @@
         "capital": "Hauptstadt"
       }
     }
+  },
+  "aboutPage": {
+    "title": "Über das KiezQuiz",
+    "metaDescription": "Was ist KiezQuiz? Wer ist Kalle die Kieztaube? Alles über das kostenlose Karten-Quiz für Hamburg, Berlin, Frankfurt und Europa.",
+    "backLink": "← Zurück zum Quiz",
+    "heroClaim": "Besser wissen als Besserwissen.",
+    "whatTitle": "Was ist KiezQuiz?",
+    "whatBody": "KiezQuiz ist ein kostenloses Karten-Quiz, mit dem du Bezirke, Stadtteile und Hauptstädte spielerisch lernst. Klicke auf der Karte, finde Orte oder tippe Namen unter Zeitdruck — mit XP, Serien, Trivia und Rangsystem. Keine Werbung, kein Pflicht-Account. Als Progressive Web App auch offline nutzbar.",
+    "kalleTitle": "Wer ist Kalle die Kieztaube?",
+    "kalleIntro": "Darf ich vorstellen: Kalle, die Kieztaube.",
+    "kalleBody1": "Jede Stadt hat sie, keiner schaut hin: die Taube. Kalle ist überall zuhause, kennt jede Bank, jede Bäckerei, jede Abkürzung. Der perfekte Local — und das Gesicht des KiezQuiz.",
+    "kalleBody2": "Hinter Kalle steckt der Entwickler, der KiezQuiz baut und pflegt. Die Haltung: Kennste schon? Komm, zeig ich dir — nie oberlehrerhaft, immer neugierig. Kalle feiert deine Serien, gibt Trivia-Tipps und freut sich, wenn du deine Stadt wirklich kennst.",
+    "kalleRole": "Stadttaube · Entwickler-Pseudonym · Maskottchen",
+    "modesTitle": "Spielmodi",
+    "modesBody": "Entdecker-Modus zum freien Erkunden, Karten-Quiz zum Anklicken, Detektiv zum Suchen, Challenge unter Zeitdruck und Eingabe-Modus zum Tippen — für jeden Lerntyp das Richtige.",
+    "citiesTitle": "Städte & Wünsche",
+    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
+    "privacyTitle": "Datenschutz",
+    "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.",
+    "ctaPlay": "Jetzt spielen →",
+    "langSwitchToEn": "Switch to English",
+    "langSwitchToDe": "Auf Deutsch wechseln"
   }
 }

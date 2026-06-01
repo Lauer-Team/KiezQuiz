@@ -7,6 +7,7 @@ from pathlib import Path
 BASE_URL = "https://kiezquiz.de"
 URLS = [
     "/",
+    "/about/",
     "/hamburg/",
     "/berlin/",
     "/frankfurt/",
