@@ -12,6 +12,10 @@
       && getSupabase();
   }
 
+  function normalizeUsernameInput(value) {
+    return String(value || '').trim().replace(/^@+/, '');
+  }
+
   async function rpc(name, params) {
     if (!isEnabled()) return { data: null, error: new Error('not_configured') };
     try {
@@ -23,13 +27,17 @@
   }
 
   async function searchProfiles(query) {
-    const { data, error } = await rpc('search_profiles_by_username', { p_query: query });
+    const { data, error } = await rpc('search_profiles_by_username', {
+      p_query: normalizeUsernameInput(query)
+    });
     if (error) return { rows: [], error };
     return { rows: Array.isArray(data) ? data : [], error: null };
   }
 
   async function sendFriendRequest(username) {
-    const { data, error } = await rpc('send_friend_request', { p_username: username });
+    const { data, error } = await rpc('send_friend_request', {
+      p_username: normalizeUsernameInput(username)
+    });
     if (error) return { ok: false, error };
     return { ...(data || {}), error: null };
   }

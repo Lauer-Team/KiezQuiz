@@ -305,7 +305,7 @@ begin
     return;
   end if;
 
-  v_q := lower(trim(p_query));
+  v_q := lower(regexp_replace(trim(p_query), '^@+', ''));
   if v_q is null or length(v_q) < 2 then
     return;
   end if;
@@ -317,7 +317,7 @@ begin
   return query
   select p.id, p.username
   from public.profiles p
-  where lower(p.username) like v_q || '%'
+  where p.username ilike v_q || '%'
     and p.id <> auth.uid()
   order by p.username
   limit 10;
@@ -343,7 +343,7 @@ begin
 
   select id into v_target
   from public.profiles
-  where lower(username) = lower(trim(p_username));
+  where username ilike lower(regexp_replace(trim(p_username), '^@+', ''));
 
   if v_target is null then
     return jsonb_build_object('ok', false, 'reason', 'not_found');
