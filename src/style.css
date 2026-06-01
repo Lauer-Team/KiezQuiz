@@ -2035,7 +2035,8 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     font-size: 1.2rem;
   }
   
-  .brand h1 {
+  .brand h1,
+  .brand h2.brand-title {
     font-size: 1.25rem;
   }
   
@@ -2449,10 +2450,15 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   gap: var(--gap);
 }
 
-.global-header .brand h1 {
+.global-header .brand h1,
+.global-header .brand h2.brand-title {
   background: linear-gradient(135deg, #fff 30%, var(--color-neutral-glow) 110%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  margin: 0;
+  font-size: inherit;
+  font-family: var(--font-display);
+  font-weight: 800;
 }
 
 .global-header .badge {
@@ -2668,4 +2674,34 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   .city-context-bar { flex-direction: column; align-items: stretch; }
   .ccb-breadcrumb { justify-content: center; }
   .segment-selector.adaptive { grid-template-columns: 1fr; }
+}
+
+/* Crawlable SEO fallback in hub (replaced by hub.js on init) */
+.seo-hub-fallback {
+  max-width: 42rem;
+  margin: 2rem auto;
+  padding: 0 1.25rem 2rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+.seo-hub-fallback h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: #fff;
+  margin: 0 0 1rem;
+  line-height: 1.25;
+}
+.seo-hub-fallback h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: #fff;
+  margin: 1.5rem 0 0.5rem;
+}
+.seo-hub-fallback p { margin: 0 0 1rem; }
+.seo-hub-fallback nav { margin: 1rem 0 1.5rem; font-size: 0.95rem; }
+.seo-hub-fallback a { color: var(--acc); }
+.achievement-alert .share-milestone-btn {
+  margin-left: auto;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
 }

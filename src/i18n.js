@@ -83,11 +83,17 @@ function applyToDom(root = document) {
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.content = t('meta.description');
 
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.content = t('meta.title');
+
   const ogDesc = document.querySelector('meta[property="og:description"]');
   if (ogDesc) ogDesc.content = t('meta.ogDescription');
 
   const ogLocale = document.querySelector('meta[property="og:locale"]');
   if (ogLocale) ogLocale.content = _locale === 'en' ? 'en_US' : 'de_DE';
+
+  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twitterTitle) twitterTitle.content = t('meta.title');
 
   const twitterDesc = document.querySelector('meta[name="twitter:description"]');
   if (twitterDesc) twitterDesc.content = t('meta.ogDescription');

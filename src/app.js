@@ -839,6 +839,28 @@ class KiezQuizGame {
     this.view = window.saveManager.getInitialView(this._save);
     this.activeCityId = this._save.lastCity || 'hamburg';
 
+    const params = new URLSearchParams(window.location.search);
+    const cityParam = params.get('city');
+    if (cityParam && window.cityRegistry.isPlayable(cityParam)) {
+      this.view = 'city';
+      this.activeCityId = cityParam;
+      window.saveManager.ensureCityBranch(this._save, cityParam);
+      this._applyCityBranch(this._save.cities[cityParam]);
+      const hadProgress = window.saveManager.hasAnyProgress(this._save);
+      const prevLastCity = this._save.lastCity;
+      // Deep link: open city for this session; only persist lastCity for new users
+      // or when it already matches — avoids overriding returning players' home city.
+      if (!hadProgress || !prevLastCity || prevLastCity === cityParam) {
+        this._save.lastCity = cityParam;
+        window.saveManager.persistSave(this._save);
+      }
+      if (window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname || '/');
+      }
+      this._initCityPlay();
+      return;
+    }
+
     const hubEl = document.getElementById('hub-view');
     const cityEl = document.getElementById('city-view');
 
@@ -1863,6 +1885,43 @@ class KiezQuizGame {
     return ROUND_TIME_LIMIT - this.roundTimeLeft;
   }
 
+  getShareUrl() {
+    const city = this.activeCityId || 'hamburg';
+    return `https://kiezquiz.de/?city=${encodeURIComponent(city)}`;
+  }
+
+  async shareMilestone(kind, extra = {}) {
+    if (!navigator.share) return;
+    const city = window.cityRegistry.getCity(this.activeCityId);
+    const cityName = city?.name || this.activeCityId;
+    let title;
+    let text;
+    if (kind === 'levelUp') {
+      title = t('share.levelUpTitle');
+      text = t('share.levelUpText');
+    } else {
+      title = t('share.trophyTitle');
+      text = extra.trophyName
+        ? `${t('share.trophyText')} (${cityName}: ${extra.trophyName})`
+        : `${t('share.trophyText')} (${cityName})`;
+    }
+    try {
+      await navigator.share({ title, text, url: this.getShareUrl() });
+    } catch (err) {
+      if (err?.name !== 'AbortError') console.warn('Share failed:', err);
+    }
+  }
+
+  appendShareButton(container, kind, extra = {}) {
+    if (!navigator.share || !container) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'secondary-btn share-milestone-btn';
+    btn.textContent = t('share.button');
+    btn.addEventListener('click', () => this.shareMilestone(kind, extra));
+    container.appendChild(btn);
+  }
+
   showAchievementAlert(title, desc) {
     // Create an elegant glass sliding panel alert
     const alertBox = document.createElement('div');
@@ -1892,6 +1951,8 @@ class KiezQuizGame {
         <div style="font-size:0.75rem; color:var(--text-secondary);">${desc}</div>
       </div>
     `;
+
+    this.appendShareButton(alertBox, 'trophy', { trophyName: title });
     
     document.body.appendChild(alertBox);
     
@@ -1925,11 +1986,19 @@ class KiezQuizGame {
         <h2 style="font-size: 2.2rem; color: var(--color-xp); text-shadow: 0 0 15px rgba(255, 191, 0, 0.3);">${t('levelUp.title')}</h2>
         <p style="margin-top:0.5rem; font-weight:700; font-size: 1.1rem; color:#fff;">${t('levelUp.rank', { name: rank.name })}</p>
         <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">${t('levelUp.body')}</p>
-        <button class="primary-btn" id="btn-lvl-dismiss">${t('levelUp.dismiss')}</button>
+        <div class="round-end-actions" style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
+          <button class="primary-btn" id="btn-lvl-dismiss">${t('levelUp.dismiss')}</button>
+          <button class="secondary-btn" id="btn-lvl-share" hidden>${t('levelUp.share')}</button>
+        </div>
       </div>
     `);
     launchConfetti(this.sounds);
     document.getElementById('btn-lvl-dismiss').addEventListener('click', () => closeOverlayModal(modal));
+    const shareBtn = document.getElementById('btn-lvl-share');
+    if (shareBtn && navigator.share) {
+      shareBtn.hidden = false;
+      shareBtn.addEventListener('click', () => this.shareMilestone('levelUp'));
+    }
   }
 
   async resetGame() {

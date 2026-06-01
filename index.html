@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>KiezQuiz – Städte spielerisch lernen</title>
-  <meta name="description" content="KiezQuiz: Lerne spielerisch Bezirke und Stadtteile deutscher Städte — starte in Hamburg, weitere Städte folgen. Interaktiv, offline spielbar und mobiloptimiert.">
+  <title>KiezQuiz – Hamburg, Berlin & Frankfurt Bezirke und Stadtteile spielerisch lernen</title>
+  <meta name="description" content="Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.">
   <meta name="theme-color" content="#0f1118">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,8 +15,8 @@
   <link rel="canonical" href="https://kiezquiz.de/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KiezQuiz">
-  <meta property="og:title" content="KiezQuiz">
-  <meta property="og:description" content="Besser wissen als Besserwissen.">
+  <meta property="og:title" content="KiezQuiz – Hamburg, Berlin & Frankfurt Bezirke und Stadtteile spielerisch lernen">
+  <meta property="og:description" content="Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.">
   <meta property="og:url" content="https://kiezquiz.de/">
   <meta property="og:locale" content="de_DE">
   <meta property="og:image" content="https://kiezquiz.de/assets/og-image.jpg">
@@ -26,19 +26,48 @@
 
   <!-- Link-Vorschau: Twitter / X Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="KiezQuiz">
-  <meta name="twitter:description" content="Besser wissen als Besserwissen.">
+  <meta name="twitter:title" content="KiezQuiz – Hamburg, Berlin & Frankfurt Bezirke und Stadtteile spielerisch lernen">
+  <meta name="twitter:description" content="Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.">
   <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.jpg">
 
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon.svg">
   <link rel="stylesheet" href="src/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "KiezQuiz",
+    "url": "https://kiezquiz.de/",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil und offline.",
+    "inLanguage": ["de", "en"]
+  }
+  </script>
 </head>
 <body>
 
   <div class="app-shell density-compact">
-    <div id="hub-view" class="hub-view-root" hidden></div>
+    <div id="hub-view" class="hub-view-root" hidden>
+      <article class="seo-hub-fallback">
+        <h1>KiezQuiz – Bezirke und Stadtteile spielerisch lernen</h1>
+        <p>Kostenloses Karten-Quiz für Hamburg, Berlin und Frankfurt am Main. Lerne alle Bezirke und Ortsteile auf interaktiven Karten — mit XP, Streaks, Trivia und Pokalen. Keine Anmeldung nötig, mobil und offline spielbar.</p>
+        <nav aria-label="Städte">
+          <a href="/hamburg/">Hamburg (104 Stadtteile)</a> ·
+          <a href="/berlin/">Berlin (97 Ortsteile)</a> ·
+          <a href="/frankfurt/">Frankfurt (46 Stadtteile)</a>
+        </nav>
+        <h2>Hamburg</h2>
+        <p>Hamburg gliedert sich in 7 Bezirke und 104 Stadtteile — vom Hafen bis nach Bergedorf. KiezQuiz zeigt jeden Stadtteil auf einer zoombaren Karte und trainiert dein Orientierungswissen mit Entdecker-Modus, Detektiv, Quiz und Sporcle-Challenge.</p>
+        <h2>Berlin</h2>
+        <p>Berlin hat 12 Bezirke und 97 Ortsteile — von Mitte über Kreuzberg bis Marzahn-Hellersdorf. Lerne die Hauptstadt spielerisch: Klicke Ortsteile an, finde sie auf der Karte oder tippe Namen unter Zeitdruck ein.</p>
+        <h2>Frankfurt am Main</h2>
+        <p>Frankfurt umfasst 16 Ortsbezirke und 46 Stadtteile — von der Innenstadt bis Bergen-Enkheim. Das kostenlose Quiz hilft dir, Mainmetropole und Finanzstadt geografisch wirklich zu kennen.</p>
+      </article>
+    </div>
 
     <div id="city-view" class="city-view-root" data-city="hamburg" hidden>
   <div class="app-container">
@@ -46,7 +75,7 @@
     <!-- App Header & Stats Bar -->
     <header class="app-header global-header">
       <div class="brand">
-        <h1>KiezQuiz ⚓</h1>
+        <h2 class="brand-title">KiezQuiz ⚓</h2>
         <span class="badge" id="header-badge">Hamburg</span>
       </div>
       
@@ -195,7 +224,7 @@
         <button type="button" class="control-btn map-center-btn" id="btn-zoom-reset" data-i18n-title="map.zoomResetTitle" data-i18n="map.zoomReset" title="Karte zentrieren">Zentrieren</button>
 
         <!-- Bounding Box for SVG Map -->
-        <div class="map-container-wrapper" id="map-wrapper">
+        <div class="map-container-wrapper" id="map-wrapper" role="img" aria-label="Interaktive Stadtkarte zum Erkunden von Bezirken und Stadtteilen">
           
           <!-- Floating island Easter Eggs (city-specific) -->
           <div class="island-overlay neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!" hidden>
@@ -383,6 +412,8 @@
   </div>
     </div><!-- /city-view -->
   </div><!-- /app-shell -->
+
+  <script src="src/bootView.js"></script>
 
   <!-- Database & Logic Script tags -->
   <script src="src/i18n.js"></script>

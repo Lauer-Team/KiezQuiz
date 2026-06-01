@@ -79,12 +79,18 @@
     };
   }
 
+  function isPlayable(id) {
+    const city = getCity(id);
+    return city?.status === 'playable';
+  }
+
   window.cityRegistry = {
     accentVars,
     applyAccentVars,
     getAllCities,
     getCity,
     getPlayableCities,
+    isPlayable,
     getBezirkeProgression,
     segmentToLevelKey,
     levelKeyToSegment,
