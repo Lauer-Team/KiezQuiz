@@ -25,6 +25,25 @@
     { name: 'Lichtenberg', xpNeeded: 2250 }
   ];
 
+  const FRANKFURT_BEZIRKE_PROGRESSION = [
+    { name: 'Innenstadt I', xpNeeded: 0 },
+    { name: 'Innenstadt II', xpNeeded: 50 },
+    { name: 'Innenstadt III', xpNeeded: 150 },
+    { name: 'Bornheim/Ostend', xpNeeded: 300 },
+    { name: 'Süd', xpNeeded: 450 },
+    { name: 'West', xpNeeded: 600 },
+    { name: 'Mitte-West', xpNeeded: 750 },
+    { name: 'Nord-West', xpNeeded: 900 },
+    { name: 'Mitte-Nord', xpNeeded: 1050 },
+    { name: 'Nord-Ost', xpNeeded: 1200 },
+    { name: 'Ost', xpNeeded: 1350 },
+    { name: 'Kalbach-Riedberg', xpNeeded: 1500 },
+    { name: 'Nieder-Erlenbach', xpNeeded: 1650 },
+    { name: 'Harheim', xpNeeded: 1800 },
+    { name: 'Nieder-Eschbach', xpNeeded: 2000 },
+    { name: 'Bergen-Enkheim', xpNeeded: 2250 }
+  ];
+
   const cities = [
     {
       id: 'hamburg',
@@ -69,16 +88,22 @@
     },
     {
       id: 'frankfurt',
-      name: 'Frankfurt',
+      name: 'Frankfurt am Main',
       greetingKey: 'cities.frankfurt.greeting',
       blurbKey: 'cities.frankfurt.blurb',
       hue: 352,
-      status: 'coming_soon',
+      status: 'playable',
       levels: [
         { key: 'stadtbezirke', labelKey: 'cities.frankfurt.levels.stadtbezirke', singularKey: 'cities.frankfurt.singular.stadtbezirk', tierKey: 'cities.tier.overview', count: 16 },
         { key: 'stadtteile', labelKey: 'cities.frankfurt.levels.stadtteile', singularKey: 'cities.frankfurt.singular.stadtteil', tierKey: 'cities.tier.detail', count: 46 }
       ],
-      totalTrophies: 0
+      dataGlobal: 'FRANKFURT_DATA',
+      mapSvg: 'src/data/frankfurt_map.svg',
+      progression: FRANKFURT_BEZIRKE_PROGRESSION,
+      trophyCatalog: 'frankfurt',
+      totalTrophies: 19,
+      paradiseTarget: 'Westend-Süd',
+      onboardingVersion: 1
     }
   ];
 
@@ -86,6 +111,7 @@
     cities,
     BEZIRKE_PROGRESSION: HAMBURG_BEZIRKE_PROGRESSION,
     HAMBURG_BEZIRKE_PROGRESSION,
-    BERLIN_BEZIRKE_PROGRESSION
+    BERLIN_BEZIRKE_PROGRESSION,
+    FRANKFURT_BEZIRKE_PROGRESSION
   };
 })();

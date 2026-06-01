@@ -178,6 +178,21 @@
     "progressHint": "Boroughs {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "Berlin rank"
   },
+  "cityRanksFrankfurt": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Main Rookie" },
+    "3": { "name": "Frankfurt Local" },
+    "4": { "name": "Main Captain" },
+    "5": { "name": "Frankfurt Expert" },
+    "6": { "name": "True Frankfurter" },
+    "7": { "name": "District Boss" },
+    "8": { "name": "King of Frankfurt" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Frankfurt rank reached — all districts & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Frankfurt rank"
+  },
   "trophiesBerlin": {
     "pfaueninsel_island": {
       "name": "Peacock Island Explorer",
@@ -202,6 +217,26 @@
       "unlockTitle": "Borough Boss 🏛️",
       "desc": "Name all twelve boroughs in the challenge.",
       "unlockDesc": "Name all twelve boroughs in the challenge!"
+    }
+  },
+  "trophiesFrankfurt": {
+    "paradise_explorer": {
+      "name": "Skyline Explorer!",
+      "unlockTitle": "Skyline Explorer! 🌴",
+      "desc": "Correctly tap \"Westend-Süd\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Westend-Süd for the first time."
+    },
+    "meister_alle_stadtteile": {
+      "name": "King of Frankfurt",
+      "unlockTitle": "King of Frankfurt 👑",
+      "desc": "Name all neighbourhoods in \"Name all places\".",
+      "unlockDesc": "Find every neighbourhood in the Sporcle challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "District Boss",
+      "unlockTitle": "District Boss 🏛️",
+      "desc": "Name all 16 districts in the challenge.",
+      "unlockDesc": "Name all 16 districts in the challenge!"
     }
   },
   "trophies": {
@@ -252,6 +287,7 @@
     "defaultOrtsteil": "A Berlin neighbourhood with its own distinct Kiez character.",
     "defaultBezirk": "A significant borough of Hamburg.",
     "defaultBezirkBerlin": "A significant borough of Berlin.",
+    "defaultBezirkFrankfurt": "A significant district of Frankfurt.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
     "templates": {
       "Altona": [
@@ -300,7 +336,23 @@
       "Treptow-Köpenick": ["Largest borough by area: Müggelsee and Köpenick old town.", "South-east Berlin — water, forest, single-family homes.", "Treptower Park Soviet memorial is iconic."],
       "Marzahn-Hellersdorf": ["DDR-era plattenbau estates and Gärten der Welt.", "Large housing estates like Marzahn.", "Green spaces between the blocks."],
       "Lichtenberg": ["East Berlin: Tierpark and Stasi memorial.", "Mix of plattenbau and detached housing.", "Key transport axis to the Berlin ring road."],
-      "Reinickendorf": ["North-west: Tegeler See and airship hangar.", "Housing from the 1920s and 1970s.", "Borders Brandenburg and Spandau."]
+      "Reinickendorf": ["North-west: Tegeler See and airship hangar.", "Housing from the 1920s and 1970s.", "Borders Brandenburg and Spandau."],
+      "Innenstadt I": ["Historic centre with Römer, cathedral and Old Town.", "Banking district and station quarter shape the skyline.", "Smallest district but the densest urban core."],
+      "Innenstadt II": ["Westend with Gründerzeit villas and the trade fair grounds.", "Bockenheim is home to Goethe University.", "Traditional upscale residential quarter."],
+      "Innenstadt III": ["Nordend with splendid Art Nouveau buildings.", "Popular residential area with cafés and small shops.", "Connects the centre with northern neighbourhoods."],
+      "Bornheim/Ostend": ["Lively district east of the centre.", "Bornheim known for Berger Straße and weekly market.", "Ostend with rising neighbourhoods along Ostendstraße."],
+      "Süd": ["Sachsenhausen south of the Main — apple wine culture and museum embankment.", "Frankfurt Airport is located here.", "Niederrad and Oberrad on the Main riverbank."],
+      "West": ["Largest district with Höchst, Griesheim and Schwanheim.", "Industrial heritage and Main river location.", "Höchst Old Town with Justinus Church — UNESCO World Heritage."],
+      "Mitte-West": ["Rödelheim, Hausen and Praunheim west of the centre.", "Mixed residential and commercial areas.", "Good connections to the city centre."],
+      "Nord-West": ["Heddernheim and Niederursel on the Nidda river.", "Roman settlement Heddernheim — former Roman town.", "Green residential areas in the north-west."],
+      "Mitte-Nord": ["Dornbusch, Eschersheim and Ginnheim.", "Strong growth in the post-war decades.", "Good infrastructure and local amenities."],
+      "Nord-Ost": ["Most populous district of Frankfurt.", "Eckenheim, Preungesheim and Frankfurter Berg.", "Many single-family home areas and green spaces."],
+      "Ost": ["Fechenheim, Riederwald and Seckbach on the Main.", "Industrial past and modern housing.", "Eastern location with Main river proximity."],
+      "Kalbach-Riedberg": ["Youngest neighbourhood on the Riedberg plateau.", "Goethe University Campus Westend nearby.", "Modern housing and research facilities."],
+      "Nieder-Erlenbach": ["Small-town character in Frankfurt's north.", "Rural charm with orchards and fields.", "Former independent municipality, annexed in 1910."],
+      "Harheim": ["Northernmost neighbourhood at the edge of the Wetterau.", "Rural flair with fields and orchards.", "Annexed to Frankfurt in 1928."],
+      "Nieder-Eschbach": ["Quiet residential district in the north-east.", "Many single-family homes and green spaces.", "Borders Bad Vilbel and the Taunus hills."],
+      "Bergen-Enkheim": ["Easternmost district with vineyards and apple wine.", "Bergen-Enkheim market attracts visitors.", "Rural character despite big-city affiliation."]
     },
     "specific": {
       "St. Pauli": "Home to the famous Kiez (neighborhood), the Reeperbahn, and FC St. Pauli. Once a suburb outside Hamburg's city limits.",
@@ -329,7 +381,16 @@
       "Tempelhof": "Legendary airport — today a huge park for Berliners.",
       "Marzahn": "Gärten der Welt and typical plattenbau estates in the east.",
       "Lichtenberg": "Tierpark and Hohenschönhausen memorial recall DDR history.",
-      "Reinickendorf": "Tegeler See for swimming — with a view of the airship hangar."
+      "Reinickendorf": "Tegeler See for swimming — with a view of the airship hangar.",
+      "Altstadt": "Historic centre with Römer, imperial cathedral and the famous Römerberg square.",
+      "Westend-Süd": "Banking district and skyline — Frankfurt's landmark high-rise cluster.",
+      "Sachsenhausen": "Apple wine pubs, museum embankment and the lively Dörfchen quarter.",
+      "Höchst": "Old town with Justinus Church — part of the UNESCO Limes World Heritage.",
+      "Flughafen": "Frankfurt Airport — one of Europe's largest airports and a global hub.",
+      "Bockenheim": "Student quarter with Goethe University and lively Bockenheimer Landstraße.",
+      "Bornheim": "Popular residential area with Berger Straße, weekly market and cosy cafés.",
+      "Nordend": "Art Nouveau buildings and the heart of Frankfurt's Nordend.",
+      "Gallus": "Up-and-coming quarter west of the main station with multicultural flair."
     }
   },
   "onboarding": {
@@ -357,10 +418,24 @@
     "mapTip": "Tip: The Spree and large green spaces like Tiergarten help you orient yourself on the Berlin map!",
     "dismiss": "Let's go!"
   },
+  "onboardingFrankfurt": {
+    "title": "Welcome to Frankfurt! 🍎",
+    "intro": "Learn all 16 districts and 46 neighbourhoods through play. You start in <strong>Innenstadt I</strong> and unlock the Main metropolis step by step.",
+    "feature1Title": "1. Districts & neighbourhoods",
+    "feature1Text": "Learn all 46 neighbourhoods in detail, or switch to \"Districts\" to master Frankfurt's 16 districts first.",
+    "feature2Title": "2. Sporcle runs & challenges",
+    "feature2Text": "Structured rounds with permanent green/red marks. Score at least <strong>75%</strong> in a district to unlock the next!",
+    "feature3Title": "3. Type the name",
+    "feature3Text": "Type neighbourhood names from the keyboard — with smart autocomplete suggestions.",
+    "mapTip": "Tip: The Main river runs through Frankfurt — Sachsenhausen lies south of the river!",
+    "dismiss": "Let's go!"
+  },
   "explorer": {
     "emptyBezirk": "Click a borough on the map to see fascinating metadata and Hanseatic facts!",
     "emptyBezirkBerlin": "Click a borough on the map to see fascinating metadata and Berlin facts!",
+    "emptyBezirkFrankfurt": "Click a district on the map to see fascinating metadata and Frankfurt facts!",
     "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
+    "emptyStadtteilFrankfurt": "Click a neighbourhood on the map to see fascinating metadata and Frankfurt facts!",
     "emptyOrtsteil": "Click a neighbourhood on the map to see fascinating metadata and Berlin facts!",
     "residents": "Population",
     "area": "Area",
@@ -373,7 +448,8 @@
     "totalArea": "Total area",
     "avgDensity": "Average density",
     "subdistricts": "Districts ({count})",
-    "subdistrictsBerlin": "Neighbourhoods ({count})"
+    "subdistrictsBerlin": "Neighbourhoods ({count})",
+    "subdistrictsFrankfurt": "Neighbourhoods ({count})"
   },
   "game": {
     "roundStartTitle": "Start a run",
@@ -545,11 +621,11 @@
       "greeting": "Ei gude!",
       "blurb": "16 districts · 46 neighbourhoods",
       "levels": {
-        "stadtbezirke": "City districts",
+        "stadtbezirke": "Districts",
         "stadtteile": "Neighbourhoods"
       },
       "singular": {
-        "stadtbezirk": "City district",
+        "stadtbezirk": "District",
         "stadtteil": "Neighbourhood"
       }
     }
