@@ -102,6 +102,8 @@
     "zoomOut": "Zoom out",
     "zoomReset": "Center",
     "zoomResetTitle": "Center map",
+    "europeMicrostatesLabel": "Small countries",
+    "europeMicrostateTitle": "{{name}} — tap to zoom & select",
     "hintDesktop": "💡 Tip: Drag to pan. Mouse wheel or pinch to zoom.",
     "hintTouch": "💡 Tip: One finger to pan, two fingers to zoom. Use +/- buttons.",
     "tooltipLocked": "🔒 Borough locked",

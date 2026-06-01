@@ -151,6 +151,7 @@ class KiezQuizGame {
         europeStack.hidden = islandEgg !== 'europe';
         if (islandEgg === 'europe') this.renderEuropeIslandEggs(europeStack);
       }
+      this.updateEuropeMicrostatesUI();
 
       if (!wrapper || !city) {
         this.svg = document.querySelector('.city-map-svg, .hamburg-map-svg');
@@ -209,7 +210,13 @@ class KiezQuizGame {
       this.setupMobileMapHint();
       if (this.svg) {
         this.initMapPaths();
+        if (this.activeCityId === 'europe') {
+          this.enhanceEuropeMicrostateHits();
+        }
         this.buildBezirkBoundaries();
+      }
+      if (this.activeCityId === 'europe') {
+        this.renderEuropeMicrostatesBar();
       }
       this.renderStats();
 
@@ -1121,6 +1128,156 @@ class KiezQuizGame {
       });
     });
     this.updateIslandBadges();
+    this.updateEuropeMicrostatesUI();
+  }
+
+  isEuropeMicrostate(bezirk) {
+    return typeof EUROPE_MICROSTATES !== 'undefined' && EUROPE_MICROSTATES.includes(bezirk);
+  }
+
+  updateEuropeMicrostatesUI() {
+    const bar = document.getElementById('europe-microstates-bar');
+    if (!bar) return;
+    const show = this.activeCityId === 'europe';
+    bar.hidden = !show;
+    if (show && !bar.dataset.rendered) {
+      this.renderEuropeMicrostatesBar();
+      bar.dataset.rendered = '1';
+    }
+  }
+
+  renderEuropeMicrostatesBar() {
+    const bar = document.getElementById('europe-microstates-bar');
+    if (!bar || typeof EUROPE_MICROSTATES === 'undefined') return;
+    const flags = typeof EUROPE_MICROSTATE_FLAGS !== 'undefined' ? EUROPE_MICROSTATE_FLAGS : {};
+    bar.innerHTML = `
+      <span class="europe-microstates-label">${t('map.europeMicrostatesLabel')}</span>
+      <div class="europe-microstates-chips" role="list">
+        ${EUROPE_MICROSTATES.map((name) => {
+          const flag = flags[name] || '';
+          const title = t('map.europeMicrostateTitle', { name });
+          return `<button type="button" class="europe-microstate-chip" data-bezirk="${name}" title="${title}"><span aria-hidden="true">${flag}</span><span>${name}</span></button>`;
+        }).join('')}
+      </div>
+    `;
+    bar.querySelectorAll('.europe-microstate-chip').forEach((btn) => {
+      btn.addEventListener('click', () => this.activateEuropeMicrostate(btn.dataset.bezirk));
+    });
+  }
+
+  enhanceEuropeMicrostateHits() {
+    if (!this.svg || this.activeCityId !== 'europe') return;
+
+    this.svg.querySelectorAll('.micro-hit-target').forEach((el) => el.remove());
+    document.querySelectorAll('.stadtteil-path.micro-state-visible').forEach((p) => {
+      p.classList.remove('micro-state-visible');
+    });
+
+    const minArea = typeof EUROPE_MICRO_HIT_MIN_AREA === 'number' ? EUROPE_MICRO_HIT_MIN_AREA : 220;
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    const minRadius = isTouch
+      ? (typeof EUROPE_MICRO_HIT_MIN_RADIUS_TOUCH === 'number' ? EUROPE_MICRO_HIT_MIN_RADIUS_TOUCH : 28)
+      : (typeof EUROPE_MICRO_HIT_MIN_RADIUS === 'number' ? EUROPE_MICRO_HIT_MIN_RADIUS : 20);
+    const byBezirk = new Map();
+
+    document.querySelectorAll('.stadtteil-path:not(.micro-hit-target)').forEach((path) => {
+      const bezirk = path.getAttribute('data-bezirk');
+      if (!bezirk) return;
+      const b = path.getBBox();
+      let entry = byBezirk.get(bezirk);
+      if (!entry) {
+        entry = { paths: [], ux: Infinity, uy: Infinity, ux2: -Infinity, uy2: -Infinity };
+        byBezirk.set(bezirk, entry);
+      }
+      entry.paths.push(path);
+      entry.ux = Math.min(entry.ux, b.x);
+      entry.uy = Math.min(entry.uy, b.y);
+      entry.ux2 = Math.max(entry.ux2, b.x + b.width);
+      entry.uy2 = Math.max(entry.uy2, b.y + b.height);
+    });
+
+    let group = this.svg.querySelector('.micro-hit-group');
+    if (!group) {
+      group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      group.setAttribute('class', 'micro-hit-group');
+    }
+    const labels = this.svg.querySelector('#map-labels-group');
+    if (labels) {
+      this.svg.insertBefore(group, labels);
+    } else {
+      this.svg.appendChild(group);
+    }
+
+    byBezirk.forEach((entry, bezirk) => {
+      const bw = entry.ux2 - entry.ux;
+      const bh = entry.uy2 - entry.uy;
+      const area = bw * bh;
+      const needsHit = this.isEuropeMicrostate(bezirk) || area < minArea;
+      if (!needsHit) return;
+
+      const cx = entry.ux + bw / 2;
+      const cy = entry.uy + bh / 2;
+      const radius = Math.max(minRadius, Math.max(bw, bh) * 0.95 + 6);
+      const ref = entry.paths[0];
+
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('class', 'stadtteil-path micro-hit-target');
+      circle.setAttribute('data-name', ref.getAttribute('data-name'));
+      circle.setAttribute('data-bezirk', bezirk);
+      if (ref.getAttribute('data-iso')) circle.setAttribute('data-iso', ref.getAttribute('data-iso'));
+      circle.setAttribute('cx', String(cx));
+      circle.setAttribute('cy', String(cy));
+      circle.setAttribute('r', String(radius));
+      group.appendChild(circle);
+
+      entry.paths.forEach((p) => p.classList.add('micro-state-visible'));
+    });
+  }
+
+  activateEuropeMicrostate(bezirk) {
+    if (!bezirk) return;
+    if (this.mapNav) this.mapNav.didDrag = false;
+
+    const paths = [...document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirk}"]:not(.micro-hit-target)`)];
+    const hitPaths = paths.length
+      ? paths
+      : [...document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirk}"]`)];
+    if (!hitPaths.length) return;
+
+    if (this.mapNav) {
+      requestAnimationFrame(() => this.mapNav.zoomToPaths(hitPaths, { padding: 1.55, maxZoom: 14, minZoom: 0.9 }));
+    }
+
+    const microBar = document.getElementById('europe-microstates-bar');
+    if (microBar) {
+      microBar.querySelectorAll('.europe-microstate-chip').forEach((c) => {
+        c.classList.toggle('active', c.dataset.bezirk === bezirk);
+      });
+    }
+
+    const ref = paths[0] || hitPaths[0];
+    const name = ref.getAttribute('data-name');
+
+    if (this.currentMode === 'EXPLORER') {
+      if (this.activeSegment === 'BEZIRKE') {
+        this.selectBezirk(bezirk);
+      } else {
+        this.selectNeighbourhood(ref, name, bezirk);
+      }
+      return;
+    }
+    if (!this.inRound) return;
+
+    if (this.currentMode === 'LOCATE') {
+      if (this.activeSegment === 'BEZIRKE') {
+        this.handleBezirkLocateClick(bezirk);
+      } else {
+        this.handleLocateClick(ref, name, bezirk);
+      }
+    } else if (this.currentMode === 'QUIZ') {
+      const answer = this.activeSegment === 'BEZIRKE' ? bezirk : name;
+      this.handleRoundAnswer(answer, null);
+    }
   }
 
   selectEuropeIsland(island) {
@@ -1888,6 +2045,9 @@ class KiezQuizGame {
       path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect', 'bezirk-excluded');
       path.style.pointerEvents = '';
       path.style.removeProperty('--map-h');
+    });
+    document.getElementById('europe-microstates-bar')?.querySelectorAll('.europe-microstate-chip.active').forEach((c) => {
+      c.classList.remove('active');
     });
     this.activeSelectPath = null;
   }
@@ -2659,8 +2819,16 @@ class KiezQuizGame {
     }
     if (!this.inRound || !this.currentTarget) return [];
 
-    // Detective mode: never zoom to the answer — keep continent overview
+    // Detective mode: continent overview — except tiny countries that are hard to tap
     if (this.currentMode === 'LOCATE') {
+      if (this.activeCityId === 'europe' && this.currentTarget) {
+        const microBz = this.activeSegment === 'BEZIRKE'
+          ? this.currentTarget.name
+          : this.currentTarget.bezirk;
+        if (this.isEuropeMicrostate(microBz)) {
+          return [microBz];
+        }
+      }
       if (Array.isArray(this.roundDistrict) && this.roundDistrict.length > 0) {
         const allUnlocked = this.getUnlockedBezirke();
         if (this.roundDistrict.length < allUnlocked.length) {
@@ -2672,6 +2840,10 @@ class KiezQuizGame {
 
     const isBz = this.activeSegment === 'BEZIRKE';
     if (isBz) return [this.currentTarget.name];
+
+    if (this.activeCityId === 'europe' && this.isEuropeMicrostate(this.currentTarget.bezirk)) {
+      return [this.currentTarget.bezirk];
+    }
 
     if (Array.isArray(this.roundDistrict) && this.roundDistrict.length > 0) {
       const allUnlocked = this.getUnlockedBezirke();

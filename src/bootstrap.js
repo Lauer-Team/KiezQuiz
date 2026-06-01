@@ -16,6 +16,7 @@
     'src/data/frankfurt_data.js',
     'src/data/europe_data.js',
     'src/data/europe_islands.js',
+    'src/data/europe_microstates.js',
     'src/ui/cityDashboard.js',
     'src/ui/modals.js'
   ];

@@ -102,6 +102,8 @@
     "zoomOut": "Verkleinern",
     "zoomReset": "Zentrieren",
     "zoomResetTitle": "Karte zentrieren",
+    "europeMicrostatesLabel": "Kleine Länder",
+    "europeMicrostateTitle": "{{name}} — antippen zum Zoomen & Auswählen",
     "hintDesktop": "💡 Tipp: Ziehe zum Verschieben. Mausrad oder Pinch zum Zoomen.",
     "hintTouch": "💡 Tipp: Mit einem Finger verschieben, mit zwei Fingern zoomen. +/- Buttons nutzen.",
     "tooltipLocked": "🔒 Bezirk gesperrt",

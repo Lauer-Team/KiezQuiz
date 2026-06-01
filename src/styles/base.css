@@ -1087,12 +1087,18 @@ body.in-round .map-container-wrapper {
   height: 100%;
   max-height: 70vh;
   transform-origin: center;
-  will-change: transform;
+  shape-rendering: geometricPrecision;
 }
 
 .hamburg-map-svg.smooth-transition,
 .city-map-svg.smooth-transition {
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.hamburg-map-svg.map-panning,
+.city-map-svg.map-panning {
+  will-change: transform;
 }
 
 /* Water styling (Elbe, Alster) — subtle, integrated with map */
@@ -1394,6 +1400,113 @@ body.in-round .map-container-wrapper {
     font-size: 0.7rem;
     padding: 0.45rem 0.65rem;
   }
+}
+
+.europe-microstates-bar {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.65rem;
+  z-index: 48;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem 0.55rem;
+  background: rgba(17, 24, 39, 0.88);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+
+  &[hidden] {
+    display: none !important;
+  }
+}
+
+.europe-microstates-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.europe-microstates-chips {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding-bottom: 0.1rem;
+}
+
+.europe-microstate-chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.68rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  white-space: nowrap;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.12);
+    outline: none;
+  }
+
+  &.active {
+    border-color: hsla(var(--acc-h, 210), 90%, 60%, 0.65);
+    background: hsla(var(--acc-h, 210), 70%, 45%, 0.25);
+    box-shadow: 0 0 12px hsla(var(--acc-h, 210), 90%, 55%, 0.25);
+  }
+}
+
+.micro-hit-group {
+  pointer-events: none;
+}
+
+.micro-hit-group .micro-hit-target {
+  pointer-events: all;
+}
+
+#city-view[data-city="europe"] .stadtteil-path.micro-hit-target {
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 2px;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.9;
+  touch-action: manipulation;
+}
+
+#city-view[data-city="europe"] .stadtteil-path.micro-hit-target:hover,
+#city-view[data-city="europe"] .stadtteil-path.micro-hit-target:focus-visible {
+  fill: rgba(255, 255, 255, 0.14);
+  stroke: hsla(var(--map-h, 200), 100%, 70%, 0.65);
+  stroke-width: 2.5px !important;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  #city-view[data-city="europe"] .stadtteil-path.micro-hit-target {
+    fill: rgba(255, 255, 255, 0.1);
+    stroke-width: 2.5px;
+  }
+}
+
+#city-view[data-city="europe"] .stadtteil-path.micro-state-visible {
+  stroke: hsla(var(--map-h, 200), 100%, 65%, 0.45);
+  stroke-width: 1.25px !important;
+  filter: drop-shadow(0 0 4px hsla(var(--map-h, 200), 100%, 55%, 0.35));
 }
 
 #city-view[data-city="berlin"] .pfaueninsel-overlay {
