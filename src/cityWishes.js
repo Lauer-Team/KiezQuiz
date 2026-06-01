@@ -1,10 +1,13 @@
 /**
  * CityWishes — Stadt-Wünsche (Gäste + Accounts) via Supabase.
+ * Pro Stadt: max. 1 Wunsch/Vote alle 23 Stunden (unbegrenzt viele verschiedene Städte).
  * Fallback: localStorage wenn Supabase nicht konfiguriert ist.
  */
 (function () {
   const GUEST_KEY = 'kiezquiz_guest_id';
   const LOCAL_VOTES_KEY = 'kiezquiz_city_wishes';
+  const LOCAL_COOLDOWNS_KEY = 'kiezquiz_city_wish_cooldowns';
+  const COOLDOWN_MS = 23 * 60 * 60 * 1000;
   const DEFAULT_VOTES = { Köln: 312, München: 287, Leipzig: 176, Stuttgart: 143, Dresden: 121 };
 
   function getSupabase() {
@@ -13,6 +16,10 @@
 
   function isCloudEnabled() {
     return window.authManager?.isConfigured() && getSupabase();
+  }
+
+  function normalizeCityKey(name) {
+    return name?.trim().toLowerCase() || '';
   }
 
   function getGuestId() {
@@ -43,6 +50,83 @@
     } catch (e) { /* ignore */ }
   }
 
+  function loadLocalCooldowns() {
+    try {
+      const saved = localStorage.getItem(LOCAL_COOLDOWNS_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) { /* ignore */ }
+    return {};
+  }
+
+  function persistLocalCooldowns(cooldowns) {
+    try {
+      localStorage.setItem(LOCAL_COOLDOWNS_KEY, JSON.stringify(cooldowns));
+    } catch (e) { /* ignore */ }
+  }
+
+  function pruneLocalCooldowns(cooldowns) {
+    const now = Date.now();
+    const pruned = {};
+    Object.entries(cooldowns || {}).forEach(([key, entry]) => {
+      const nextAt = new Date(entry?.nextVoteAt || entry).getTime();
+      if (nextAt > now) pruned[key] = entry;
+    });
+    return pruned;
+  }
+
+  function getLocalCooldownEntry(cooldowns, cityName) {
+    const key = normalizeCityKey(cityName);
+    const entry = cooldowns[key];
+    if (!entry) return null;
+    const nextAt = new Date(entry.nextVoteAt || entry);
+    if (nextAt.getTime() <= Date.now()) return null;
+    return {
+      cityName: entry.cityName || cityName,
+      nextVoteAt: nextAt.toISOString()
+    };
+  }
+
+  function setLocalCooldown(cooldowns, cityName) {
+    const key = normalizeCityKey(cityName);
+    const nextVoteAt = new Date(Date.now() + COOLDOWN_MS).toISOString();
+    cooldowns[key] = { cityName: cityName.trim(), nextVoteAt };
+    return cooldowns;
+  }
+
+  function mapCooldownRows(rows) {
+    const map = {};
+    (rows || []).forEach((row) => {
+      const name = row.city_name || row.cityName;
+      const next = row.next_vote_at || row.nextVoteAt;
+      if (!name || !next) return;
+      const key = normalizeCityKey(name);
+      map[key] = { cityName: name, nextVoteAt: next };
+    });
+    return map;
+  }
+
+  async function fetchCooldowns() {
+    if (!isCloudEnabled()) {
+      return pruneLocalCooldowns(loadLocalCooldowns());
+    }
+
+    const guestId = window.authManager?.user?.id ? null : getGuestId();
+    try {
+      const { data, error } = await getSupabase().rpc('get_my_city_wish_cooldowns', {
+        p_guest_id: guestId
+      });
+      if (error) throw error;
+      return mapCooldownRows(data);
+    } catch (e) {
+      console.warn('City wish cooldown fetch failed, using local fallback:', e);
+      return pruneLocalCooldowns(loadLocalCooldowns());
+    }
+  }
+
+  function isOnCooldown(cooldowns, cityName) {
+    return !!getLocalCooldownEntry(cooldowns, cityName);
+  }
+
   async function fetchTotals() {
     if (!isCloudEnabled()) return loadLocalVotes();
     try {
@@ -61,29 +145,70 @@
 
   async function submitWish(cityName, requestType = 'vote') {
     const name = cityName?.trim();
-    if (!name) return { ok: false };
+    if (!name) return { ok: false, reason: 'invalid' };
+
+    let cooldowns = await fetchCooldowns();
+    const blocked = getLocalCooldownEntry(cooldowns, name);
+    if (blocked) {
+      return { ok: false, reason: 'cooldown', nextVoteAt: blocked.nextVoteAt, cityName: blocked.cityName };
+    }
 
     if (!isCloudEnabled()) {
       const votes = loadLocalVotes();
       votes[name] = (votes[name] || 0) + 1;
       persistLocal(votes);
-      return { ok: true, votes };
+      cooldowns = setLocalCooldown(cooldowns, name);
+      persistLocalCooldowns(cooldowns);
+      return { ok: true, votes, cooldowns };
     }
 
     const userId = window.authManager?.user?.id || null;
     const guestId = userId ? null : getGuestId();
-    const row = {
-      city_name: name,
-      user_id: userId,
-      guest_id: guestId,
-      request_type: requestType
-    };
+
+    async function finishSuccess() {
+      cooldowns = setLocalCooldown(cooldowns, name);
+      if (!userId) persistLocalCooldowns(cooldowns);
+      const votes = await fetchTotals();
+      return { ok: true, votes, cooldowns };
+    }
 
     try {
-      const { error } = await getSupabase().from('city_wish_requests').insert(row);
+      const { data, error } = await getSupabase().rpc('submit_city_wish', {
+        p_city_name: name,
+        p_request_type: requestType,
+        p_guest_id: guestId
+      });
+      if (error?.code === 'PGRST202') {
+        const row = {
+          city_name: name,
+          user_id: userId,
+          guest_id: guestId,
+          request_type: requestType
+        };
+        const { error: insertError } = await getSupabase().from('city_wish_requests').insert(row);
+        if (insertError) throw insertError;
+        return finishSuccess();
+      }
       if (error) throw error;
-      const votes = await fetchTotals();
-      return { ok: true, votes };
+
+      const result = data || {};
+      if (!result.ok) {
+        if (result.reason === 'cooldown' && result.next_vote_at) {
+          const key = normalizeCityKey(name);
+          cooldowns[key] = { cityName: name, nextVoteAt: result.next_vote_at };
+          if (!userId) persistLocalCooldowns(cooldowns);
+          return {
+            ok: false,
+            reason: 'cooldown',
+            nextVoteAt: result.next_vote_at,
+            cityName: name,
+            cooldowns
+          };
+        }
+        return { ok: false, reason: result.reason || 'error' };
+      }
+
+      return finishSuccess();
     } catch (e) {
       console.warn('City wish submit failed:', e);
       return { ok: false, reason: 'error' };
@@ -228,7 +353,12 @@
   }
 
   window.cityWishes = {
+    COOLDOWN_MS,
+    normalizeCityKey,
     fetchTotals,
+    fetchCooldowns,
+    getCooldownEntry: getLocalCooldownEntry,
+    isOnCooldown,
     submitWish,
     isAdmin,
     fetchAdminList,

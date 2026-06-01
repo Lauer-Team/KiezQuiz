@@ -141,17 +141,24 @@
 
   async function showWishModal() {
     let votes = await window.cityWishes?.fetchTotals?.() || {};
+    let cooldowns = await window.cityWishes?.fetchCooldowns?.() || {};
 
     function renderVoteList() {
       const sorted = Object.entries(votes).sort((a, b) => b[1] - a[1]);
       const max = Math.max(...Object.values(votes), 1);
-      return sorted.map(([name, count]) => `
-        <button type="button" class="wish-vote-item" data-vote="${name}">
+      return sorted.map(([name, count]) => {
+        const blocked = window.cityWishes?.isOnCooldown?.(cooldowns, name);
+        const action = blocked ? t('hub.wishVoted') : t('hub.wishVote');
+        const votedClass = blocked ? ' wish-vote-item--voted' : '';
+        const cooldownAttr = blocked ? ' data-on-cooldown="true"' : '';
+        return `
+        <button type="button" class="wish-vote-item${votedClass}" data-vote="${name}"${cooldownAttr}>
           <div class="wvi-bar" style="width:${(count / max) * 100}%"></div>
           <span class="wvi-name">${name}</span>
           <span class="wvi-count">${count.toLocaleString(getLocale())}</span>
-          <span class="wvi-action">${t('hub.wishVote')}</span>
-        </button>`).join('');
+          <span class="wvi-action">${action}</span>
+        </button>`;
+      }).join('');
     }
 
     const modal = openOverlayModal(`
@@ -165,16 +172,68 @@
           <button type="button" class="primary-btn wish-submit-btn" id="btn-wish-propose">${t('hub.wishSubmit')}</button>
         </div>
         <div class="wish-thanks" id="wish-thanks" hidden>${t('hub.wishThanks')}</div>
+        <div class="wish-cooldown-msg" id="wish-cooldown-msg" hidden role="alert" aria-live="polite"></div>
       </div>
     `, { closeOnBackdrop: true });
 
     const listEl = modal.querySelector('#wish-vote-list');
-    const refresh = () => { listEl.innerHTML = renderVoteList(); bindVotes(); };
+    const cooldownMsg = modal.querySelector('#wish-cooldown-msg');
+    const refresh = () => { listEl.innerHTML = renderVoteList(); };
+
+    function formatWishCooldownRemaining(nextVoteAt) {
+      const ms = Math.max(0, new Date(nextVoteAt).getTime() - Date.now());
+      const hours = Math.floor(ms / 3600000);
+      const mins = Math.max(1, Math.ceil((ms % 3600000) / 60000));
+      if (hours > 0 && mins > 0 && mins < 60) {
+        return t('hub.wishCooldownRemainingHM', { hours, mins });
+      }
+      if (hours > 0) return t('hub.wishCooldownRemainingH', { hours });
+      return t('hub.wishCooldownRemainingM', { mins });
+    }
+
+    function showCooldownNotice(cityName) {
+      if (!cooldownMsg) return;
+      const entry = window.cityWishes?.getCooldownEntry?.(cooldowns, cityName);
+      const nextVoteAt = entry?.nextVoteAt;
+      const remaining = nextVoteAt ? formatWishCooldownRemaining(nextVoteAt) : t('hub.wishCooldownRemainingFallback');
+      const nextTime = nextVoteAt
+        ? `${formatDate(nextVoteAt, { day: 'numeric', month: 'short' })}, ${formatTime(nextVoteAt, { hour: '2-digit', minute: '2-digit' })}`
+        : '';
+      const msgKey = nextTime ? 'hub.wishCooldown' : 'hub.wishCooldownShort';
+      cooldownMsg.textContent = t(msgKey, {
+        city: entry?.cityName || cityName,
+        remaining,
+        nextTime
+      });
+      cooldownMsg.hidden = false;
+      cooldownMsg.classList.add('wish-cooldown-msg--visible');
+      clearTimeout(showCooldownNotice._hideTimer);
+      showCooldownNotice._hideTimer = setTimeout(() => {
+        cooldownMsg.hidden = true;
+        cooldownMsg.classList.remove('wish-cooldown-msg--visible');
+      }, 6000);
+    }
 
     async function castVote(name, type = 'vote') {
+      if (window.cityWishes?.isOnCooldown?.(cooldowns, name)) {
+        showCooldownNotice(name);
+        return;
+      }
       const result = await window.cityWishes?.submitWish?.(name, type);
-      if (!result?.ok) return;
+      if (!result?.ok) {
+        if (result?.reason === 'cooldown') {
+          cooldowns = result.cooldowns || cooldowns;
+          if (result.cityName) {
+            const key = window.cityWishes.normalizeCityKey(result.cityName);
+            cooldowns[key] = { cityName: result.cityName, nextVoteAt: result.nextVoteAt };
+          }
+          refresh();
+          showCooldownNotice(result.cityName || name);
+        }
+        return;
+      }
       votes = result.votes || votes;
+      cooldowns = result.cooldowns || cooldowns;
       refresh();
       const thanks = modal.querySelector('#wish-thanks');
       if (thanks) {
@@ -183,12 +242,11 @@
       }
     }
 
-    function bindVotes() {
-      listEl.querySelectorAll('[data-vote]').forEach((btn) => {
-        btn.addEventListener('click', () => castVote(btn.dataset.vote, 'vote'));
-      });
-    }
-    bindVotes();
+    listEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-vote]');
+      if (!btn || !listEl.contains(btn)) return;
+      castVote(btn.dataset.vote, 'vote');
+    });
 
     modal.querySelector('#btn-wish-x')?.addEventListener('click', () => closeOverlayModal(modal));
     modal.querySelector('#btn-wish-propose')?.addEventListener('click', () => {
