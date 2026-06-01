@@ -1,6 +1,7 @@
 /* KiezQuiz — hub-first bootstrap; lazy game bundle on city entry */
 (function () {
   var GAME_CORE = [
+    'src/leaderboard.js',
     'src/game/config.js',
     'src/game/progress.js',
     'src/game/SoundManager.js',

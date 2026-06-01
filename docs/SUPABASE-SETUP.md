@@ -316,6 +316,25 @@ Alternativ in `src/supabaseConfig.js`: `adminUserIds: ['DEINE-USER-UUID']`.
 
 ---
 
+## 2c. Profil, Freunde & Bestenliste (optional)
+
+Für eingeloggte Nutzer: persönliche Bestwerte pro Stadt, Freundesliste und öffentliche Bestenliste. Im SQL Editor ausführen:
+
+**Neu deployt:** `docs/sql/profile-social-leaderboard.sql` (Tabellen `user_city_best_scores`, `friend_requests` + RPCs; kein direkter Client-Zugriff auf Tabellen).
+
+Nach dem Ausführen:
+
+| Feature | Wo in der App |
+|---------|----------------|
+| Profil & Erfolge | `/profile/` (nur eingeloggt) |
+| Freunde suchen / anfragen | Profil → Freunde |
+| Bestenliste | Profil → Bestenliste |
+| Bestwert nach Runde | Automatisch nach Spielende (wenn eingeloggt) |
+
+**Manuell testen:** Zwei Test-Accounts anlegen, Freundschaftsanfrage senden/annehmen, je eine Runde spielen, Bestenliste prüfen.
+
+---
+
 ## 3. E-Mail-Auth konfigurieren
 
 1. Links **Authentication** → **Providers**.
