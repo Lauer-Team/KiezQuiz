@@ -26,6 +26,9 @@ function assert(cond, msg) {
 assert(saveManagerSrc.includes("const SAVE_KEY = 'kiezquiz_save_v2'"), 'SAVE_KEY unchanged');
 assert(!saveManagerSrc.includes('clearSave()') || saveManagerSrc.includes('function clearSave'), 'clearSave still present');
 assert(appSrc.includes('hadProgress') && appSrc.includes('prevLastCity'), 'deep link guards lastCity for returning players');
+assert(appSrc.includes('.trim().toLowerCase()'), 'deep link normalizes city param');
+assert(appSrc.includes('game.init();') && appSrc.includes('void (async'), 'game init not blocked on auth');
+assert(bootSrc.includes('toLowerCase'), 'bootView normalizes city param');
 assert(appSrc.includes('history.replaceState'), 'deep link cleans URL after load');
 assert(bootSrc.includes('kiezquiz_save_v2'), 'bootView reads v2 save');
 assert(bootSrc.includes('hasV1Save'), 'bootView detects v1 migration candidates');
