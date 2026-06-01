@@ -5,7 +5,8 @@
 }
 
 .about-shell {
-  max-width: 720px;
+  width: min(56rem, calc(100vw - 2.5rem));
+  max-width: 56rem;
   margin: 0 auto;
   padding: max(1.25rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
 }
@@ -102,17 +103,41 @@
 }
 
 .about-kalle {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
-  align-items: center;
+}
+
+.about-kalle-content {
+  min-width: 0;
 }
 
 .about-kalle-figure {
-  width: min(200px, 100%);
+  width: min(160px, 72%);
   height: auto;
   flex-shrink: 0;
+  align-self: center;
   border-radius: var(--radius-md);
+}
+
+@media (min-width: 640px) {
+  .about-kalle {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .about-kalle-content {
+    flex: 1 1 0;
+  }
+
+  .about-kalle-figure {
+    flex: 0 0 min(220px, 32%);
+    width: min(220px, 32%);
+    max-width: 220px;
+    align-self: center;
+    margin: 0;
+  }
 }
 
 .about-kalle-intro {
@@ -174,14 +199,14 @@
   color: var(--signal);
 }
 
-@media (max-width: 560px) {
+@media (max-width: 639px) {
   .about-kalle {
-    grid-template-columns: 1fr;
     text-align: center;
   }
 
   .about-kalle-figure {
-    width: 100px;
-    margin: 0 auto;
+    order: 2;
+    width: min(140px, 60%);
+    margin: 0.25rem auto 0;
   }
 }

@@ -175,18 +175,22 @@
       });
     }
 
-    const settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn && !settingsBtn.dataset.hubBound) {
-      settingsBtn.dataset.hubBound = 'true';
-      settingsBtn.addEventListener('click', () => {
-        const open = () => game.showSettings();
+    const bindHubHeaderBtn = (id, openFn) => {
+      const btn = document.getElementById(id);
+      if (!btn || btn.dataset.bound === 'true') return;
+      btn.dataset.bound = 'true';
+      btn.addEventListener('click', () => {
+        const open = () => openFn();
         if (typeof window.loadGameBundle === 'function') {
           window.loadGameBundle().then(open);
         } else {
           open();
         }
       });
-    }
+    };
+
+    bindHubHeaderBtn('btn-history', () => game.showGameHistory());
+    bindHubHeaderBtn('btn-settings', () => game.showSettings());
 
     const langBtn = document.getElementById('btn-lang');
     if (langBtn && !langBtn.dataset.hubBound) {
