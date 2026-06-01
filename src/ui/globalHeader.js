@@ -22,6 +22,10 @@
             '<span class="auth-pill-label" data-i18n="header.guest">Gast</span>' +
             '<span class="auth-pill-action" data-i18n="header.login">Anmelden</span>' +
           '</button>' +
+          '<button type="button" class="changelog-header-btn hub-changelog-btn" data-changelog-trigger data-i18n-title="header.changelogTitle" title="">' +
+            '<span class="changelog-header-icon" aria-hidden="true">✨</span>' +
+            '<span class="changelog-header-label" data-i18n="footer.changelog">Was ist neu?</span>' +
+          '</button>' +
           '<button class="audio-toggle lang-toggle" id="hub-btn-lang" title="">🇩🇪</button>' +
           '<button class="audio-toggle" id="hub-btn-settings" data-i18n-title="header.settingsTitle" title="">⚙️</button>' +
         '</div>' +

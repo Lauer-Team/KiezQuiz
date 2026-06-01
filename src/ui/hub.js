@@ -197,6 +197,8 @@
     }
 
     game.syncHubStats();
+    if (typeof applyToDom === 'function') applyToDom(container);
+    if (window.kiezChangelog?.bindTriggers) window.kiezChangelog.bindTriggers(container);
   }
 
   function updateStats(game) {

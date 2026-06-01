@@ -25,7 +25,8 @@
     "profileLink": "Profile",
     "profileTitle": "Open profile & leaderboards",
     "streakTitle": "Your current answer streak",
-    "xpTitle": "Your experience points"
+    "xpTitle": "Your experience points",
+    "changelogTitle": "View all updates and what's new"
   },
   "segment": {
     "stadtteile": "🏙️ Districts",
