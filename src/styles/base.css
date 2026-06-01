@@ -777,6 +777,14 @@ body.overlay-open {
   height: 100%;
 }
 
+/* During rounds the map frame should match the SVG viewport, not an oversized flex box */
+body.in-round .map-container-wrapper {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: min(72vh, 72dvh);
+  height: auto;
+}
+
 .map-center-btn {
   align-self: stretch;
   background: rgba(0, 162, 255, 0.08);
@@ -1839,7 +1847,10 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   }
 
   body.in-round .map-container-wrapper {
+    flex: 0 1 auto;
     min-height: min(42vh, 42dvh, 320px);
+    max-height: min(58vh, 58dvh);
+    height: auto;
   }
 }
 

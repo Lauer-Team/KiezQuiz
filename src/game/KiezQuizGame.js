@@ -389,7 +389,10 @@ class KiezQuizGame {
     // Zoom Buttons
     document.getElementById('btn-zoom-in').addEventListener('click', () => this.mapNav.zoomIn());
     document.getElementById('btn-zoom-out').addEventListener('click', () => this.mapNav.zoomOut());
-    document.getElementById('btn-zoom-reset').addEventListener('click', () => this.mapNav.reset());
+    document.getElementById('btn-zoom-reset').addEventListener('click', () => {
+      if (this.inRound || this.nameAllIsActive) this.zoomMapToGameArea();
+      else this.mapNav.reset();
+    });
 
     // Game history & Settings
     const historyBtn = document.getElementById('btn-history');
@@ -2307,28 +2310,52 @@ class KiezQuizGame {
     promptTarget.classList.toggle('highlight', promptData.highlight);
     promptSub.textContent = promptData.sub;
     this.syncMapPromptBar(promptData);
-    this.zoomMapToCurrentTarget();
+    this.zoomMapToGameArea();
 
     // Bind Cancel round button
     document.getElementById('btn-cancel-round').onclick = () => this.endRound(true);
   }
 
-  zoomMapToCurrentTarget() {
-    if (!this.mapNav || !this.inRound || !this.currentTarget || !this.svg) return;
+  getPathsForBezirke(bezirke) {
+    if (!this.svg || !bezirke?.length) return [];
+    const paths = [];
+    bezirke.forEach((bezirk) => {
+      this.svg.querySelectorAll(
+        `.stadtteil-path:not(.bezirk-excluded)[data-bezirk="${CSS.escape(bezirk)}"]`
+      ).forEach((p) => paths.push(p));
+    });
+    return paths;
+  }
+
+  /** Bezirke whose combined bounds should fill the map viewport edge-to-edge. */
+  getMapZoomBezirke() {
+    if (this.nameAllIsActive && this.nameAllActiveBezirke?.length) {
+      return [...this.nameAllActiveBezirke];
+    }
+    if (!this.inRound || !this.currentTarget) return [];
 
     const isBz = this.activeSegment === 'BEZIRKE';
-    let paths;
-    if (isBz) {
-      paths = Array.from(this.svg.querySelectorAll(
-        `.stadtteil-path[data-bezirk="${CSS.escape(this.currentTarget.name)}"]`
-      ));
-    } else {
-      const path = this.getPathByNeighbourhoodName(this.currentTarget.name);
-      paths = path ? [path] : [];
+    if (isBz) return [this.currentTarget.name];
+
+    if (Array.isArray(this.roundDistrict) && this.roundDistrict.length > 0) {
+      const allUnlocked = this.getUnlockedBezirke();
+      if (this.roundDistrict.length < allUnlocked.length) {
+        return [...this.roundDistrict];
+      }
     }
+    return this.currentTarget.bezirk ? [this.currentTarget.bezirk] : [];
+  }
+
+  zoomMapToGameArea() {
+    if (!this.mapNav || !this.svg) return;
+    const paths = this.getPathsForBezirke(this.getMapZoomBezirke());
     if (paths.length) {
       requestAnimationFrame(() => this.mapNav.zoomToPaths(paths));
     }
+  }
+
+  zoomMapToCurrentTarget() {
+    this.zoomMapToGameArea();
   }
 
   getAlreadyAnsweredInRound() {
@@ -3001,6 +3028,7 @@ class KiezQuizGame {
     // Start Timer
     this.stopActiveTimer();
     this.timerInterval = setInterval(() => this.tickNameAll(), 1000);
+    requestAnimationFrame(() => this.zoomMapToGameArea());
   }
 
   tickNameAll() {

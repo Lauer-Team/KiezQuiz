@@ -222,7 +222,7 @@ class MapNavigator {
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
   }
 
-  zoomToPaths(paths, { padding = 1.8, maxZoom = 8, minZoom = 0.8 } = {}) {
+  zoomToPaths(paths, { padding = 1, maxZoom = 8, minZoom = 0.8 } = {}) {
     if (!paths?.length || !this.container || !this.svg) return;
 
     const cw = this.container.clientWidth;
@@ -233,7 +233,6 @@ class MapNavigator {
 
     const promptBar = this.container.querySelector('.map-prompt-bar:not([hidden])');
     const promptInset = promptBar ? promptBar.offsetHeight : 0;
-    const visibleH = Math.max(1, ch - promptInset);
 
     let ux = Infinity;
     let uy = Infinity;
@@ -269,10 +268,15 @@ class MapNavigator {
     const pX = svgLeft + localX;
     const pY = svgTop + localY;
 
-    const fitZoom = Math.min(cw / (bbW * padding), visibleH / (bbH * padding));
+    // Fit to the SVG viewport (not the full flex container) so the Bezirk fills the map edge-to-edge.
+    const promptOverlap = Math.max(0, promptInset - Math.max(0, ch - svgTop - svgH));
+    const viewH = Math.max(1, svgH - promptOverlap);
+    const viewCY = svgTop + (svgH - promptOverlap) / 2;
+
+    const fitZoom = Math.min(svgW / (bbW * padding), viewH / (bbH * padding));
     const targetZoom = Math.min(maxZoom, Math.max(minZoom, fitZoom));
     const ccX = cw / 2;
-    const ccY = visibleH / 2;
+    const ccY = viewCY;
 
     // SVG uses transform-origin: center — pan must account for scaling around the SVG center.
     this.svg.classList.add('smooth-transition');
