@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "KiezQuiz – Learn cities through play",
-    "description": "KiezQuiz: Learn boroughs and districts of German cities through play — start in Hamburg, more cities coming soon.",
-    "ogDescription": "Don't be a know-it-all. Know it all.",
-    "manifestDescription": "Learn German cities through play — Hamburg playable"
+    "title": "KiezQuiz – Learn Hamburg, Berlin & Frankfurt districts through play",
+    "description": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
+    "ogDescription": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
+    "manifestDescription": "Hamburg, Berlin & Frankfurt — learn districts through play"
   },
   "header": {
     "badge": "Gamified Learning",
@@ -553,7 +553,16 @@
     "title": "🎉 Level up! 🎉",
     "rank": "You are now rank: {name}",
     "body": "Your knowledge is growing! Earn XP in any city and mode to keep climbing.",
-    "dismiss": "Let's keep going!"
+    "dismiss": "Let's keep going!",
+    "share": "Share"
+  },
+  "share": {
+    "levelUpTitle": "KiezQuiz – New rank!",
+    "levelUpText": "I just ranked up in KiezQuiz! Learn Hamburg, Berlin & Frankfurt districts on an interactive map.",
+    "trophyTitle": "KiezQuiz – Trophy unlocked!",
+    "trophyText": "New trophy in KiezQuiz! Learn boroughs and neighbourhoods through play — free, no signup.",
+    "button": "Share",
+    "fallbackCopied": "Link copied!"
   },
   "hub": {
     "badge": "Cities",

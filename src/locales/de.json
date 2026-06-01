@@ -1,9 +1,9 @@
 {
   "meta": {
-    "title": "KiezQuiz – Städte spielerisch lernen",
-    "description": "KiezQuiz: Lerne spielerisch Bezirke und Stadtteile deutscher Städte — starte in Hamburg, weitere Städte folgen.",
-    "ogDescription": "Besser wissen als Besserwissen.",
-    "manifestDescription": "Deutsche Städte spielerisch lernen — Hamburg spielbar"
+    "title": "KiezQuiz – Hamburg, Berlin & Frankfurt Bezirke und Stadtteile spielerisch lernen",
+    "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
+    "ogDescription": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
+    "manifestDescription": "Hamburg, Berlin & Frankfurt — Bezirke und Stadtteile spielerisch lernen"
   },
   "header": {
     "badge": "Gamified Learning",
@@ -665,7 +665,16 @@
     "title": "🎉 Aufstieg! 🎉",
     "rank": "Du bist jetzt im Rang: {name}",
     "body": "Dein Wissen wächst! Sammle XP in jeder Stadt und jedem Modus, um weiter aufzusteigen.",
-    "dismiss": "Weiter geht's!"
+    "dismiss": "Weiter geht's!",
+    "share": "Teilen"
+  },
+  "share": {
+    "levelUpTitle": "KiezQuiz – Neuer Rang!",
+    "levelUpText": "Ich bin gerade im KiezQuiz aufgestiegen! Lerne Hamburg, Berlin & Frankfurt spielerisch auf der Karte.",
+    "trophyTitle": "KiezQuiz – Pokal freigeschaltet!",
+    "trophyText": "Neuer Pokal in KiezQuiz! Lerne Bezirke und Stadtteile spielerisch — kostenlos & ohne Anmeldung.",
+    "button": "Teilen",
+    "fallbackCopied": "Link kopiert!"
   },
   "hub": {
     "badge": "Städte",

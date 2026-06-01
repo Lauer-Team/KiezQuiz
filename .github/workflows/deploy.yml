@@ -45,6 +45,11 @@ jobs:
             );
           "
 
+      - name: Generate SEO pages and sitemap
+        run: |
+          python3 scripts/generate_seo_pages.py
+          python3 scripts/generate_sitemap.py
+
       - name: Prepare static site
         run: |
           mkdir -p _site
