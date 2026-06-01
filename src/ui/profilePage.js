@@ -6,6 +6,8 @@
   let friendRequests = [];
   let searchResults = [];
   let loadError = null;
+  let searchDebounceTimer = null;
+  let leaderboardLoadToken = 0;
 
   const SECTION_TITLES = {
     achievements: 'profilePage.navAchievements',
@@ -42,6 +44,46 @@
       trophies: new Set(),
       bezirkProgress: {}
     };
+  }
+
+  function getModeDisplayLabel(mode, segment) {
+    if (typeof getModeLabel === 'function') {
+      return getModeLabel(mode, segment) || mode || '—';
+    }
+    return mode || '—';
+  }
+
+  function formatHistoryItem(item) {
+    const pct = item.percent != null
+      ? item.percent
+      : (item.total ? Math.round((item.correct / item.total) * 100) : 0);
+    const modeLabel = getModeDisplayLabel(item.mode, item.segment);
+    const segmentSuffix = item.segment === 'BEZIRKE' ? t('log.bezirkeSegment') : '';
+    const districts = item.districts?.length ? item.districts.join(', ') : '';
+    let dateHtml = '';
+    if (item.date) {
+      const date = new Date(item.date);
+      const dateStr = formatDate(date, { day: '2-digit', month: '2-digit', year: 'numeric' });
+      const timeStr = formatTime(date, { hour: '2-digit', minute: '2-digit' });
+      dateHtml = `<div class="profile-history-date">${escapeHtml(dateStr)} · ${escapeHtml(timeStr)}</div>`;
+    }
+    const scoreLine = t('profilePage.historyScore', {
+      correct: item.correct ?? 0,
+      total: item.total ?? 0,
+      percent: pct
+    });
+
+    return `
+      <div class="profile-history-item">
+        ${dateHtml}
+        <div class="profile-history-mode">${escapeHtml(modeLabel)}${segmentSuffix}</div>
+        ${districts ? `<div class="profile-history-districts">${escapeHtml(districts)}</div>` : ''}
+        <div class="profile-history-score">${escapeHtml(scoreLine)}${item.durationSec != null ? ` · ⏱ ${formatDuration(item.durationSec)}` : ''}</div>
+      </div>`;
+  }
+
+  function renderLeaderboardMode(mode) {
+    return escapeHtml(getModeDisplayLabel(mode, null));
   }
 
   function getCityBranchHistory(cityId, save) {
@@ -105,10 +147,7 @@
       const highScore = parseInt(branch.highScore, 10) || 0;
       const history = getCityBranchHistory(city.id, save).slice(0, 3);
       const historyHtml = history.length
-        ? `<div class="profile-history-list">${history.map((item) => {
-          const pct = item.percent != null ? item.percent : (item.total ? Math.round((item.correct / item.total) * 100) : 0);
-          return `<div class="profile-history-item">${escapeHtml(item.mode || '—')} · ${item.correct}/${item.total} (${pct}%)${item.durationSec != null ? ` · ${formatDuration(item.durationSec)}` : ''}</div>`;
-        }).join('')}</div>`
+        ? `<div class="profile-history-list">${history.map((item) => formatHistoryItem(item)).join('')}</div>`
         : `<p class="profile-empty">${t('profilePage.noHistory')}</p>`;
 
       return `
@@ -172,11 +211,13 @@
       <section class="profile-panel" id="profile-section-friends">
         <p class="profile-panel-intro">${t('profilePage.friendsIntro')}</p>
         <div class="profile-search-row">
-          <label class="profile-field" style="flex:1;">
+          <label class="profile-field profile-search-field">
             <span class="profile-field-label">${t('profilePage.searchLabel')}</span>
-            <input type="search" class="text-input-field" id="profile-friend-search" placeholder="${t('profilePage.searchPlaceholder')}">
+            <div class="autocomplete-container profile-autocomplete-container">
+              <input type="search" class="text-input-field" id="profile-friend-search" placeholder="${t('profilePage.searchPlaceholder')}" autocomplete="off" spellcheck="false">
+              <div class="autocomplete-dropdown profile-autocomplete-dropdown" id="profile-friend-suggestions"></div>
+            </div>
           </label>
-          <button type="button" class="primary-btn" id="profile-btn-search">${t('profilePage.searchBtn')}</button>
         </div>
         <div id="profile-search-results">${searchHtml}</div>
         <p id="profile-friend-feedback" class="profile-feedback" hidden></p>
@@ -211,7 +252,7 @@
             <td>@${escapeHtml(row.username || '')}</td>
             <td class="profile-num-col">${row.correct} / ${(row.correct || 0) + (row.incorrect || 0)}</td>
             <td class="profile-num-col">${formatDuration(row.duration_sec ?? row.durationSec)}</td>
-            <td>${escapeHtml(row.mode || '—')}</td>
+            <td>${renderLeaderboardMode(row.mode)}</td>
           </tr>`).join('')}
         </tbody>
       </table>`;
@@ -232,7 +273,7 @@
             <select class="text-input-field" id="profile-leaderboard-city">${options}</select>
           </label>
         </div>
-        ${loadError ? `<p class="profile-feedback profile-feedback--error">${t('profilePage.loadError')}</p>` : ''}
+        ${loadError ? `<p class="profile-feedback profile-feedback--error profile-lb-error">${t('profilePage.loadError')}</p>` : ''}
         <h3 class="profile-section-title">${t('profilePage.publicLeaderboard')}</h3>
         <div class="profile-table-wrap" id="profile-public-lb">${t('profilePage.loading')}</div>
         <h3 class="profile-section-title" style="margin-top:1.25rem;">${t('profilePage.friendsLeaderboard')}</h3>
@@ -245,7 +286,9 @@
     return `
       <section class="profile-panel" id="profile-section-account">
         <p class="profile-panel-intro">${t('profilePage.accountIntro', { name: escapeHtml(name) })}</p>
-        <button type="button" class="secondary-btn" id="profile-btn-signout">${t('profilePage.signOut')}</button>
+        <div class="profile-account-actions">
+          <button type="button" class="secondary-btn profile-btn-signout" id="profile-btn-signout">${t('profilePage.signOut')}</button>
+        </div>
         <div class="profile-danger-zone">
           <h3 class="profile-section-title">${t('profilePage.deleteTitle')}</h3>
           <p>${t('profilePage.deleteBody')}</p>
@@ -284,20 +327,50 @@
   }
 
   async function loadLeaderboards() {
-    loadError = null;
     const publicEl = document.getElementById('profile-public-lb');
     const friendsEl = document.getElementById('profile-friends-lb');
     if (!publicEl || !friendsEl) return;
 
-    const [pub, fr] = await Promise.all([
-      window.kiezSocial?.getCityLeaderboard?.(leaderboardCity, 50),
-      window.kiezSocial?.getFriendsLeaderboard?.(leaderboardCity, 50)
-    ]);
-    if (pub?.error || fr?.error) loadError = true;
-    publicEl.innerHTML = renderLeaderboardTable(pub?.rows || [], 'profilePage.emptyLeaderboard');
-    friendsEl.innerHTML = friends.length
-      ? renderLeaderboardTable(fr?.rows || [], 'profilePage.emptyFriendsLeaderboard')
-      : `<p class="profile-empty">${t('profilePage.noFriendsForLb')}</p>`;
+    const loadToken = ++leaderboardLoadToken;
+    loadError = null;
+    publicEl.textContent = t('profilePage.loading');
+    friendsEl.textContent = t('profilePage.loading');
+
+    const emptyResult = { rows: [], error: new Error('unavailable') };
+    const timeoutMs = 15000;
+
+    try {
+      const [pub, fr] = await Promise.all([
+        Promise.race([
+          window.kiezSocial?.getCityLeaderboard?.(leaderboardCity, 50) ?? Promise.resolve(emptyResult),
+          new Promise((resolve) => setTimeout(() => resolve({ rows: [], error: new Error('timeout') }), timeoutMs))
+        ]),
+        Promise.race([
+          window.kiezSocial?.getFriendsLeaderboard?.(leaderboardCity, 50) ?? Promise.resolve(emptyResult),
+          new Promise((resolve) => setTimeout(() => resolve({ rows: [], error: new Error('timeout') }), timeoutMs))
+        ])
+      ]);
+
+      if (loadToken !== leaderboardLoadToken) return;
+
+      if (pub?.error || fr?.error) loadError = true;
+
+      publicEl.innerHTML = renderLeaderboardTable(pub?.rows || [], 'profilePage.emptyLeaderboard');
+      friendsEl.innerHTML = friends.length
+        ? renderLeaderboardTable(fr?.rows || [], 'profilePage.emptyFriendsLeaderboard')
+        : `<p class="profile-empty">${t('profilePage.noFriendsForLb')}</p>`;
+
+      const section = document.getElementById('profile-section-leaderboard');
+      section?.querySelector('.profile-lb-error')?.remove();
+      if (loadError && section) {
+        section.insertAdjacentHTML('afterbegin', `<p class="profile-feedback profile-feedback--error profile-lb-error">${t('profilePage.loadError')}</p>`);
+      }
+    } catch (err) {
+      console.warn('Leaderboard load failed:', err);
+      if (loadToken !== leaderboardLoadToken) return;
+      publicEl.innerHTML = `<p class="profile-empty">${t('profilePage.loadError')}</p>`;
+      friendsEl.innerHTML = `<p class="profile-empty">${t('profilePage.loadError')}</p>`;
+    }
   }
 
   function showFeedback(msg, isError) {
@@ -321,10 +394,7 @@
       showDeleteConfirmModal();
     });
 
-    main.querySelector('#profile-btn-search')?.addEventListener('click', () => void runProfileSearch());
-    main.querySelector('#profile-friend-search')?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') void runProfileSearch();
-    });
+    bindFriendSearchAutocomplete(main);
 
     main.querySelectorAll('.profile-btn-accept').forEach((btn) => {
       btn.addEventListener('click', () => void respondRequest(btn.dataset.id, true));
@@ -342,29 +412,82 @@
     });
   }
 
-  async function runProfileSearch() {
-    const input = document.getElementById('profile-friend-search');
-    const q = input?.value?.trim() || '';
-    if (q.length < 2) {
-      showFeedback(t('profilePage.searchTooShort'), true);
-      return;
-    }
-    const res = await window.kiezSocial?.searchProfiles?.(q);
-    searchResults = res?.rows || [];
-    const container = document.getElementById('profile-search-results');
-    if (container) {
-      container.innerHTML = searchResults.length
-        ? `<div class="profile-request-list">${searchResults.map((u) => `
+  function bindFriendSearchAutocomplete(root) {
+    const input = root.querySelector('#profile-friend-search');
+    const dropdown = root.querySelector('#profile-friend-suggestions');
+    if (!input || !dropdown) return;
+
+    const hideSuggestions = () => {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    };
+
+    const showSelectedUser = (user) => {
+      const container = root.querySelector('#profile-search-results')
+        || document.getElementById('profile-search-results');
+      if (!container || !user?.username) return;
+      container.innerHTML = `
+        <div class="profile-request-list">
           <div class="profile-request-row">
-            <span>@${escapeHtml(u.username || '')}</span>
-            <button type="button" class="secondary-btn profile-btn-add-friend" data-username="${escapeHtml(u.username)}">${t('profilePage.sendRequest')}</button>
-          </div>`).join('')}</div>`
-        : `<p class="profile-empty">${t('profilePage.noSearchResults')}</p>`;
-      container.querySelectorAll('.profile-btn-add-friend').forEach((btn) => {
-        btn.addEventListener('click', () => void sendRequest(btn.dataset.username));
+            <span>@${escapeHtml(user.username)}</span>
+            <button type="button" class="secondary-btn profile-btn-add-friend" data-username="${escapeHtml(user.username)}">${t('profilePage.sendRequest')}</button>
+          </div>
+        </div>`;
+      container.querySelector('.profile-btn-add-friend')
+        ?.addEventListener('click', () => void sendRequest(user.username));
+    };
+
+    const renderSuggestions = (rows) => {
+      dropdown.innerHTML = '';
+      if (!rows.length) {
+        dropdown.style.display = 'none';
+        return;
+      }
+      rows.forEach((user) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'autocomplete-item profile-autocomplete-item';
+        item.textContent = `@${user.username || ''}`;
+        item.addEventListener('mousedown', (e) => e.preventDefault());
+        item.addEventListener('click', () => {
+          input.value = user.username || '';
+          hideSuggestions();
+          showSelectedUser(user);
+        });
+        dropdown.appendChild(item);
       });
-    }
-    showFeedback('', false);
+      dropdown.style.display = 'block';
+    };
+
+    const queueSearch = () => {
+      clearTimeout(searchDebounceTimer);
+      const q = input.value.trim();
+      if (q.length < 2) {
+        searchResults = [];
+        hideSuggestions();
+        if (q.length === 0) showFeedback('', false);
+        else showFeedback(t('profilePage.searchTooShort'), true);
+        return;
+      }
+      showFeedback('', false);
+      searchDebounceTimer = setTimeout(async () => {
+        const res = await window.kiezSocial?.searchProfiles?.(q);
+        searchResults = res?.rows || [];
+        renderSuggestions(searchResults);
+        if (!searchResults.length) {
+          showFeedback(t('profilePage.noSearchResults'), false);
+        }
+      }, 280);
+    };
+
+    input.addEventListener('input', queueSearch);
+    input.addEventListener('focus', queueSearch);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideSuggestions();
+    });
+    input.addEventListener('blur', () => {
+      setTimeout(hideSuggestions, 150);
+    });
   }
 
   async function sendRequest(username) {
@@ -390,17 +513,31 @@
   function showDeleteConfirmModal() {
     if (typeof openOverlayModal !== 'function') return;
     const modal = openOverlayModal(`
-      <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-content profile-delete-modal">
+        <div class="profile-danger-banner">${t('profilePage.deleteDangerZone')}</div>
         <h2>${t('profilePage.deleteConfirmTitle')}</h2>
-        <p style="color: var(--text-secondary);">${t('profilePage.deleteConfirmBody')}</p>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:1rem;">
-          <button type="button" class="profile-btn-danger" id="profile-delete-confirm">${t('profilePage.deleteConfirmBtn')}</button>
+        <p>${t('profilePage.deleteConfirmBody')}</p>
+        <label class="profile-delete-confirm-label">
+          <input type="checkbox" id="profile-delete-understand">
+          <span>${t('profilePage.deleteConfirmCheckbox')}</span>
+        </label>
+        <div class="profile-delete-actions">
+          <button type="button" class="profile-btn-danger" id="profile-delete-confirm" disabled>${t('profilePage.deleteConfirmBtn')}</button>
           <button type="button" class="secondary-btn" id="profile-delete-cancel">${t('profilePage.deleteCancel')}</button>
         </div>
       </div>
     `, { closeOnBackdrop: true });
+
+    const confirmBtn = modal.querySelector('#profile-delete-confirm');
+    const checkbox = modal.querySelector('#profile-delete-understand');
+
+    checkbox?.addEventListener('change', () => {
+      if (confirmBtn) confirmBtn.disabled = !checkbox.checked;
+    });
+
     modal.querySelector('#profile-delete-cancel')?.addEventListener('click', () => closeOverlayModal(modal));
-    modal.querySelector('#profile-delete-confirm')?.addEventListener('click', async () => {
+    confirmBtn?.addEventListener('click', async () => {
+      if (!checkbox?.checked) return;
       closeOverlayModal(modal);
       const res = await window.kiezSocial?.deleteMyAccount?.();
       if (res?.ok) {

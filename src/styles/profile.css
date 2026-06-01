@@ -198,9 +198,127 @@
 .profile-history-item {
   font-size: 0.78rem;
   color: var(--text-muted);
-  padding: 0.35rem 0.5rem;
+  padding: 0.55rem 0.65rem;
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.profile-history-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 0.15rem;
+}
+
+.profile-history-mode {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.profile-history-districts {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 0.1rem;
+}
+
+.profile-history-score {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.profile-account-actions {
+  margin-bottom: 0.5rem;
+}
+
+.profile-panel .secondary-btn,
+.profile-panel .primary-btn {
+  width: auto;
+  min-width: 8rem;
+}
+
+.profile-btn-signout {
+  display: inline-flex;
+}
+
+.profile-search-field {
+  flex: 1;
+  min-width: min(100%, 260px);
+}
+
+.profile-autocomplete-container {
+  position: relative;
+}
+
+.profile-autocomplete-dropdown {
+  top: calc(100% + 4px);
+  bottom: auto;
+  margin-bottom: 0;
+}
+
+.profile-autocomplete-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+}
+
+.profile-delete-modal {
+  max-width: 420px;
+  text-align: left;
+}
+
+.profile-danger-banner {
+  display: inline-block;
+  margin-bottom: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(220, 50, 50, 0.18);
+  border: 1px solid rgba(220, 50, 50, 0.55);
+  color: #ff6b6b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.profile-delete-confirm-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: left;
+}
+
+.profile-delete-confirm-label input {
+  margin-top: 0.15rem;
+  accent-color: #ef4444;
+}
+
+.profile-delete-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.profile-delete-actions .profile-btn-danger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.profile-btn-danger {
+  background: rgba(220, 50, 50, 0.2);
+  border: 1px solid rgba(220, 50, 50, 0.5);
+  color: #ff6b6b;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font: inherit;
 }
 
 .profile-toolbar {
@@ -318,15 +436,9 @@
   margin: 0 0 0.75rem;
 }
 
-.profile-btn-danger {
-  background: rgba(220, 50, 50, 0.2);
-  border: 1px solid rgba(220, 50, 50, 0.5);
-  color: #ff6b6b;
-  padding: 0.5rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font: inherit;
+.profile-btn-danger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .profile-feedback {

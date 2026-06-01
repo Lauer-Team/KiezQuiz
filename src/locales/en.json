@@ -202,10 +202,13 @@
     "deleteTitle": "Delete account",
     "deleteBody": "Permanently deletes your account and all cloud data.",
     "deleteBtn": "Delete account",
+    "deleteDangerZone": "DANGER ZONE",
     "deleteConfirmTitle": "Delete account?",
     "deleteConfirmBody": "All saves, friends, and leaderboard entries in the cloud will be removed. This cannot be undone.",
+    "deleteConfirmCheckbox": "I understand that all cloud data will be permanently deleted.",
     "deleteConfirmBtn": "Delete permanently",
     "deleteCancel": "Cancel",
+    "historyScore": "{correct} of {total} correct ({percent}%)",
     "deleteFailed": "Deletion failed. Please try again later.",
     "close": "Close",
     "friendError": {

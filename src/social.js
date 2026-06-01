@@ -14,8 +14,12 @@
 
   async function rpc(name, params) {
     if (!isEnabled()) return { data: null, error: new Error('not_configured') };
-    const { data, error } = await getSupabase().rpc(name, params || {});
-    return { data, error };
+    try {
+      const { data, error } = await getSupabase().rpc(name, params || {});
+      return { data, error: error || null };
+    } catch (err) {
+      return { data: null, error: err };
+    }
   }
 
   async function searchProfiles(query) {

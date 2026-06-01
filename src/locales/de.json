@@ -202,10 +202,13 @@
     "deleteTitle": "Account löschen",
     "deleteBody": "Löscht deinen Account und alle Cloud-Daten unwiderruflich.",
     "deleteBtn": "Account löschen",
+    "deleteDangerZone": "GEFAHRENZONE",
     "deleteConfirmTitle": "Account wirklich löschen?",
     "deleteConfirmBody": "Alle Spielstände, Freunde und Bestenwerte in der Cloud werden gelöscht. Dies kann nicht rückgängig gemacht werden.",
+    "deleteConfirmCheckbox": "Ich verstehe, dass alle Cloud-Daten unwiderruflich gelöscht werden.",
     "deleteConfirmBtn": "Endgültig löschen",
     "deleteCancel": "Abbrechen",
+    "historyScore": "{correct} von {total} richtig ({percent}%)",
     "deleteFailed": "Löschen fehlgeschlagen. Bitte später erneut versuchen.",
     "close": "Schließen",
     "friendError": {
