@@ -111,6 +111,8 @@
   },
   "adminPage": {
     "title": "Admin",
+    "subtitle": "Verwaltung",
+    "navCityWishes": "Städte-Wünsche",
     "loading": "Wird geladen…",
     "loginRequiredTitle": "Anmeldung erforderlich",
     "loginRequiredBody": "Melde dich mit deinem Admin-Account an, um die Stadt-Wünsche einzusehen.",
@@ -133,6 +135,7 @@
     "colTotal": "Gesamt",
     "emptyCities": "Keine Städte gefunden.",
     "emptyUsers": "Keine Nutzer gefunden.",
+    "loadErrorBody": "Daten konnten nicht geladen werden. Bitte Browser-Konsole prüfen oder Supabase-Setup aktualisieren.",
     "selectUserHint": "Wähle links einen Nutzer oder Gast, um die gewünschten Städte zu sehen.",
     "guestLabel": "Gast ({id}…)",
     "unknownUser": "Unbekannt",

@@ -198,6 +198,34 @@ language sql stable security definer set search_path = public as $$
 $$;
 
 grant execute on function public.get_city_wish_totals() to anon, authenticated;
+
+-- Admin-Liste inkl. Benutzernamen (serverseitiger Join)
+create or replace function public.get_city_wish_admin_list()
+returns table(
+  id uuid,
+  city_name text,
+  user_id uuid,
+  guest_id text,
+  request_type text,
+  created_at timestamptz,
+  username text
+)
+language sql stable security definer set search_path = public as $$
+  select
+    r.id,
+    r.city_name,
+    r.user_id,
+    r.guest_id,
+    r.request_type,
+    r.created_at,
+    p.username
+  from public.city_wish_requests r
+  left join public.profiles p on p.id = r.user_id
+  where public.is_city_wish_admin()
+  order by r.created_at desc;
+$$;
+
+grant execute on function public.get_city_wish_admin_list() to authenticated;
 ```
 
 Falls du die Unique-Indizes aus einer früheren Version bereits angelegt hast, einmal entfernen:
@@ -216,7 +244,7 @@ insert into public.city_wish_admins (user_id) values ('DEINE-USER-UUID');
 
 Alternativ in `src/supabaseConfig.js`: `adminUserIds: ['DEINE-USER-UUID']`.
 
-**Wünsche einsehen:** Einstellungen (⚙️) → „Wünsche anzeigen“ (nur als Admin), oder Supabase **Table Editor** → `city_wish_requests`.
+**Wünsche einsehen:** Einstellungen (⚙️) → „Admin-Bereich öffnen“ (nur als Admin) unter `/admin/`, oder Supabase **Table Editor** → `city_wish_requests`.
 
 ---
 
