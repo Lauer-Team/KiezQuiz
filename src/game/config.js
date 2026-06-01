@@ -17,6 +17,9 @@ const RANK_THRESHOLDS = [
   { level: 10, minXp: 4000, maxXp: Infinity }
 ];
 
+/** Bump when publishing release notes; set matching copy in locales `appNews` (de + en). */
+const APP_NEWS_VERSION = 0;
+
 const CITY_RANK_THRESHOLDS = [
   { level: 1, minDistricts: 0, minTrophies: 0 },
   { level: 2, minDistricts: 1, minTrophies: 0 },
@@ -33,7 +36,6 @@ const CITY_LOCALE_CONFIG = {
     rankKey: 'cityRanks',
     trophyNs: 'trophies',
     defaultBezirkTrivia: 'trivia.defaultBezirk',
-    onboarding: 'onboarding',
     emptyBezirk: 'explorer.emptyBezirk',
     emptyDetail: 'explorer.emptyStadtteil',
     subdistricts: 'explorer.subdistricts',
@@ -44,7 +46,6 @@ const CITY_LOCALE_CONFIG = {
     rankKey: 'cityRanksBerlin',
     trophyNs: 'trophiesBerlin',
     defaultBezirkTrivia: 'trivia.defaultBezirkBerlin',
-    onboarding: 'onboardingBerlin',
     emptyBezirk: 'explorer.emptyBezirkBerlin',
     emptyDetail: 'explorer.emptyOrtsteil',
     subdistricts: 'explorer.subdistrictsBerlin',
@@ -55,7 +56,6 @@ const CITY_LOCALE_CONFIG = {
     rankKey: 'cityRanksFrankfurt',
     trophyNs: 'trophiesFrankfurt',
     defaultBezirkTrivia: 'trivia.defaultBezirkFrankfurt',
-    onboarding: 'onboardingFrankfurt',
     emptyBezirk: 'explorer.emptyBezirkFrankfurt',
     emptyDetail: 'explorer.emptyStadtteilFrankfurt',
     subdistricts: 'explorer.subdistrictsFrankfurt',

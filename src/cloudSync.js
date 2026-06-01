@@ -129,6 +129,10 @@ class CloudSync {
           : (parseInt(local.global?.streak, 10) || 0),
         bestStreak: Math.max(parseInt(local.global?.bestStreak, 10) || 0, parseInt(cloud.global?.bestStreak, 10) || 0),
         rankSeen: Math.max(parseInt(local.global?.rankSeen, 10) || 1, parseInt(cloud.global?.rankSeen, 10) || 1),
+        newsVersionSeen: Math.max(
+          parseInt(local.global?.newsVersionSeen, 10) || 0,
+          parseInt(cloud.global?.newsVersionSeen, 10) || 0
+        ),
         muted: local.global?.muted ?? cloud.global?.muted ?? false
       },
       lastCity: useCloudNav ? (cloud.lastCity || local.lastCity || 'hamburg') : (local.lastCity || cloud.lastCity || 'hamburg'),

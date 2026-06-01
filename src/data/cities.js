@@ -63,8 +63,7 @@
       trophyCatalog: 'hamburg',
       totalTrophies: 11,
       islandEasterEgg: 'neuwerk',
-      paradiseTarget: 'Groß Flottbek',
-      onboardingVersion: 1
+      paradiseTarget: 'Groß Flottbek'
     },
     {
       id: 'berlin',
@@ -83,8 +82,7 @@
       trophyCatalog: 'berlin',
       totalTrophies: 16,
       islandEasterEgg: 'pfaueninsel',
-      paradiseTarget: 'Teufelsberg',
-      onboardingVersion: 1
+      paradiseTarget: 'Teufelsberg'
     },
     {
       id: 'frankfurt',
@@ -102,8 +100,7 @@
       progression: FRANKFURT_BEZIRKE_PROGRESSION,
       trophyCatalog: 'frankfurt',
       totalTrophies: 19,
-      paradiseTarget: 'Westend-Süd',
-      onboardingVersion: 1
+      paradiseTarget: 'Westend-Süd'
     }
   ];
 
