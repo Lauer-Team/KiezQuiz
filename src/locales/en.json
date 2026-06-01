@@ -111,6 +111,8 @@
   },
   "adminPage": {
     "title": "Admin",
+    "subtitle": "Management",
+    "navCityWishes": "City wishes",
     "loading": "Loading…",
     "loginRequiredTitle": "Sign-in required",
     "loginRequiredBody": "Sign in with your admin account to view city wishes.",
@@ -133,6 +135,7 @@
     "colTotal": "Total",
     "emptyCities": "No cities found.",
     "emptyUsers": "No users found.",
+    "loadErrorBody": "Could not load data. Check the browser console or update the Supabase setup.",
     "selectUserHint": "Select a user or guest on the left to see their requested cities.",
     "guestLabel": "Guest ({id}…)",
     "unknownUser": "Unknown",

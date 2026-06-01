@@ -1,9 +1,11 @@
-/* KiezQuiz — Admin page for city wish analytics */
+/* KiezQuiz — Full-screen admin area */
 (function () {
+  const ACTIVE_SECTION = 'city-wishes';
   let rows = [];
   let viewMode = 'cities';
   let userFilter = '';
   let searchQuery = '';
+  let loadError = null;
 
   function escapeHtml(str) {
     return String(str)
@@ -19,7 +21,13 @@
     return t('adminPage.unknownUser');
   }
 
+  function setShellVisible(show) {
+    document.getElementById('admin-sidebar')?.toggleAttribute('hidden', !show);
+    document.getElementById('admin-app')?.classList.toggle('admin-app--ready', show);
+  }
+
   function renderGate(state, extraHtml) {
+    setShellVisible(false);
     const main = document.getElementById('admin-main');
     if (!main) return;
     main.innerHTML = `
@@ -148,21 +156,21 @@
       </div>`;
   }
 
-  function renderDashboard() {
+  function renderCityWishesSection() {
     const cities = window.cityWishes.aggregateByCity(rows);
     const users = window.cityWishes.aggregateByUser(rows);
-    const main = document.getElementById('admin-main');
-    if (!main) return;
-
     const content = viewMode === 'users'
       ? renderUserSummary(users)
       : renderCityTable(cities);
 
-    main.innerHTML = `
-      <section class="admin-panel">
+    const errorBanner = loadError
+      ? `<div class="admin-error-banner" role="alert">${t('adminPage.loadErrorBody')}</div>`
+      : '';
+
+    return `
+      <section class="admin-panel" id="admin-section-city-wishes" aria-labelledby="admin-page-title">
         <div class="admin-panel-head">
           <div>
-            <h2>${t('adminPage.sectionTitle')}</h2>
             <p class="admin-panel-intro">${t('adminPage.sectionIntro')}</p>
           </div>
           <p class="admin-stats-line">${t('adminPage.statsLine', {
@@ -171,6 +179,8 @@
             users: formatNumber(users.length)
           })}</p>
         </div>
+
+        ${errorBanner}
 
         <div class="admin-toolbar">
           <div class="admin-view-tabs" role="tablist">
@@ -185,6 +195,11 @@
 
         <div class="admin-table-wrap">${content}</div>
       </section>`;
+  }
+
+  function bindSectionEvents() {
+    const main = document.getElementById('admin-main');
+    if (!main) return;
 
     main.querySelectorAll('.admin-view-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
@@ -212,8 +227,24 @@
     });
   }
 
+  function renderDashboard() {
+    setShellVisible(true);
+    const main = document.getElementById('admin-main');
+    if (!main) return;
+
+    main.innerHTML = ACTIVE_SECTION === 'city-wishes' ? renderCityWishesSection() : '';
+    bindSectionEvents();
+  }
+
   async function loadAdminData() {
-    rows = await window.cityWishes.fetchAdminList();
+    loadError = null;
+    const result = await window.cityWishes.fetchAdminList();
+    if (result && typeof result === 'object' && Array.isArray(result.rows)) {
+      rows = result.rows;
+      loadError = result.error || null;
+    } else {
+      rows = Array.isArray(result) ? result : [];
+    }
     renderDashboard();
   }
 

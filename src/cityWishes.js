@@ -107,7 +107,7 @@
     return {
       id: row.id,
       cityName: row.city_name,
-      username: row.profiles?.username || null,
+      username: row.username ?? row.profiles?.username ?? null,
       guestId: row.guest_id,
       userId: row.user_id,
       requestType: row.request_type,
@@ -128,16 +128,31 @@
   }
 
   async function fetchAdminList() {
-    if (!isCloudEnabled() || !(await isAdmin())) return [];
+    if (!isCloudEnabled() || !(await isAdmin())) return { rows: [], error: null };
+
+    const supabase = getSupabase();
+
+    try {
+      const { data, error } = await supabase.rpc('get_city_wish_admin_list');
+      if (!error && Array.isArray(data)) {
+        return { rows: data.map(mapAdminRow), error: null };
+      }
+      if (error && error.code !== 'PGRST202') throw error;
+    } catch (e) {
+      if (e?.code !== 'PGRST202') {
+        console.warn('City wish admin RPC failed, falling back to direct select:', e);
+      }
+    }
+
     try {
       const pageSize = 1000;
       let from = 0;
       const all = [];
 
       while (true) {
-        const { data, error } = await getSupabase()
+        const { data, error } = await supabase
           .from('city_wish_requests')
-          .select('id, city_name, user_id, guest_id, request_type, created_at, profiles(username)')
+          .select('id, city_name, user_id, guest_id, request_type, created_at')
           .order('created_at', { ascending: false })
           .range(from, from + pageSize - 1);
         if (error) throw error;
@@ -147,10 +162,10 @@
         from += pageSize;
       }
 
-      return all;
+      return { rows: all, error: null };
     } catch (e) {
       console.warn('City wish admin list failed:', e);
-      return [];
+      return { rows: [], error: e?.message || String(e) };
     }
   }
 

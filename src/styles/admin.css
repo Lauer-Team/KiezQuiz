@@ -1,32 +1,39 @@
-/* Admin page */
+/* Full-screen admin area */
 .admin-page-body {
   min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
   background: var(--bg-deep, #0a0c12);
 }
 
-.admin-shell {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 1.25rem 1rem 3rem;
+.admin-app {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
-.admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-  padding: 1rem 1.25rem;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
+.admin-app--ready {
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
 }
 
-.admin-header-brand {
+.admin-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 1.25rem;
+  padding: 1.25rem 1rem;
+  background: rgba(0, 0, 0, 0.28);
+  border-right: 1px solid var(--border-color);
+}
+
+.admin-sidebar[hidden] {
+  display: none;
+}
+
+.admin-sidebar-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .admin-back-link {
@@ -40,18 +47,86 @@
   color: var(--acc, hsl(205 100% 62%));
 }
 
-.admin-header h1 {
+.admin-sidebar-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.admin-nav-item {
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.admin-nav-item:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.admin-nav-item.is-active {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-main-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-topbar-eyebrow {
+  margin: 0 0 0.2rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.admin-topbar h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
   color: #fff;
 }
 
 .admin-main {
-  min-height: 40vh;
+  flex: 1;
+  padding: 1.25rem 1.5rem 2.5rem;
+  overflow: auto;
 }
 
 .admin-state {
+  max-width: 36rem;
+  margin: 4rem auto 0;
   padding: 2.5rem 1.5rem;
   text-align: center;
   background: var(--bg-surface);
@@ -68,8 +143,6 @@
 .admin-state p {
   margin: 0 0 1.25rem;
   color: var(--text-secondary);
-  max-width: 36ch;
-  margin-inline: auto;
 }
 
 .admin-link-btn {
@@ -93,13 +166,6 @@
   margin-bottom: 1.25rem;
 }
 
-.admin-panel h2 {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  color: #fff;
-}
-
 .admin-panel-intro {
   margin: 0;
   font-size: 0.88rem;
@@ -111,6 +177,16 @@
   font-size: 0.78rem;
   color: var(--text-secondary);
   white-space: nowrap;
+}
+
+.admin-error-banner {
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 120, 120, 0.35);
+  background: rgba(255, 80, 80, 0.08);
+  color: #ffb4b4;
+  font-size: 0.85rem;
 }
 
 .admin-toolbar {
@@ -188,7 +264,32 @@
   align-items: start;
 }
 
+@media (max-width: 960px) {
+  .admin-app--ready {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .admin-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .admin-nav-item {
+    width: auto;
+  }
+}
+
 @media (max-width: 720px) {
+  .admin-topbar,
+  .admin-main {
+    padding-inline: 1rem;
+  }
+
   .admin-user-layout {
     grid-template-columns: 1fr;
   }
