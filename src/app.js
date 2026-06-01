@@ -823,6 +823,8 @@ class KiezQuizGame {
     this.nameAllActiveBezirke = [];
     
     this._hamburgSvgCache = null;
+    this._sessionCityOverride = null;
+    this._loadedMapCityId = null;
     this.loadState();
   }
 
@@ -844,6 +846,7 @@ class KiezQuizGame {
     if (cityParam && window.cityRegistry.isPlayable(cityParam)) {
       this.view = 'city';
       this.activeCityId = cityParam;
+      this._sessionCityOverride = cityParam;
       window.saveManager.ensureCityBranch(this._save, cityParam);
       this._applyCityBranch(this._save.cities[cityParam]);
       const hadProgress = window.saveManager.hasAnyProgress(this._save);
@@ -920,6 +923,7 @@ class KiezQuizGame {
           if (!this._hamburgSvgCache) this._hamburgSvgCache = inline.outerHTML;
           this.svg = inline;
           this.ensureMapLabelsGroup();
+          this._loadedMapCityId = this.activeCityId;
           resolve();
           return;
         }
@@ -927,6 +931,7 @@ class KiezQuizGame {
           this._swapMapSvg(this._hamburgSvgCache, wrapper);
           this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
           this.ensureMapLabelsGroup();
+          this._loadedMapCityId = this.activeCityId;
           resolve();
           return;
         }
@@ -945,6 +950,7 @@ class KiezQuizGame {
         this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
       }
       this.ensureMapLabelsGroup();
+      this._loadedMapCityId = this.activeCityId;
       resolve();
     });
   }
@@ -1060,6 +1066,7 @@ class KiezQuizGame {
       this._syncToSaveObject();
     }
     this.activeCityId = cityId;
+    this._sessionCityOverride = null;
     this.view = 'city';
     window.saveManager.ensureCityBranch(this._save, cityId);
     this._applyCityBranch(this._save.cities[cityId]);
@@ -1321,11 +1328,13 @@ class KiezQuizGame {
       if (storedRankSeen < this.level && this._save.global) {
         this._save.global.rankSeen = this.level;
       }
-      this.activeCityId = this._save.lastCity || 'hamburg';
+      this.activeCityId = this._sessionCityOverride || this._save.lastCity || 'hamburg';
       const savedMode = this._save.lastMode || 'EXPLORER';
       this.currentMode = savedMode === 'BEZIRK_MATCH' ? 'EXPLORER' : savedMode;
       this.activeSegment = window.cityRegistry.levelKeyToSegment(this._save.lastLevelKey || 'stadtteile');
-      this._applyCityBranch(this._save.cities[this.activeCityId] || this._save.cities.hamburg);
+      this._applyCityBranch(
+        this._save.cities[this.activeCityId] || this._save.cities.hamburg
+      );
       if (typeof g.muted === 'boolean') {
         this.sounds.muted = g.muted;
         const muteBtn = document.getElementById('btn-mute');
@@ -1643,6 +1652,12 @@ class KiezQuizGame {
       if (hubEl && !hubEl.hidden) window.kiezHub?.render(this, hubEl);
       return;
     }
+    if (this._loadedMapCityId !== this.activeCityId) {
+      this._initCityPlay();
+      return;
+    }
+    this.updateHeaderBadge();
+    window.kiezCityDashboard?.renderContextBar(this, document.getElementById('city-context-bar'));
     window.kiezCityDashboard?.enhanceSegmentSelector();
     this.setupSegmentSelectors();
     this.renderStats();
@@ -3952,7 +3967,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         game.updateMapStates();
         game.updateIslandBadges();
       }
-    } else if (_previousAuthUser !== undefined) {
+    } else if (_previousAuthUser) {
       game.resetToGuestState();
     }
     _previousAuthUser = user;

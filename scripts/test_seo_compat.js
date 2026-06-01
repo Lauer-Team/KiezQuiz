@@ -28,7 +28,10 @@ assert(!saveManagerSrc.includes('clearSave()') || saveManagerSrc.includes('funct
 assert(appSrc.includes('hadProgress') && appSrc.includes('prevLastCity'), 'deep link guards lastCity for returning players');
 assert(appSrc.includes('.trim().toLowerCase()'), 'deep link normalizes city param');
 assert(appSrc.includes('game.init();') && appSrc.includes('void (async'), 'game init not blocked on auth');
-assert(bootSrc.includes('toLowerCase'), 'bootView normalizes city param');
+assert(appSrc.includes('_sessionCityOverride'), 'deep link session city override');
+assert(appSrc.includes('} else if (_previousAuthUser) {'), 'guest auth does not reset on duplicate null session');
+assert(!appSrc.includes('_previousAuthUser !== undefined'), 'removed duplicate null-session reset');
+assert(appSrc.includes('_loadedMapCityId'), 'map tracks loaded city for resync');
 assert(appSrc.includes('history.replaceState'), 'deep link cleans URL after load');
 assert(bootSrc.includes('kiezquiz_save_v2'), 'bootView reads v2 save');
 assert(bootSrc.includes('hasV1Save'), 'bootView detects v1 migration candidates');
