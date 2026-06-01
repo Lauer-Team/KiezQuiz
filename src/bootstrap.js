@@ -72,6 +72,14 @@
   window.addEventListener('DOMContentLoaded', function () {
     void (async function () {
       await initI18n();
+      if (window.kiezChangelog?.bindTriggers) {
+        window.kiezChangelog.bindTriggers(document);
+      }
+      if (typeof onLocaleChange === 'function' && window.kiezChangelog?.bindTriggers) {
+        onLocaleChange(function () {
+          window.kiezChangelog.bindTriggers(document);
+        });
+      }
       if (needsCityOnBoot()) {
         await window.loadGameBundle();
       } else {

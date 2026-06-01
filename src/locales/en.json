@@ -110,7 +110,13 @@
   },
   "footer": {
     "privacy": "Privacy:",
-    "privacyText": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username, and save data are encrypted via TLS and stored with Supabase (EU) — no sharing with third parties."
+    "privacyText": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username, and save data are encrypted via TLS and stored with Supabase (EU) — no sharing with third parties.",
+    "changelog": "What's new?"
+  },
+  "changelog": {
+    "title": "📋 What's new?",
+    "intro": "Every update and fix since launch — newest first.",
+    "close": "Close"
   },
   "settings": {
     "title": "⚙️ Settings",
@@ -133,7 +139,10 @@
     "wishAdminBtn": "Open admin area",
     "profileTitle": "👤 Profile",
     "profileBody": "Achievements, friends, and leaderboards for your account.",
-    "profileBtn": "Open profile"
+    "profileBtn": "Open profile",
+    "changelogTitle": "📋 What's new?",
+    "changelogBody": "All updates, new cities, and bug fixes since launch.",
+    "changelogBtn": "View changelog"
   },
   "adminPage": {
     "title": "Admin",
@@ -626,18 +635,18 @@
     }
   },
   "appNews": {
-    "title": "",
-    "intro": "",
-    "feature1Icon": "✨",
-    "feature1Title": "",
-    "feature1Text": "",
-    "feature2Icon": "✨",
-    "feature2Title": "",
-    "feature2Text": "",
-    "feature3Icon": "✨",
-    "feature3Title": "",
-    "feature3Text": "",
-    "footerTip": "",
+    "title": "🌍 More Kiez, more world!",
+    "intro": "A lot has happened since your last visit — and we've officially moved to <strong>KiezQuiz.de</strong>. Four maps, one account, zero boredom.",
+    "feature1Icon": "🗺️",
+    "feature1Title": "Four game worlds: ",
+    "feature1Text": "Hamburg, Berlin, Frankfurt — plus the brand-new <strong>Europe map</strong> with 44 countries and capitals.",
+    "feature2Icon": "👥",
+    "feature2Title": "Profile, friends & leaderboards: ",
+    "feature2Text": "Find friends, compare scores, claim the crown. Trophies, personal bests, and bragging rights — all in one place.",
+    "feature3Icon": "🌐",
+    "feature3Title": "KiezQuiz.de & English: ",
+    "feature3Text": "Our new official home — bookmark it, don't lose it. Bonus: the app now speaks <strong>English</strong> too.",
+    "footerTip": "Full details are always in “What's new?” in the footer. Missing your city? Drop a city wish in the hub — we're listening.",
     "dismiss": "Got it"
   },
   "explorer": {

@@ -1727,6 +1727,11 @@ class KiezQuizGame {
           ${cloudStatusHtml}
         </div>
         <div id="settings-wish-admin-slot" style="margin-bottom: 1.2rem;"></div>
+        <div class="settings-changelog-block" style="margin-bottom: 1.2rem;">
+          <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.changelogTitle')}</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.changelogBody')}</p>
+          <button type="button" class="secondary-btn" id="btn-settings-changelog">${t('settings.changelogBtn')}</button>
+        </div>
         <div class="settings-privacy-block" style="margin-bottom: 1.2rem;">
           <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.privacyTitle')}</strong>
           <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">${t('settings.privacyBody')}</p>
@@ -1741,6 +1746,10 @@ class KiezQuizGame {
     `, { closeOnBackdrop: true });
     modal.querySelector('#btn-settings-close')?.addEventListener('click', () => closeOverlayModal(modal));
     modal.querySelector('#btn-settings-reset')?.addEventListener('click', () => this.resetGame());
+    modal.querySelector('#btn-settings-changelog')?.addEventListener('click', () => {
+      closeOverlayModal(modal);
+      window.kiezChangelog?.show?.();
+    });
 
     if (loggedIn) {
       const profileSlot = document.createElement('div');
