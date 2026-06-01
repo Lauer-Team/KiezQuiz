@@ -170,35 +170,6 @@
   }
 
   function renderFriendsSection() {
-    const incoming = friendRequests.filter((r) => r.direction === 'incoming');
-    const outgoing = friendRequests.filter((r) => r.direction === 'outgoing');
-
-    const incomingHtml = incoming.length
-      ? incoming.map((r) => `
-        <div class="profile-request-row">
-          <span>@${escapeHtml(r.other_username || r.otherUsername || '')}</span>
-          <div class="profile-request-actions">
-            <button type="button" class="primary-btn profile-btn-accept" data-id="${escapeHtml(r.id)}">${t('profilePage.accept')}</button>
-            <button type="button" class="secondary-btn profile-btn-reject" data-id="${escapeHtml(r.id)}">${t('profilePage.reject')}</button>
-          </div>
-        </div>`).join('')
-      : `<p class="profile-empty">${t('profilePage.noIncoming')}</p>`;
-
-    const outgoingHtml = outgoing.length
-      ? outgoing.map((r) => `
-        <div class="profile-request-row">
-          <span>@${escapeHtml(r.other_username || r.otherUsername || '')}</span>
-          <span class="profile-stat-line">${t('profilePage.pending')}</span>
-        </div>`).join('')
-      : `<p class="profile-empty">${t('profilePage.noOutgoing')}</p>`;
-
-    const friendsHtml = friends.length
-      ? friends.map((f) => `
-        <div class="profile-request-row">
-          <span>@${escapeHtml(f.username || '')}</span>
-        </div>`).join('')
-      : `<p class="profile-empty">${t('profilePage.noFriends')}</p>`;
-
     const searchHtml = searchResults.length
       ? `<div class="profile-request-list">${searchResults.map((u) => `
         <div class="profile-request-row">
@@ -223,13 +194,13 @@
         <p id="profile-friend-feedback" class="profile-feedback" hidden></p>
 
         <h3 class="profile-section-title">${t('profilePage.incomingTitle')}</h3>
-        <div class="profile-request-list">${incomingHtml}</div>
+        <div class="profile-request-list" id="profile-incoming-requests">${renderIncomingRequestsHtml()}</div>
 
         <h3 class="profile-section-title">${t('profilePage.outgoingTitle')}</h3>
-        <div class="profile-request-list">${outgoingHtml}</div>
+        <div class="profile-request-list" id="profile-outgoing-requests">${renderOutgoingRequestsHtml()}</div>
 
         <h3 class="profile-section-title">${t('profilePage.friendsListTitle')}</h3>
-        <div class="profile-friend-list">${friendsHtml}</div>
+        <div class="profile-friend-list" id="profile-friends-list">${renderFriendsListHtml()}</div>
       </section>`;
   }
 
@@ -306,10 +277,92 @@
     }
   }
 
+  function clearFriendSearchTimer() {
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = null;
+  }
+
+  function resetFriendSearchUI() {
+    clearFriendSearchTimer();
+    searchResults = [];
+    const resultsEl = document.getElementById('profile-search-results');
+    if (resultsEl) resultsEl.innerHTML = '';
+    const input = document.getElementById('profile-friend-search');
+    if (input) input.value = '';
+    const dropdown = document.getElementById('profile-friend-suggestions');
+    if (dropdown) {
+      dropdown.innerHTML = '';
+      dropdown.style.display = 'none';
+    }
+  }
+
+  function renderIncomingRequestsHtml() {
+    const incoming = friendRequests.filter((r) => r.direction === 'incoming');
+    return incoming.length
+      ? incoming.map((r) => `
+        <div class="profile-request-row">
+          <span>@${escapeHtml(r.other_username || r.otherUsername || '')}</span>
+          <div class="profile-request-actions">
+            <button type="button" class="primary-btn profile-btn-accept" data-id="${escapeHtml(r.id)}">${t('profilePage.accept')}</button>
+            <button type="button" class="secondary-btn profile-btn-reject" data-id="${escapeHtml(r.id)}">${t('profilePage.reject')}</button>
+          </div>
+        </div>`).join('')
+      : `<p class="profile-empty">${t('profilePage.noIncoming')}</p>`;
+  }
+
+  function renderOutgoingRequestsHtml() {
+    const outgoing = friendRequests.filter((r) => r.direction === 'outgoing');
+    return outgoing.length
+      ? outgoing.map((r) => `
+        <div class="profile-request-row">
+          <span>@${escapeHtml(r.other_username || r.otherUsername || '')}</span>
+          <span class="profile-stat-line">${t('profilePage.pending')}</span>
+        </div>`).join('')
+      : `<p class="profile-empty">${t('profilePage.noOutgoing')}</p>`;
+  }
+
+  function renderFriendsListHtml() {
+    return friends.length
+      ? friends.map((f) => `
+        <div class="profile-request-row">
+          <span>@${escapeHtml(f.username || '')}</span>
+        </div>`).join('')
+      : `<p class="profile-empty">${t('profilePage.noFriends')}</p>`;
+  }
+
+  function bindFriendRequestActions(root) {
+    root.querySelectorAll('.profile-btn-accept').forEach((btn) => {
+      btn.addEventListener('click', () => void respondRequest(btn.dataset.id, true));
+    });
+    root.querySelectorAll('.profile-btn-reject').forEach((btn) => {
+      btn.addEventListener('click', () => void respondRequest(btn.dataset.id, false));
+    });
+    root.querySelectorAll('.profile-btn-add-friend').forEach((btn) => {
+      btn.addEventListener('click', () => void sendRequest(btn.dataset.username));
+    });
+  }
+
+  function updateFriendsListsInDom() {
+    const section = document.getElementById('profile-section-friends');
+    if (!section) return false;
+
+    const incomingEl = section.querySelector('#profile-incoming-requests');
+    const outgoingEl = section.querySelector('#profile-outgoing-requests');
+    const friendsEl = section.querySelector('#profile-friends-list');
+    if (!incomingEl || !outgoingEl || !friendsEl) return false;
+
+    incomingEl.innerHTML = renderIncomingRequestsHtml();
+    outgoingEl.innerHTML = renderOutgoingRequestsHtml();
+    friendsEl.innerHTML = renderFriendsListHtml();
+    bindFriendRequestActions(section);
+    return true;
+  }
+
   function renderDashboard() {
     setShellVisible(true);
     const main = document.getElementById('profile-main');
     if (!main) return;
+    clearFriendSearchTimer();
     main.innerHTML = renderSectionContent();
     bindSectionEvents();
     if (activeSection === 'leaderboard') {
@@ -395,16 +448,7 @@
     });
 
     bindFriendSearchAutocomplete(main);
-
-    main.querySelectorAll('.profile-btn-accept').forEach((btn) => {
-      btn.addEventListener('click', () => void respondRequest(btn.dataset.id, true));
-    });
-    main.querySelectorAll('.profile-btn-reject').forEach((btn) => {
-      btn.addEventListener('click', () => void respondRequest(btn.dataset.id, false));
-    });
-    main.querySelectorAll('.profile-btn-add-friend').forEach((btn) => {
-      btn.addEventListener('click', () => void sendRequest(btn.dataset.username));
-    });
+    bindFriendRequestActions(main);
 
     main.querySelector('#profile-leaderboard-city')?.addEventListener('change', (e) => {
       leaderboardCity = e.target.value;
@@ -459,11 +503,18 @@
       dropdown.style.display = 'block';
     };
 
+    const clearSearchResults = () => {
+      searchResults = [];
+      const container = root.querySelector('#profile-search-results')
+        || document.getElementById('profile-search-results');
+      if (container) container.innerHTML = '';
+    };
+
     const queueSearch = () => {
-      clearTimeout(searchDebounceTimer);
+      clearFriendSearchTimer();
       const q = input.value.trim();
       if (q.length < 2) {
-        searchResults = [];
+        clearSearchResults();
         hideSuggestions();
         if (q.length === 0) showFeedback('', false);
         else showFeedback(t('profilePage.searchTooShort'), true);
@@ -493,9 +544,12 @@
   async function sendRequest(username) {
     const res = await window.kiezSocial?.sendFriendRequest?.(username);
     if (res?.ok) {
-      showFeedback(t('profilePage.requestSent'), false);
       await loadSocialData();
-      if (activeSection === 'friends') renderDashboard();
+      resetFriendSearchUI();
+      if (activeSection === 'friends' && !updateFriendsListsInDom()) {
+        renderDashboard();
+      }
+      showFeedback(t('profilePage.requestSent'), false);
       return;
     }
     const reason = res?.reason || 'error';
@@ -507,7 +561,9 @@
   async function respondRequest(id, accept) {
     await window.kiezSocial?.respondFriendRequest?.(id, accept);
     await loadSocialData();
-    if (activeSection === 'friends') renderDashboard();
+    if (activeSection === 'friends' && !updateFriendsListsInDom()) {
+      renderDashboard();
+    }
   }
 
   function showDeleteConfirmModal() {
