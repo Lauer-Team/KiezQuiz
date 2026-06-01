@@ -188,7 +188,7 @@
       : t(`${cityRankKey}.maxReached`);
     const stripItems = catalog.slice(0, 4).map((tr) => {
       const earned = game.trophies.has(tr.id);
-      return `<div class="cpc-tro-chip${earned ? ' earned' : ' locked'}" title="${tr.name} — ${tr.desc}"><span class="cpc-tro-icon">${tr.icon}</span></div>`;
+      return `<button type="button" class="cpc-tro-chip${earned ? ' earned' : ' locked'}" data-trophy-id="${tr.id}" aria-label="${tr.name}"><span class="cpc-tro-icon">${tr.icon}</span></button>`;
     }).join('');
 
     container.innerHTML = `
@@ -227,6 +227,7 @@
     container.querySelector('#btn-city-progress-log')?.addEventListener('click', () => {
       if (window.kiezModals?.showLogModal) window.kiezModals.showLogModal(game);
     });
+    window.kiezModals?.bindTrophyClicks?.(container.querySelector('.cpc-tro-strip'), game);
   }
 
   function enhanceSegmentSelector() {

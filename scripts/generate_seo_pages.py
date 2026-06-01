@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE_URL = "https://kiezquiz.de"
+SLOGAN = "Besser wissen als Besserwissen."
 
 CITIES = {
     "hamburg": {
@@ -119,7 +120,7 @@ def json_ld_faq(faq_items: list[tuple[str, str]]) -> str:
 def render_city_head(city: dict) -> str:
     slug = city["slug"]
     page_url = f"{BASE_URL}/{slug}/"
-    title = html.escape(city["title"])
+    title = html.escape(SLOGAN)
     desc = html.escape(city["meta_description"])
     h1 = html.escape(city["h1"])
 

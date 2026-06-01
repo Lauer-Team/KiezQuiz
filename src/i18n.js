@@ -85,7 +85,7 @@ function applyToDom(root = document) {
   if (metaDesc) metaDesc.content = t('meta.description');
 
   const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.content = t('meta.title');
+  if (ogTitle) ogTitle.content = t('meta.slogan') || t('meta.title');
 
   const ogDesc = document.querySelector('meta[property="og:description"]');
   if (ogDesc) ogDesc.content = t('meta.ogDescription');
@@ -94,12 +94,12 @@ function applyToDom(root = document) {
   if (ogLocale) ogLocale.content = _locale === 'en' ? 'en_US' : 'de_DE';
 
   const twitterTitle = document.querySelector('meta[name="twitter:title"]');
-  if (twitterTitle) twitterTitle.content = t('meta.title');
+  if (twitterTitle) twitterTitle.content = t('meta.slogan') || t('meta.title');
 
   const twitterDesc = document.querySelector('meta[name="twitter:description"]');
   if (twitterDesc) twitterDesc.content = t('meta.ogDescription');
 
-  document.title = t('meta.title');
+  document.title = t('meta.slogan') || t('meta.title');
 }
 
 function notifyLocaleListeners() {

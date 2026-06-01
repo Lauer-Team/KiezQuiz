@@ -1420,10 +1420,10 @@ class KiezQuizGame {
     const tiles = getTrophyCatalog().map(trophy => {
       const earned = this.trophies.has(trophy.id);
       return `
-        <div class="trophy-tile ${earned ? 'trophy-tile--earned' : 'trophy-tile--locked'}" title="${trophy.desc}">
+        <button type="button" class="trophy-tile ${earned ? 'trophy-tile--earned' : 'trophy-tile--locked'}" data-trophy-id="${trophy.id}" aria-label="${trophy.name}">
           <span class="trophy-icon">${trophy.icon}</span>
           <span class="trophy-name">${trophy.name}</span>
-        </div>
+        </button>
       `;
     }).join('');
 
@@ -1480,6 +1480,7 @@ class KiezQuizGame {
       </div>
     `, { closeOnBackdrop: true });
     document.getElementById('btn-history-close').addEventListener('click', () => closeOverlayModal(modal));
+    window.kiezModals?.bindTrophyClicks?.(modal.querySelector('.trophy-gallery'), this);
   }
 
   showSyncToast(message) {
@@ -2306,9 +2307,28 @@ class KiezQuizGame {
     promptTarget.classList.toggle('highlight', promptData.highlight);
     promptSub.textContent = promptData.sub;
     this.syncMapPromptBar(promptData);
+    this.zoomMapToCurrentTarget();
 
     // Bind Cancel round button
     document.getElementById('btn-cancel-round').onclick = () => this.endRound(true);
+  }
+
+  zoomMapToCurrentTarget() {
+    if (!this.mapNav || !this.inRound || !this.currentTarget || !this.svg) return;
+
+    const isBz = this.activeSegment === 'BEZIRKE';
+    let paths;
+    if (isBz) {
+      paths = Array.from(this.svg.querySelectorAll(
+        `.stadtteil-path[data-bezirk="${CSS.escape(this.currentTarget.name)}"]`
+      ));
+    } else {
+      const path = this.getPathByNeighbourhoodName(this.currentTarget.name);
+      paths = path ? [path] : [];
+    }
+    if (paths.length) {
+      requestAnimationFrame(() => this.mapNav.zoomToPaths(paths));
+    }
   }
 
   getAlreadyAnsweredInRound() {

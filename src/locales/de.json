@@ -1,6 +1,7 @@
 {
   "meta": {
     "title": "KiezQuiz – Hamburg, Berlin & Frankfurt Bezirke und Stadtteile spielerisch lernen",
+    "slogan": "Besser wissen als Besserwissen.",
     "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
     "ogDescription": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
     "manifestDescription": "Hamburg, Berlin & Frankfurt — Bezirke und Stadtteile spielerisch lernen"
@@ -749,6 +750,12 @@
   },
   "achievement": {
     "unlocked": "Erfolg freigeschaltet!"
+  },
+  "trophyDetail": {
+    "earned": "Freigeschaltet!",
+    "locked": "Noch nicht freigeschaltet",
+    "howToEarn": "So verdienst du diesen Pokal:",
+    "close": "Schließen"
   },
   "levelUp": {
     "title": "🎉 Aufstieg! 🎉",

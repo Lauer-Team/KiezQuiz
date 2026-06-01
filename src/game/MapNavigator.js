@@ -222,6 +222,44 @@ class MapNavigator {
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
   }
 
+  zoomToPaths(paths, { padding = 1.8, maxZoom = 6, minZoom = 1.2 } = {}) {
+    if (!paths?.length || !this.container || !this.svg) return;
+
+    const containerRect = this.container.getBoundingClientRect();
+    const cw = containerRect.width;
+    const ch = containerRect.height;
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    paths.forEach((path) => {
+      const r = path.getBoundingClientRect();
+      minX = Math.min(minX, r.left);
+      minY = Math.min(minY, r.top);
+      maxX = Math.max(maxX, r.right);
+      maxY = Math.max(maxY, r.bottom);
+    });
+
+    const bboxW = maxX - minX;
+    const bboxH = maxY - minY;
+    if (bboxW <= 0 || bboxH <= 0) return;
+
+    const bboxCx = (minX + maxX) / 2 - containerRect.left;
+    const bboxCy = (minY + maxY) / 2 - containerRect.top;
+    const fitZoom = Math.min(cw / (bboxW * padding), ch / (bboxH * padding));
+    const targetZoom = Math.min(maxZoom, Math.max(minZoom, this.zoom * fitZoom));
+
+    const oldZoom = this.zoom;
+    this.svg.classList.add('smooth-transition');
+    this.zoom = targetZoom;
+    this.panX = bboxCx - (bboxCx - this.panX) * (this.zoom / oldZoom);
+    this.panY = bboxCy - (bboxCy - this.panY) * (this.zoom / oldZoom);
+    this.updateTransform(false);
+    this.snapPanToBounds();
+    setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
+  }
+
   updateTransform(rubberBand = false) {
     let px = this.panX;
     let py = this.panY;

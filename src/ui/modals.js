@@ -1,10 +1,43 @@
 /* KiezQuiz — Log (2 zones) + Wish modals */
 (function () {
+  function showTrophyDetail(trophy, earned) {
+    const statusLabel = earned ? t('trophyDetail.earned') : t('trophyDetail.locked');
+    const statusClass = earned ? 'trophy-detail--earned' : 'trophy-detail--locked';
+    const modal = openOverlayModal(`
+      <div class="modal-content trophy-detail-modal ${statusClass}">
+        <button type="button" class="modal-x" id="btn-trophy-x">✕</button>
+        <div class="trophy-detail-icon">${trophy.icon}</div>
+        <h2 class="trophy-detail-name">${trophy.name}</h2>
+        <span class="trophy-detail-status">${statusLabel}</span>
+        <p class="trophy-detail-label">${t('trophyDetail.howToEarn')}</p>
+        <p class="trophy-detail-desc">${trophy.desc}</p>
+        <button type="button" class="primary-btn" id="btn-trophy-close">${t('trophyDetail.close')}</button>
+      </div>
+    `, { closeOnBackdrop: true });
+
+    document.getElementById('btn-trophy-x')?.addEventListener('click', () => closeOverlayModal(modal));
+    document.getElementById('btn-trophy-close')?.addEventListener('click', () => closeOverlayModal(modal));
+  }
+
+  function bindTrophyClicks(container, game) {
+    if (!container || !game) return;
+    container.querySelectorAll('[data-trophy-id]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.trophyId;
+        const catalog = typeof getTrophyCatalog === 'function'
+          ? getTrophyCatalog(game.activeCityId)
+          : [];
+        const trophy = catalog.find((tr) => tr.id === id);
+        if (trophy) showTrophyDetail(trophy, game.trophies.has(id));
+      });
+    });
+  }
+
   function showLogModal(game) {
     const city = window.cityRegistry.localizeCity(window.cityRegistry.getCity(game.activeCityId || 'hamburg'));
     const { currentRank, nextRank, percent } = game.getRankProgressInfo();
     const cityRankInfo = game.getCityRankProgressInfo();
-    const trophyCatalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog() : [];
+    const trophyCatalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(game.activeCityId) : [];
     const won = game.trophies.size;
     const total = trophyCatalog.length;
 
@@ -60,10 +93,10 @@
     const trophyTiles = trophyCatalog.map((tr) => {
       const earned = game.trophies.has(tr.id);
       return `
-        <div class="trophy-tile ${earned ? 'trophy-tile--earned' : 'trophy-tile--locked'}" title="${tr.desc}">
+        <button type="button" class="trophy-tile ${earned ? 'trophy-tile--earned' : 'trophy-tile--locked'}" data-trophy-id="${tr.id}" aria-label="${tr.name}">
           <span class="trophy-icon">${tr.icon}</span>
           <span class="trophy-name">${tr.name}</span>
-        </div>`;
+        </button>`;
     }).join('');
 
     const history = game.loadGameHistory();
@@ -137,6 +170,7 @@
 
     document.getElementById('btn-log-x')?.addEventListener('click', () => closeOverlayModal(modal));
     document.getElementById('btn-history-close')?.addEventListener('click', () => closeOverlayModal(modal));
+    bindTrophyClicks(modal.querySelector('.trophy-gallery'), game);
   }
 
   async function showWishModal() {
@@ -264,5 +298,5 @@
     window.location.assign('/admin/');
   }
 
-  window.kiezModals = { showLogModal, showWishModal, showWishAdminModal };
+  window.kiezModals = { showLogModal, showWishModal, showWishAdminModal, showTrophyDetail, bindTrophyClicks };
 })();

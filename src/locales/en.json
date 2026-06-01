@@ -1,6 +1,7 @@
 {
   "meta": {
     "title": "KiezQuiz – Learn Hamburg, Berlin & Frankfurt districts through play",
+    "slogan": "Don't be a Know-it-all. Know it all.",
     "description": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
     "ogDescription": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
     "manifestDescription": "Hamburg, Berlin & Frankfurt — learn districts through play"
@@ -637,6 +638,12 @@
   },
   "achievement": {
     "unlocked": "Achievement unlocked!"
+  },
+  "trophyDetail": {
+    "earned": "Unlocked!",
+    "locked": "Not yet unlocked",
+    "howToEarn": "How to earn this trophy:",
+    "close": "Close"
   },
   "levelUp": {
     "title": "🎉 Level up! 🎉",
