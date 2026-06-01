@@ -68,12 +68,10 @@
               </div>
             </div>
           </div>
-          <div class="ccb-progress" id="city-progress-card"></div>
         </div>
+        <div class="ccb-progress" id="city-progress-card"></div>
         <div class="ccb-breadcrumb" id="city-breadcrumb">
           <span class="bc-step bc-city">${city.name}</span>
-          <span class="bc-sep" aria-hidden="true">›</span>
-          <span class="bc-step bc-tier">${level.tier}</span>
           <span class="bc-sep" aria-hidden="true">›</span>
           <span class="bc-step bc-level">${level.label}</span>
           <span class="bc-sep" aria-hidden="true">›</span>
@@ -120,8 +118,6 @@
     const modeLabel = getModeLabelForBreadcrumb(game);
     bc.innerHTML = `
       <span class="bc-step bc-city">${city.name}</span>
-      <span class="bc-sep" aria-hidden="true">›</span>
-      <span class="bc-step bc-tier">${level.tier}</span>
       <span class="bc-sep" aria-hidden="true">›</span>
       <span class="bc-step bc-level">${level.label}</span>
       <span class="bc-sep" aria-hidden="true">›</span>
