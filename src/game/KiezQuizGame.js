@@ -1640,7 +1640,7 @@ class KiezQuizGame {
       align-items: center;
       padding: 1rem;
       animation: alertSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      background: rgba(17, 24, 39, 0.9);
+      background: var(--bg-surface);
     `;
     
     alertBox.innerHTML = `
