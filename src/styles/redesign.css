@@ -1,9 +1,8 @@
 /* ============================================================
    KiezQuiz Redesign — bridges existing markup to CI .kq system
    Loaded after base.css + app.css. Does NOT touch save/auth logic.
+   Mobile overrides: mobile.css (imported at end of file).
    ============================================================ */
-
-@import url("mobile.css");
 
 /* --- Token bridge: map legacy vars → CI tokens --- */
 .app-shell.kq,
@@ -1588,3 +1587,6 @@ body.about-page-body {
   overflow: visible;
   height: auto;
 }
+
+/* Mobile / touch — must load after all rules above */
+@import url("mobile.css");

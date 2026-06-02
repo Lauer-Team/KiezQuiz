@@ -2508,7 +2508,7 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     font-size: 0.82rem;
   }
   
-  .xp-pill {
+  .app-header:not(.global-header) .xp-pill {
     flex: 1 1 11rem;
     min-width: 0;
   }
