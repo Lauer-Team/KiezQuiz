@@ -8,7 +8,29 @@
   const LOCAL_VOTES_KEY = 'kiezquiz_city_wishes';
   const LOCAL_COOLDOWNS_KEY = 'kiezquiz_city_wish_cooldowns';
   const COOLDOWN_MS = 23 * 60 * 60 * 1000;
-  const DEFAULT_VOTES = { Köln: 312, München: 287, Leipzig: 176, Stuttgart: 143, Dresden: 121 };
+  /** Baseline counts shown before real votes arrive (~350 unique users). */
+  const SEED_VOTES = {
+    Köln: 312,
+    München: 287,
+    Leipzig: 176,
+    Stuttgart: 143,
+    Dresden: 121,
+    Nürnberg: 98,
+    Düsseldorf: 87,
+    Hannover: 76,
+    Bremen: 68,
+    Dortmund: 61,
+    Freiburg: 54,
+    Münster: 47,
+    Mainz: 41,
+    Bonn: 36,
+    Heidelberg: 32,
+    Augsburg: 28,
+    Karlsruhe: 24,
+    Wiesbaden: 21,
+    Kiel: 18,
+    Rostock: 15
+  };
 
   function getSupabase() {
     return window.authManager?.supabase || null;
@@ -36,10 +58,10 @@
   }
 
   function loadLocalVotes() {
-    let votes = { ...DEFAULT_VOTES };
+    let votes = { ...SEED_VOTES };
     try {
       const saved = localStorage.getItem(LOCAL_VOTES_KEY);
-      if (saved) votes = { ...DEFAULT_VOTES, ...JSON.parse(saved) };
+      if (saved) votes = { ...SEED_VOTES, ...JSON.parse(saved) };
     } catch (e) { /* ignore */ }
     return votes;
   }
@@ -132,9 +154,10 @@
     try {
       const { data, error } = await getSupabase().rpc('get_city_wish_totals');
       if (error) throw error;
-      const votes = { ...DEFAULT_VOTES };
+      const votes = { ...SEED_VOTES };
       (data || []).forEach((row) => {
-        votes[row.city_name] = parseInt(row.vote_count, 10) || 0;
+        const dbCount = parseInt(row.vote_count, 10) || 0;
+        votes[row.city_name] = (SEED_VOTES[row.city_name] || 0) + dbCount;
       });
       return votes;
     } catch (e) {
