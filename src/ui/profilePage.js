@@ -191,7 +191,6 @@
           <span class="profile-city-summary-meta">🏆 ${rankInfo.totals.trophies}/${rankInfo.totals.totalTrophies}</span>
         </summary>
         <div class="profile-city-details-body log-zone log-zone-city">
-          <p class="log-rank-current">${t(`${cityRankKey}.yourRank`)}: <strong>${escapeHtml(rankInfo.currentRank.name)}</strong></p>
           <div class="rank-ladder rank-ladder-city">${steps}</div>
           <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${rankInfo.percent}%"></div></div>
           <p class="log-rank-progress-note">${escapeHtml(progressNote)}</p>
@@ -362,7 +361,9 @@
     getPlayableCities().forEach((city) => {
       window.saveManager?.ensureCityBranch?.(save, city.id);
     });
-    const name = window.authManager?.getDisplayName?.() || t('auth.player');
+    const name = window.authManager?.isLoggedIn?.()
+      ? (window.authManager.getDisplayName() || t('auth.player'))
+      : t('header.guest');
     const { xp, currentRank, nextRank, percent } = getGlobalRankProgressFromSave(save);
     const streak = parseInt(save?.global?.streak, 10) || 0;
     const bestStreak = parseInt(save?.global?.bestStreak, 10) || 0;
@@ -529,17 +530,23 @@
       </section>`;
   }
 
+  function renderGuestLoginSection() {
+    return `
+      <section class="profile-panel">
+        <p class="profile-panel-intro">${t('profilePage.loginRequiredBody')}</p>
+        <button type="button" class="primary-btn" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
+        <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></p>
+      </section>`;
+  }
+
   function renderSectionContent() {
     if (!window.authManager?.isConfigured?.()) {
       return `<section class="profile-panel"><p class="profile-empty">${t('profilePage.noCloudBody')}</p><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></section>`;
     }
-    if (!window.authManager?.isLoggedIn?.()) {
-      return `
-        <section class="profile-panel">
-          <p class="profile-panel-intro">${t('profilePage.loginRequiredBody')}</p>
-          <button type="button" class="primary-btn" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
-          <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></p>
-        </section>`;
+    const needsLogin = !window.authManager?.isLoggedIn?.()
+      && (activeSection === 'friends' || activeSection === 'account');
+    if (needsLogin) {
+      return renderGuestLoginSection();
     }
     switch (activeSection) {
       case 'dashboard': return renderDashboardSection();
@@ -914,11 +921,8 @@
       renderNoCloud();
       return;
     }
-    if (!window.authManager.isLoggedIn()) {
-      renderLoginPrompt();
-      return;
-    }
-    if (activeSection === 'friends' || activeSection === 'leaderboard') {
+    if (window.authManager.isLoggedIn()
+      && (activeSection === 'friends' || activeSection === 'leaderboard')) {
       await loadSocialData();
     }
     renderDashboard();

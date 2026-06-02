@@ -7,9 +7,22 @@
   background-image: var(--bg-grad);
 }
 
+/* .kq sets overflow:hidden on shell — allow page scroll on /about/ */
+.about-page-body.kq {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+}
+
 .about-app-shell {
-  min-height: 100vh;
   min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+}
+
+.about-app-shell.kq {
+  overflow: visible;
+  height: auto;
 }
 
 .about-app-shell .app-header.global-header {
@@ -31,6 +44,8 @@
   padding: 0;
   background: transparent;
   min-height: 0;
+  overflow: visible;
+  height: auto;
 }
 
 .about-topbar {
@@ -119,11 +134,9 @@ html[data-theme="light"] .about-icon-btn::after,
   box-shadow: none;
 }
 
+/* Wordmark lives in the fixed header — avoid duplicate logo in hero */
 .about-hero-logo {
-  display: block;
-  width: min(280px, 78vw);
-  height: auto;
-  margin: 0 auto 0.85rem;
+  display: none;
 }
 
 .about-hero-claim {

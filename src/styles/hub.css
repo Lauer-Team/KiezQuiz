@@ -139,6 +139,26 @@
   display: block;
 }
 
+/* Hub landing map preview — no game chrome (hover/zoom); legend centered above XP card */
+.hub-map-preview .cell,
+.hub-map-preview .cell:hover {
+  cursor: default;
+  filter: none;
+}
+
+.hub-map-preview .kq-zoom {
+  display: none;
+}
+
+.hub-map-preview .kq-legend {
+  left: 50%;
+  right: auto;
+  bottom: 12px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 24px);
+  justify-content: center;
+}
+
 .hub-map-loading {
   position: absolute;
   inset: 0;
@@ -349,7 +369,7 @@
   align-self: stretch;
   background: radial-gradient(80% 70% at 50% 100%, color-mix(in srgb, var(--signal) 18%, transparent), var(--surface));
   border: none;
-  border-radius: 0 20px 20px 0;
+  border-radius: var(--radius, 18px);
   overflow: hidden;
 }
 
@@ -361,7 +381,7 @@
   max-height: none;
   object-fit: cover;
   object-position: bottom center;
-  border-radius: 0 18px 18px 0;
+  border-radius: var(--radius, 18px);
 }
 
 .hub-guide-step {
@@ -730,11 +750,11 @@ html[data-theme="light"] .hub-about-kalle {
   .hub-about-unified .hub-about-visual {
     order: -1;
     min-height: 240px;
-    border-radius: 18px 18px 0 0;
+    border-radius: var(--radius, 18px);
   }
 
-  .hub-about-kalle {
+  .hub-about-unified .hub-about-kalle {
     min-height: 240px;
-    border-radius: 14px 14px 0 0;
+    border-radius: var(--radius, 18px);
   }
 }

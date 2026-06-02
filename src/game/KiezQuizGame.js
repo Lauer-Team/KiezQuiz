@@ -1116,6 +1116,10 @@ class KiezQuizGame {
       
       // Calculate how many stadtteile are solved out of total in this district
       const totalInDistrict = this.getCityData().filter(d => d.bezirk === bz.name && !d.is_island).length;
+      const progress = this.bezirkProgress[bz.name];
+      if (!progress) {
+        this.bezirkProgress[bz.name] = { solved: new Set() };
+      }
       const solvedInDistrict = this.bezirkProgress[bz.name].solved.size;
       const percent = totalInDistrict > 0 ? Math.round((solvedInDistrict / totalInDistrict) * 100) : 0;
       

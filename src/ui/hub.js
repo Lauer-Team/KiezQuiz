@@ -127,9 +127,6 @@
           <span class="lg"><i style="background:#5AA9FF"></i>${escapeHtml(t('hub.mapLegendOpen'))}</span>
           <span class="lg"><i style="background:#C6F24E"></i>${escapeHtml(t('hub.mapLegendStreak'))}</span>
         </div>
-        <div class="kq-mapui" aria-hidden="true">
-          <div class="kq-zoom"><button type="button" tabindex="-1">+</button><button type="button" tabindex="-1">−</button></div>
-        </div>
       </div>`;
   }
 
@@ -142,9 +139,6 @@
         <span class="lg"><i style="background:#FF5233"></i>${escapeHtml(t('hub.mapLegendLearned'))}</span>
         <span class="lg"><i style="background:#5AA9FF"></i>${escapeHtml(t('hub.mapLegendOpen'))}</span>
         <span class="lg"><i style="background:#C6F24E"></i>${escapeHtml(t('hub.mapLegendStreak'))}</span>
-      </div>
-      <div class="kq-mapui" aria-hidden="true">
-        <div class="kq-zoom"><button type="button" tabindex="-1">+</button><button type="button" tabindex="-1">−</button></div>
       </div>`;
   }
 

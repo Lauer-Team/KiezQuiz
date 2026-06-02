@@ -2819,6 +2819,10 @@ a.auth-pill-profile-link:hover {
   pointer-events: none;
 }
 
+.auth-pill:not(.auth-pill--logged-in) .auth-pill-action.btn-auth-login {
+  pointer-events: auto;
+}
+
 .auth-modal-content {
   max-width: 420px;
 }

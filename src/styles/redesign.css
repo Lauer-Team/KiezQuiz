@@ -647,18 +647,17 @@ body::selection,
 }
 
 .app-shell.kq .console-panel .unlocker-card {
-  flex: 0 1 auto;
-  min-height: 0;
-  max-height: min(220px, 30vh);
-  overflow: hidden;
+  flex: 0 0 auto;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
 
 .app-shell.kq .console-panel .unlocker-card .district-progress-list {
-  flex: 1;
-  min-height: 0;
+  flex: none;
+  max-height: min(240px, 32vh, 32dvh);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .app-shell.kq .map-panel {

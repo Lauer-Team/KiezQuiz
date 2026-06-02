@@ -4,6 +4,13 @@
   min-height: 100dvh;
   margin: 0;
   background-color: var(--bg-main);
+}
+
+/* .kq sets overflow:hidden + height:100% on body — allow page scroll */
+body.kq.profile-page-body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
   background-image:
     radial-gradient(at 0% 0%, rgba(255, 82, 51, 0.08) 0, transparent 45%),
     radial-gradient(at 100% 0%, rgba(90, 169, 255, 0.07) 0, transparent 45%),
@@ -19,6 +26,11 @@
 
 .profile-app--ready {
   grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+.profile-app--ready .profile-main-column {
+  min-height: 0;
 }
 
 .profile-sidebar {
