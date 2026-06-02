@@ -1,74 +1,146 @@
 /* ============================================================
-   KiezQuiz — Mobile / Touch (CI screens-mobile.jsx)
-   Map-first city play, compact modes, safe areas. Desktop unchanged.
+   KiezQuiz — Mobile / Touch (CI AppMobile)
+   Map-first city play: full-width map card, modes below. Desktop unchanged.
+   Loaded after redesign.css (do not @import from redesign — invalid at EOF).
    ============================================================ */
 
-/* --- City view: map-first column (≤900px) --- */
+/* --- City view: map-first stack (≤900px) --- */
 @media (max-width: 900px) {
-  .app-shell.kq.view-city .app-footer {
+  .app-shell.kq.view-city,
+  .app-shell.kq:has(#city-view:not([hidden])) {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100dvh;
+    max-height: 100dvh;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-shell.kq.view-city .app-footer,
+  .app-shell.kq:has(#city-view:not([hidden])) .app-footer {
     display: none;
   }
 
-  .app-shell.kq.view-city .city-view-root {
-    flex: 1 1 auto;
+  .app-shell.kq.view-city .city-view-root,
+  .app-shell.kq:has(#city-view:not([hidden])) .city-view-root {
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
-  .app-shell.kq.view-city .city-view-root .app-container {
-    flex: 1 1 auto;
+  .app-shell.kq.view-city .city-view-root .app-container,
+  .app-shell.kq:has(#city-view:not([hidden])) .city-view-root .app-container {
+    flex: 1 0 auto;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
+    width: 100%;
+    max-width: 100%;
   }
 
-  .app-shell.kq.view-city .dashboard-grid {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
+  /* DOM: console then map — flex order puts map on top (CI mockup) */
+  .app-shell.kq.view-city .dashboard-grid,
+  .app-shell.kq:has(#city-view:not([hidden])) .dashboard-grid,
+  #city-view:not([hidden]) .dashboard-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 0 auto;
     min-height: 0;
+    width: 100%;
+    max-width: 100%;
     gap: 0;
-    grid-template-columns: unset;
-    grid-template-rows: unset;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    align-items: stretch;
   }
 
-  .app-shell.kq.view-city .map-panel {
+  .app-shell.kq.view-city .map-panel,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-panel,
+  #city-view:not([hidden]) .map-panel {
     order: 1;
-    flex: 1 1 auto;
-    min-height: min(46vh, 46dvh);
-    max-height: none;
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
     min-width: 0;
+    min-height: 0;
+    max-height: none;
     display: flex;
     flex-direction: column;
+    overflow: visible;
+    position: relative;
+  }
+
+  .app-shell.kq.view-city .map-topbar,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-topbar {
+    flex-shrink: 0;
+    padding: 8px max(14px, env(safe-area-inset-right)) 8px max(14px, env(safe-area-inset-left));
+    gap: 8px;
+    border-bottom: none;
+    background: transparent;
+  }
+
+  .app-shell.kq.view-city .map-container-wrapper,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-container-wrapper,
+  #city-view:not([hidden]) .map-container-wrapper {
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0 max(14px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left));
+    height: min(48vh, 48dvh);
+    min-height: min(260px, 42dvh);
+    max-height: min(420px, 56dvh);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
     overflow: hidden;
+    box-shadow: var(--shadow);
   }
 
-  .app-shell.kq.view-city .map-container-wrapper {
-    flex: 1 1 auto;
-    min-height: min(200px, 32dvh);
-    max-height: none;
-    border-radius: 0;
-  }
-
-  .app-shell.kq.view-city .console-panel {
+  .app-shell.kq.view-city .console-panel,
+  .app-shell.kq:has(#city-view:not([hidden])) .console-panel,
+  #city-view:not([hidden]) .console-panel {
     order: 2;
-    flex: 0 1 auto;
-    max-height: min(52vh, 52dvh);
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    max-height: none;
+    overflow: visible;
     border-right: none;
-    border-top: 1px solid var(--line);
-    padding: 14px 16px max(14px, env(safe-area-inset-bottom));
-    gap: 12px;
+    border-top: none;
+    padding: 12px max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    gap: 14px;
   }
 
-  .app-shell.kq.view-city .map-prompt-bar {
+  .app-shell.kq.view-city .map-prompt-bar,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar {
     display: block;
+  }
+
+  .app-shell.kq.view-city .segment-selector,
+  .app-shell.kq:has(#city-view:not([hidden])) .segment-selector {
+    order: 1;
+  }
+
+  .app-shell.kq.view-city .mode-selector,
+  .app-shell.kq:has(#city-view:not([hidden])) .mode-selector {
+    order: 2;
+  }
+
+  .app-shell.kq.view-city #game-play-area-card,
+  .app-shell.kq:has(#city-view:not([hidden])) #game-play-area-card {
+    order: 3;
+  }
+
+  .app-shell.kq.view-city #unlocker-card-container,
+  .app-shell.kq:has(#city-view:not([hidden])) #unlocker-card-container {
+    order: 4;
+  }
+
+  .app-shell.kq.view-city .console-panel,
+  .app-shell.kq:has(#city-view:not([hidden])) .console-panel {
+    display: flex;
+    flex-direction: column;
   }
 
   /* Horizontal mode strip (CI AppMobile) */
@@ -92,10 +164,10 @@
   }
 
   .app-shell.kq .mode-selector .mode-btn {
-    flex: 0 0 76px;
-    width: 76px;
-    min-width: 76px;
-    max-width: 76px;
+    flex: 0 0 84px;
+    width: 84px;
+    min-width: 84px;
+    max-width: 84px;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
@@ -209,15 +281,13 @@
   .app-shell.kq .mode-selector {
     min-width: 0;
     overflow: hidden;
+    border: none;
+    background: transparent;
+    box-shadow: none;
   }
 
-  .app-shell.kq.view-city .map-container-wrapper {
-    min-height: min(220px, 38dvh);
-  }
-
-  .app-shell.kq .map-topbar {
-    padding: 8px 12px;
-    gap: 8px;
+  .app-shell.kq .mode-selector.glass-card {
+    padding: 0;
   }
 
   .app-shell.kq .map-center-btn {
@@ -234,12 +304,27 @@
   }
 
   /* Active round: map + play sheet (CI QuizMobile) */
-  body.in-round .app-shell.kq.view-city .map-panel {
-    flex: 1 1 0;
-    min-height: min(36vh, 36dvh);
+  body.in-round .app-shell.kq.view-city,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) {
+    overflow: hidden;
   }
 
-  body.in-round .app-shell.kq.view-city .console-panel {
+  body.in-round .app-shell.kq.view-city .dashboard-grid,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .dashboard-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-panel,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-panel {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+  }
+
+  body.in-round .app-shell.kq.view-city .console-panel,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .console-panel {
     flex: 0 0 auto;
     max-height: min(46vh, 46dvh);
     overflow-y: auto;
@@ -272,10 +357,17 @@
     padding: 0;
   }
 
-  body.in-round .app-shell.kq.view-city .map-container-wrapper {
+  body.in-round .app-shell.kq.view-city .map-container-wrapper,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-container-wrapper {
     flex: 1 1 auto;
+    width: auto;
+    margin: 0;
+    height: auto;
     min-height: min(180px, 28dvh);
     max-height: min(58vh, 58dvh);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
   }
 
   body.in-round .app-shell.kq .choices-grid {
@@ -382,15 +474,6 @@
   .app-shell.kq.view-city .streak-pill .streak-current .value,
   .app-shell.kq.view-city .xp-pill .value {
     font-size: 14px;
-  }
-
-  .app-shell.kq.view-city .map-panel {
-    min-height: min(42vh, 42dvh);
-  }
-
-  .app-shell.kq.view-city .console-panel {
-    max-height: min(56vh, 56dvh);
-    padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
   }
 
   .app-shell.kq .segment-selector {
