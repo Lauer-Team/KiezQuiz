@@ -4,7 +4,7 @@
   "description": "Kostenloses Karten-Quiz: Bezirke und Stadtteile von Hamburg (104), Berlin (97) und Frankfurt (46) spielerisch lernen.",
   "keywords": ["KiezQuiz", "Hamburg Stadtteile", "Berlin Ortsteile", "Frankfurt Stadtteile", "Bezirke lernen", "Karten-Quiz", "Geografie"],
   "scripts": {
-    "dev": "npx -y http-server -p 3000 -o"
+    "dev": "npx -y http-server -p 3000 -c-1 -o"
   },
   "keywords": [],
   "author": "",

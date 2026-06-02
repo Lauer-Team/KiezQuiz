@@ -1,4 +1,4 @@
-/* KiezQuiz — logged-in users use /profile/ as home, not the landing page */
+/* KiezQuiz — optional redirect from landing to /profile/ (local progress only; logged-in users use the header Dashboard link) */
 (function () {
   function isHomePath() {
     return window.kiezViewRouter?.isHomePath?.(window.location.pathname) ?? false;
@@ -15,7 +15,7 @@
 
   function shouldRedirectToDashboard(auth) {
     if (!isHomePath()) return false;
-    if (auth?.isLoggedIn?.()) return true;
+    if (auth?.isLoggedIn?.()) return false;
     return hasLocalProgress();
   }
 

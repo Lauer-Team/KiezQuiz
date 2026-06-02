@@ -482,6 +482,33 @@ html[data-theme="light"] .hub-about-kalle {
   filter: drop-shadow(0 14px 32px rgba(60, 50, 30, .22));
 }
 
+.header-dashboard-nav {
+  margin-left: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.header-dashboard-nav[hidden] {
+  display: none !important;
+}
+
+.header-dashboard-nav .header-dashboard-link {
+  padding: 8px 13px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-decoration: none;
+  transition: 0.14s;
+  border: none;
+  box-shadow: none;
+}
+
+.header-dashboard-nav .header-dashboard-link:hover {
+  color: var(--text-1);
+  background: var(--surface);
+}
+
 .header-hub-nav {
   margin-left: 14px;
 }

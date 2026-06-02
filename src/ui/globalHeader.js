@@ -178,6 +178,40 @@
     });
   }
 
+  function syncDashboardNavLink() {
+    const onProfile = /^\/profile\/?/.test(window.location.pathname);
+    const show = window.authManager?.isLoggedIn?.() && !onProfile;
+    let nav = document.getElementById('header-dashboard-nav');
+
+    if (!show) {
+      if (nav) nav.hidden = true;
+      return;
+    }
+
+    if (!nav) {
+      nav = document.createElement('nav');
+      nav.id = 'header-dashboard-nav';
+      nav.className = 'header-dashboard-nav';
+      nav.setAttribute('aria-label', t('header.dashboardTitle'));
+      nav.innerHTML = `<a href="/profile/" class="header-dashboard-link" id="header-dashboard-link"></a>`;
+      const header = document.getElementById('app-header');
+      const hubNav = document.getElementById('header-hub-nav');
+      if (header) {
+        if (hubNav) header.insertBefore(nav, hubNav);
+        else header.querySelector('.brand-link')?.insertAdjacentElement('afterend', nav);
+      }
+    }
+
+    const link = nav.querySelector('.header-dashboard-link');
+    if (link) {
+      link.textContent = t('header.dashboardLink');
+      link.dataset.i18n = 'header.dashboardLink';
+      link.title = t('header.dashboardTitle');
+      link.dataset.i18nTitle = 'header.dashboardTitle';
+    }
+    nav.hidden = false;
+  }
+
   function applyWordmark() {
     syncBrandTheme();
     document.querySelectorAll('.brand-link .brand-logo').forEach((img) => {
@@ -238,6 +272,7 @@
     }
 
     bindXpPill(game);
+    syncDashboardNavLink();
     syncHeaderOffset();
   }
 
@@ -296,7 +331,12 @@
       aboutLink.classList.add('on');
       aboutLink.setAttribute('aria-current', 'page');
     }
+    syncDashboardNavLink();
     syncHeaderOffset();
+  }
+
+  if (typeof onLocaleChange === 'function') {
+    onLocaleChange(() => syncDashboardNavLink());
   }
 
   window.kiezGlobalHeader = {
@@ -309,6 +349,7 @@
     syncBrandTheme,
     logoPathForTheme,
     renderStaticChrome,
+    syncDashboardNavLink,
     syncHeaderOffset
   };
 })();

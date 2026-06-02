@@ -250,6 +250,8 @@ class AuthManager {
         this.showAuthModal();
       });
     });
+
+    window.kiezGlobalHeader?.syncDashboardNavLink?.();
   }
 
   initUI() {
