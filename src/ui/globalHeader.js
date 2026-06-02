@@ -93,6 +93,24 @@
 
   let headerCityMenuOpen = false;
 
+  function isProfilePage() {
+    return /^\/profile\/?/.test(window.location.pathname);
+  }
+
+  function cityPlayHref(cityId) {
+    return `/${cityId}/`;
+  }
+
+  function getHeaderContextCityId() {
+    const g = window.kiezQuizGame || window.hamburgGame;
+    if (g?.view === 'city' && g.activeCityId) return g.activeCityId;
+    try {
+      const save = window.saveManager?.loadSave?.();
+      if (save?.lastCity && window.cityRegistry.getCity(save.lastCity)) return save.lastCity;
+    } catch (_) { /* ignore */ }
+    return 'hamburg';
+  }
+
   function closeHeaderCityMenu() {
     headerCityMenuOpen = false;
     const menu = document.getElementById('header-city-menu');
@@ -101,9 +119,66 @@
     if (toggle) toggle.setAttribute('aria-expanded', 'false');
   }
 
+  function renderProfileCityPicker() {
+    const slot = document.getElementById('header-city-tabs');
+    if (!slot || !isProfilePage()) return;
+
+    const activeId = getHeaderContextCityId();
+    const current = window.cityRegistry.localizeCity(window.cityRegistry.getCity(activeId));
+    if (!current) {
+      slot.hidden = true;
+      slot.innerHTML = '';
+      return;
+    }
+
+    slot.hidden = false;
+    const cities = window.cityRegistry.getAllCities().filter((c) => c.status === 'playable');
+    const menuItems = cities.map((c) => {
+      const loc = window.cityRegistry.localizeCity(c);
+      const n = citySegmentCount(c);
+      const on = c.id === activeId;
+      const href = cityPlayHref(c.id);
+      return `<a href="${href}" class="header-city-item${on ? ' active' : ''}" role="menuitem"${on ? ' aria-current="page"' : ''}>
+        <span class="header-city-item-name">${escapeHtml(loc.name)}</span>
+        <span class="header-city-item-count">${n}</span>
+        ${on ? '<span class="header-city-item-check" aria-hidden="true">✓</span>' : ''}
+      </a>`;
+    }).join('');
+
+    slot.innerHTML = `
+      <div class="header-city-picker">
+        <button type="button" class="header-city-toggle" id="header-city-toggle" aria-haspopup="menu" aria-expanded="${headerCityMenuOpen ? 'true' : 'false'}" aria-controls="header-city-menu">
+          <span class="header-city-toggle-name">${escapeHtml(current.name)}</span>
+          <span class="header-city-toggle-count">${citySegmentCount(window.cityRegistry.getCity(activeId))}</span>
+          <span class="header-city-toggle-chev" aria-hidden="true">▾</span>
+        </button>
+        <div class="header-city-menu" id="header-city-menu" role="menu" ${headerCityMenuOpen ? '' : 'hidden'}>
+          <div class="header-city-menu-title">${escapeHtml(t('hub.switchCity'))}</div>
+          ${menuItems}
+        </div>
+      </div>`;
+
+    if (slot.dataset.profilePickerBound !== 'true') {
+      slot.dataset.profilePickerBound = 'true';
+      slot.addEventListener('click', (e) => {
+        const toggle = e.target.closest('#header-city-toggle');
+        if (toggle) {
+          e.preventDefault();
+          e.stopPropagation();
+          headerCityMenuOpen = !headerCityMenuOpen;
+          renderProfileCityPicker();
+        }
+      });
+    }
+  }
+
   function renderCityTabs(game) {
     const slot = document.getElementById('header-city-tabs');
     if (!slot) return;
+    if (isProfilePage()) {
+      renderProfileCityPicker();
+      return;
+    }
     if (game.view !== 'city') {
       slot.hidden = true;
       slot.innerHTML = '';
@@ -269,7 +344,7 @@
 
     const settingsBtn = document.getElementById('btn-settings');
     if (settingsBtn) {
-      const showSettings = game.view === 'city';
+      const showSettings = game.view === 'city' || isProfilePage();
       settingsBtn.hidden = !showSettings;
       settingsBtn.setAttribute('aria-hidden', showSettings ? 'false' : 'true');
     }
@@ -308,12 +383,14 @@
       closeHeaderCityMenu();
       const g = window.kiezQuizGame || window.hamburgGame;
       if (g?.view === 'city') renderCityTabs(g);
+      else if (isProfilePage()) renderProfileCityPicker();
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && headerCityMenuOpen) {
         closeHeaderCityMenu();
         const g = window.kiezQuizGame || window.hamburgGame;
         if (g?.view === 'city') renderCityTabs(g);
+        else if (isProfilePage()) renderProfileCityPicker();
       }
     });
   }
@@ -355,6 +432,14 @@
       aboutLink.classList.add('on');
       aboutLink.setAttribute('aria-current', 'page');
     }
+    if (isProfilePage()) {
+      renderProfileCityPicker();
+      const settingsBtn = document.getElementById('btn-settings');
+      if (settingsBtn) {
+        settingsBtn.hidden = false;
+        settingsBtn.setAttribute('aria-hidden', 'false');
+      }
+    }
     syncDashboardNavLink();
     syncHeaderOffset();
   }
@@ -372,6 +457,7 @@
     closeXpPopover,
     closeHeaderCityMenu,
     renderCityTabs,
+    renderProfileCityPicker,
     applyWordmark,
     syncBrandTheme,
     logoPathForTheme,

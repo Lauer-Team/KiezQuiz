@@ -1432,8 +1432,15 @@ class KiezQuizGame {
     if (bar) bar.hidden = true;
   }
 
+  syncMapChrome() {
+    const nameAllUi = document.getElementById('name-all-active');
+    const nameAllSession = !!(nameAllUi && nameAllUi.style.display !== 'none');
+    document.body.classList.toggle('map-play-active', !!(this.inRound || nameAllSession));
+  }
+
   setInRoundUI(active) {
     document.body.classList.toggle('in-round', active);
+    this.syncMapChrome();
     if (!active) this.hideMapPromptBar();
   }
 
@@ -2722,6 +2729,7 @@ class KiezQuizGame {
     if (this.roundQuestions.length === 0) {
       alert(t('game.noQuestionsAlert'));
       this.inRound = false;
+      this.syncMapChrome();
       return;
     }
 
@@ -3529,6 +3537,7 @@ class KiezQuizGame {
     this.nameAllFound.clear();
     this.nameAllIsActive = true;
     this.nameAllTimeLeft = ROUND_TIME_LIMIT;
+    this.syncMapChrome();
 
     document.getElementById('name-all-setup').style.display = 'none';
     document.getElementById('name-all-active').style.display = 'flex';
@@ -3599,6 +3608,7 @@ class KiezQuizGame {
       if (input) input.disabled = true;
       this.stopActiveTimer();
     }
+    this.syncMapChrome();
   }
 
   checkNameAllInput(input, totalCount) {
@@ -3659,6 +3669,7 @@ class KiezQuizGame {
 
   stopNameAllChallenge(surrender = true) {
     this.nameAllIsActive = false;
+    this.syncMapChrome();
     this.svg?.classList.remove('name-all-active');
     this.reorderMapLayers();
     const durationSec = ROUND_TIME_LIMIT - this.nameAllTimeLeft;

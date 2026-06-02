@@ -1683,10 +1683,11 @@ body.in-round .map-container-wrapper {
   flex-direction: column;
   gap: 0.35rem;
   padding: 0.5rem 0.55rem;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--bg-surface) 58%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-color) 72%, transparent);
   border-radius: var(--radius-md);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   pointer-events: auto;
 
   &[hidden] {
@@ -1719,8 +1720,10 @@ body.in-round .map-container-wrapper {
   gap: 0.3rem;
   padding: 0.35rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid var(--border-color);
-  background: color-mix(in srgb, var(--text-primary) 6%, var(--bg-surface));
+  border: 1px solid color-mix(in srgb, var(--border-color) 72%, transparent);
+  background: color-mix(in srgb, var(--bg-surface) 68%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: var(--text-primary);
   font-size: 0.68rem;
   font-family: var(--font-sans);

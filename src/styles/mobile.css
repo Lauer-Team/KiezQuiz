@@ -104,11 +104,11 @@
     width: auto;
     max-width: min(calc(100% - 120px), 72vw);
     margin: 8px max(10px, env(safe-area-inset-right)) 0 0;
+    padding: 6px 8px 2px;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: 2px;
   }
 
   .app-shell.kq.view-city .map-island-dock:not(:has(.island-overlay:not([hidden]), .europe-island-overlay:not([hidden]), .islands-stack:not([hidden]))),
@@ -210,8 +210,15 @@
     margin: 0 max(10px, env(safe-area-inset-right)) 10px 0;
   }
 
-  .app-shell.kq.view-city .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls,
-  .app-shell.kq:has(#city-view:not([hidden])) .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls {
+  body.in-round .app-shell.kq.view-city .map-controls,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-controls,
+  body.map-play-active .app-shell.kq.view-city .map-controls,
+  body.map-play-active .app-shell.kq:has(#city-view:not([hidden])) .map-controls {
+    margin-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+  }
+
+  body:not(.map-play-active) .app-shell.kq.view-city .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls,
+  body:not(.map-play-active) .app-shell.kq:has(#city-view:not([hidden])) .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls {
     margin-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
   }
 
@@ -504,15 +511,6 @@
     grid-template-areas: "mapstack";
   }
 
-  body.in-round .app-shell.kq.view-city .map-island-dock,
-  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-island-dock {
-    grid-area: mapstack;
-    align-self: start;
-    justify-self: end;
-    z-index: 35;
-    margin: 8px max(10px, env(safe-area-inset-right)) 0 0;
-  }
-
   body.in-round .app-shell.kq.view-city .console-panel,
   body.in-round .app-shell.kq:has(#city-view:not([hidden])) .console-panel {
     flex: 0 0 auto;
@@ -562,17 +560,6 @@
   body.in-round .app-shell.kq.view-city .map-center-btn,
   body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-center-btn {
     margin: 8px 0 0 max(10px, env(safe-area-inset-left));
-  }
-
-  body.in-round .app-shell.kq.view-city .map-microstates-dock:not([hidden]),
-  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-microstates-dock:not([hidden]) {
-    margin: 0 max(10px, env(safe-area-inset-right)) 52px max(10px, env(safe-area-inset-left));
-    padding: 5px 8px;
-  }
-
-  body.in-round .app-shell.kq.view-city .map-microstates-dock .europe-microstates-label,
-  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-microstates-dock .europe-microstates-label {
-    display: none;
   }
 
   body.in-round .app-shell.kq.view-city .map-prompt-bar,
@@ -653,6 +640,12 @@
     max-width: min(180px, 48vw);
     display: flex;
     justify-content: flex-start;
+    margin-left: 0;
+  }
+
+  .app-shell.kq.view-city .header-dashboard-nav:not([hidden]) {
+    order: 2;
+    margin: 0 0 0 6px;
   }
 
   .app-shell.kq.view-city .header-city-picker {
@@ -680,14 +673,14 @@
   }
 
   .app-shell.kq .header-dashboard-nav:not([hidden]) {
-    order: 1;
+    order: 2;
     flex: 0 0 auto;
     width: auto;
     margin: 0 0 0 8px;
   }
 
   .app-shell.kq .app-header.global-header .stats-bar {
-    order: 2;
+    order: 10;
   }
 
   .app-shell.kq .header-hub-nav:not([hidden]) {
@@ -698,6 +691,7 @@
   }
 
   .app-shell.kq.view-city .app-header.global-header .stats-bar {
+    order: 10;
     flex: 1 1 100%;
     width: 100%;
     min-width: 0;
@@ -713,6 +707,110 @@
 
   .app-shell.kq.view-city .app-header.global-header .stats-bar::-webkit-scrollbar {
     display: none;
+  }
+
+  .app-shell.kq.view-city .app-header.global-header .stats-bar {
+    position: relative;
+    padding-right: 4px;
+  }
+
+  .app-shell.kq.view-city .app-header.global-header .stats-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .profile-app-shell .header-hub-nav:not([hidden]) {
+    order: 10;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  .profile-app-shell .app-header.global-header .stats-bar {
+    order: 2;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    margin-left: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: relative;
+    padding-right: 4px;
+    padding-bottom: 2px;
+  }
+
+  .profile-app-shell .app-header.global-header .stats-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .profile-app-shell .app-header.global-header .stats-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .profile-app-shell .app-header.global-header {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .profile-app-shell .app-header.global-header .brand.brand-link {
+    order: 0;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .profile-app-shell .app-header.global-header #header-city-tabs {
+    order: 1;
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 0;
+    max-width: min(180px, 48vw);
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .profile-app-shell .header-city-picker {
+    max-width: 100%;
+  }
+
+  .profile-app-shell .header-city-toggle {
+    max-width: min(100%, 280px);
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .profile-app-shell .xp-pill .rank-name {
+    margin-left: 0;
   }
 
   .app-shell.kq .stat-pill,
@@ -791,9 +889,31 @@
     display: none;
   }
 
+  .app-shell.kq.view-city .xp-pill {
+    min-width: 5.25rem;
+    max-width: min(7.75rem, 34vw);
+    overflow: hidden;
+    align-items: center;
+  }
+
+  .app-shell.kq.view-city .xp-pill-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .app-shell.kq.view-city .xp-pill .xp-pill-row {
+    flex-wrap: nowrap;
+    align-items: center;
+    min-width: 0;
+  }
+
   .app-shell.kq.view-city .xp-pill .rank-name {
-    display: inline;
-    max-width: 11ch;
+    display: block;
+    margin-left: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -865,8 +985,6 @@
   .app-shell.kq .map-panel > .europe-microstates-bar {
     padding: 8px 10px;
     border-radius: var(--radius-s);
-    border: 1px solid var(--line);
-    background: var(--surface);
     box-sizing: border-box;
     max-width: calc(100% - 56px);
   }
@@ -955,6 +1073,58 @@
 
   .app-shell.kq.view-hub .header-hub-nav:not([hidden])::-webkit-scrollbar {
     display: none;
+  }
+
+  .app-shell.kq.view-hub .header-hub-nav:not([hidden]) {
+    position: relative;
+    padding-right: 4px;
+  }
+
+  .app-shell.kq.view-hub .header-hub-nav:not([hidden])::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  body.kq.profile-page-body .header-hub-nav:not([hidden]) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: relative;
+    padding-right: 4px;
+  }
+
+  body.kq.profile-page-body .header-hub-nav:not([hidden])::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.kq.profile-page-body .header-hub-nav:not([hidden])::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
   }
 
   .app-shell.kq.view-hub .changelog-header-btn .changelog-header-label {

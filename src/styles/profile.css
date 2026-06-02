@@ -28,6 +28,30 @@ body.kq.profile-page-body {
 
 .profile-app-shell .app-header.global-header {
   margin-bottom: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+}
+
+.profile-app-shell .app-header.global-header .brand.brand-link {
+  flex: 0 0 auto;
+}
+
+.profile-app-shell .app-header.global-header #header-city-tabs {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: flex;
+}
+
+.profile-app-shell .header-hub-nav:not([hidden]) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.profile-app-shell .app-header.global-header .stats-bar {
+  flex: 0 0 auto;
+  margin-left: auto;
+  flex-wrap: nowrap;
 }
 
 .profile-app-shell #btn-theme::after {

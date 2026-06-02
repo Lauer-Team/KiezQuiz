@@ -223,7 +223,12 @@ html[data-theme="light"] .profile-sidebar {
   background: color-mix(in srgb, var(--surface, #FCFBF8) 94%, transparent);
 }
 
-/* Light · Papier — legacy base.css white text on light surfaces */
+/* Light · Papier — map dock glass + legacy base.css white text on light surfaces */
+html[data-theme="light"] .app-shell.kq {
+  --map-dock-glass: color-mix(in srgb, var(--bg) 74%, transparent);
+  --map-dock-glass-chip: color-mix(in srgb, var(--bg) 84%, transparent);
+}
+
 html[data-theme="light"] .stat-pill .value,
 html[data-theme="light"] .auth-pill,
 html[data-theme="light"] .header-city-toggle,
@@ -439,6 +444,9 @@ body::selection,
 /* --- Topbar / Header --- */
 .app-shell.kq {
   --kq-header-offset: 0px;
+  --map-dock-glass: color-mix(in srgb, var(--bg) 56%, transparent);
+  --map-dock-glass-chip: color-mix(in srgb, var(--bg) 68%, transparent);
+  --map-dock-glass-border: color-mix(in srgb, var(--line) 72%, transparent);
 }
 
 .app-shell.kq .app-header.global-header {
@@ -1045,6 +1053,13 @@ body::selection,
   align-items: center;
   margin-left: auto;
   min-width: 0;
+  padding: 6px 8px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--map-dock-glass-border);
+  background: var(--map-dock-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--bg) 35%, transparent);
 }
 
 .app-shell.kq .map-island-dock .island-overlay,
@@ -1055,17 +1070,49 @@ body::selection,
   margin: 0;
   padding: 7px 12px;
   border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--surface);
+  border: 1px solid var(--map-dock-glass-border);
+  background: var(--map-dock-glass-chip);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   font-size: 12px;
   font-weight: 600;
   color: var(--text-2);
   box-shadow: none;
 }
 
-.app-shell.kq .map-island-dock .island-overlay:hover {
+.app-shell.kq .map-island-dock .island-overlay:hover,
+.app-shell.kq .map-island-dock .europe-island-overlay:hover {
   border-color: color-mix(in srgb, var(--acc) 55%, var(--line));
   color: var(--text-1);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+}
+
+.app-shell.kq .map-microstates-dock:not([hidden]),
+.app-shell.kq .map-panel > .europe-microstates-bar:not([hidden]) {
+  background: var(--map-dock-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--map-dock-glass-border);
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--bg) 35%, transparent);
+}
+
+.app-shell.kq .europe-microstate-chip {
+  border-color: var(--map-dock-glass-border);
+  background: var(--map-dock-glass-chip);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.app-shell.kq .europe-microstate-chip:hover,
+.app-shell.kq .europe-microstate-chip:focus-visible {
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  border-color: color-mix(in srgb, var(--acc) 40%, var(--line));
+}
+
+body.map-play-active .app-shell.kq .map-island-dock,
+body.map-play-active .app-shell.kq .map-microstates-dock,
+body.map-play-active .app-shell.kq .europe-microstates-bar {
+  display: none !important;
 }
 
 .app-shell.kq .map-island-dock .islands-stack {
@@ -1292,7 +1339,7 @@ body::selection,
   z-index: 50;
 }
 
-.app-shell.kq .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls {
+body:not(.map-play-active) .app-shell.kq .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls {
   bottom: calc(14px + 58px);
 }
 

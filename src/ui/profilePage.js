@@ -175,6 +175,7 @@
         : t('ranks.maxReached');
     }
     if (progFill) progFill.style.width = `${pct}%`;
+    window.kiezGlobalHeader?.renderProfileCityPicker?.();
   }
 
   function openSettingsModal() {
