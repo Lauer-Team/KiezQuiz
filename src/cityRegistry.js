@@ -14,7 +14,26 @@
     capitals: 'STADTTEILE'
   };
 
+  function isLightTheme() {
+    try {
+      if (window.kiezTheme?.getTheme) return window.kiezTheme.getTheme() === 'light';
+    } catch (_) { /* ignore */ }
+    return document.documentElement.dataset.theme === 'light'
+      || document.body?.dataset.theme === 'light';
+  }
+
   function accentVars(hue) {
+    if (isLightTheme()) {
+      return {
+        '--acc-h': String(hue),
+        '--acc': `hsl(${hue} 60% 38%)`,
+        '--acc-bright': `hsl(${hue} 55% 30%)`,
+        '--acc-line': `hsl(${hue} 45% 38% / 0.35)`,
+        '--acc-fill': `hsl(${hue} 50% 42% / 0.12)`,
+        '--acc-fill-soft': `hsl(${hue} 50% 42% / 0.06)`,
+        '--acc-glow': `hsl(${hue} 55% 38% / 0.2)`
+      };
+    }
     return {
       '--acc-h': String(hue),
       '--acc': `hsl(${hue} 100% 62%)`,

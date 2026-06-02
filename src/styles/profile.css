@@ -67,7 +67,7 @@ body.kq.profile-page-body {
   flex-direction: column;
   gap: 1.25rem;
   padding: 1.25rem 1rem;
-  background: rgba(15, 17, 24, 0.72);
+  background: color-mix(in srgb, var(--bg-surface, var(--surface, #171A24)) 94%, transparent);
   border-right: 1px solid var(--border-color);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);

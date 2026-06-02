@@ -14,8 +14,9 @@
   function applyTheme(theme) {
     const t = theme === 'light' ? 'light' : 'dark';
     document.documentElement.dataset.theme = t;
-    document.body.dataset.theme = t;
-    document.querySelectorAll('.app-shell, .about-shell.kq').forEach((el) => {
+    document.documentElement.style.colorScheme = t;
+    if (document.body) document.body.dataset.theme = t;
+    document.querySelectorAll('.app-shell, .about-shell, .profile-app-shell').forEach((el) => {
       el.dataset.theme = t;
     });
     const meta = document.querySelector('meta[name="theme-color"]');
@@ -35,7 +36,11 @@
     return setTheme(getTheme() === 'dark' ? 'light' : 'dark');
   }
 
+  window.kiezTheme = { getTheme, setTheme, toggleTheme, applyTheme };
+
   applyTheme(getTheme());
 
-  window.kiezTheme = { getTheme, setTheme, toggleTheme, applyTheme };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => applyTheme(getTheme()));
+  }
 })();

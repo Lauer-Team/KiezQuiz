@@ -40,6 +40,9 @@
   <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <script>
+  (function(){try{var t=localStorage.getItem('kiezquiz_theme');if(t==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,600;10..48,700;10..48,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -159,7 +162,7 @@
         <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
         <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf" hidden aria-hidden="true">📋</button>
         <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
-        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten">☀</button>
+        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"></button>
         <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
       </div>
     </header>
@@ -265,7 +268,7 @@
         <!-- Bypass progression Toggle -->
         <div class="glass-card" style="padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
           <div style="display: flex; flex-direction: column;">
-            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;" data-i18n="progress.unlockAll">Alle Bezirke freischalten</span>
+            <span style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);" data-i18n="progress.unlockAll">Alle Bezirke freischalten</span>
             <span style="font-size: 0.75rem; color: var(--text-secondary);" data-i18n="progress.unlockAllHint">Bypass für Profis (keine Progression)</span>
           </div>
           <label class="switch">

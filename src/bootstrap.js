@@ -203,6 +203,11 @@
     bindHeaderControls();
     syncLangButton();
     syncMuteButton();
+    var game = window.kiezQuizGame || window.hamburgGame;
+    var hubView = document.getElementById('hub-view');
+    if (game && hubView && !hubView.hidden && window.kiezHub?.render) {
+      window.kiezHub.render(game, hubView);
+    }
   }
 
   window.applyRedesignChrome = applyRedesignChrome;

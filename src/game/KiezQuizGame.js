@@ -1646,7 +1646,7 @@ class KiezQuizGame {
     alertBox.innerHTML = `
       <div style="font-size: 2rem;">🏆</div>
       <div>
-        <div style="font-weight:700; color:#fff; font-size:0.95rem; margin-bottom: 0.15rem;">${t('achievement.unlocked')}</div>
+        <div style="font-weight:700; color:var(--text-primary); font-size:0.95rem; margin-bottom: 0.15rem;">${t('achievement.unlocked')}</div>
         <div style="font-weight:700; color:var(--color-xp); font-size:0.85rem; margin-bottom: 0.15rem;">${title}</div>
         <div style="font-size:0.75rem; color:var(--text-secondary);">${desc}</div>
       </div>
@@ -1684,7 +1684,7 @@ class KiezQuizGame {
     const modal = openOverlayModal(`
       <div class="modal-content">
         <h2 style="font-size: 2.2rem; color: var(--color-xp); text-shadow: 0 0 15px rgba(255, 191, 0, 0.3);">${t('levelUp.title')}</h2>
-        <p style="margin-top:0.5rem; font-weight:700; font-size: 1.1rem; color:#fff;">${t('levelUp.rank', { name: rank.name })}</p>
+        <p style="margin-top:0.5rem; font-weight:700; font-size: 1.1rem; color:var(--text-primary);">${t('levelUp.rank', { name: rank.name })}</p>
         <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">${t('levelUp.body')}</p>
         <div class="round-end-actions" style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
           <button class="primary-btn" id="btn-lvl-dismiss">${t('levelUp.dismiss')}</button>
@@ -2576,7 +2576,7 @@ class KiezQuizGame {
         <!-- Play / Round Controls -->
         <div class="round-setup-card" id="round-setup-ui" style="display: flex; flex-direction: column; gap: 0.75rem; text-align: center;">
           <div style="font-size: 1.8rem;">🎮</div>
-          <h4 style="font-family: var(--font-display); font-weight:700; color: #fff;">${t('game.roundStartTitle')}</h4>
+          <h4 style="font-family: var(--font-display); font-weight:700; color: var(--text-primary);">${t('game.roundStartTitle')}</h4>
           <p style="font-size:0.82rem; color: var(--text-secondary);">
             ${t('game.roundStartDesc')}
             <br><strong>${t('game.timeLimit')}</strong>
@@ -2602,7 +2602,7 @@ class KiezQuizGame {
           <div class="timer-display" id="round-timer-display">10:00</div>
           <!-- Round Indicators -->
           <div style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.6rem; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; margin-bottom: 0.75rem;">
-            <div id="round-questions-count" style="font-weight: 700; color: #fff;">${t('game.questionCount', { current: 0, total: 0 })}</div>
+            <div id="round-questions-count" style="font-weight: 700; color: var(--text-primary);">${t('game.questionCount', { current: 0, total: 0 })}</div>
             <div style="display:flex; gap:0.75rem;">
               <span style="color: var(--color-correct); font-weight:700;">🟢 <span id="round-correct-count">0</span></span>
               <span style="color: var(--color-incorrect); font-weight:700;">🔴 <span id="round-incorrect-count">0</span></span>
@@ -3370,7 +3370,7 @@ class KiezQuizGame {
     container.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 0.75rem; text-align: center; padding: 0.5rem;">
         <div style="font-size: 2.2rem;">🏁</div>
-        <h3 style="font-family: var(--font-display); font-weight:700; color: #fff;">${t('game.roundEnded')}</h3>
+        <h3 style="font-family: var(--font-display); font-weight:700; color: var(--text-primary);">${t('game.roundEnded')}</h3>
         ${timedOut ? `<p style="font-size:0.85rem; color:var(--color-incorrect); font-weight:700;">${t('game.timeUp')}</p>` : ''}
         <p style="font-size:0.85rem; color:var(--text-secondary);">${t('game.playDuration')} <strong>${this.formatDuration(durationSec)}</strong></p>
         
@@ -3452,7 +3452,7 @@ class KiezQuizGame {
     container.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:center;" id="name-all-setup">
         <div style="font-size:2.2rem;">⏱️</div>
-        <h4 style="font-family:var(--font-display); font-weight:700; color:#fff;">${isBz ? t('nameAll.titleBezirke') : t('nameAll.titleStadtteile')}</h4>
+        <h4 style="font-family:var(--font-display); font-weight:700; color:var(--text-primary);">${isBz ? t('nameAll.titleBezirke') : t('nameAll.titleStadtteile')}</h4>
         <p style="font-size:0.82rem; color:var(--text-secondary);">
           ${isBz ? t('nameAll.introBezirke') : t('nameAll.introStadtteile')}
           ${t('nameAll.introSuffix')}
@@ -3469,7 +3469,7 @@ class KiezQuizGame {
         <div class="timer-display" id="timer-display">10:00</div>
         
         <div style="background: rgba(0,0,0,0.15); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.5rem; display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
-          <span style="font-weight:700; color:#fff;">${t('nameAll.found')}</span>
+          <span style="font-weight:700; color:var(--text-primary);">${t('nameAll.found')}</span>
           <span style="font-weight:700; color:var(--color-correct);" id="name-all-counter">0 / 104</span>
         </div>
 
@@ -3752,7 +3752,7 @@ class KiezQuizGame {
     container.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:center; padding: 0.5rem;">
         <div style="font-size:2.2rem;">⏱️</div>
-        <h3 style="font-family:var(--font-display); font-weight:700; color:#fff;">${t('nameAll.challengeEnded')}</h3>
+        <h3 style="font-family:var(--font-display); font-weight:700; color:var(--text-primary);">${t('nameAll.challengeEnded')}</h3>
         
         <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.25rem;">
           ${resultMsg}

@@ -5,7 +5,11 @@
 
 /* --- Token bridge: map legacy vars → CI tokens --- */
 .app-shell.kq,
-.app-shell[data-theme] {
+.app-shell[data-theme],
+.profile-app-shell.kq,
+.profile-app-shell[data-theme],
+.about-shell.kq,
+.about-shell[data-theme] {
   --font-sans: var(--text, "Hanken Grotesk", system-ui, sans-serif);
   --font-display: var(--display, "Bricolage Grotesque", system-ui, sans-serif);
   --font-mono: var(--mono, "Space Mono", ui-monospace, monospace);
@@ -64,6 +68,7 @@
 
 /* Theme tokens on :root so body + shell both react to toggle */
 html[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0F1118;
   --bg-grad: radial-gradient(120% 90% at 82% -8%, #1b1f2e 0%, #0F1118 56%);
   --bg-main: #0F1118;
@@ -74,35 +79,236 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="light"] {
+  color-scheme: light;
   --bg: #F1ECE0;
   --bg-grad: radial-gradient(120% 90% at 82% -8%, #fbf8f1 0%, #F1ECE0 60%);
   --bg-main: #F1ECE0;
+  --bg-surface: rgba(252, 251, 248, 0.94);
+  --bg-surface-hover: rgba(243, 238, 226, 0.98);
   --text-primary: #0F1118;
   --text-secondary: #2b2620;
-  --text-muted: #7d7666;
-  --border-color: #DCD3C0;
+  --text-muted: #5C5649;
+  --border-color: rgba(15, 17, 24, 0.1);
+  --border-color-glow: rgba(255, 82, 51, 0.28);
+  --color-default-path: #D4CBB5;
+  --map-bg: #E9E2D2;
+  --kreide: #0F1118;
+  --tinte: #0F1118;
+  --nebel: #5C5649;
+  --acc: #2563B0;
+  --acc-bright: #1B4F96;
+  --acc-line: rgba(37, 99, 176, 0.35);
+  --acc-fill: rgba(37, 99, 176, 0.12);
+  --acc-fill-soft: rgba(37, 99, 176, 0.07);
+  --acc-glow: rgba(37, 99, 176, 0.22);
+  --color-neutral-glow: #2563B0;
+  --himmel: #2563B0;
+  --color-xp: #5A7A00;
+  --strom: #5A7A00;
+  --bernstein: #8A5A00;
 }
 
 /* Light · Papier — ensure shell picks up theme when html toggles */
 html[data-theme="light"] .app-shell.kq,
-html[data-theme="light"] .about-shell.kq {
+html[data-theme="light"] .about-shell.kq,
+html[data-theme="light"] .profile-app-shell.kq {
   --bg: #F1ECE0;
   --bg-grad: radial-gradient(120% 90% at 82% -8%, #fbf8f1 0%, #F1ECE0 60%);
   --surface: #FCFBF8;
   --surface-2: #F3EEE2;
   --surface-3: #E7E0D0;
   --line: #DCD3C0;
+  --line-soft: #E7E0D0;
   --text-1: #0F1118;
   --text-2: #2b2620;
-  --text-3: #7d7666;
-  --text-4: #a39a86;
+  --text-3: #5C5649;
+  --text-4: #7A7264;
   --map-bg: #E9E2D2;
   --bg-main: #F1ECE0;
   --text-primary: #0F1118;
   --text-secondary: #2b2620;
-  --text-muted: #7d7666;
+  --text-muted: #5C5649;
   --border-color: #DCD3C0;
   --bg-surface: #FCFBF8;
+  --bg-surface-hover: #F3EEE2;
+  --shadow: 0 16px 40px -20px rgba(60, 50, 30, 0.45);
+  --kreide: #0F1118;
+  --acc: #2563B0;
+  --acc-bright: #1B4F96;
+  --acc-line: rgba(37, 99, 176, 0.35);
+  --acc-fill: rgba(37, 99, 176, 0.12);
+  --acc-fill-soft: rgba(37, 99, 176, 0.07);
+  --acc-glow: rgba(37, 99, 176, 0.22);
+  --color-neutral-glow: #2563B0;
+  --himmel: #2563B0;
+  --color-xp: #5A7A00;
+  --strom: #5A7A00;
+  --bernstein: #8A5A00;
+}
+
+/* Light · Papier — legacy base.css + overlays */
+html[data-theme="light"] .overlay-modal {
+  background: rgba(241, 236, 224, 0.78);
+}
+
+html[data-theme="light"] .modal-content {
+  background: radial-gradient(circle at top right, rgba(90, 169, 255, 0.1), transparent 60%), var(--surface, #FCFBF8);
+  border-color: var(--line, #DCD3C0);
+  box-shadow: var(--shadow, 0 16px 40px -20px rgba(60, 50, 30, 0.45));
+}
+
+html[data-theme="light"] .modal-content h2 {
+  background: linear-gradient(135deg, #0F1118 35%, var(--himmel, #5AA9FF) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+html[data-theme="light"] .modal-content .mf-item {
+  background: color-mix(in srgb, var(--surface-2, #F3EEE2) 65%, transparent);
+  border-color: var(--line, #DCD3C0);
+}
+
+html[data-theme="light"] .modal-content .mf-item strong {
+  color: var(--text-primary, #0F1118);
+}
+
+html[data-theme="light"] .map-text-label {
+  fill: #0F1118;
+  stroke: rgba(252, 251, 248, 0.92);
+}
+
+html[data-theme="light"] .stadtteil-path {
+  stroke: color-mix(in srgb, var(--papier, #F1ECE0) 55%, #0F1118);
+}
+
+html[data-theme="light"] .stadtteil-path:hover {
+  stroke: var(--tinte, #0F1118) !important;
+  filter: drop-shadow(0 0 4px rgba(15, 17, 24, 0.22)) !important;
+}
+
+html[data-theme="light"] .stadtteil-path.unlocked-bezirk {
+  fill: rgba(15, 17, 24, 0.05);
+  stroke: rgba(15, 17, 24, 0.12);
+}
+
+html[data-theme="light"] .hub-level-track,
+html[data-theme="light"] .hub-city-card--wish {
+  background: color-mix(in srgb, var(--surface-2, #F3EEE2) 80%, transparent);
+}
+
+html[data-theme="light"] .hub-city-card:not(.hub-city-card--wish) {
+  background: color-mix(in srgb, var(--surface, #FCFBF8) 92%, transparent);
+}
+
+html[data-theme="light"] .app-shell.kq .unlocker-card .district-progress-row {
+  background: color-mix(in srgb, var(--surface-2, #F3EEE2) 55%, transparent);
+}
+
+html[data-theme="light"] .profile-sidebar {
+  background: color-mix(in srgb, var(--surface, #FCFBF8) 94%, transparent);
+}
+
+/* Light · Papier — legacy base.css white text on light surfaces */
+html[data-theme="light"] .stat-pill .value,
+html[data-theme="light"] .auth-pill,
+html[data-theme="light"] .header-city-toggle,
+html[data-theme="light"] .prompt-box .prompt-target,
+html[data-theme="light"] .info-details .detail-header h2,
+html[data-theme="light"] .info-details .detail-stat .ds-value,
+html[data-theme="light"] .district-progress-row.unlocked .dp-name,
+html[data-theme="light"] .map-center-btn:hover,
+html[data-theme="light"] .map-controls .control-btn:hover,
+html[data-theme="light"] .changelog-entry-title,
+html[data-theme="light"] .trophy-name,
+html[data-theme="light"] .trophy-detail-name,
+html[data-theme="light"] .trophy-detail-desc,
+html[data-theme="light"] .rank-ladder-name,
+html[data-theme="light"] .game-history-item .gh-mode,
+html[data-theme="light"] .lang-btn.active,
+html[data-theme="light"] .text-input-field,
+html[data-theme="light"] .auth-field input,
+html[data-theme="light"] .europe-microstate-chip,
+html[data-theme="light"] .city-pill,
+html[data-theme="light"] .csi-name,
+html[data-theme="light"] .bc-mode,
+html[data-theme="light"] .wvi-name,
+html[data-theme="light"] .cpc-head h3,
+html[data-theme="light"] .cpc-unlock-num,
+html[data-theme="light"] .cpc-compact-stat,
+html[data-theme="light"] .ccb-hub-btn:hover,
+html[data-theme="light"] .city-switcher-item:hover,
+html[data-theme="light"] .modal-content .mf-item .mf-text strong,
+html[data-theme="light"] .secondary-btn:hover {
+  color: var(--text-primary);
+}
+
+html[data-theme="light"] .secondary-btn.danger-outline:hover {
+  color: var(--color-incorrect);
+}
+
+html[data-theme="light"] .changelog-header-btn,
+html[data-theme="light"] .changelog-footer-btn {
+  color: var(--bernstein);
+}
+
+html[data-theme="light"] .changelog-header-btn:hover,
+html[data-theme="light"] .changelog-footer-btn:hover {
+  color: #fff;
+}
+
+html[data-theme="light"] .footer-link-btn:hover {
+  color: var(--signal);
+}
+
+html[data-theme="light"] .profile-nav-item:hover {
+  color: var(--text-primary);
+  background: rgba(15, 17, 24, 0.04);
+  border-color: rgba(15, 17, 24, 0.08);
+}
+
+html[data-theme="light"] .profile-table-wrap {
+  background: var(--bg-surface);
+}
+
+html[data-theme="light"] .profile-data-table tbody tr:hover,
+html[data-theme="light"] .profile-request-row,
+html[data-theme="light"] .profile-history-item,
+html[data-theme="light"] .profile-stat-card {
+  background: color-mix(in srgb, var(--surface-2, #F3EEE2) 55%, transparent);
+}
+
+html[data-theme="light"] .water-group .water-body {
+  fill: hsl(42, 28%, 82%);
+}
+
+html[data-theme="light"] .water-group .water-outline,
+html[data-theme="light"] .water-group .water-fill {
+  stroke: hsl(42, 22%, 72%);
+  fill: hsl(42, 28%, 82%);
+}
+
+html[data-theme="light"] .bezirk-boundary-line,
+html[data-theme="light"] #city-view[data-city="berlin"] .bezirk-boundary-line,
+html[data-theme="light"] #city-view[data-city="frankfurt"] .bezirk-boundary-line {
+  stroke: rgba(15, 17, 24, 0.28);
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(15, 17, 24, 0.14);
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 17, 24, 0.26);
+}
+
+html[data-theme="light"] .app-shell.kq .mode-selector h3,
+html[data-theme="light"] .app-shell.kq .unlocker-card h3 {
+  color: var(--text-3);
+}
+
+html[data-theme="light"] .city-tile-greet,
+html[data-theme="light"] .hub-level-tier {
+  color: hsl(var(--acc-h, 210) 55% 30%);
 }
 
 /* --- Global shell --- */
@@ -1306,14 +1512,19 @@ body.kq.profile-page-body[data-theme="light"] {
   --bg: #F1ECE0;
   --bg-grad: radial-gradient(120% 90% at 82% -8%, #fbf8f1 0%, #F1ECE0 60%);
   --surface: #FCFBF8;
+  --surface-2: #F3EEE2;
   --line: #DCD3C0;
   --text-1: #0F1118;
   --text-2: #2b2620;
-  --text-3: #7d7666;
+  --text-3: #5C5649;
   --border-color: #DCD3C0;
   --text-primary: var(--text-1);
   --text-secondary: var(--text-2);
   --text-muted: var(--text-3);
+  --kreide: #0F1118;
+  --acc-bright: #1B4F96;
+  --color-xp: #5A7A00;
+  --bernstein: #8A5A00;
 }
 
 body.kq.profile-page-body[data-theme="dark"] {
