@@ -189,8 +189,8 @@
       });
     };
 
-    bindHubHeaderBtn('btn-history', () => game.showGameHistory());
     bindHubHeaderBtn('btn-settings', () => game.showSettings());
+    window.kiezGlobalHeader?.sync?.(game);
 
     const langBtn = document.getElementById('btn-lang');
     if (langBtn && !langBtn.dataset.hubBound) {

@@ -10,6 +10,7 @@ window.startKiezQuizGame = async function startKiezQuizGame() {
 
   window.authManager.onAuthChange(async (user) => {
     window.authManager.updateHeaderUI();
+    window.kiezAdminBar?.scheduleRender?.();
     if (user) {
       await window.cloudSync.handleLoginMerge();
       game.reRenderCurrentView();
@@ -39,6 +40,7 @@ window.startKiezQuizGame = async function startKiezQuizGame() {
       await window.authManager.init();
       await window.authManager.waitForPendingAuthTasks();
       window.authManager.initUI();
+      window.kiezAdminBar?.scheduleRender?.();
       if (window.authManager.isLoggedIn()) {
         game.reRenderCurrentView();
         if (game.view === 'city') {

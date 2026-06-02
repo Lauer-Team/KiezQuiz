@@ -42,22 +42,29 @@
 
   async function ensureModalDeps() {
     if (typeof openOverlayModal === 'function') return;
-    if (typeof window.loadGameBundle === 'function') {
-      await window.loadGameBundle();
-      return;
-    }
     if (typeof window.loadGameCore === 'function') {
       await window.loadGameCore();
     }
+    if (typeof openOverlayModal !== 'function' && typeof window.loadGameBundle === 'function') {
+      await window.loadGameBundle();
+    }
   }
 
-  async function showChangelogModal() {
-    await ensureModalDeps();
-    if (typeof openOverlayModal !== 'function') return;
+  let changelogOpening = false;
 
-    const modal = openOverlayModal(renderChangelogHtml(), { closeOnBackdrop: true });
-    modal.querySelector('#btn-changelog-x')?.addEventListener('click', () => closeOverlayModal(modal));
-    modal.querySelector('#btn-changelog-close')?.addEventListener('click', () => closeOverlayModal(modal));
+  async function showChangelogModal() {
+    if (changelogOpening) return;
+    changelogOpening = true;
+    try {
+      await ensureModalDeps();
+      if (typeof openOverlayModal !== 'function') return;
+
+      const modal = openOverlayModal(renderChangelogHtml(), { closeOnBackdrop: true });
+      modal.querySelector('#btn-changelog-x')?.addEventListener('click', () => closeOverlayModal(modal));
+      modal.querySelector('#btn-changelog-close')?.addEventListener('click', () => closeOverlayModal(modal));
+    } finally {
+      changelogOpening = false;
+    }
   }
 
   function bindChangelogTriggers(root) {
@@ -66,6 +73,7 @@
       el.dataset.changelogBound = 'true';
       el.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
         void showChangelogModal();
       });
     });

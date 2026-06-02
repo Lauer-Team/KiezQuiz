@@ -50,6 +50,159 @@
     };
   }
 
+  function calculateGlobalLevel(xp) {
+    let level = 1;
+    for (const rank of getRanks()) {
+      if (xp >= rank.minXp) level = rank.level;
+    }
+    return level;
+  }
+
+  function getGlobalRankProgressFromSave(save) {
+    const xp = parseInt(save?.global?.xp, 10) || 0;
+    const level = calculateGlobalLevel(xp);
+    const currentRank = getRanks().find((r) => r.level === level) || getRanks()[0];
+    const nextRank = getRanks().find((r) => r.level === level + 1);
+    let percent = 100;
+    if (nextRank) {
+      const span = nextRank.minXp - currentRank.minXp;
+      percent = span > 0 ? Math.min(100, ((xp - currentRank.minXp) / span) * 100) : 0;
+    }
+    return { xp, level, currentRank, nextRank, percent };
+  }
+
+  function getProfileCityRankInfo(game, cityId) {
+    const cityLevel = window.kiezProgress.calculateCityLevel(game, cityId);
+    const ranks = getCityRanks(cityId);
+    const currentRank = ranks.find((r) => r.level === cityLevel) || ranks[0];
+    const nextRank = ranks.find((r) => r.level === cityLevel + 1);
+    const totals = window.kiezProgress.getCityRankTotals(game, cityId);
+    let percent = 100;
+    if (nextRank) {
+      const nextDistricts = nextRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalDistricts
+        : Math.min(nextRank.minDistricts, totals.totalDistricts);
+      const nextTrophies = nextRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalTrophies
+        : Math.min(nextRank.minTrophies, totals.totalTrophies);
+      const curDistricts = currentRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalDistricts
+        : Math.min(currentRank.minDistricts, totals.totalDistricts);
+      const curTrophies = currentRank.level === CITY_RANK_THRESHOLDS.length
+        ? totals.totalTrophies
+        : Math.min(currentRank.minTrophies, totals.totalTrophies);
+      const districtSpan = Math.max(nextDistricts - curDistricts, 1);
+      const trophySpan = Math.max(nextTrophies - curTrophies, 1);
+      const districtPct = Math.min(100, ((totals.unlockedDistricts - curDistricts) / districtSpan) * 100);
+      const trophyPct = Math.min(100, ((totals.trophies - curTrophies) / trophySpan) * 100);
+      percent = Math.min(districtPct, trophyPct);
+    }
+    return { currentRank, nextRank, percent, totals };
+  }
+
+  function renderRankLadderMarkup(ranks, currentLevel, hintForRank) {
+    return ranks.map((rank) => {
+      let state = 'upcoming';
+      if (rank.level < currentLevel) state = 'passed';
+      else if (rank.level === currentLevel) state = 'current';
+      const hint = hintForRank(rank);
+      return `
+        <div class="rank-ladder-step rank-ladder-step--${state}">
+          <span class="rank-ladder-dot"></span>
+          <span class="rank-ladder-label">
+            <span class="rank-ladder-name">${escapeHtml(rank.name)}</span>
+            <span class="rank-ladder-xp">${escapeHtml(hint)}</span>
+          </span>
+        </div>`;
+    }).join('');
+  }
+
+  function renderTrophyGalleryMarkup(cityId, earnedIds) {
+    const catalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(cityId) : [];
+    const earned = new Set(earnedIds || []);
+    if (!catalog.length) return `<p class="profile-empty">${t('profilePage.noTrophies')}</p>`;
+    return `<div class="trophy-gallery profile-trophy-gallery">${catalog.map((tr) => `
+      <div class="trophy-tile ${earned.has(tr.id) ? 'trophy-tile--earned' : 'trophy-tile--locked'}" title="${escapeHtml(tr.name)}">
+        <span class="trophy-icon">${tr.icon}</span>
+        <span class="trophy-name">${escapeHtml(tr.name)}</span>
+      </div>`).join('')}</div>`;
+  }
+
+  function renderGlobalAchievementsBlock(save) {
+    const { xp, level, currentRank, nextRank, percent } = getGlobalRankProgressFromSave(save);
+    const steps = renderRankLadderMarkup(getRanks(), level, (rank) => (
+      rank.maxXp !== Infinity ? `${rank.minXp} XP` : t('log.xpPlus', { xp: rank.minXp })
+    ));
+    const progressNote = nextRank
+      ? t('ranks.progressTo', { percent: Math.round(percent), name: nextRank.name, xp: nextRank.minXp })
+      : t('ranks.maxReached');
+
+    return `
+      <section class="profile-global-rank-card log-zone log-zone-global">
+        <div class="log-zone-head">
+          <span class="log-zone-tag global">${t('log.zoneGlobal')}</span>
+          <span class="log-zone-note">${t('log.zoneGlobalNote')}</span>
+        </div>
+        <p class="log-rank-current">${t('log.yourGlobalRank')}: <strong>${escapeHtml(currentRank.name)}</strong> · ${xp} XP</p>
+        <div class="rank-ladder">${steps}</div>
+        <div class="rank-xp-bar"><div class="rank-xp-bar-fill" style="width:${percent}%"></div></div>
+        <p class="log-rank-progress-note">${escapeHtml(progressNote)}</p>
+      </section>`;
+  }
+
+  function renderCityAchievementsDetails(city, save, game) {
+    const loc = window.cityRegistry.localizeCity(city);
+    const branch = save.cities[city.id] || {};
+    const rankInfo = getProfileCityRankInfo(game, city.id);
+    const cityRankKey = typeof getCityRankLocaleKey === 'function'
+      ? getCityRankLocaleKey(city.id)
+      : 'cityRanks';
+    const ranks = getCityRanks(city.id);
+    const steps = renderRankLadderMarkup(ranks, rankInfo.currentRank.level, (rank) => {
+      const isMax = rank.level === ranks.length;
+      const reqDistricts = isMax ? rankInfo.totals.totalDistricts : Math.min(rank.minDistricts, rankInfo.totals.totalDistricts);
+      const reqTrophies = isMax ? rankInfo.totals.totalTrophies : Math.min(rank.minTrophies, rankInfo.totals.totalTrophies);
+      return t(`${cityRankKey}.progressHint`, {
+        districts: reqDistricts,
+        totalDistricts: rankInfo.totals.totalDistricts,
+        trophies: reqTrophies,
+        totalTrophies: rankInfo.totals.totalTrophies
+      });
+    });
+    const progressNote = rankInfo.nextRank
+      ? t(`${cityRankKey}.progressTo`, { percent: Math.round(rankInfo.percent), name: rankInfo.nextRank.name })
+      : t(`${cityRankKey}.maxReached`);
+    const highScore = parseInt(branch.highScore, 10) || 0;
+    const history = getCityBranchHistory(city.id, save).slice(0, 5);
+    const historyHtml = history.length
+      ? `<div class="game-history-list profile-history-list">${history.map((item) => formatHistoryItem(item)).join('')}</div>`
+      : `<p class="profile-empty">${t('profilePage.noHistory')}</p>`;
+    const trophyIds = Array.isArray(branch.trophies) ? branch.trophies : [];
+    const accentStyle = Object.entries(window.cityRegistry.accentVars(city.hue))
+      .map(([k, v]) => `${k}:${v}`).join(';');
+
+    return `
+      <details class="profile-city-details" style="${accentStyle}">
+        <summary class="profile-city-summary">
+          <span class="profile-city-summary-dot"></span>
+          <span class="profile-city-summary-name">${escapeHtml(loc.name)}</span>
+          <span class="profile-city-summary-rank">${escapeHtml(rankInfo.currentRank.name)}</span>
+          <span class="profile-city-summary-meta">🏆 ${rankInfo.totals.trophies}/${rankInfo.totals.totalTrophies}</span>
+        </summary>
+        <div class="profile-city-details-body log-zone log-zone-city">
+          <p class="log-rank-current">${t(`${cityRankKey}.yourRank`)}: <strong>${escapeHtml(rankInfo.currentRank.name)}</strong></p>
+          <div class="rank-ladder rank-ladder-city">${steps}</div>
+          <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${rankInfo.percent}%"></div></div>
+          <p class="log-rank-progress-note">${escapeHtml(progressNote)}</p>
+          <p class="profile-stat-line">${t('profilePage.cityHighScore', { score: formatNumber(highScore) })}</p>
+          <h4 class="profile-section-title">${t('log.trophies', { won: rankInfo.totals.trophies, total: rankInfo.totals.totalTrophies })}</h4>
+          ${renderTrophyGalleryMarkup(city.id, trophyIds)}
+          <h4 class="profile-section-title">${t('profilePage.recentRuns')}</h4>
+          ${historyHtml}
+        </div>
+      </details>`;
+  }
+
   function getModeDisplayLabel(mode, segment) {
     if (typeof getModeLabel === 'function') {
       return getModeLabel(mode, segment) || mode || '—';
@@ -143,33 +296,19 @@
   function renderAchievementsSection() {
     const save = window.saveManager?.loadSave?.() || window.saveManager?.createEmptySave?.();
     const game = buildProfileGameContext(save);
-    const cards = getPlayableCities().map((city) => {
+    getPlayableCities().forEach((city) => {
       window.saveManager?.ensureCityBranch?.(save, city.id);
-      const branch = save.cities[city.id] || {};
-      const level = window.kiezProgress?.calculateCityLevel?.(game, city.id) || 1;
-      const totals = window.kiezProgress?.getCityRankTotals?.(game, city.id) || {};
-      const highScore = parseInt(branch.highScore, 10) || 0;
-      const history = getCityBranchHistory(city.id, save).slice(0, 3);
-      const historyHtml = history.length
-        ? `<div class="profile-history-list">${history.map((item) => formatHistoryItem(item)).join('')}</div>`
-        : `<p class="profile-empty">${t('profilePage.noHistory')}</p>`;
-
-      return `
-        <article class="profile-city-card">
-          <h3>${escapeHtml(city.name)}</h3>
-          <p class="profile-stat-line">${t('profilePage.cityLevel', { level })}</p>
-          <p class="profile-stat-line">${t('profilePage.cityDistricts', { unlocked: totals.unlockedDistricts, total: totals.totalDistricts })}</p>
-          <p class="profile-stat-line">${t('profilePage.cityTrophies', { won: totals.trophies, total: totals.totalTrophies })}</p>
-          <p class="profile-stat-line">${t('profilePage.cityHighScore', { score: formatNumber(highScore) })}</p>
-          <p class="profile-section-title" style="margin-top:0.75rem;font-size:0.8rem;">${t('profilePage.recentRuns')}</p>
-          ${historyHtml}
-        </article>`;
-    }).join('');
+    });
+    const cityBlocks = getPlayableCities()
+      .map((city) => renderCityAchievementsDetails(city, save, game))
+      .join('');
 
     return `
       <section class="profile-panel" id="profile-section-achievements">
         <p class="profile-panel-intro">${t('profilePage.achievementsIntro')}</p>
-        <div class="profile-city-grid">${cards}</div>
+        ${renderGlobalAchievementsBlock(save)}
+        <h3 class="profile-section-title profile-cities-heading">${t('profilePage.citiesHeading')}</h3>
+        <div class="profile-city-stack">${cityBlocks}</div>
       </section>`;
   }
 
@@ -688,15 +827,18 @@
     window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
     window.authManager.onAuthChange(async () => {
       window.authManager.updateHeaderUI();
+      window.kiezAdminBar?.scheduleRender?.();
       await refreshAccess();
     });
 
     try {
       await window.authManager.init();
       window.authManager.initUI();
+      window.kiezAdminBar?.scheduleRender?.();
     } catch (err) {
       console.warn('Profile auth startup failed:', err);
       window.authManager.initUI();
+      window.kiezAdminBar?.scheduleRender?.();
     }
 
     await refreshAccess();

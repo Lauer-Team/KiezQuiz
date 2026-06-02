@@ -85,6 +85,38 @@ function closeOverlayModal(modal) {
   }
 }
 
+function closeTopOverlayModal() {
+  const modals = document.querySelectorAll('.overlay-modal');
+  const top = modals[modals.length - 1];
+  if (top) closeOverlayModal(top);
+  return !!top;
+}
+
+function setupGlobalEscapeHandler() {
+  if (document.documentElement.dataset.kqEscapeBound === 'true') return;
+  document.documentElement.dataset.kqEscapeBound = 'true';
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (closeTopOverlayModal()) {
+      e.preventDefault();
+      return;
+    }
+    const game = window.kiezQuizGame || window.hamburgGame;
+    if (game?.view === 'city' && game.mapNav) {
+      e.preventDefault();
+      game.mapNav.reset();
+    }
+  });
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupGlobalEscapeHandler);
+  } else {
+    setupGlobalEscapeHandler();
+  }
+}
+
 function launchConfetti(soundManager) {
   if (soundManager) soundManager.playApplause();
   const container = document.createElement('div');

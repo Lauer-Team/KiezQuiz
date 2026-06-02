@@ -28,7 +28,11 @@
     "homeTitle": "Back to home",
     "streakTitle": "Your current answer streak",
     "xpTitle": "Your experience points",
-    "changelogTitle": "View all updates and what's new"
+    "changelogTitle": "View all updates and what's new",
+    "adminLoggedIn": "Logged in as admin",
+    "adminOpen": "Admin area",
+    "adminCityWishes": "City wishes",
+    "adminChangelog": "What's new?"
   },
   "segment": {
     "stadtteile": "🏙️ Districts",
@@ -198,7 +202,9 @@
     "backToApp": "Back to app",
     "noCloudTitle": "Cloud not configured",
     "noCloudBody": "Supabase is not set up — profile is only available in the live environment.",
-    "achievementsIntro": "Per-city progress from your save (local and cloud).",
+    "achievementsIntro": "Global XP rank and per-city progress — expand each city below.",
+    "citiesHeading": "Cities",
+    "noTrophies": "No trophies in this city yet.",
     "cityLevel": "City rank: level {level}",
     "cityDistricts": "Districts: {unlocked} / {total}",
     "cityTrophies": "Trophies: {won} / {total}",
@@ -772,6 +778,9 @@
   "log": {
     "title": "📋 Log",
     "intro": "This is how KiezQuiz separates your progress.",
+    "introGlobalOnly": "Your global XP rank applies in every city. City trophies and city rank are in the full game log or on your profile.",
+    "introCityOnly": "City rank and trophies apply only in {city} — each city has its own progress.",
+    "titleCity": "City rank & trophies",
     "zoneGlobal": "Global",
     "zoneGlobalNote": "XP rank · applies across all cities",
     "yourGlobalRank": "Global rank",
@@ -864,7 +873,8 @@
     "mastered": "mastered",
     "gateHint": "🔒 Reach 75% in one {singular} to unlock the next.",
     "trophies": "Trophies",
-    "viewLog": "View trophies & rank"
+    "viewLog": "View trophies & rank",
+    "viewRankTrophies": "View city rank & trophies"
   },
   "cities": {
     "tier": {

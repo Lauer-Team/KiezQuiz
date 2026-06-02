@@ -199,22 +199,23 @@
     });
 
     container.innerHTML = `
-      <div class="city-progress-compact" title="${escapeHtml(city.name)} · ${t('cityProgress.title')}">
-        <div class="cpc-compact-rank">
+      <div class="city-progress-compact">
+        <button type="button" class="cpc-compact-rank cpc-compact-rank-btn" id="btn-city-progress-rank"
+          title="${escapeHtml(t('cityProgress.viewRankTrophies'))}"
+          aria-label="${escapeHtml(t('cityProgress.viewRankTrophies'))}">
           <span class="cpc-compact-label">${t('cityProgress.cityRank')}</span>
           <span class="cpc-compact-name">${currentRank.name}</span>
           <div class="cpc-compact-bar"><div class="cpc-compact-fill" style="width:${percent}%"></div></div>
           <span class="cpc-compact-meta">${progressHint}</span>
-        </div>
+        </button>
         <div class="cpc-compact-stats">
           <span class="cpc-compact-stat" title="${level.label} ${t('cityProgress.unlocked')}">${prog.unlocked}/${prog.total}</span>
           <span class="cpc-compact-stat" title="${t('cityProgress.trophies')}">🏆 ${won}/${total}</span>
         </div>
-        <button type="button" class="cpc-compact-btn" id="btn-city-progress-log">${t('cityProgress.viewLog')}</button>
       </div>`;
 
-    container.querySelector('#btn-city-progress-log')?.addEventListener('click', () => {
-      if (window.kiezModals?.showLogModal) window.kiezModals.showLogModal(game);
+    container.querySelector('#btn-city-progress-rank')?.addEventListener('click', () => {
+      if (window.kiezModals?.showLogModal) window.kiezModals.showLogModal(game, { cityOnly: true });
     });
   }
 

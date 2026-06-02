@@ -368,7 +368,7 @@ class MapNavigator {
     setTimeout(() => this.svg.classList.remove('smooth-transition'), 400);
   }
 
-  zoomToPaths(paths, { padding = 1, maxZoom = 8, minZoom = 0.8 } = {}) {
+  zoomToPaths(paths, { padding = 2, maxZoom = 4, minZoom = 0.55 } = {}) {
     if (!paths?.length || !this.container || !this.svg) return;
 
     const cw = this.container.clientWidth;
