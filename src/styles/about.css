@@ -47,25 +47,6 @@ body.about-page-body {
   display: none;
 }
 
-.about-header-actions {
-  margin-left: auto;
-}
-
-.about-header-actions .xp-pill {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-.about-app-shell #about-btn-theme::after {
-  content: '☀';
-  font-size: 16px;
-}
-
-.about-app-shell[data-theme="light"] #about-btn-theme::after {
-  content: '☾';
-}
-
 .about-topbar-actions {
   display: flex;
   align-items: center;
