@@ -33,15 +33,17 @@
     });
   }
 
-  function showLogModal(game) {
+  function showLogModal(game, { globalOnly = false, cityOnly = false } = {}) {
     const city = window.cityRegistry.localizeCity(window.cityRegistry.getCity(game.activeCityId || 'hamburg'));
-    const { currentRank, nextRank, percent } = game.getRankProgressInfo();
+    const { currentRank, nextRank, percent } = cityOnly
+      ? { currentRank: null, nextRank: null, percent: 0 }
+      : game.getRankProgressInfo();
     const cityRankInfo = game.getCityRankProgressInfo();
     const trophyCatalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(game.activeCityId) : [];
     const won = game.trophies.size;
     const total = trophyCatalog.length;
 
-    const rankSteps = getRanks().map((rank) => {
+    const rankSteps = cityOnly ? '' : getRanks().map((rank) => {
       let state = 'upcoming';
       if (rank.level < game.level) state = 'passed';
       else if (rank.level === game.level) state = 'current';
@@ -56,9 +58,9 @@
         </div>`;
     }).join('');
 
-    const progressNote = nextRank
+    const progressNote = cityOnly ? '' : (nextRank
       ? t('ranks.progressTo', { percent: Math.round(percent), name: nextRank.name, xp: nextRank.minXp })
-      : t('ranks.maxReached');
+      : t('ranks.maxReached'));
 
     const cityRankKey = typeof getCityRankLocaleKey === 'function'
       ? getCityRankLocaleKey(game.activeCityId)
@@ -126,12 +128,40 @@
     const accentStyle = Object.entries(window.cityRegistry.accentVars(city.hue))
       .map(([k, v]) => `${k}:${v}`).join(';');
 
-    const modal = openOverlayModal(`
-      <div class="modal-content log-modal-content">
-        <button type="button" class="modal-x" id="btn-log-x">✕</button>
-        <h2>${t('log.title')}</h2>
-        <p class="log-modal-intro">${t('log.intro')}</p>
+    const cityZoneHtml = globalOnly ? '' : `
+        <div class="log-zone log-zone-city" style="${accentStyle}">
+          <div class="log-zone-head">
+            <span class="log-zone-tag city">${city.name}</span>
+            <span class="log-zone-note">${t('log.zoneCityNote', { won, total })}</span>
+          </div>
+          <p class="log-rank-current">${t(`${cityRankKey}.yourRank`)}: <strong style="color:var(--acc-bright)">${cityRankInfo.currentRank.name}</strong></p>
+          <div class="rank-ladder rank-ladder-city">${cityRankSteps}</div>
+          <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${cityRankInfo.percent}%"></div></div>
+          <p class="log-rank-progress-note">${cityProgressNote}</p>
+          <div class="trophy-gallery">${trophyTiles}</div>
+          ${cityOnly ? '' : `<p class="log-city-note">${t('log.cityNote')}</p>`}
+        </div>`;
 
+    const historySectionHtml = (globalOnly || cityOnly) ? '' : `
+        <div class="log-history-section">
+          <h3 class="log-section-title">${t('log.historyTitle')}</h3>
+          ${listHtml}
+        </div>`;
+
+    const introHtml = cityOnly
+      ? `<p class="log-modal-intro">${t('log.introCityOnly', { city: city.name })}</p>`
+      : globalOnly
+        ? `<p class="log-modal-intro">${t('log.introGlobalOnly')}</p>`
+        : `<p class="log-modal-intro">${t('log.intro')}</p>`;
+
+    const modalTitle = cityOnly ? t('log.titleCity') : t('log.title');
+    const modalModifier = globalOnly
+      ? ' log-modal-content--global-only'
+      : cityOnly
+        ? ' log-modal-content--city-only'
+        : '';
+
+    const globalZoneHtml = cityOnly ? '' : `
         <div class="log-zone log-zone-global">
           <div class="log-zone-head">
             <span class="log-zone-tag global">${t('log.zoneGlobal')}</span>
@@ -145,32 +175,23 @@
             <p class="log-xp-hint">${t('log.xpHint1')}</p>
             <p class="log-xp-hint">${t('log.xpHint2')}</p>
           </div>
-        </div>
+        </div>`;
 
-        <div class="log-zone log-zone-city" style="${accentStyle}">
-          <div class="log-zone-head">
-            <span class="log-zone-tag city">${city.name}</span>
-            <span class="log-zone-note">${t('log.zoneCityNote', { won, total })}</span>
-          </div>
-          <p class="log-rank-current">${t(`${cityRankKey}.yourRank`)}: <strong style="color:var(--acc-bright)">${cityRankInfo.currentRank.name}</strong></p>
-          <div class="rank-ladder rank-ladder-city">${cityRankSteps}</div>
-          <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${cityRankInfo.percent}%"></div></div>
-          <p class="log-rank-progress-note">${cityProgressNote}</p>
-          <div class="trophy-gallery">${trophyTiles}</div>
-          <p class="log-city-note">${t('log.cityNote')}</p>
-        </div>
-
-        <div class="log-history-section">
-          <h3 class="log-section-title">${t('log.historyTitle')}</h3>
-          ${listHtml}
-        </div>
+    const modal = openOverlayModal(`
+      <div class="modal-content log-modal-content${modalModifier}">
+        <button type="button" class="modal-x" id="btn-log-x">✕</button>
+        <h2>${modalTitle}</h2>
+        ${introHtml}
+        ${globalZoneHtml}
+        ${cityZoneHtml}
+        ${historySectionHtml}
         <button type="button" class="primary-btn" id="btn-history-close">${t('log.close')}</button>
       </div>
     `, { closeOnBackdrop: true });
 
     document.getElementById('btn-log-x')?.addEventListener('click', () => closeOverlayModal(modal));
     document.getElementById('btn-history-close')?.addEventListener('click', () => closeOverlayModal(modal));
-    bindTrophyClicks(modal.querySelector('.trophy-gallery'), game);
+    if (!globalOnly) bindTrophyClicks(modal.querySelector('.trophy-gallery'), game);
   }
 
   async function showWishModal() {

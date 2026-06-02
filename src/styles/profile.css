@@ -129,6 +129,97 @@
   color: var(--kreide);
 }
 
+.profile-global-rank-card {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 191, 0, 0.25);
+  background: rgba(255, 191, 0, 0.06);
+}
+
+.profile-cities-heading {
+  margin: 0 0 0.75rem;
+}
+
+.profile-city-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.profile-city-details {
+  border: 1px solid var(--acc-line, var(--border-color));
+  border-radius: var(--radius-lg);
+  background: var(--acc-fill-soft, rgba(255, 255, 255, 0.03));
+  overflow: hidden;
+}
+
+.profile-city-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  color: var(--kreide);
+}
+
+.profile-city-summary::-webkit-details-marker {
+  display: none;
+}
+
+.profile-city-summary::after {
+  content: '▾';
+  margin-left: auto;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+.profile-city-details[open] .profile-city-summary::after {
+  transform: rotate(180deg);
+}
+
+.profile-city-summary-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--acc-bright, var(--signal));
+  box-shadow: 0 0 8px var(--acc-glow, transparent);
+  flex-shrink: 0;
+}
+
+.profile-city-summary-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+}
+
+.profile-city-summary-rank {
+  font-size: 0.82rem;
+  color: var(--acc-bright, var(--color-xp));
+}
+
+.profile-city-summary-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.profile-city-details-body {
+  padding: 0 1rem 1rem;
+  border-top: 1px solid var(--acc-line, rgba(255, 255, 255, 0.08));
+}
+
+.profile-trophy-gallery {
+  margin-bottom: 0.75rem;
+}
+
+.profile-history-list .profile-history-item {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .profile-main {
   flex: 1;
   padding: 1.25rem 1.5rem 2.5rem;

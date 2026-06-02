@@ -152,7 +152,7 @@
 
 .city-progress-compact {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.55rem 0.75rem;
   align-items: center;
   width: 100%;
@@ -163,6 +163,23 @@
   border: 1px solid var(--acc-line);
 }
 .cpc-compact-rank { display: flex; flex-direction: column; gap: 0.2rem; min-width: 0; }
+.cpc-compact-rank-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+.cpc-compact-rank-btn:hover { background: var(--acc-fill-soft); }
+.cpc-compact-rank-btn:focus-visible {
+  outline: 2px solid var(--acc-bright);
+  outline-offset: 2px;
+}
 .cpc-compact-label { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-weight: 700; }
 .cpc-compact-name { font-family: var(--font-display); font-weight: 700; color: var(--acc-bright); font-size: 0.88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cpc-compact-bar { height: 4px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
@@ -170,12 +187,6 @@
 .cpc-compact-meta { font-size: 0.62rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cpc-compact-stats { display: flex; flex-direction: column; gap: 0.2rem; align-items: flex-end; }
 .cpc-compact-stat { font-family: var(--font-display); font-size: 0.78rem; font-weight: 700; color: #fff; white-space: nowrap; }
-.cpc-compact-btn {
-  border: 1px solid var(--border-color); background: rgba(255,255,255,0.04); color: var(--text-secondary);
-  font: inherit; font-size: 0.68rem; font-weight: 700; padding: 0.35rem 0.55rem; border-radius: var(--radius-sm);
-  cursor: pointer; white-space: nowrap;
-}
-.cpc-compact-btn:hover { color: #fff; border-color: var(--acc-line); background: var(--acc-fill-soft); }
 
 @media (max-width: 680px) {
   .hub-tiles { grid-template-columns: 1fr; }
@@ -184,7 +195,6 @@
   .ccb-row { flex-direction: row; align-items: center; }
   .ccb-progress { justify-content: stretch; }
   .city-progress-compact { grid-template-columns: minmax(0, 1fr) auto; max-width: none; }
-  .cpc-compact-btn { grid-column: 1 / -1; width: 100%; }
   .ccb-breadcrumb { justify-content: flex-start; }
   .segment-selector.adaptive { grid-template-columns: 1fr; }
 }

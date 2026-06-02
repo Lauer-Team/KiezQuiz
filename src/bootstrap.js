@@ -4,6 +4,7 @@
     'src/leaderboard.js',
     'src/game/config.js',
     'src/game/progress.js',
+    'src/districtColors.js',
     'src/game/SoundManager.js',
     'src/game/effects.js',
     'src/game/MapNavigator.js',
@@ -100,6 +101,11 @@
       if (typeof window.startKiezQuizGame === 'function') {
         window.startKiezQuizGame();
       }
+
+      document.addEventListener('pointerdown', function primeKqAudio() {
+        const game = window.kiezQuizGame || window.hamburgGame;
+        game?.sounds?.init();
+      }, { once: true, capture: true });
     })();
   });
 })();

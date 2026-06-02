@@ -11,9 +11,19 @@ class SoundManager {
       if (AudioCtx) this.ctx = new AudioCtx();
     }
     if (this.ctx?.state === 'suspended') {
-      return this.ctx.resume().catch(() => {});
+      void this.ctx.resume();
     }
-    return Promise.resolve();
+  }
+
+  /** Returns true when the audio context is ready for immediate playback. */
+  _ready() {
+    this.init();
+    if (!this.ctx) return false;
+    if (this.ctx.state === 'suspended') {
+      void this.ctx.resume();
+      return false;
+    }
+    return this.ctx.state === 'running';
   }
 
   toggleMute() {
@@ -23,8 +33,8 @@ class SoundManager {
   }
 
   playCorrect() {
-    if (this.muted) return;
-    this.init().then(() => this._ensureRunning()).then(() => this._playCorrectTone());
+    if (this.muted || !this._ready()) return;
+    this._playCorrectTone();
   }
 
   _playCorrectTone() {
@@ -49,8 +59,8 @@ class SoundManager {
   }
 
   playSelect() {
-    if (this.muted) return;
-    this.init().then(() => this._ensureRunning()).then(() => this._playSelectTone());
+    if (this.muted || !this._ready()) return;
+    this._playSelectTone();
   }
 
   _playSelectTone() {
@@ -69,8 +79,8 @@ class SoundManager {
   }
 
   playIncorrect() {
-    if (this.muted) return;
-    this.init().then(() => this._ensureRunning()).then(() => this._playIncorrectTone());
+    if (this.muted || !this._ready()) return;
+    this._playIncorrectTone();
   }
 
   _playIncorrectTone() {
@@ -94,13 +104,13 @@ class SoundManager {
   }
 
   playLevelUp() {
-    if (this.muted) return;
-    this.init().then(() => this._ensureRunning()).then(() => this._playLevelUpTone());
+    if (this.muted || !this._ready()) return;
+    this._playLevelUpTone();
   }
 
   playApplause() {
-    if (this.muted) return;
-    this.init().then(() => this._ensureRunning()).then(() => this._playApplauseTone());
+    if (this.muted || !this._ready()) return;
+    this._playApplauseTone();
   }
 
   _playApplauseTone() {
@@ -141,8 +151,8 @@ class SoundManager {
   }
 
   playSad() {
-    if (this.muted) return;
-    this.init().then(() => this._ensureRunning()).then(() => this._playSadTone());
+    if (this.muted || !this._ready()) return;
+    this._playSadTone();
   }
 
   _playSadTone() {
@@ -160,13 +170,6 @@ class SoundManager {
     gain.connect(this.ctx.destination);
     osc.start(t);
     osc.stop(t + 0.75);
-  }
-
-  _ensureRunning() {
-    if (this.ctx?.state === 'suspended') {
-      return this.ctx.resume().catch(() => {});
-    }
-    return Promise.resolve();
   }
 
   _playLevelUpTone() {

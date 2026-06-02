@@ -104,8 +104,8 @@
 <div class="app-shell density-compact">
     <header class="app-header global-header" id="app-header">
       <a href="/" class="brand brand-link" data-i18n-title="header.homeTitle" title="Zur Startseite">
-        <img class="brand-pin" src="assets/brand/marke/qpin-signal.svg" width="36" height="45" alt="">
-        <h1 class="brand-title">KiezQuiz</h1>
+        <img class="brand-logo" src="../assets/brand/logo/wortmarke-invers.png" width="148" height="36" alt="KiezQuiz">
+        <h1 class="brand-title visually-hidden">KiezQuiz</h1>
         <span class="badge" id="header-badge">Städte</span>
       </a>
 
@@ -120,19 +120,18 @@
           </div>
         </div>
 
-        <a href="/profile/" class="stat-pill xp-pill stat-pill-link" data-i18n-title="header.profileTitle" title="Profil & Bestenliste öffnen">
-          <span class="label" data-i18n="header.xpLabel">XP:</span>
-          <span class="value" id="stat-xp">0</span>
+        <a href="/profile/" class="stat-pill xp-pill stat-pill-link" id="btn-xp-pill" data-i18n-title="header.profileTitle" title="Profil & Bestenliste öffnen">
+          <div class="xp-pill-body">
+            <div class="xp-pill-row">
+              <span class="label" data-i18n="header.xpLabel">XP:</span>
+              <span class="value" id="stat-xp">0</span>
+              <span class="rank-name" id="stat-rank">Neuling</span>
+            </div>
+            <div class="progress-bg xp-pill-progress" aria-hidden="true">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
         </a>
-
-        <div class="level-tracker">
-          <div class="level-info">
-            <span class="rank-name" id="stat-rank">Neuling</span>
-          </div>
-          <div class="progress-bg">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-        </div>
 
         <button type="button" class="auth-pill" id="auth-pill" data-i18n-title="header.authTitle" title="Cloud-Speicherung: optional anmelden">
           <span class="auth-pill-icon">👤</span>
@@ -347,6 +346,7 @@
   <script src="src/ui/changelog.js" defer></script>
   <script src="src/cloudSync.js" defer></script>
   <script src="src/cityWishes.js" defer></script>
+  <script src="src/ui/adminBar.js" defer></script>
   <script src="src/game/init.js" defer></script>
   <script src="src/bootstrap.js" defer></script>
 </body>

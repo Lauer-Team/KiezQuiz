@@ -66,6 +66,7 @@ class KiezQuizGame {
   }
 
   init() {
+    this.setupHeaderListeners();
     this._save = window.saveManager.loadSave();
     const route = window.kiezViewRouter?.resolveInitialView({ save: this._save }) || {};
     this.view = route.view || window.saveManager.getInitialView(this._save);
@@ -102,10 +103,12 @@ class KiezQuizGame {
     if (this.view === 'hub') {
       if (hubEl) hubEl.hidden = false;
       if (cityEl) cityEl.hidden = true;
+      this.setupHeaderListeners();
       this.updateHeaderBadge();
       this.renderStats();
       window.kiezHub?.render(this, hubEl);
       if (window.authManager) window.authManager.updateHeaderUI();
+      window.kiezAdminBar?.scheduleRender?.();
       this._maybeShowAppNews();
       return;
     }
@@ -294,6 +297,8 @@ class KiezQuizGame {
       hubEl.hidden = false;
       window.kiezHub?.render(this, hubEl);
     }
+    this.updateHeaderBadge();
+    this.renderStats();
     if (window.authManager) window.authManager.updateHeaderUI();
   }
 
@@ -377,6 +382,40 @@ class KiezQuizGame {
     }
   }
 
+  setupHeaderListeners() {
+    const historyBtn = document.getElementById('btn-history');
+    if (historyBtn && historyBtn.dataset.bound !== 'true') {
+      historyBtn.dataset.bound = 'true';
+      historyBtn.addEventListener('click', () => this.showGameHistory());
+    }
+    const settingsBtn = document.getElementById('btn-settings');
+    if (settingsBtn && settingsBtn.dataset.bound !== 'true') {
+      settingsBtn.dataset.bound = 'true';
+      settingsBtn.addEventListener('click', () => this.showSettings());
+    }
+
+    const langBtn = document.getElementById('btn-lang');
+    if (langBtn && langBtn.dataset.bound !== 'true') {
+      langBtn.dataset.bound = 'true';
+      this.updateLangButton(langBtn);
+      langBtn.addEventListener('click', () => {
+        setLocale(getLocale() === 'de' ? 'en' : 'de');
+      });
+    }
+
+    const muteBtn = document.getElementById('btn-mute');
+    if (muteBtn && muteBtn.dataset.bound !== 'true') {
+      muteBtn.dataset.bound = 'true';
+      muteBtn.innerHTML = this.sounds.muted ? '🔇' : '🔊';
+      muteBtn.addEventListener('click', () => {
+        this.sounds.init();
+        const isMuted = this.sounds.toggleMute();
+        muteBtn.innerHTML = isMuted ? '🔇' : '🔊';
+        this.saveState();
+      });
+    }
+  }
+
   setupMobileMapHint() {
     const hint = document.getElementById('map-hint-text');
     if (!hint) return;
@@ -405,38 +444,10 @@ class KiezQuizGame {
     document.getElementById('btn-zoom-in').addEventListener('click', () => this.mapNav.zoomIn());
     document.getElementById('btn-zoom-out').addEventListener('click', () => this.mapNav.zoomOut());
     document.getElementById('btn-zoom-reset').addEventListener('click', () => {
-      if (this.inRound || this.nameAllIsActive) this.zoomMapToGameArea();
-      else this.mapNav.reset();
+      if (this.mapNav) this.mapNav.reset();
     });
 
-    // Game history & Settings
-    const historyBtn = document.getElementById('btn-history');
-    if (historyBtn && historyBtn.dataset.bound !== 'true') {
-      historyBtn.dataset.bound = 'true';
-      historyBtn.addEventListener('click', () => this.showGameHistory());
-    }
-    const settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn && settingsBtn.dataset.bound !== 'true') {
-      settingsBtn.dataset.bound = 'true';
-      settingsBtn.addEventListener('click', () => this.showSettings());
-    }
-
-    const langBtn = document.getElementById('btn-lang');
-    if (langBtn && langBtn.dataset.bound !== 'true') {
-      langBtn.dataset.bound = 'true';
-      this.updateLangButton(langBtn);
-      langBtn.addEventListener('click', () => {
-        setLocale(getLocale() === 'de' ? 'en' : 'de');
-      });
-    }
-
-    // Sound Toggle
-    const muteBtn = document.getElementById('btn-mute');
-    muteBtn.innerHTML = this.sounds.muted ? '🔇' : '🔊';
-    muteBtn.addEventListener('click', () => {
-      const isMuted = this.sounds.toggleMute();
-      muteBtn.innerHTML = isMuted ? '🔇' : '🔊';
-    });
+    this.setupHeaderListeners();
     
     const nwAnchor = document.getElementById('neuwerk-anchor');
     if (nwAnchor && nwAnchor.dataset.bound !== 'true') {
@@ -800,6 +811,23 @@ class KiezQuizGame {
     return map[bezirkName] || bezirkName.toLowerCase().replace(/\s+/g, '-');
   }
 
+  getBezirkIndicatorColor(bezirkName) {
+    if (window.districtColors?.getDistrictIndicatorColor) {
+      return window.districtColors.getDistrictIndicatorColor(this.activeCityId, bezirkName);
+    }
+    const cssKey = this.getBezirkCssKey(bezirkName);
+    if (this.activeCityId === 'hamburg') return `var(--color-${cssKey})`;
+    return `hsl(${this.getBezirkHue(bezirkName)} 72% 58%)`;
+  }
+
+  getMapZoomOptions() {
+    return { padding: 2, maxZoom: 4, minZoom: 0.55 };
+  }
+
+  getEuropeMicrostateZoomOptions() {
+    return { padding: 4.5, maxZoom: 4, minZoom: 0.4 };
+  }
+
   isModeAllowedForSegment(mode) {
     if (this.activeSegment === 'BEZIRKE') {
       return !BEZIRKE_SEGMENT_HIDDEN_MODES.includes(mode);
@@ -983,6 +1011,7 @@ class KiezQuizGame {
     const bestStreakVal = document.getElementById('stat-best-streak');
     const rankName = document.getElementById('stat-rank');
     const progFill = document.getElementById('progress-fill');
+    const xpPill = document.querySelector('.xp-pill');
     
     xpVal && (xpVal.textContent = this.xp);
     streakVal && (streakVal.textContent = `${this.streak}x`);
@@ -991,10 +1020,22 @@ class KiezQuizGame {
     const currentRank = getRanks().find(r => r.level === this.level);
     rankName && (rankName.textContent = currentRank ? currentRank.name : t('ranks.fallback'));
     
-    // Global rank progress bar (XP-based)
     const nextRank = getRanks().find(r => r.level === this.level + 1);
+    if (xpPill) {
+      let pct = 100;
+      if (nextRank && currentRank) {
+        const span = nextRank.minXp - currentRank.minXp;
+        pct = span > 0 ? Math.min(100, ((this.xp - currentRank.minXp) / span) * 100) : 0;
+      }
+      xpPill.style.setProperty('--xp-rank-pct', `${pct}%`);
+      xpPill.title = nextRank
+        ? t('ranks.progressTo', { percent: Math.round(pct), name: nextRank.name, xp: nextRank.minXp })
+        : t('ranks.maxReached');
+    }
     if (progFill && currentRank) {
-      if (nextRank) {
+      const pctVar = xpPill?.style.getPropertyValue('--xp-rank-pct');
+      if (pctVar) progFill.style.width = pctVar;
+      else if (nextRank) {
         const span = nextRank.minXp - currentRank.minXp;
         const progressPercent = span > 0 ? ((this.xp - currentRank.minXp) / span) * 100 : 0;
         progFill.style.width = `${Math.min(progressPercent, 100)}%`;
@@ -1013,6 +1054,7 @@ class KiezQuizGame {
       window.kiezCityDashboard?.updateBreadcrumb(this);
       window.kiezCityDashboard?.renderCityProgressCard(this);
     }
+    window.kiezGlobalHeader?.sync?.(this);
   }
 
   renderUnlockProgress() {
@@ -1022,7 +1064,7 @@ class KiezQuizGame {
     listContainer.innerHTML = '';
     const unlocked = this.getUnlockedBezirke();
     
-    this.getProgression().forEach(bz => {
+    this.getProgression().forEach((bz, idx) => {
       const isUnlocked = unlocked.includes(bz.name);
       
       // Calculate how many stadtteile are solved out of total in this district
@@ -1036,10 +1078,10 @@ class KiezQuizGame {
         row.classList.add('active-unlock');
       }
       
-      const cssKey = this.getBezirkCssKey(bz.name);
+      const indicatorColor = this.getBezirkIndicatorColor(bz.name);
       
       row.innerHTML = `
-        <div class="dp-indicator" style="background: var(--color-${cssKey}); box-shadow: 0 0 6px var(--color-${cssKey});"></div>
+        <div class="dp-indicator" style="background: ${indicatorColor}; box-shadow: 0 0 6px ${indicatorColor};"></div>
         <div class="dp-name">${bz.name}</div>
         ${isUnlocked ? 
           `<div class="dp-score">${solvedInDistrict}/${totalInDistrict} (${percent}%)</div>` : 
@@ -1262,7 +1304,7 @@ class KiezQuizGame {
     if (!hitPaths.length) return;
 
     if (this.mapNav) {
-      requestAnimationFrame(() => this.mapNav.zoomToPaths(hitPaths, { padding: 1.55, maxZoom: 14, minZoom: 0.9 }));
+      requestAnimationFrame(() => this.mapNav.zoomToPaths(hitPaths, this.getEuropeMicrostateZoomOptions()));
     }
 
     const microBar = document.getElementById('europe-microstates-bar');
@@ -1337,7 +1379,9 @@ class KiezQuizGame {
   }
 
   playSelectionSound() {
-    this.sounds.init();
+    if (!this.sounds._ready()) {
+      this.sounds.init();
+    }
     this.sounds.playSelect();
   }
 
@@ -1909,12 +1953,6 @@ class KiezQuizGame {
           <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.cloudTitle')}</strong>
           ${cloudStatusHtml}
         </div>
-        <div id="settings-wish-admin-slot" style="margin-bottom: 1.2rem;"></div>
-        <div class="settings-changelog-block" style="margin-bottom: 1.2rem;">
-          <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.changelogTitle')}</strong>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.changelogBody')}</p>
-          <button type="button" class="secondary-btn" id="btn-settings-changelog">${t('settings.changelogBtn')}</button>
-        </div>
         <div class="settings-privacy-block" style="margin-bottom: 1.2rem;">
           <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.privacyTitle')}</strong>
           <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">${t('settings.privacyBody')}</p>
@@ -1929,10 +1967,6 @@ class KiezQuizGame {
     `, { closeOnBackdrop: true });
     modal.querySelector('#btn-settings-close')?.addEventListener('click', () => closeOverlayModal(modal));
     modal.querySelector('#btn-settings-reset')?.addEventListener('click', () => this.resetGame());
-    modal.querySelector('#btn-settings-changelog')?.addEventListener('click', () => {
-      closeOverlayModal(modal);
-      window.kiezChangelog?.show?.();
-    });
 
     if (loggedIn) {
       const profileSlot = document.createElement('div');
@@ -1945,15 +1979,6 @@ class KiezQuizGame {
       cloudBlock?.insertAdjacentElement('afterend', profileSlot);
     }
 
-    window.cityWishes?.isAdmin?.().then((isAdmin) => {
-      if (!isAdmin) return;
-      const slot = modal.querySelector('#settings-wish-admin-slot');
-      if (!slot) return;
-      slot.innerHTML = `
-        <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.wishAdminTitle')}</strong>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.wishAdminBody')}</p>
-        <a href="/admin/" class="secondary-btn" style="display:inline-block;text-decoration:none;text-align:center;">${t('settings.wishAdminBtn')}</a>`;
-    });
   }
 
   showAppNews() {
@@ -2549,20 +2574,9 @@ class KiezQuizGame {
   }
 
   getBezirkHue(bezirk) {
-    const hues = {
-      Altona: 295, Bergedorf: 32, 'Eimsbüttel': 175, 'Hamburg-Mitte': 345,
-      'Hamburg-Nord': 210, Harburg: 100, Wandsbek: 260,
-      Mitte: 38, 'Friedrichshain-Kreuzberg': 350, Pankow: 160,
-      'Charlottenburg-Wilmersdorf': 280, Spandau: 200, 'Steglitz-Zehlendorf': 120,
-      'Tempelhof-Schöneberg': 310, Neukölln: 45, 'Treptow-Köpenick': 85,
-      'Marzahn-Hellersdorf': 15, Lichtenberg: 330, Reinickendorf: 190,
-      'Innenstadt I': 352, 'Innenstadt II': 5, 'Innenstadt III': 20,
-      'Bornheim/Ostend': 340, Süd: 25, West: 210, 'Mitte-West': 280,
-      'Nord-West': 175, 'Mitte-Nord': 310, 'Nord-Ost': 45, Ost: 185,
-      'Kalbach-Riedberg': 130, 'Nieder-Erlenbach': 95, Harheim: 160,
-      'Nieder-Eschbach': 220, 'Bergen-Enkheim': 15
-    };
-    if (hues[bezirk] !== undefined) return hues[bezirk];
+    if (window.districtColors?.getDistrictHue) {
+      return window.districtColors.getDistrictHue(this.activeCityId, bezirk);
+    }
     let hash = 0;
     for (let i = 0; i < bezirk.length; i++) {
       hash = bezirk.charCodeAt(i) + ((hash << 5) - hash);
@@ -2880,9 +2894,13 @@ class KiezQuizGame {
 
   zoomMapToGameArea() {
     if (!this.mapNav || !this.svg) return;
-    const paths = this.getPathsForBezirke(this.getMapZoomBezirke());
+    const bezirke = this.getMapZoomBezirke();
+    const paths = this.getPathsForBezirke(bezirke);
     if (paths.length) {
-      requestAnimationFrame(() => this.mapNav.zoomToPaths(paths));
+      const zoomOpts = bezirke.length === 1 && this.isEuropeMicrostate(bezirke[0])
+        ? this.getEuropeMicrostateZoomOptions()
+        : this.getMapZoomOptions();
+      requestAnimationFrame(() => this.mapNav.zoomToPaths(paths, zoomOpts));
     }
   }
 

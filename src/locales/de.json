@@ -28,7 +28,11 @@
     "homeTitle": "Zur Startseite",
     "streakTitle": "Deine aktuelle Antwortserie",
     "xpTitle": "Deine Erfahrungspunkte",
-    "changelogTitle": "Alle Updates und Neuerungen anzeigen"
+    "changelogTitle": "Alle Updates und Neuerungen anzeigen",
+    "adminLoggedIn": "Als Admin eingeloggt",
+    "adminOpen": "Admin-Bereich",
+    "adminCityWishes": "Städte-Wünsche",
+    "adminChangelog": "Was ist neu?"
   },
   "segment": {
     "stadtteile": "🏙️ Stadtteile",
@@ -198,7 +202,9 @@
     "backToApp": "Zurück zur App",
     "noCloudTitle": "Cloud nicht konfiguriert",
     "noCloudBody": "Supabase ist nicht eingerichtet — das Profil ist nur in der Live-Umgebung verfügbar.",
-    "achievementsIntro": "Fortschritt pro Stadt aus deinem Spielstand (lokal und Cloud).",
+    "achievementsIntro": "Globaler XP-Rang und Fortschritt pro Stadt — aufklappbar nach Stadt.",
+    "citiesHeading": "Städte",
+    "noTrophies": "Keine Pokale in dieser Stadt.",
     "cityLevel": "Stadt-Rang: Stufe {level}",
     "cityDistricts": "Bezirke: {unlocked} / {total}",
     "cityTrophies": "Pokale: {won} / {total}",
@@ -884,6 +890,9 @@
   "log": {
     "title": "📋 Log",
     "intro": "So trennt KiezQuiz deinen Fortschritt.",
+    "introGlobalOnly": "Dein globaler XP-Rang gilt in allen Städten. Stadt-Pokale und Stadtrang findest du im Spiel-Log oder in deinem Profil.",
+    "introCityOnly": "Stadtrang und Pokale gelten nur in {city} — jede Stadt hat ihren eigenen Fortschritt.",
+    "titleCity": "Stadtrang & Pokale",
     "zoneGlobal": "Global",
     "zoneGlobalNote": "XP-Rang · gilt über alle Städte",
     "yourGlobalRank": "Globaler Rang",
@@ -976,7 +985,8 @@
     "mastered": "gemeistert",
     "gateHint": "🔒 Schaffe 75 % in einem {singular}, um den nächsten freizuschalten.",
     "trophies": "Pokale",
-    "viewLog": "Pokale & Rang ansehen"
+    "viewLog": "Pokale & Rang ansehen",
+    "viewRankTrophies": "Stadtrang & Pokale ansehen"
   },
   "cities": {
     "tier": {
