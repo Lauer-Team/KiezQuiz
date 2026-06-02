@@ -11,7 +11,6 @@
 
   const SECTION_TITLES = {
     dashboard: 'profilePage.navDashboard',
-    achievements: 'profilePage.navAchievements',
     friends: 'profilePage.navFriends',
     leaderboard: 'profilePage.navLeaderboard',
     account: 'profilePage.navAccount'
@@ -154,6 +153,7 @@
   function renderCityAchievementsDetails(city, save, game) {
     const loc = window.cityRegistry.localizeCity(city);
     const branch = save.cities[city.id] || {};
+    const stats = computeCityStats(game, city);
     const rankInfo = getProfileCityRankInfo(game, city.id);
     const cityRankKey = typeof getCityRankLocaleKey === 'function'
       ? getCityRankLocaleKey(city.id)
@@ -181,16 +181,24 @@
     const trophyIds = Array.isArray(branch.trophies) ? branch.trophies : [];
     const accentStyle = Object.entries(window.cityRegistry.accentVars(city.hue))
       .map(([k, v]) => `${k}:${v}`).join(';');
+    const isFresh = stats.completion === 0;
+    const cta = isFresh ? t('hub.startCity') : t('hub.continueCity');
+    const lastCity = save?.lastCity === city.id;
+    const homeMark = lastCity ? `<span class="profile-city-summary-home" title="${escapeHtml(t('hub.homeCity'))}">★</span>` : '';
+    const openAttr = lastCity ? ' open' : '';
 
     return `
-      <details class="profile-city-details" style="${accentStyle}">
+      <details class="profile-city-details"${openAttr} style="${accentStyle}">
         <summary class="profile-city-summary">
           <span class="profile-city-summary-dot"></span>
-          <span class="profile-city-summary-name">${escapeHtml(loc.name)}</span>
+          <span class="profile-city-summary-name">${escapeHtml(loc.name)}${homeMark}</span>
           <span class="profile-city-summary-rank">${escapeHtml(rankInfo.currentRank.name)}</span>
-          <span class="profile-city-summary-meta">🏆 ${rankInfo.totals.trophies}/${rankInfo.totals.totalTrophies}</span>
+          <span class="profile-city-summary-meta">${t('profilePage.dashboardCompletion', { percent: stats.completion })} · 🏆 ${rankInfo.totals.trophies}/${rankInfo.totals.totalTrophies}</span>
         </summary>
         <div class="profile-city-details-body log-zone log-zone-city">
+          <div class="profile-city-details-actions">
+            <a href="/${escapeHtml(city.id)}/" class="primary-btn profile-city-play-btn">${escapeHtml(cta)} →</a>
+          </div>
           <div class="rank-ladder rank-ladder-city">${steps}</div>
           <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${rankInfo.percent}%"></div></div>
           <p class="log-rank-progress-note">${escapeHtml(progressNote)}</p>
@@ -317,42 +325,83 @@
     return { completion: 0, trophies: { won: 0, total: city.totalTrophies || 0 } };
   }
 
-  function renderDashboardCityCard(city, save, game) {
-    const loc = window.cityRegistry.localizeCity(city);
-    const stats = computeCityStats(game, city);
-    const rankInfo = getProfileCityRankInfo(game, city.id);
-    const isComingSoon = city.status === 'coming_soon';
-    const isFresh = stats.completion === 0;
-    const cta = isComingSoon ? t('hub.comingSoon') : (isFresh ? t('hub.startCity') : t('hub.continueCity'));
-    const accentStyle = Object.entries(window.cityRegistry.accentVars(city.hue))
-      .map(([k, v]) => `${k}:${v}`).join(';');
-    const lastCity = save?.lastCity === city.id;
-    const homeMark = lastCity ? `<span class="profile-city-card-home" title="${escapeHtml(t('hub.homeCity'))}">★</span>` : '';
+  function renderDashboardFriendsWidget() {
+    const isLoggedIn = window.authManager?.isLoggedIn?.();
+    const incoming = friendRequests.filter((r) => r.direction === 'incoming');
+    const pendingBadge = incoming.length
+      ? `<p class="profile-widget-badge">${t('profilePage.dashboardPendingRequests', { count: incoming.length })}</p>`
+      : '';
 
-    if (isComingSoon) {
+    if (!isLoggedIn) {
       return `
-        <div class="profile-city-card profile-city-card--soon" style="${accentStyle}">
-          <div class="profile-city-card-head">
-            <span class="profile-city-card-name">${escapeHtml(loc.name)}</span>
-            <span class="profile-city-card-badge">${escapeHtml(t('hub.comingSoonBadge'))}</span>
-          </div>
-          <p class="profile-city-card-blurb">${escapeHtml(loc.blurb)}</p>
+        <div class="profile-widget profile-widget--friends">
+          <h3 class="profile-widget-title">${t('profilePage.dashboardFriendsHeading')}</h3>
+          <p class="profile-widget-lead">${t('profilePage.dashboardFriendsLogin')}</p>
+          <button type="button" class="secondary-btn profile-btn-login-widget">${t('profilePage.loginBtn')}</button>
         </div>`;
     }
 
+    const friendChips = friends.length
+      ? friends.slice(0, 8).map((f) => `
+        <span class="profile-friend-chip">@${escapeHtml(f.username || '')}</span>`).join('')
+      : `<p class="profile-empty profile-widget-empty">${t('profilePage.noFriends')}</p>`;
+
     return `
-      <a href="/${escapeHtml(city.id)}/" class="profile-city-card" style="${accentStyle}">
-        <div class="profile-city-card-head">
-          <span class="profile-city-card-name">${escapeHtml(loc.name)}${homeMark}</span>
-          <span class="profile-city-card-rank">${escapeHtml(rankInfo.currentRank.name)}</span>
-        </div>
-        <p class="profile-city-card-greet">${escapeHtml(loc.greeting)}</p>
-        <div class="profile-city-card-stats">
-          <span class="profile-city-card-stat">${stats.completion}%</span>
-          <span class="profile-city-card-stat">🏆 ${stats.trophies.won}/${stats.trophies.total}</span>
-        </div>
-        <span class="profile-city-card-cta">${escapeHtml(cta)} →</span>
-      </a>`;
+      <div class="profile-widget profile-widget--friends">
+        <h3 class="profile-widget-title">${t('profilePage.dashboardFriendsHeading')}</h3>
+        <p class="profile-widget-lead">${t('profilePage.dashboardFriendsLead')}</p>
+        ${pendingBadge}
+        <div class="profile-friend-chips">${friendChips}</div>
+        <button type="button" class="profile-widget-link" data-goto-section="friends">${t('profilePage.dashboardViewFriends')}</button>
+      </div>`;
+  }
+
+  function renderDashboardLeaderboardWidget(save) {
+    const cities = getLeaderboardCities();
+    const defaultCity = save?.lastCity && cities.some((c) => c.id === save.lastCity)
+      ? save.lastCity
+      : (cities[0]?.id || 'hamburg');
+    const cityName = cities.find((c) => c.id === defaultCity)?.name || defaultCity;
+
+    return `
+      <div class="profile-widget profile-widget--leaderboard">
+        <h3 class="profile-widget-title">${t('profilePage.dashboardLeaderboardHeading')}</h3>
+        <p class="profile-widget-lead">${t('profilePage.dashboardLeaderboardLead', { city: cityName })}</p>
+        <div class="profile-widget-lb" id="profile-dashboard-lb-mini">${t('profilePage.loading')}</div>
+        <button type="button" class="profile-widget-link" data-goto-section="leaderboard">${t('profilePage.dashboardViewLeaderboard')}</button>
+      </div>`;
+  }
+
+  async function loadDashboardLeaderboardMini(save) {
+    const el = document.getElementById('profile-dashboard-lb-mini');
+    if (!el || !window.authManager?.isConfigured?.()) {
+      if (el) el.innerHTML = `<p class="profile-empty">${t('profilePage.noCloudBody')}</p>`;
+      return;
+    }
+    const cities = getLeaderboardCities();
+    const cityId = save?.lastCity && cities.some((c) => c.id === save.lastCity)
+      ? save.lastCity
+      : (cities[0]?.id || 'hamburg');
+    el.textContent = t('profilePage.loading');
+    try {
+      const pub = await window.kiezSocial?.getCityLeaderboard?.(cityId, 5);
+      const rows = pub?.rows || [];
+      if (!rows.length) {
+        el.innerHTML = `<p class="profile-empty">${t('profilePage.emptyLeaderboard')}</p>`;
+        return;
+      }
+      el.innerHTML = `
+        <ol class="profile-mini-lb">
+          ${rows.map((row) => `
+            <li class="profile-mini-lb-row">
+              <span class="profile-mini-lb-rank">${row.rank ?? row.rn ?? '—'}</span>
+              <span class="profile-mini-lb-user">@${escapeHtml(row.username || '')}</span>
+              <span class="profile-mini-lb-score">${row.correct}/${(row.correct || 0) + (row.incorrect || 0)}</span>
+            </li>`).join('')}
+        </ol>`;
+    } catch (e) {
+      el.innerHTML = `<p class="profile-empty">${t('profilePage.loadError')}</p>`;
+    }
   }
 
   function renderDashboardSection() {
@@ -374,8 +423,8 @@
     const progressNote = nextRank
       ? t('ranks.progressTo', { percent: Math.round(percent), name: nextRank.name, xp: nextRank.minXp })
       : t('ranks.maxReached');
-    const cityCards = (window.KQ_DATA?.cities || [])
-      .map((city) => renderDashboardCityCard(city, save, game))
+    const cityBlocks = getPlayableCities()
+      .map((city) => renderCityAchievementsDetails(city, save, game))
       .join('');
 
     return `
@@ -403,28 +452,18 @@
             <span class="profile-stat-meta">${t('profilePage.dashboardCitiesMeta')}</span>
           </div>
         </div>
-        <h3 class="profile-section-title">${t('profilePage.dashboardCitiesHeading')}</h3>
-        <p class="profile-panel-intro profile-dashboard-cities-lead">${t('profilePage.dashboardCitiesLead')}</p>
-        <div class="profile-dashboard-cities">${cityCards}</div>
-      </section>`;
-  }
-
-  function renderAchievementsSection() {
-    const save = window.saveManager?.loadSave?.() || window.saveManager?.createEmptySave?.();
-    const game = buildProfileGameContext(save);
-    getPlayableCities().forEach((city) => {
-      window.saveManager?.ensureCityBranch?.(save, city.id);
-    });
-    const cityBlocks = getPlayableCities()
-      .map((city) => renderCityAchievementsDetails(city, save, game))
-      .join('');
-
-    return `
-      <section class="profile-panel" id="profile-section-achievements">
-        <p class="profile-panel-intro">${t('profilePage.achievementsIntro')}</p>
-        ${renderGlobalAchievementsBlock(save)}
-        <h3 class="profile-section-title profile-cities-heading">${t('profilePage.citiesHeading')}</h3>
-        <div class="profile-city-stack">${cityBlocks}</div>
+        <div class="profile-dashboard-layout">
+          <div class="profile-dashboard-main">
+            ${renderGlobalAchievementsBlock(save)}
+            <h3 class="profile-section-title profile-cities-heading">${t('profilePage.dashboardCitiesHeading')}</h3>
+            <p class="profile-panel-intro profile-dashboard-cities-lead">${t('profilePage.dashboardCitiesLead')}</p>
+            <div class="profile-city-stack">${cityBlocks}</div>
+          </div>
+          <aside class="profile-dashboard-aside">
+            ${renderDashboardFriendsWidget()}
+            ${renderDashboardLeaderboardWidget(save)}
+          </aside>
+        </div>
       </section>`;
   }
 
@@ -540,20 +579,26 @@
   }
 
   function renderSectionContent() {
-    if (!window.authManager?.isConfigured?.()) {
-      return `<section class="profile-panel"><p class="profile-empty">${t('profilePage.noCloudBody')}</p><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></section>`;
-    }
-    const needsLogin = !window.authManager?.isLoggedIn?.()
+    const needsLogin = window.authManager?.isConfigured?.()
+      && !window.authManager?.isLoggedIn?.()
       && (activeSection === 'friends' || activeSection === 'account');
     if (needsLogin) {
       return renderGuestLoginSection();
+    }
+    if (!window.authManager?.isConfigured?.()
+      && (activeSection === 'friends' || activeSection === 'account' || activeSection === 'leaderboard')) {
+      return `
+        <section class="profile-panel">
+          <p class="profile-empty">${t('profilePage.noCloudBody')}</p>
+          <a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a>
+        </section>`;
     }
     switch (activeSection) {
       case 'dashboard': return renderDashboardSection();
       case 'friends': return renderFriendsSection();
       case 'leaderboard': return renderLeaderboardSection();
       case 'account': return renderAccountSection();
-      default: return renderAchievementsSection();
+      default: return renderDashboardSection();
     }
   }
 
@@ -643,16 +688,32 @@
     const main = document.getElementById('profile-main');
     if (!main) return;
     clearFriendSearchTimer();
+    const save = window.saveManager?.loadSave?.() || window.saveManager?.createEmptySave?.();
     main.innerHTML = renderSectionContent();
     bindSectionEvents();
-    if (activeSection === 'friends' || activeSection === 'leaderboard') {
+    const needsSocial = activeSection === 'dashboard'
+      || activeSection === 'friends'
+      || activeSection === 'leaderboard';
+    if (needsSocial && window.authManager?.isConfigured?.()) {
       void loadSocialData().then(() => {
-        if (activeSection === 'friends') {
+        if (activeSection === 'dashboard') {
+          const aside = document.getElementById('profile-section-dashboard');
+          if (aside) {
+            const friendsCol = aside.querySelector('.profile-dashboard-aside');
+            if (friendsCol) {
+              friendsCol.innerHTML = renderDashboardFriendsWidget() + renderDashboardLeaderboardWidget(save);
+              bindSectionEvents();
+            }
+          }
+          void loadDashboardLeaderboardMini(save);
+        } else if (activeSection === 'friends') {
           updateFriendsListsInDom();
         } else if (activeSection === 'leaderboard') {
           void loadLeaderboards();
         }
       });
+    } else if (activeSection === 'dashboard') {
+      void loadDashboardLeaderboardMini(save);
     }
   }
 
@@ -730,6 +791,17 @@
 
     main.querySelector('#profile-btn-login')?.addEventListener('click', () => {
       window.authManager?.showAuthModal?.();
+    });
+    main.querySelectorAll('.profile-btn-login-widget').forEach((btn) => {
+      btn.addEventListener('click', () => window.authManager?.showAuthModal?.());
+    });
+    main.querySelectorAll('[data-goto-section]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const section = btn.dataset.gotoSection;
+        if (!section) return;
+        setActiveNav(section);
+        await refreshAccess();
+      });
     });
 
     main.querySelector('#profile-btn-signout')?.addEventListener('click', async () => {
@@ -917,12 +989,13 @@
   }
 
   async function refreshAccess() {
-    if (!window.authManager?.isConfigured?.()) {
+    if (!window.authManager?.isConfigured?.() && activeSection !== 'dashboard') {
       renderNoCloud();
       return;
     }
-    if (window.authManager.isLoggedIn()
-      && (activeSection === 'friends' || activeSection === 'leaderboard')) {
+    if (window.authManager?.isConfigured?.()
+      && window.authManager.isLoggedIn()
+      && (activeSection === 'friends' || activeSection === 'leaderboard' || activeSection === 'dashboard')) {
       await loadSocialData();
     }
     renderDashboard();

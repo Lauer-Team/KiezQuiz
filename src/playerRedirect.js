@@ -4,8 +4,19 @@
     return window.kiezViewRouter?.isHomePath?.(window.location.pathname) ?? false;
   }
 
+  function hasLocalProgress() {
+    try {
+      const save = window.saveManager?.loadSave?.();
+      return !!(save && window.saveManager?.hasAnyProgress?.(save));
+    } catch (e) {
+      return false;
+    }
+  }
+
   function shouldRedirectToDashboard(auth) {
-    return !!(auth?.isLoggedIn?.() && isHomePath());
+    if (!isHomePath()) return false;
+    if (auth?.isLoggedIn?.()) return true;
+    return hasLocalProgress();
   }
 
   function redirectToDashboard() {
