@@ -336,18 +336,37 @@
     return onHub ? `#${sectionId}` : `/#${sectionId}`;
   }
 
+  function shouldShowDashboardLink() {
+    if (/^\/profile\/?/.test(window.location.pathname)) return false;
+    if (window.authManager?.isLoggedIn?.()) return true;
+    try {
+      const save = window.saveManager?.loadSave?.();
+      return !!(save && window.saveManager?.hasAnyProgress?.(save));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function dashboardNavLinkHtml() {
+    if (!shouldShowDashboardLink()) return '';
+    const label = escapeHtml(t('header.dashboardLink'));
+    const title = escapeHtml(t('header.dashboardTitle'));
+    return `<a href="/profile/" class="hub-nav-dashboard" data-i18n="header.dashboardLink" title="${title}" data-i18n-title="header.dashboardTitle">${label}</a>`;
+  }
+
   function renderHubNav(opts = {}) {
     const nav = document.getElementById('header-hub-nav');
     if (!nav) return;
     const useHomeLinks = opts.homeLinks === true;
     nav.hidden = false;
-    nav.innerHTML = HUB_SECTIONS.map((s) => {
+    const sectionLinks = HUB_SECTIONS.map((s) => {
       const href = hubNavHref(s.id);
       if (useHomeLinks) {
         return `<a href="${href}">${escapeHtml(t(s.navKey))}</a>`;
       }
       return `<a href="${href}" data-hub-scroll="${s.id}">${escapeHtml(t(s.navKey))}</a>`;
     }).join('');
+    nav.innerHTML = sectionLinks + dashboardNavLinkHtml();
     if (useHomeLinks) return;
     if (nav.dataset.bound !== 'true') {
       nav.dataset.bound = 'true';
@@ -535,5 +554,22 @@
 
   function updateStats() { /* stats via game.renderStats */ }
 
-  window.kiezHub = { render, updateStats, computeCityStats, progressRingHtml, hideHubNav, renderHubNav, scrollToSection };
+  function refreshHubNav() {
+    const nav = document.getElementById('header-hub-nav');
+    if (!nav || nav.hidden) return;
+    const game = window.kiezQuizGame || window.hamburgGame;
+    const onGameHub = game?.view === 'hub';
+    renderHubNav(onGameHub ? {} : { homeLinks: true });
+  }
+
+  window.kiezHub = {
+    render,
+    updateStats,
+    computeCityStats,
+    progressRingHtml,
+    hideHubNav,
+    renderHubNav,
+    refreshHubNav,
+    scrollToSection
+  };
 })();

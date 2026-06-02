@@ -328,10 +328,6 @@ body::selection,
   display: none !important;
 }
 
-.app-shell.kq.view-city .header-dashboard-nav:not([hidden]) {
-  display: flex !important;
-}
-
 .app-shell.kq.view-city .app-header.global-header {
   display: flex;
   flex-wrap: nowrap;

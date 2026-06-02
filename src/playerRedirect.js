@@ -1,4 +1,4 @@
-/* KiezQuiz — optional redirect from landing to /profile/ (local progress only; logged-in users use the header Dashboard link) */
+/* KiezQuiz — player redirect helpers (auto-redirect disabled; use hub nav Dashboard link) */
 (function () {
   function isHomePath() {
     return window.kiezViewRouter?.isHomePath?.(window.location.pathname) ?? false;
@@ -13,10 +13,8 @@
     }
   }
 
-  function shouldRedirectToDashboard(auth) {
-    if (!isHomePath()) return false;
-    if (auth?.isLoggedIn?.()) return false;
-    return hasLocalProgress();
+  function shouldRedirectToDashboard() {
+    return false;
   }
 
   function redirectToDashboard() {
