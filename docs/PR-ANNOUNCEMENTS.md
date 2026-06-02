@@ -105,6 +105,8 @@ Das ist neu:
 • 📊 **Spieler-Dashboard:** Fortschritt, Städte, Freunde und Bestenliste auf einen Blick — direkt weiterspielen per Klick.
 • 🐦 **Über uns:** Kalle stellt sich vor — inklusive About-Seite, einheitlichem Header und poliertem Light Mode „Papier“.
 • 📱 **Mobile First:** Touch-optimiertes Layout, Karte zuerst, Glass Map Docks — KiezQuiz fühlt sich endlich wie eine App an.
+• Tipp: Finde den Schalter mit ☀️/🌒 und entdecke unseren neuen **Light-Mode**. Mit Tinten-Dark Mode bis Paper-Light Mode ist dein KiezQuiz jetzt rund um die Uhr für dich da.
+
 
 247+ Orte, vier Städte, 100 % kostenlos — dein Fortschritt bleibt erhalten.
 
@@ -127,6 +129,7 @@ What's new:
 • 📊 **Player dashboard:** Progress, cities, friends, and leaderboards at a glance — jump back in with one tap.
 • 🐦 **About us:** Meet Kalle — dedicated about page, unified header everywhere, and a polished "Paper" light mode.
 • 📱 **Mobile first:** Touch-optimised layout, map up front, glass map docks — KiezQuiz finally feels like an app.
+• Tipp: Find the ☀️/🌒 toggle and explore our new **Light mode**! From the tinted dark to to the paper light, your KiezQuiz is here for you around the clock.
 
 247+ places, four cities, 100% free — your progress stays intact.
 
