@@ -173,7 +173,7 @@
 
   function syncBrandTheme() {
     const theme = window.kiezTheme?.getTheme?.() || document.documentElement.dataset.theme || 'dark';
-    document.querySelectorAll('.brand-logo').forEach((img) => {
+    document.querySelectorAll('.brand-logo, .about-hero-logo').forEach((img) => {
       img.src = logoPathForTheme(theme);
     });
   }
