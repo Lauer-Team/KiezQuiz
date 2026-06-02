@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="../src/styles/hub.css">
   <link rel="stylesheet" href="../src/styles/modals.css">
   <link rel="stylesheet" href="../src/styles/profile.css">
+  <link rel="stylesheet" href="../src/styles/admin.css">
   <link rel="stylesheet" href="../src/styles/redesign.css">
   <link rel="stylesheet" href="../src/styles/mobile.css">
   <script src="../src/theme.js"></script>
@@ -93,6 +94,10 @@
           <button type="button" class="profile-nav-item" data-section="leaderboard" data-i18n="profilePage.navLeaderboard">Bestenliste</button>
           <button type="button" class="profile-nav-item" data-section="account" data-i18n="profilePage.navAccount">Konto</button>
         </nav>
+        <div class="profile-admin-nav" id="profile-admin-nav" hidden>
+          <p class="profile-admin-nav-label" data-i18n="profilePage.adminNavLabel">Admin</p>
+          <nav class="profile-nav profile-nav--admin" id="profile-admin-nav-list" aria-label="Admin"></nav>
+        </div>
       </aside>
 
       <div class="profile-main-column">
@@ -119,7 +124,6 @@
   <script src="../src/data/cities.js"></script>
   <script src="../src/cityRegistry.js"></script>
   <script src="../src/cityWishes.js"></script>
-  <script src="../src/ui/adminBar.js"></script>
   <script src="../src/saveManager.js"></script>
   <script src="../src/game/config.js"></script>
   <script src="../src/game/progress.js"></script>
@@ -134,6 +138,7 @@
   <script src="../src/ui/globalHeader.js"></script>
   <script src="../src/ui/hub.js"></script>
   <script src="../src/ui/hubScrollTop.js"></script>
+  <script src="../src/ui/adminSections.js"></script>
   <script src="../src/ui/profilePage.js"></script>
 </body>
 </html>

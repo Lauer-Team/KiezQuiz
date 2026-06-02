@@ -2,58 +2,12 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>KiezQuiz Admin</title>
+  <meta http-equiv="refresh" content="0;url=/profile/?section=admin-city-wishes">
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#0f1118">
-  <link rel="icon" href="../icons/icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../src/styles/base.css">
-  <link rel="stylesheet" href="../src/styles/admin.css">
-  <script>window.KIEZ_SRC_BASE = '../src/';</script>
+  <title>KiezQuiz · Weiterleitung</title>
+  <script>location.replace('/profile/?section=admin-city-wishes');</script>
 </head>
-<body class="admin-page-body">
-  <div class="admin-app" id="admin-app">
-    <aside class="admin-sidebar" id="admin-sidebar" hidden>
-      <div class="admin-sidebar-brand">
-        <a href="/" class="admin-back-link">← KiezQuiz</a>
-        <p class="admin-sidebar-title" data-i18n="adminPage.title">Admin</p>
-      </div>
-      <nav class="admin-nav" aria-label="Admin">
-        <button type="button" class="admin-nav-item is-active" data-section="city-wishes" data-i18n="adminPage.navCityWishes">
-          Städte-Wünsche
-        </button>
-      </nav>
-    </aside>
-
-    <div class="admin-main-column">
-      <header class="admin-topbar">
-        <div class="admin-topbar-text">
-          <p class="admin-topbar-eyebrow" data-i18n="adminPage.subtitle">Verwaltung</p>
-          <h1 id="admin-page-title" data-i18n="adminPage.navCityWishes">Städte-Wünsche</h1>
-        </div>
-        <div class="admin-topbar-actions">
-          <button type="button" class="auth-pill admin-auth-pill" data-i18n-title="header.authTitle" title="">
-            <span class="auth-pill-icon">👤</span>
-            <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
-            <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
-          </button>
-        </div>
-      </header>
-
-      <main id="admin-main" class="admin-main">
-        <div class="admin-state admin-state--loading" id="admin-state-loading">
-          <p data-i18n="adminPage.loading">Wird geladen…</p>
-        </div>
-      </main>
-    </div>
-  </div>
-
-  <script src="../src/i18n.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../src/supabaseConfig.js"></script>
-  <script src="../src/auth.js"></script>
-  <script src="../src/game/effects.js"></script>
-  <script src="../src/cityWishes.js"></script>
-  <script src="../src/ui/adminPage.js"></script>
+<body>
+  <p><a href="/profile/?section=admin-city-wishes">Zum Dashboard (Admin)</a></p>
 </body>
 </html>

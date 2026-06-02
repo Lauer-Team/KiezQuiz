@@ -1,6 +1,5 @@
-/* KiezQuiz — Full-screen admin area */
+/* KiezQuiz — Admin panels (city wishes) for dashboard sidebar */
 (function () {
-  const ACTIVE_SECTION = 'city-wishes';
   let rows = [];
   let viewMode = 'cities';
   let userFilter = '';
@@ -19,47 +18,6 @@
     if (entry.username) return `@${entry.username}`;
     if (entry.isGuest) return t('adminPage.guestLabel', { id: entry.label.replace('…', '') });
     return t('adminPage.unknownUser');
-  }
-
-  function setShellVisible(show) {
-    document.getElementById('admin-sidebar')?.toggleAttribute('hidden', !show);
-    document.getElementById('admin-app')?.classList.toggle('admin-app--ready', show);
-  }
-
-  function renderGate(state, extraHtml) {
-    setShellVisible(false);
-    const main = document.getElementById('admin-main');
-    if (!main) return;
-    main.innerHTML = `
-      <div class="admin-state admin-state--${state}">
-        ${extraHtml || ''}
-      </div>`;
-  }
-
-  function renderLoginPrompt() {
-    renderGate('locked', `
-      <h2>${t('adminPage.loginRequiredTitle')}</h2>
-      <p>${t('adminPage.loginRequiredBody')}</p>
-      <button type="button" class="primary-btn" id="admin-btn-login">${t('adminPage.loginBtn')}</button>
-    `);
-    document.getElementById('admin-btn-login')?.addEventListener('click', () => {
-      window.authManager?.showAuthModal?.();
-    });
-  }
-
-  function renderAccessDenied() {
-    renderGate('denied', `
-      <h2>${t('adminPage.deniedTitle')}</h2>
-      <p>${t('adminPage.deniedBody')}</p>
-      <a href="/" class="secondary-btn admin-link-btn">${t('adminPage.backToApp')}</a>
-    `);
-  }
-
-  function renderNoCloud() {
-    renderGate('locked', `
-      <h2>${t('adminPage.noCloudTitle')}</h2>
-      <p>${t('adminPage.noCloudBody')}</p>
-    `);
   }
 
   function filterCities(cities) {
@@ -168,7 +126,7 @@
       : '';
 
     return `
-      <section class="admin-panel" id="admin-section-city-wishes" aria-labelledby="admin-page-title">
+      <section class="admin-panel profile-panel" id="profile-section-admin-city-wishes">
         <div class="admin-panel-head">
           <div>
             <p class="admin-panel-intro">${t('adminPage.sectionIntro')}</p>
@@ -197,21 +155,20 @@
       </section>`;
   }
 
-  function bindSectionEvents() {
-    const main = document.getElementById('admin-main');
+  function bindSectionEvents(main, onRerender) {
     if (!main) return;
 
     main.querySelectorAll('.admin-view-tab').forEach((tab) => {
       tab.addEventListener('click', () => {
         viewMode = tab.dataset.view;
         if (viewMode !== 'users') userFilter = '';
-        renderDashboard();
+        onRerender();
       });
     });
 
     main.querySelector('#admin-search')?.addEventListener('input', (e) => {
       searchQuery = e.target.value;
-      renderDashboard();
+      onRerender();
       const input = main.querySelector('#admin-search');
       if (input) {
         input.focus();
@@ -222,18 +179,9 @@
     main.querySelectorAll('.admin-user-row').forEach((btn) => {
       btn.addEventListener('click', () => {
         userFilter = btn.dataset.userKey || '';
-        renderDashboard();
+        onRerender();
       });
     });
-  }
-
-  function renderDashboard() {
-    setShellVisible(true);
-    const main = document.getElementById('admin-main');
-    if (!main) return;
-
-    main.innerHTML = ACTIVE_SECTION === 'city-wishes' ? renderCityWishesSection() : '';
-    bindSectionEvents();
   }
 
   async function loadAdminData() {
@@ -245,51 +193,31 @@
     } else {
       rows = Array.isArray(result) ? result : [];
     }
-    renderDashboard();
+    return rows.length;
   }
 
-  async function refreshAccess() {
-    if (!window.authManager?.isConfigured?.()) {
-      renderNoCloud();
-      return;
-    }
-    if (!window.authManager.isLoggedIn()) {
-      renderLoginPrompt();
-      return;
-    }
-    const admin = await window.cityWishes.isAdmin();
-    if (!admin) {
-      renderAccessDenied();
-      return;
-    }
-    await loadAdminData();
-  }
-
-  async function boot() {
-    await initI18n();
-    document.title = t('adminPage.title') + ' – KiezQuiz';
-    applyToDom();
-
-    window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
-    window.authManager.onAuthChange(async () => {
-      window.authManager.updateHeaderUI();
-      await refreshAccess();
-    });
-
+  async function fetchWishCount() {
     try {
-      await window.authManager.init();
-      window.authManager.initUI();
-    } catch (err) {
-      console.warn('Admin auth startup failed:', err);
-      window.authManager.initUI();
+      const result = await window.cityWishes?.fetchAdminList?.();
+      const list = Array.isArray(result?.rows) ? result.rows : [];
+      return list.length;
+    } catch (_) {
+      return 0;
     }
-
-    await refreshAccess();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
+  function resetFilters() {
+    viewMode = 'cities';
+    userFilter = '';
+    searchQuery = '';
+    loadError = null;
   }
+
+  window.kiezAdminSections = {
+    renderCityWishesSection,
+    bindSectionEvents,
+    loadAdminData,
+    fetchWishCount,
+    resetFilters
+  };
 })();

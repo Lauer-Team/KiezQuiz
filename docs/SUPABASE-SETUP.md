@@ -312,7 +312,7 @@ insert into public.city_wish_admins (user_id) values ('DEINE-USER-UUID');
 
 Alternativ in `src/supabaseConfig.js`: `adminUserIds: ['DEINE-USER-UUID']`.
 
-**Wünsche einsehen:** Einstellungen (⚙️) → „Admin-Bereich öffnen“ (nur als Admin) unter `/admin/`, oder Supabase **Table Editor** → `city_wish_requests`.
+**Wünsche einsehen:** Als Admin im **Dashboard** (`/profile/`) → Seitenleiste **Admin** → **Städte-Wünsche**, oder Supabase **Table Editor** → `city_wish_requests`.
 
 ---
 

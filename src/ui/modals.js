@@ -314,7 +314,7 @@
   }
 
   async function showWishAdminModal() {
-    window.location.assign('/admin/');
+    window.location.assign('/profile/?section=admin-city-wishes');
   }
 
   window.kiezModals = { showLogModal, showWishModal, showWishAdminModal, showTrophyDetail, bindTrophyClicks };

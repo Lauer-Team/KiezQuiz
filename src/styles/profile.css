@@ -169,6 +169,51 @@ body.kq.profile-page-body {
   box-shadow: inset 3px 0 0 var(--signal);
 }
 
+.profile-admin-nav {
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.profile-admin-nav-label {
+  margin: 0 0 0.5rem;
+  padding: 0 0.85rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+
+.profile-nav-item--admin.is-active {
+  border-color: rgba(220, 38, 38, 0.45);
+  background: linear-gradient(90deg, rgba(220, 38, 38, 0.16), rgba(220, 38, 38, 0.04));
+  box-shadow: inset 3px 0 0 #dc2626;
+}
+
+.profile-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  margin-left: 0.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+  background: #dc2626;
+}
+
+.profile-admin-action {
+  max-width: 36rem;
+}
+
+.profile-admin-gate {
+  max-width: 32rem;
+}
+
 .profile-main-column {
   display: flex;
   flex-direction: column;

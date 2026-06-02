@@ -1,6 +1,8 @@
 /* KiezQuiz — Full-screen profile (logged-in users) */
 (function () {
   let activeSection = 'dashboard';
+  let isAdmin = false;
+  let adminWishCount = 0;
   let leaderboardCity = 'hamburg';
   let friends = [];
   let friendRequests = [];
@@ -13,8 +15,37 @@
     dashboard: 'profilePage.navDashboard',
     friends: 'profilePage.navFriends',
     leaderboard: 'profilePage.navLeaderboard',
-    account: 'profilePage.navAccount'
+    account: 'profilePage.navAccount',
+    'admin-city-wishes': 'adminPage.navCityWishes',
+    'admin-changelog': 'header.adminChangelog',
+    'admin-settings': 'header.settingsTitle'
   };
+
+  const ADMIN_SECTIONS = new Set(['admin-city-wishes', 'admin-changelog', 'admin-settings']);
+
+  function parseInitialSection() {
+    try {
+      const section = new URLSearchParams(window.location.search).get('section') || '';
+      if (section && (SECTION_TITLES[section] || ADMIN_SECTIONS.has(section))) {
+        return section;
+      }
+    } catch (_) { /* ignore */ }
+    return 'dashboard';
+  }
+
+  function isAdminSection(section) {
+    return ADMIN_SECTIONS.has(section);
+  }
+
+  function updateSectionUrl(section) {
+    try {
+      const url = new URL(window.location.href);
+      if (!section || section === 'dashboard') url.searchParams.delete('section');
+      else url.searchParams.set('section', section);
+      const qs = url.searchParams.toString();
+      history.replaceState(null, '', url.pathname + (qs ? `?${qs}` : ''));
+    } catch (_) { /* ignore */ }
+  }
 
   function escapeHtml(str) {
     return String(str)
@@ -683,6 +714,92 @@
       </section>`;
   }
 
+  function renderAdminGate(kind) {
+    if (kind === 'login') {
+      return `
+        <section class="profile-panel profile-admin-gate">
+          <h2>${t('adminPage.loginRequiredTitle')}</h2>
+          <p class="profile-panel-intro">${t('adminPage.loginRequiredBody')}</p>
+          <button type="button" class="kq-btn sig" id="profile-btn-login">${t('adminPage.loginBtn')}</button>
+        </section>`;
+    }
+    if (kind === 'denied') {
+      return `
+        <section class="profile-panel profile-admin-gate">
+          <h2>${t('adminPage.deniedTitle')}</h2>
+          <p class="profile-panel-intro">${t('adminPage.deniedBody')}</p>
+          <a href="/" class="kq-btn ghost">${t('adminPage.backToApp')}</a>
+        </section>`;
+    }
+    return `
+      <section class="profile-panel profile-admin-gate">
+        <h2>${t('adminPage.noCloudTitle')}</h2>
+        <p class="profile-panel-intro">${t('adminPage.noCloudBody')}</p>
+      </section>`;
+  }
+
+  function renderAdminChangelogSection() {
+    return `
+      <section class="profile-panel profile-admin-action" id="profile-section-admin-changelog">
+        <p class="profile-panel-intro">${t('profilePage.adminChangelogIntro')}</p>
+        <button type="button" class="kq-btn sig" id="profile-admin-open-changelog">${t('header.adminChangelog')}</button>
+      </section>`;
+  }
+
+  function renderAdminSettingsSection() {
+    return `
+      <section class="profile-panel profile-admin-action" id="profile-section-admin-settings">
+        <p class="profile-panel-intro">${t('profilePage.adminSettingsIntro')}</p>
+        <button type="button" class="kq-btn sig" id="profile-admin-open-settings">${t('header.settingsTitle')}</button>
+      </section>`;
+  }
+
+  async function loadAdminWishCount() {
+    if (!isAdmin) {
+      adminWishCount = 0;
+      return;
+    }
+    adminWishCount = await window.kiezAdminSections?.fetchWishCount?.() || 0;
+  }
+
+  function renderAdminNav() {
+    const wrap = document.getElementById('profile-admin-nav');
+    const nav = document.getElementById('profile-admin-nav-list');
+    if (!wrap || !nav) return;
+
+    if (!isAdmin) {
+      wrap.hidden = true;
+      nav.innerHTML = '';
+      if (isAdminSection(activeSection)) {
+        activeSection = 'dashboard';
+        setActiveNav('dashboard');
+      }
+      return;
+    }
+
+    wrap.hidden = false;
+    const badge = adminWishCount > 0
+      ? `<span class="profile-admin-badge">${adminWishCount}</span>`
+      : '';
+    const items = [
+      { section: 'admin-city-wishes', labelKey: 'adminPage.navCityWishes', badge },
+      { section: 'admin-changelog', labelKey: 'header.adminChangelog', badge: '' },
+      { section: 'admin-settings', labelKey: 'header.settingsTitle', badge: '' }
+    ];
+
+    nav.innerHTML = items.map((item) => `
+      <button type="button" class="profile-nav-item profile-nav-item--admin ${activeSection === item.section ? 'is-active' : ''}" data-section="${item.section}">
+        ${escapeHtml(t(item.labelKey))}${item.badge}
+      </button>`).join('');
+
+    nav.querySelectorAll('.profile-nav-item').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        setActiveNav(btn.dataset.section);
+        await refreshAccess();
+      });
+    });
+  }
+
   function renderSectionContent() {
     const needsLogin = window.authManager?.isConfigured?.()
       && !window.authManager?.isLoggedIn?.()
@@ -697,6 +814,16 @@
           <h3 class="profile-section-title">${t('profilePage.noCloudTitle')}</h3>
           <p class="profile-panel-intro">${t('profilePage.noCloudBody')}</p>
         </section>`;
+    }
+    if (isAdminSection(activeSection)) {
+      if (!window.authManager?.isConfigured?.()) return renderAdminGate('nocloud');
+      if (!window.authManager?.isLoggedIn?.()) return renderAdminGate('login');
+      if (!isAdmin) return renderAdminGate('denied');
+      if (activeSection === 'admin-city-wishes') {
+        return window.kiezAdminSections?.renderCityWishesSection?.() || '';
+      }
+      if (activeSection === 'admin-changelog') return renderAdminChangelogSection();
+      if (activeSection === 'admin-settings') return renderAdminSettingsSection();
     }
     switch (activeSection) {
       case 'dashboard': return renderDashboardSection();
@@ -833,6 +960,12 @@
     } else if (activeSection === 'dashboard') {
       void loadDashboardLeaderboardMini(save);
     }
+
+    if (activeSection === 'admin-changelog') {
+      requestAnimationFrame(() => window.kiezChangelog?.show?.());
+    } else if (activeSection === 'admin-settings') {
+      requestAnimationFrame(() => openSettingsModal());
+    }
   }
 
   async function loadSocialData() {
@@ -938,6 +1071,17 @@
       leaderboardCity = e.target.value;
       void loadLeaderboards();
     });
+
+    main.querySelector('#profile-admin-open-changelog')?.addEventListener('click', () => {
+      window.kiezChangelog?.show?.();
+    });
+    main.querySelector('#profile-admin-open-settings')?.addEventListener('click', () => {
+      openSettingsModal();
+    });
+
+    if (activeSection === 'admin-city-wishes' && isAdmin) {
+      window.kiezAdminSections?.bindSectionEvents?.(main, () => renderDashboard());
+    }
 
     if (main.dataset.profileCityTilesBound !== 'true') {
       main.dataset.profileCityTilesBound = 'true';
@@ -1116,19 +1260,44 @@
   }
 
   function setActiveNav(section) {
-    activeSection = section;
-    document.querySelectorAll('.profile-nav-item').forEach((btn) => {
-      btn.classList.toggle('is-active', btn.dataset.section === section);
+    activeSection = section || 'dashboard';
+    document.querySelectorAll('.profile-nav:not(.profile-nav--admin) .profile-nav-item').forEach((btn) => {
+      btn.classList.toggle('is-active', btn.dataset.section === activeSection);
     });
-    const titleKey = SECTION_TITLES[section] || SECTION_TITLES.dashboard;
+    document.querySelectorAll('.profile-nav--admin .profile-nav-item').forEach((btn) => {
+      btn.classList.toggle('is-active', btn.dataset.section === activeSection);
+    });
+    const titleKey = SECTION_TITLES[activeSection] || SECTION_TITLES.dashboard;
     const titleEl = document.getElementById('profile-page-title');
+    const eyebrowEl = document.querySelector('.profile-page-eyebrow');
     if (titleEl) {
       titleEl.textContent = t(titleKey);
       titleEl.setAttribute('data-i18n', titleKey);
     }
+    if (eyebrowEl) {
+      const eyebrowKey = isAdminSection(activeSection) ? 'adminPage.subtitle' : 'profilePage.subtitle';
+      eyebrowEl.textContent = t(eyebrowKey);
+      eyebrowEl.setAttribute('data-i18n', eyebrowKey);
+    }
+    updateSectionUrl(activeSection);
+    renderAdminNav();
+  }
+
+  async function refreshAdminState() {
+    isAdmin = !!(await window.cityWishes?.isAdmin?.());
+    await loadAdminWishCount();
+    renderAdminNav();
   }
 
   async function refreshAccess() {
+    await refreshAdminState();
+
+    if (isAdminSection(activeSection) && isAdmin && activeSection === 'admin-city-wishes') {
+      await window.kiezAdminSections?.loadAdminData?.();
+      adminWishCount = await window.kiezAdminSections?.fetchWishCount?.() || adminWishCount;
+      renderAdminNav();
+    }
+
     if (window.authManager?.isConfigured?.()
       && window.authManager.isLoggedIn()
       && (activeSection === 'friends' || activeSection === 'leaderboard' || activeSection === 'dashboard')) {
@@ -1155,10 +1324,15 @@
       applyToDom();
       initProfileChrome();
       setShellVisible(true);
+      setActiveNav(parseInitialSection());
 
-      document.querySelectorAll('.profile-nav-item').forEach((btn) => {
+      document.querySelectorAll('.profile-nav:not(.profile-nav--admin) .profile-nav-item').forEach((btn) => {
         btn.addEventListener('click', async () => {
+          const prev = activeSection;
           setActiveNav(btn.dataset.section);
+          if (isAdminSection(prev)) {
+            window.kiezAdminSections?.resetFilters?.();
+          }
           await refreshAccess();
         });
       });
@@ -1177,7 +1351,6 @@
 
       window.authManager.onAuthChange(async (user) => {
         window.authManager.updateHeaderUI();
-        window.kiezAdminBar?.scheduleRender?.();
         if (user) {
           await window.cloudSync.handleLoginMerge();
         }
@@ -1187,11 +1360,9 @@
       try {
         await window.authManager.init();
         window.authManager.initUI();
-        window.kiezAdminBar?.scheduleRender?.();
       } catch (err) {
         console.warn('Profile auth startup failed:', err);
         window.authManager.initUI();
-        window.kiezAdminBar?.scheduleRender?.();
       }
 
       await refreshAccess();
@@ -1203,9 +1374,13 @@
         if (document.getElementById('profile-section-dashboard')
           || document.getElementById('profile-section-friends')
           || document.getElementById('profile-section-leaderboard')
-          || document.getElementById('profile-section-account')) {
+          || document.getElementById('profile-section-account')
+          || document.getElementById('profile-section-admin-city-wishes')
+          || document.getElementById('profile-section-admin-changelog')
+          || document.getElementById('profile-section-admin-settings')) {
           renderDashboard();
         }
+        renderAdminNav();
       });
     } catch (err) {
       console.error('Profile boot failed:', err);
