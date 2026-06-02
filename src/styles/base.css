@@ -1305,9 +1305,9 @@ body.in-round .map-container-wrapper {
   }
 }
 
-/* Floating Tooltip — fixed to viewport so it follows the cursor */
+/* Floating Tooltip — anchored to map container, scrolls with the map */
 .map-tooltip {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   pointer-events: none;
@@ -2403,7 +2403,7 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--color-neutral-glow), var(--color-wandsbek));
+  background: var(--signal);
   border: none;
   color: #fff;
   padding: 0.9rem 2rem;
@@ -2413,17 +2413,54 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
   font-weight: 700;
   cursor: pointer;
   transition: var(--transition-fast);
-  box-shadow: 0 4px 15px rgba(0, 162, 255, 0.4);
+  box-shadow: 0 8px 22px -10px var(--signal);
   width: 100%;
   
   &:hover {
+    background: var(--signal-tief);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(0, 162, 255, 0.6);
+    box-shadow: 0 12px 26px -10px var(--signal);
   }
   
   &:active {
     transform: translateY(1px);
   }
+}
+
+.round-setup-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.round-setup-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--signal) 13%, var(--bg-surface));
+  border: 1px solid color-mix(in srgb, var(--signal) 26%, transparent);
+  color: var(--signal);
+}
+
+.round-setup-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.round-setup-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.round-setup-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
 }
 
 /* Animations */

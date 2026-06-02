@@ -1259,6 +1259,24 @@ body.map-play-active .app-shell.kq .europe-microstates-bar {
   filter: none;
 }
 
+.app-shell.kq .round-setup-icon {
+  background: color-mix(in srgb, var(--signal) 13%, var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--signal) 26%, transparent);
+  color: var(--signal);
+}
+
+.app-shell.kq .primary-btn {
+  border-radius: 999px;
+  background: var(--signal);
+  color: var(--on-signal, #fff);
+  box-shadow: 0 8px 22px -10px var(--signal);
+}
+
+.app-shell.kq .primary-btn:hover {
+  background: var(--signal-tief);
+  box-shadow: 0 12px 26px -10px var(--signal);
+}
+
 /* Bezirks-Fortschritt: keep legacy flex rows (JS uses .dp-score / .dp-lock) */
 .app-shell.kq .unlocker-card .district-progress-list {
   gap: 0.65rem;

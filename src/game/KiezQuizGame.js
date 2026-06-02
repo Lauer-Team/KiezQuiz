@@ -230,11 +230,11 @@ class KiezQuizGame {
         });
       }
 
-      if (this.tooltip && this.tooltip.parentElement !== document.body) {
-        document.body.appendChild(this.tooltip);
+      if (this.tooltip && this.mapWrapper && this.tooltip.parentElement !== this.mapWrapper) {
+        this.mapWrapper.appendChild(this.tooltip);
       }
 
-      window.kiezCityDashboard?.enhanceSegmentSelector();
+      this.setupMapTooltipScrollHide();
       window.kiezCityDashboard?.renderContextBar(this, document.getElementById('city-context-bar'));
 
       this.setupUIListeners();
@@ -2210,7 +2210,7 @@ class KiezQuizGame {
     });
 
     path.addEventListener('mouseleave', () => {
-      this.tooltip.style.display = 'none';
+      this.hideMapTooltip();
     });
 
     path.addEventListener('touchstart', (e) => {
@@ -2310,6 +2310,17 @@ class KiezQuizGame {
     return true;
   }
 
+  hideMapTooltip() {
+    if (this.tooltip) this.tooltip.style.display = 'none';
+  }
+
+  setupMapTooltipScrollHide() {
+    if (this._mapTooltipScrollBound) return;
+    this._mapTooltipScrollBound = true;
+    const hide = () => this.hideMapTooltip();
+    document.addEventListener('scroll', hide, { passive: true, capture: true });
+  }
+
   showMapTooltipForPath(path, clientX, clientY) {
     if (!this.shouldShowMapTooltip() || !this.tooltip) {
       if (this.tooltip) this.tooltip.style.display = 'none';
@@ -2334,19 +2345,20 @@ class KiezQuizGame {
   }
 
   positionMapTooltip(clientX, clientY) {
-    if (!this.tooltip) return;
+    if (!this.tooltip || !this.mapWrapper) return;
+    const wrapperRect = this.mapWrapper.getBoundingClientRect();
     const offsetX = 14;
     const offsetY = 12;
     this.tooltip.style.visibility = 'hidden';
     this.tooltip.style.display = 'block';
-    this.tooltip.style.position = 'fixed';
+    this.tooltip.style.position = 'absolute';
     const rect = this.tooltip.getBoundingClientRect();
     const w = rect.width || 160;
     const h = rect.height || 40;
-    let x = clientX + offsetX;
-    let y = clientY - h - offsetY;
-    x = Math.max(8, Math.min(x, window.innerWidth - w - 8));
-    y = Math.max(8, Math.min(y, window.innerHeight - h - 8));
+    let x = clientX - wrapperRect.left + offsetX;
+    let y = clientY - wrapperRect.top - h - offsetY;
+    x = Math.max(8, Math.min(x, wrapperRect.width - w - 8));
+    y = Math.max(8, Math.min(y, wrapperRect.height - h - 8));
     this.tooltip.style.left = `${x}px`;
     this.tooltip.style.top = `${y}px`;
     this.tooltip.style.transform = 'none';
@@ -2587,10 +2599,10 @@ class KiezQuizGame {
     container.innerHTML = `
       <div class="game-play-area">
         <!-- Play / Round Controls -->
-        <div class="round-setup-card" id="round-setup-ui" style="display: flex; flex-direction: column; gap: 0.75rem; text-align: center;">
-          <div style="font-size: 1.8rem;">🎮</div>
-          <h4 style="font-family: var(--font-display); font-weight:700; color: var(--text-primary);">${t('game.roundStartTitle')}</h4>
-          <p style="font-size:0.82rem; color: var(--text-secondary);">
+        <div class="round-setup-card" id="round-setup-ui">
+          <span class="round-setup-icon" id="round-setup-icon" aria-hidden="true"></span>
+          <h4 class="round-setup-title">${t('game.roundStartTitle')}</h4>
+          <p class="round-setup-desc">
             ${t('game.roundStartDesc')}
             <br><strong>${t('game.timeLimit')}</strong>
             ${this.progressionMode && !isBz ? `<br><strong style="color: var(--color-xp);">${t('game.unlockHint')}</strong>` : ''}
@@ -2601,7 +2613,7 @@ class KiezQuizGame {
             showBulkActions: this.isEuropeCapitalsMode()
           }) : ''}
 
-          <button class="primary-btn" id="btn-start-round" style="margin-top:0.4rem; padding: 0.75rem;">${t('game.begin')}</button>
+          <button class="primary-btn" id="btn-start-round">${t('game.begin')}</button>
         </div>
 
         <!-- Active round dashboard (hidden initially) -->
@@ -2633,6 +2645,10 @@ class KiezQuizGame {
         </div>
       </div>
     `;
+
+    const iconEl = document.getElementById('round-setup-icon');
+    const modeIcon = window.kiezIcons?.ModeIcon?.[this.currentMode];
+    if (iconEl && modeIcon) iconEl.innerHTML = modeIcon;
 
     const startBtn = document.getElementById('btn-start-round');
     startBtn.addEventListener('click', () => {
@@ -3464,10 +3480,10 @@ class KiezQuizGame {
     const pickerBezirke = isBz ? this.getProgression().map(b => b.name) : this.getUnlockedBezirke();
 
     container.innerHTML = `
-      <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:center;" id="name-all-setup">
-        <div style="font-size:2.2rem;">⏱️</div>
-        <h4 style="font-family:var(--font-display); font-weight:700; color:var(--text-primary);">${isBz ? t('nameAll.titleBezirke') : t('nameAll.titleStadtteile')}</h4>
-        <p style="font-size:0.82rem; color:var(--text-secondary);">
+      <div class="round-setup-card" id="name-all-setup">
+        <span class="round-setup-icon" id="name-all-setup-icon" aria-hidden="true"></span>
+        <h4 class="round-setup-title">${isBz ? t('nameAll.titleBezirke') : t('nameAll.titleStadtteile')}</h4>
+        <p class="round-setup-desc">
           ${isBz ? t('nameAll.introBezirke') : t('nameAll.introStadtteile')}
           ${t('nameAll.introSuffix')}
           <br><strong>${t('nameAll.timeLimit')}</strong>
@@ -3476,7 +3492,7 @@ class KiezQuizGame {
           allChecked: true,
           showBulkActions: this.isEuropeCapitalsMode()
         }) : ''}
-        <button class="primary-btn" id="btn-start-nameall" style="padding:0.75rem;">${t('game.begin')}</button>
+        <button class="primary-btn" id="btn-start-nameall">${t('game.begin')}</button>
       </div>
 
       <div style="display:none; flex-direction:column; gap:0.6rem;" id="name-all-active">
@@ -3495,6 +3511,10 @@ class KiezQuizGame {
         </div>
       </div>
     `;
+
+    const nameAllIcon = document.getElementById('name-all-setup-icon');
+    const nameAllSvg = window.kiezIcons?.ModeIcon?.NAME_ALL;
+    if (nameAllIcon && nameAllSvg) nameAllIcon.innerHTML = nameAllSvg;
 
     document.getElementById('btn-start-nameall').onclick = () => {
       const selected = isBz ? this.getProgression().map(b => b.name) : this.getSelectedNameAllBezirke();
