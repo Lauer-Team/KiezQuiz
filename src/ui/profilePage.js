@@ -17,11 +17,12 @@
     leaderboard: 'profilePage.navLeaderboard',
     account: 'profilePage.navAccount',
     'admin-city-wishes': 'adminPage.navCityWishes',
+    'admin-player-activity': 'adminPage.navPlayerActivity',
     'admin-changelog': 'header.adminChangelog',
     'admin-settings': 'header.settingsTitle'
   };
 
-  const ADMIN_SECTIONS = new Set(['admin-city-wishes', 'admin-changelog', 'admin-settings']);
+  const ADMIN_SECTIONS = new Set(['admin-city-wishes', 'admin-player-activity', 'admin-changelog', 'admin-settings']);
 
   function parseInitialSection() {
     try {
@@ -783,6 +784,7 @@
       : '';
     const items = [
       { section: 'admin-city-wishes', labelKey: 'adminPage.navCityWishes', badge },
+      { section: 'admin-player-activity', labelKey: 'adminPage.navPlayerActivity', badge: '' },
       { section: 'admin-changelog', labelKey: 'header.adminChangelog', badge: '' },
       { section: 'admin-settings', labelKey: 'header.settingsTitle', badge: '' }
     ];
@@ -821,6 +823,9 @@
       if (!isAdmin) return renderAdminGate('denied');
       if (activeSection === 'admin-city-wishes') {
         return window.kiezAdminSections?.renderCityWishesSection?.() || '';
+      }
+      if (activeSection === 'admin-player-activity') {
+        return window.kiezAdminSections?.renderPlayerActivitySection?.() || '';
       }
       if (activeSection === 'admin-changelog') return renderAdminChangelogSection();
       if (activeSection === 'admin-settings') return renderAdminSettingsSection();
@@ -1082,6 +1087,9 @@
     if (activeSection === 'admin-city-wishes' && isAdmin) {
       window.kiezAdminSections?.bindSectionEvents?.(main, () => renderDashboard());
     }
+    if (activeSection === 'admin-player-activity' && isAdmin) {
+      window.kiezAdminSections?.bindActivitySectionEvents?.(main, () => renderDashboard());
+    }
 
     if (main.dataset.profileCityTilesBound !== 'true') {
       main.dataset.profileCityTilesBound = 'true';
@@ -1297,6 +1305,9 @@
       adminWishCount = await window.kiezAdminSections?.fetchWishCount?.() || adminWishCount;
       renderAdminNav();
     }
+    if (isAdminSection(activeSection) && isAdmin && activeSection === 'admin-player-activity') {
+      await window.kiezAdminSections?.loadActivityData?.();
+    }
 
     if (window.authManager?.isConfigured?.()
       && window.authManager.isLoggedIn()
@@ -1376,6 +1387,7 @@
           || document.getElementById('profile-section-leaderboard')
           || document.getElementById('profile-section-account')
           || document.getElementById('profile-section-admin-city-wishes')
+          || document.getElementById('profile-section-admin-player-activity')
           || document.getElementById('profile-section-admin-changelog')
           || document.getElementById('profile-section-admin-settings')) {
           renderDashboard();

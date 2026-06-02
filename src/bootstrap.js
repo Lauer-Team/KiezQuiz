@@ -2,6 +2,7 @@
 (function () {
   var GAME_CORE = [
     'src/leaderboard.js',
+    'src/playerActivity.js',
     'src/game/config.js',
     'src/game/progress.js',
     'src/districtColors.js',

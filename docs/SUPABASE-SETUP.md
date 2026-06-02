@@ -333,6 +333,12 @@ Nach dem Ausführen:
 
 **Manuell testen:** Zwei Test-Accounts anlegen, Freundschaftsanfrage senden/annehmen, je eine Runde spielen, Bestenliste prüfen.
 
+### Admin: Spieler-Aktivität
+
+Im SQL Editor ausführen: `docs/sql/admin-player-activity.sql` (Tabelle `player_game_log`, RPCs `log_player_game`, `get_admin_play_volume`, `get_admin_player_activity`; importiert bestehende Runden aus Cloud-Spielständen).
+
+Im Dashboard unter **Admin → Spieler-Aktivität**: Karten für Heute / Woche / Monat / Jahr / Gesamt plus Tabelle pro Spieler. Neue Runden werden beim Spielen automatisch geloggt (nur eingeloggte Nutzer).
+
 ---
 
 ## 3. E-Mail-Auth konfigurieren

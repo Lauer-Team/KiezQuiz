@@ -1776,6 +1776,12 @@ class KiezQuizGame {
       durationSec,
       mode: mode || this.currentMode || ''
     });
+    void window.kiezPlayerActivity?.logGame?.(cityId, {
+      correct,
+      total,
+      durationSec,
+      mode: mode || this.currentMode || ''
+    });
   }
 
   getModeDisplayName(mode, segment) {
