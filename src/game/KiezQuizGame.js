@@ -119,7 +119,6 @@ class KiezQuizGame {
       window.kiezHub?.render(this, hubEl);
       if (window.authManager) window.authManager.updateHeaderUI();
       window.kiezAdminBar?.scheduleRender?.();
-      this._maybeShowAppNews();
       return;
     }
 
@@ -273,34 +272,7 @@ class KiezQuizGame {
         this._audioPrimed = true;
       }
 
-      this._maybeShowAppNews();
     });
-  }
-
-  _hasAppNewsContent() {
-    const title = t('appNews.title');
-    return !!(title && title !== 'appNews.title' && String(title).trim());
-  }
-
-  shouldShowAppNews() {
-    const version = typeof APP_NEWS_VERSION === 'number' ? APP_NEWS_VERSION : 0;
-    if (!version || !this._hasAppNewsContent()) return false;
-    const seen = parseInt(this._save?.global?.newsVersionSeen, 10) || 0;
-    return seen < version;
-  }
-
-  markAppNewsSeen() {
-    const version = typeof APP_NEWS_VERSION === 'number' ? APP_NEWS_VERSION : 0;
-    if (!this._save.global) this._save.global = {};
-    this._save.global.newsVersionSeen = version;
-    window.saveManager.persistSave(this._save);
-  }
-
-  _maybeShowAppNews() {
-    if (this._appNewsShownThisSession) return;
-    if (!this.shouldShowAppNews()) return;
-    this._appNewsShownThisSession = true;
-    this.showAppNews();
   }
 
   showHub(persistNav = true) {
@@ -2030,46 +2002,6 @@ class KiezQuizGame {
       cloudBlock?.insertAdjacentElement('afterend', profileSlot);
     }
 
-  }
-
-  showAppNews() {
-    const modal = openOverlayModal(`
-      <div class="modal-content" style="max-width: 550px;">
-        <h2>${t('appNews.title')}</h2>
-        <p>${t('appNews.intro')}</p>
-        
-        <div class="modal-features">
-          <div class="mf-item">
-            <span class="mf-icon">${t('appNews.feature1Icon')}</span>
-            <span class="mf-text">
-              <strong>${t('appNews.feature1Title')}</strong>
-              ${t('appNews.feature1Text')}
-            </span>
-          </div>
-          <div class="mf-item">
-            <span class="mf-icon">${t('appNews.feature2Icon')}</span>
-            <span class="mf-text">
-              <strong>${t('appNews.feature2Title')}</strong>
-              ${t('appNews.feature2Text')}
-            </span>
-          </div>
-          <div class="mf-item">
-            <span class="mf-icon">${t('appNews.feature3Icon')}</span>
-            <span class="mf-text">
-              <strong>${t('appNews.feature3Title')}</strong>
-              ${t('appNews.feature3Text')}
-            </span>
-          </div>
-        </div>
-
-        <p style="font-size: 0.8rem; color: var(--text-muted);">${t('appNews.footerTip')}</p>
-        <button class="primary-btn" id="btn-app-news-dismiss">${t('appNews.dismiss')}</button>
-      </div>
-    `);
-    document.getElementById('btn-app-news-dismiss').addEventListener('click', () => {
-      this.markAppNewsSeen();
-      closeOverlayModal(modal);
-    });
   }
 
   // Mode Setter

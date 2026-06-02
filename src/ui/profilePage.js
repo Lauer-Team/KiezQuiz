@@ -177,6 +177,19 @@
     if (progFill) progFill.style.width = `${pct}%`;
   }
 
+  function openSettingsModal() {
+    const chain = typeof window.loadGameCore === 'function'
+      ? window.loadGameCore()
+      : Promise.resolve();
+    chain.then(() => {
+      if (!window.kiezQuizGame && typeof KiezQuizGame === 'function') {
+        window.kiezQuizGame = new KiezQuizGame();
+        window.hamburgGame = window.kiezQuizGame;
+      }
+      window.kiezQuizGame?.showSettings?.();
+    });
+  }
+
   function initProfileChrome() {
     try {
       window.kiezGlobalHeader?.renderStaticChrome?.();
@@ -184,6 +197,12 @@
       window.kiezChangelog?.bindTriggers?.(document);
     } catch (err) {
       console.warn('Profile chrome init failed:', err);
+    }
+
+    const settingsBtn = document.getElementById('btn-settings');
+    if (settingsBtn && !settingsBtn.dataset.kqSettingsBound) {
+      settingsBtn.dataset.kqSettingsBound = 'true';
+      settingsBtn.addEventListener('click', openSettingsModal);
     }
 
     const themeBtn = document.getElementById('btn-theme');
@@ -1124,6 +1143,16 @@
   }
 
   async function boot() {
+    window.loadGameCore = function () {
+      if (window.KiezQuizGame) return Promise.resolve();
+      const urls = [
+        '../src/game/SoundManager.js',
+        '../src/game/MapNavigator.js',
+        '../src/game/KiezQuizGame.js'
+      ];
+      return window.kiezLoadScript.loadScripts(urls);
+    };
+
     try {
       await initI18n();
       applyPageMeta('profilePage');
