@@ -4,6 +4,7 @@
 LOCAL-INFO.md
 node_modules/
 test-results/
+_site/
 
 # Lokale Supabase-Keys (Vorlage: src/supabaseConfig.example.js)
 src/supabaseConfig.js

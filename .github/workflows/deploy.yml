@@ -59,6 +59,7 @@ jobs:
             --exclude node_modules \
             --exclude _site \
             . _site/
+          python3 scripts/stamp_build.py "${{ github.sha }}" _site
 
       - uses: actions/upload-pages-artifact@v3
         with:

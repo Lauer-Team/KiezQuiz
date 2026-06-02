@@ -26,6 +26,10 @@
   var corePromise = null;
   var fullPromise = null;
 
+  function assetHref(path) {
+    return typeof window.kiezAssetUrl === 'function' ? window.kiezAssetUrl(path) : path;
+  }
+
   function loadScripts(urls) {
     return window.kiezLoadScript.loadScripts(urls);
   }
@@ -42,7 +46,7 @@
       var link = document.createElement('link');
       link.id = 'kiez-modals-styles';
       link.rel = 'stylesheet';
-      link.href = 'src/styles/modals.css';
+      link.href = assetHref('src/styles/modals.css');
       link.onload = resolve;
       link.onerror = resolve;
       document.head.appendChild(link);
@@ -51,7 +55,7 @@
 
   function loadCityStyles() {
     var ids = ['kiez-city-styles', 'kiez-modals-styles'];
-    var hrefs = ['src/styles/city.css', 'src/styles/modals.css'];
+    var hrefs = ['src/styles/city.css', 'src/styles/modals.css'].map(assetHref);
     var chain = Promise.resolve();
     hrefs.forEach(function (href, i) {
       chain = chain.then(function () {

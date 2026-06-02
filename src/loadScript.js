@@ -3,12 +3,17 @@
   var loaded = Object.create(null);
   var loading = Object.create(null);
 
+  function resolveSrc(src) {
+    return typeof window.kiezAssetUrl === 'function' ? window.kiezAssetUrl(src) : src;
+  }
+
   function loadScript(src) {
+    var url = resolveSrc(src);
     if (loaded[src]) return Promise.resolve();
     if (loading[src]) return loading[src];
     loading[src] = new Promise(function (resolve, reject) {
       var s = document.createElement('script');
-      s.src = src;
+      s.src = url;
       s.onload = function () {
         loaded[src] = true;
         resolve();

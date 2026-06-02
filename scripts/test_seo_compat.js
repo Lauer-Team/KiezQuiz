@@ -46,6 +46,7 @@ assert(bootSrc.includes('kiezHubShell'), 'bootView injects hub shell before pain
 assert(routerSrc.includes('isHomePath'), 'viewRouter always opens hub on homepage');
 assert(indexHtml.includes('src/ui/hubShell.js'), 'index.html loads hubShell.js');
 assert(indexHtml.includes('src/bootView.js'), 'index.html loads bootView.js');
+assert(indexHtml.includes('src/versionGuard.js'), 'index.html loads versionGuard.js');
 assert(indexHtml.includes('src/bootstrap.js'), 'index.html loads bootstrap.js');
 assert(!indexHtml.includes('src/data/hamburg_data.js'), 'city data not in initial HTML scripts');
 assert(indexHtml.includes('seo-hub-fallback'), 'SEO fallback content still in DOM for crawlers');
@@ -54,6 +55,11 @@ assert(indexHtml.includes('hreflang="de"') && indexHtml.includes('hreflang="en"'
 assert(indexHtml.includes('FAQPage'), 'homepage FAQ schema');
 assert(indexHtml.includes('<noscript>'), 'homepage noscript fallback');
 assert(!indexHtml.includes('<!-- Inlined Map SVG -->'), 'inline Hamburg SVG removed from HTML');
+
+const profileHtml = fs.readFileSync(path.join(root, 'profile/index.html'), 'utf8');
+const vgHeadIdx = profileHtml.indexOf('versionGuard.js');
+const profileCssIdx = profileHtml.indexOf('styles/brand.css');
+assert(vgHeadIdx !== -1 && vgHeadIdx < profileCssIdx, 'profile loads versionGuard before CSS');
 
 for (const slug of ['hamburg', 'berlin', 'frankfurt']) {
   const cityHtml = fs.readFileSync(path.join(root, slug, 'index.html'), 'utf8');

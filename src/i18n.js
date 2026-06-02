@@ -23,7 +23,10 @@ function interpolate(str, vars) {
 
 async function loadLocaleMessages(lang) {
   const base = (typeof window !== 'undefined' && window.KIEZ_SRC_BASE) || '/src/';
-  const response = await fetch(`${base}locales/${lang}.json`);
+  const localePath = `${base}locales/${lang}.json`;
+  const response = await fetch(
+    typeof window.kiezAssetUrl === 'function' ? window.kiezAssetUrl(localePath) : localePath
+  );
   if (!response.ok) {
     throw new Error(`Failed to load locale: ${lang}`);
   }
