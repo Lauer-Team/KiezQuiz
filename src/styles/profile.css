@@ -73,6 +73,16 @@ body.kq.profile-page-body {
   -webkit-backdrop-filter: blur(12px);
 }
 
+.profile-app--ready .profile-sidebar {
+  position: sticky;
+  top: var(--kq-header-offset, 72px);
+  align-self: start;
+  z-index: 40;
+  max-height: calc(100dvh - var(--kq-header-offset, 72px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .profile-sidebar[hidden] {
   display: none;
 }

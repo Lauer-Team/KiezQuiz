@@ -517,6 +517,13 @@ html[data-theme="light"] .hub-about-kalle {
   margin-left: 14px;
 }
 
+@media (max-width: 768px) {
+  .app-shell.kq .header-hub-nav:not([hidden]),
+  .app-shell.kq .header-dashboard-nav:not([hidden]) {
+    margin-left: 0;
+  }
+}
+
 /* Loose pills — no segmented bar or vertical divider strokes */
 .header-hub-nav.kq-navlinks {
   gap: 8px;

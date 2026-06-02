@@ -3,6 +3,8 @@
    Loaded after base.css + app.css. Does NOT touch save/auth logic.
    ============================================================ */
 
+@import url("mobile.css");
+
 /* --- Token bridge: map legacy vars → CI tokens --- */
 .app-shell.kq,
 .app-shell[data-theme],
@@ -1432,26 +1434,15 @@ body::selection,
   display: none !important;
 }
 
-/* Responsive */
+/* Responsive (hub/header; city play → mobile.css) */
 @media (max-width: 900px) {
-  .app-shell.kq .dashboard-grid {
+  .app-shell.kq.view-hub .dashboard-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
   }
 
-  .app-shell.kq .console-panel {
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-    max-height: none;
-    padding: 16px;
-  }
-
-  .app-shell.kq .map-panel {
-    min-height: 50vh;
-  }
-
   .app-shell.kq .choices-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .app-shell.kq .stats-bar {
@@ -1484,19 +1475,59 @@ body::selection,
   }
 }
 
-@media (max-width: 640px) {
-  /* base.css stacks .app-header as column — keep hub/about topbar one row */
-  .app-shell.kq.view-hub .app-header.global-header {
+@media (max-width: 768px) {
+  /* Landing/profile/about: row 1 = logo + auth/icons; row 2 = nav pills */
+  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) {
     flex-direction: row !important;
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
+    align-content: flex-start;
+    row-gap: 10px;
+    column-gap: 12px;
     border-radius: 0;
     padding: 12px clamp(12px, 3vw, 16px);
   }
 
-  .app-shell.kq.view-hub .app-header.global-header .stats-bar {
+  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .brand.brand-link {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
+  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .stats-bar {
+    order: 2;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-left: auto;
     flex-wrap: nowrap;
     justify-content: flex-end;
+  }
+
+  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .header-dashboard-nav:not([hidden]) {
+    order: 3;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .header-hub-nav:not([hidden]) {
+    order: 3;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    overflow-x: visible;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) {
+    padding: 12px clamp(12px, 3vw, 16px);
   }
 
   .app-shell.kq .auth-pill-label {
