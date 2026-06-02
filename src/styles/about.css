@@ -7,22 +7,17 @@
   background-image: var(--bg-grad);
 }
 
-/* .kq sets overflow:hidden on shell — allow page scroll on /about/ */
-.about-page-body.kq {
+/* app.css .kq sets overflow:hidden — allow document scroll on /about/ */
+body.about-page-body {
   overflow-x: hidden;
   overflow-y: auto;
   height: auto;
 }
 
-.about-app-shell {
+.app-shell.about-app-shell.kq {
   min-height: 100dvh;
   height: auto;
   overflow: visible;
-}
-
-.about-app-shell.kq {
-  overflow: visible;
-  height: auto;
 }
 
 .about-app-shell .app-header.global-header {

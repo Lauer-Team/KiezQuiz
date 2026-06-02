@@ -1277,3 +1277,15 @@ body.kq.profile-page-body[data-theme="dark"] {
   --bg: #0F1118;
   --bg-grad: radial-gradient(120% 90% at 82% -8%, #1b1f2e 0%, #0F1118 56%);
 }
+
+/* About page scroll (body has no .kq; shell still does) */
+body.about-page-body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+}
+
+.app-shell.about-app-shell.kq {
+  overflow: visible;
+  height: auto;
+}
