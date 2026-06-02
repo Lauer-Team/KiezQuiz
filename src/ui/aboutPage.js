@@ -117,16 +117,37 @@
     window.kiezGlobalHeader?.syncBrandTheme?.();
   }
 
-  function initAboutChrome() {
+  function getAboutGameStub() {
+    return {
+      view: 'hub',
+      activeCityId: 'hamburg',
+      reRenderCurrentView() {
+        updateHeaderStatsFromSave();
+        refreshAboutHeader();
+      }
+    };
+  }
+
+  function refreshAboutHeader() {
+    const stub = getAboutGameStub();
+    Object.defineProperty(stub, '_save', {
+      get() { return window.saveManager.loadSave(); },
+      set(v) { if (v) window.saveManager.persistSave(v); }
+    });
+    window.kiezGlobalHeader?.sync?.(stub);
     window.kiezGlobalHeader?.renderStaticChrome?.();
     window.kiezGlobalHeader?.syncBrandTheme?.();
+    window.authManager?.updateHeaderUI?.();
+    syncLangButton();
+    syncMuteButton();
+  }
+
+  function initAboutChrome() {
     window.kiezChangelog?.bindTriggers?.(document);
     window.kiezHubScrollTop?.bind?.();
     bindHeaderControls();
-    syncLangButton();
-    syncMuteButton();
     syncTheme();
-    updateHeaderStatsFromSave();
+    refreshAboutHeader();
   }
 
   async function boot() {
@@ -147,14 +168,7 @@
     initAboutChrome();
 
     window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
-    const aboutGameStub = {
-      view: 'hub',
-      activeCityId: 'hamburg',
-      reRenderCurrentView() {
-        updateHeaderStatsFromSave();
-        window.kiezGlobalHeader?.renderStaticChrome?.();
-      }
-    };
+    const aboutGameStub = getAboutGameStub();
     Object.defineProperty(aboutGameStub, '_save', {
       get() { return window.saveManager.loadSave(); },
       set(v) { if (v) window.saveManager.persistSave(v); }
@@ -165,8 +179,7 @@
       window.authManager.updateHeaderUI();
       window.kiezAdminBar?.scheduleRender?.();
       if (user) await window.cloudSync.handleLoginMerge();
-      updateHeaderStatsFromSave();
-      window.kiezGlobalHeader?.renderStaticChrome?.();
+      refreshAboutHeader();
     });
 
     try {
@@ -179,18 +192,17 @@
       window.kiezAdminBar?.scheduleRender?.();
     }
 
-    updateHeaderStatsFromSave();
-    window.kiezGlobalHeader?.renderStaticChrome?.();
+    refreshAboutHeader();
 
     window.addEventListener('kiezthemechange', () => {
       syncTheme();
-      window.kiezGlobalHeader?.renderStaticChrome?.();
+      refreshAboutHeader();
     });
 
     onLocaleChange(() => {
       applyPageMeta('aboutPage');
       applyToDom();
-      initAboutChrome();
+      refreshAboutHeader();
     });
   }
 

@@ -256,8 +256,14 @@
       </section>`;
   }
 
+  function computeCityStats(game, city) {
+    if (window.kiezHub?.computeCityStats) {
+      return window.kiezHub.computeCityStats(game, city);
+    }
+    return { completion: 0, trophies: { won: 0, total: city.totalTrophies || 0 }, levels: {} };
+  }
+
   function renderCityAchievementsDetails(city, save, game) {
-    const loc = window.cityRegistry.localizeCity(city);
     const branch = save.cities[city.id] || {};
     const stats = computeCityStats(game, city);
     const rankInfo = getProfileCityRankInfo(game, city.id);
@@ -287,34 +293,32 @@
     const trophyIds = Array.isArray(branch.trophies) ? branch.trophies : [];
     const accentStyle = Object.entries(window.cityRegistry.accentVars(city.hue))
       .map(([k, v]) => `${k}:${v}`).join(';');
-    const isFresh = stats.completion === 0;
-    const cta = isFresh ? t('hub.startCity') : t('hub.continueCity');
     const lastCity = save?.lastCity === city.id;
-    const homeMark = lastCity ? `<span class="profile-city-summary-home" title="${escapeHtml(t('hub.homeCity'))}">★</span>` : '';
     const openAttr = lastCity ? ' open' : '';
+    const tileHtml = window.kiezHub?.renderCityTile
+      ? window.kiezHub.renderCityTile(city, stats)
+      : '';
 
     return `
-      <details class="profile-city-details"${openAttr} style="${accentStyle}">
-        <summary class="profile-city-summary">
-          <span class="profile-city-summary-dot"></span>
-          <span class="profile-city-summary-name">${escapeHtml(loc.name)}${homeMark}</span>
-          <span class="profile-city-summary-rank">${escapeHtml(rankInfo.currentRank.name)}</span>
-          <span class="profile-city-summary-meta">${t('profilePage.dashboardCompletion', { percent: stats.completion })} · 🏆 ${rankInfo.totals.trophies}/${rankInfo.totals.totalTrophies}</span>
-        </summary>
-        <div class="profile-city-details-body log-zone log-zone-city">
-          <div class="profile-city-details-actions">
-            <a href="/${escapeHtml(city.id)}/" class="kq-btn sig sm profile-city-play-btn">${escapeHtml(cta)} →</a>
+      <div class="profile-city-module">
+        ${tileHtml}
+        <details class="profile-city-details"${openAttr} style="${accentStyle}">
+          <summary class="profile-city-details-toggle">
+            <span class="profile-city-details-toggle-label">${escapeHtml(t('profilePage.dashboardCityDetails'))}</span>
+            <span class="profile-city-details-toggle-meta">${escapeHtml(rankInfo.currentRank.name)} · 🏆 ${rankInfo.totals.trophies}/${rankInfo.totals.totalTrophies}</span>
+          </summary>
+          <div class="profile-city-details-body log-zone log-zone-city">
+            <div class="rank-ladder rank-ladder-city">${steps}</div>
+            <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${rankInfo.percent}%"></div></div>
+            <p class="log-rank-progress-note">${escapeHtml(progressNote)}</p>
+            <p class="profile-stat-line">${t('profilePage.cityHighScore', { score: formatNumber(highScore) })}</p>
+            <h4 class="profile-section-title">${t('log.trophies', { won: rankInfo.totals.trophies, total: rankInfo.totals.totalTrophies })}</h4>
+            ${renderTrophyGalleryMarkup(city.id, trophyIds)}
+            <h4 class="profile-section-title">${t('profilePage.recentRuns')}</h4>
+            ${historyHtml}
           </div>
-          <div class="rank-ladder rank-ladder-city">${steps}</div>
-          <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${rankInfo.percent}%"></div></div>
-          <p class="log-rank-progress-note">${escapeHtml(progressNote)}</p>
-          <p class="profile-stat-line">${t('profilePage.cityHighScore', { score: formatNumber(highScore) })}</p>
-          <h4 class="profile-section-title">${t('log.trophies', { won: rankInfo.totals.trophies, total: rankInfo.totals.totalTrophies })}</h4>
-          ${renderTrophyGalleryMarkup(city.id, trophyIds)}
-          <h4 class="profile-section-title">${t('profilePage.recentRuns')}</h4>
-          ${historyHtml}
-        </div>
-      </details>`;
+        </details>
+      </div>`;
   }
 
   function getModeDisplayLabel(mode, segment) {
@@ -405,30 +409,6 @@
       <p>${t('profilePage.noCloudBody')}</p>
       <a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a>
     `);
-  }
-
-  function computeCityStats(game, city) {
-    if (window.kiezProgress?.getBranchState) {
-      const progression = window.cityRegistry.getBezirkeProgression(city.id);
-      const state = window.kiezProgress.getBranchState(game, city.id);
-      let mastered = 0;
-      let total = 0;
-      city.levels.forEach((lv) => {
-        if (lv.key === 'bezirke' || window.cityRegistry.levelKeyToSegment(lv.key) === 'BEZIRKE') {
-          const unlocked = state.unlockedBezirkIndex + 1;
-          mastered += unlocked;
-          total += lv.count;
-        } else {
-          let solved = 0;
-          progression.forEach((bz) => { solved += state.bezirkProgress[bz.name]?.solved?.size || 0; });
-          mastered += solved;
-          total += lv.count;
-        }
-      });
-      const trophyTotal = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(city.id).length : (city.totalTrophies || 0);
-      return { completion: total ? Math.round((mastered / total) * 100) : 0, trophies: { won: state.trophies.size, total: trophyTotal } };
-    }
-    return { completion: 0, trophies: { won: 0, total: city.totalTrophies || 0 } };
   }
 
   function renderDashboardFriendsWidget() {
@@ -529,9 +509,11 @@
     const progressNote = nextRank
       ? t('ranks.progressTo', { percent: Math.round(percent), name: nextRank.name, xp: nextRank.minXp })
       : t('ranks.maxReached');
-    const cityBlocks = getPlayableCities()
+    const cities = window.cityRegistry?.getAllCities?.() || getPlayableCities();
+    const cityBlocks = cities
       .map((city) => renderCityAchievementsDetails(city, save, game))
       .join('');
+    const wishTile = window.kiezHub?.renderWishTile ? window.kiezHub.renderWishTile() : '';
 
     return `
       <section class="profile-panel profile-dashboard" id="profile-section-dashboard">
@@ -561,9 +543,9 @@
         <div class="profile-dashboard-layout">
           <div class="profile-dashboard-main">
             ${renderGlobalAchievementsBlock(save)}
-            <h3 class="profile-section-title profile-cities-heading">${t('profilePage.dashboardCitiesHeading')}</h3>
-            <p class="profile-panel-intro profile-dashboard-cities-lead">${t('profilePage.dashboardCitiesLead')}</p>
-            <div class="profile-city-stack">${cityBlocks}</div>
+            <h3 class="profile-section-title profile-cities-heading">${t('hub.citiesSectionTitle')}</h3>
+            <p class="profile-panel-intro profile-dashboard-cities-lead">${t('hub.citiesSectionLead')}</p>
+            <div class="hub-tiles profile-dashboard-cities">${cityBlocks}${wishTile}</div>
           </div>
           <aside class="profile-dashboard-aside">
             ${renderDashboardFriendsWidget()}
@@ -941,6 +923,28 @@
       leaderboardCity = e.target.value;
       void loadLeaderboards();
     });
+
+    if (main.dataset.profileCityTilesBound !== 'true') {
+      main.dataset.profileCityTilesBound = 'true';
+      main.addEventListener('click', (e) => {
+        const wishBtn = e.target.closest('#hub-wish-tile-cards');
+        if (wishBtn) {
+          e.preventDefault();
+          const open = () => window.kiezModals?.showWishModal?.();
+          if (typeof window.loadGameBundle === 'function') window.loadGameBundle().then(open);
+          else open();
+          return;
+        }
+        const tile = e.target.closest('.city-tile[data-city-id]');
+        if (!tile || e.target.closest('.profile-city-details')) return;
+        const cityId = tile.dataset.cityId;
+        if (tile.dataset.playable !== 'true') {
+          window.kiezQuizGame?.showComingSoonToast?.(cityId);
+          return;
+        }
+        window.location.href = `/${cityId}/`;
+      });
+    }
   }
 
   function bindFriendSearchAutocomplete(root) {

@@ -333,6 +333,7 @@
 
   function hubNavHref(sectionId) {
     const onHub = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
+    if (sectionId === 'hub-ueber-uns' && !onHub) return '/about/';
     return onHub ? `#${sectionId}` : `/#${sectionId}`;
   }
 
@@ -554,11 +555,16 @@
 
   function updateStats() { /* stats via game.renderStats */ }
 
+  function isLandingHubPath() {
+    const path = window.location.pathname;
+    return path === '/' || path.endsWith('/index.html');
+  }
+
   function refreshHubNav() {
     const nav = document.getElementById('header-hub-nav');
     if (!nav || nav.hidden) return;
     const game = window.kiezQuizGame || window.hamburgGame;
-    const onGameHub = game?.view === 'hub';
+    const onGameHub = game?.view === 'hub' && isLandingHubPath();
     renderHubNav(onGameHub ? {} : { homeLinks: true });
   }
 
@@ -567,6 +573,8 @@
     updateStats,
     computeCityStats,
     progressRingHtml,
+    renderCityTile,
+    renderWishTile,
     hideHubNav,
     renderHubNav,
     refreshHubNav,

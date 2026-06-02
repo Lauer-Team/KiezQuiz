@@ -172,6 +172,7 @@ body::selection,
 
 .app-shell.kq.kq-header-padded > .hub-view-root,
 .app-shell.kq.kq-header-padded > .city-view-root,
+.app-shell.kq.kq-header-padded > .about-main,
 .app-shell.kq.kq-header-padded > .app-footer {
   flex: 1;
 }
@@ -592,14 +593,42 @@ body::selection,
 .app-shell.kq.view-hub .stats-bar .streak-pill,
 .app-shell.kq.view-hub .stats-bar .xp-pill,
 .app-shell.kq.view-hub #btn-history,
+.app-shell.kq.view-hub #btn-settings,
 .app-shell.kq.view-hub #header-city-tabs,
 .app-shell.kq #btn-history {
   display: none !important;
 }
 
 .app-shell.kq.view-hub .app-header.global-header {
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 12px;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   border-bottom: 1px solid var(--line);
+}
+
+.app-shell.kq.view-hub .app-header.global-header .brand.brand-link {
+  flex: 0 0 auto;
+}
+
+.app-shell.kq.view-hub .header-hub-nav:not([hidden]) {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.app-shell.kq.view-hub .header-hub-nav:not([hidden])::-webkit-scrollbar {
+  display: none;
+}
+
+.app-shell.kq.view-hub .app-header.global-header .stats-bar {
+  flex: 0 0 auto;
+  margin-left: auto;
+  flex-wrap: nowrap;
 }
 
 /* --- City dashboard layout --- */
@@ -1236,6 +1265,20 @@ body::selection,
 }
 
 @media (max-width: 640px) {
+  /* base.css stacks .app-header as column — keep hub/about topbar one row */
+  .app-shell.kq.view-hub .app-header.global-header {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    border-radius: 0;
+    padding: 12px clamp(12px, 3vw, 16px);
+  }
+
+  .app-shell.kq.view-hub .app-header.global-header .stats-bar {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+  }
+
   .app-shell.kq .auth-pill-label {
     display: none;
   }

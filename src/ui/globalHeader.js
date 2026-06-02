@@ -203,8 +203,12 @@
 
     const hubNav = document.getElementById('header-hub-nav');
     if (hubNav) {
-      if (game.view === 'hub') {
+      const onLanding = window.location.pathname === '/'
+        || window.location.pathname.endsWith('/index.html');
+      if (game.view === 'hub' && onLanding) {
         window.kiezHub?.renderHubNav?.();
+      } else if (game.view === 'hub') {
+        window.kiezHub?.renderHubNav?.({ homeLinks: true });
       } else {
         window.kiezHub?.hideHubNav?.();
       }
@@ -214,6 +218,13 @@
     if (historyBtn) {
       historyBtn.hidden = true;
       historyBtn.setAttribute('aria-hidden', 'true');
+    }
+
+    const settingsBtn = document.getElementById('btn-settings');
+    if (settingsBtn) {
+      const showSettings = game.view === 'city';
+      settingsBtn.hidden = !showSettings;
+      settingsBtn.setAttribute('aria-hidden', showSettings ? 'false' : 'true');
     }
 
     const xpPill = document.getElementById('btn-xp-pill');
@@ -291,7 +302,7 @@
     if (hubNav && window.kiezHub?.renderHubNav) {
       window.kiezHub.renderHubNav({ homeLinks: true });
     }
-    const aboutLink = hubNav?.querySelector('a[href="/#hub-ueber-uns"], a[href="#hub-ueber-uns"]');
+    const aboutLink = hubNav?.querySelector('a[href="/about/"], a[href="/#hub-ueber-uns"], a[href="#hub-ueber-uns"]');
     if (aboutLink && /\/about\/?$/.test(window.location.pathname)) {
       aboutLink.classList.add('on');
       aboutLink.setAttribute('aria-current', 'page');
