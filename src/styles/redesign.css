@@ -188,7 +188,21 @@ html[data-theme="light"] .stadtteil-path:hover {
 
 html[data-theme="light"] .stadtteil-path.unlocked-bezirk {
   fill: rgba(15, 17, 24, 0.05);
-  stroke: rgba(15, 17, 24, 0.12);
+  stroke: rgba(15, 17, 24, 0.22);
+  stroke-width: 0.45px;
+}
+
+/* Papier: Ortsteil-Grenzen im Stadtteile-Modus (nicht nur Bezirks-Overlay) */
+html[data-theme="light"] body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded),
+html[data-theme="light"] #city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded),
+html[data-theme="light"] #city-view[data-city="frankfurt"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+  stroke: rgba(15, 17, 24, 0.34);
+  stroke-width: 0.55px;
+}
+
+html[data-theme="light"] body.segment-stadtteile .stadtteil-path:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+  stroke: color-mix(in srgb, var(--papier, #F1ECE0) 35%, #0F1118);
+  stroke-width: 0.5px;
 }
 
 html[data-theme="light"] .hub-level-track,
