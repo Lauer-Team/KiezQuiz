@@ -84,36 +84,6 @@
 .log-zone-tag.city { background: var(--acc-fill); color: var(--acc-bright); border: 1px solid var(--acc-line); }
 .log-zone-note { font-size: 0.72rem; color: var(--text-muted); }
 .log-city-note { font-size: 0.74rem; color: var(--text-secondary); margin-top: 0.5rem; }
-.modal-x {
-  position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); cursor: pointer;
-}
-
-.wish-vote-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.1rem; }
-.wish-vote-item {
-  position: relative; display: flex; align-items: center; gap: 0.6rem; padding: 0.7rem 0.9rem; border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); cursor: pointer; overflow: hidden; font-family: var(--font-sans);
-}
-.wvi-bar { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(0, 162, 255, 0.1); }
-.wvi-name { position: relative; font-weight: 700; color: #fff; flex: 1; text-align: left; }
-.wvi-count { position: relative; font-family: var(--font-display); font-weight: 700; color: var(--text-secondary); }
-.wvi-action { position: relative; font-size: 0.72rem; font-weight: 700; color: var(--color-neutral-glow); width: 76px; text-align: right; }
-.wish-vote-item--voted { cursor: pointer; opacity: 0.72; }
-.wish-vote-item--voted .wvi-action { color: var(--color-correct); }
-.wish-propose { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-.wish-submit-btn { width: auto !important; padding: 0.85rem 1.4rem !important; }
-.wish-thanks { margin-top: 0.8rem; text-align: center; color: var(--color-correct); font-weight: 700; }
-.wish-cooldown-msg {
-  margin-top: 0.75rem; padding: 0.65rem 0.85rem; text-align: center; font-size: 0.82rem; line-height: 1.45;
-  border-radius: var(--radius-md); border: 1px solid rgba(255, 180, 80, 0.35);
-  background: rgba(255, 140, 40, 0.08); color: #f5c98a;
-}
-.wish-cooldown-msg--visible { animation: wish-cooldown-in 0.2s ease-out; }
-@keyframes wish-cooldown-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 /* City progress card (dashboard console) */
 .city-progress-card { gap: 0; }
 .cpc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.9rem; }

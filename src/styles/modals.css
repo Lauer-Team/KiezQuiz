@@ -20,6 +20,7 @@
 }
 
 .modal-content {
+  position: relative;
   background: radial-gradient(circle at top right, rgba(0, 162, 255, 0.08), transparent 60%), var(--bg-surface);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-lg);
@@ -122,6 +123,192 @@
     border-color: rgba(239, 68, 68, 0.5);
     color: #fff;
   }
+}
+
+.modal-x {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  z-index: 1;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+  }
+}
+
+/* Stadt wünschen — always in modals.css (hub/profile load this without city.css) */
+.wish-vote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+  text-align: left;
+}
+
+.wish-vote-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  width: 100%;
+}
+
+.wvi-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 162, 255, 0.1);
+}
+
+.wvi-name {
+  position: relative;
+  font-weight: 700;
+  color: #fff;
+  flex: 1;
+  text-align: left;
+}
+
+.wvi-count {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.wvi-action {
+  position: relative;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-neutral-glow);
+  width: 76px;
+  text-align: right;
+}
+
+.wish-vote-item--voted {
+  cursor: pointer;
+  opacity: 0.72;
+}
+
+.wish-vote-item--voted .wvi-action {
+  color: var(--color-correct);
+}
+
+.wish-propose {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  align-items: stretch;
+}
+
+.wish-propose .text-input-field {
+  flex: 1 1 12rem;
+  min-width: 0;
+  width: auto;
+}
+
+.wish-submit-btn {
+  width: auto !important;
+  padding: 0.85rem 1.4rem !important;
+  flex: 0 0 auto;
+}
+
+.wish-thanks {
+  margin-top: 0.8rem;
+  text-align: center;
+  color: var(--color-correct);
+  font-weight: 700;
+}
+
+.wish-cooldown-msg {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 180, 80, 0.35);
+  background: rgba(255, 140, 40, 0.08);
+  color: #f5c98a;
+}
+
+.wish-cooldown-msg--visible {
+  animation: wish-cooldown-in 0.2s ease-out;
+}
+
+@keyframes wish-cooldown-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.overlay-modal .text-input-field {
+  background: var(--surface, rgba(0, 0, 0, 0.3));
+  border: 1px solid var(--line, var(--border-color));
+  border-radius: var(--radius-md, var(--radius-s));
+  color: var(--text-1, #fff);
+}
+
+.overlay-modal .text-input-field::placeholder {
+  color: var(--text-muted, var(--text-secondary));
+  opacity: 1;
+}
+
+.overlay-modal .text-input-field:focus {
+  border-color: var(--signal, rgba(0, 162, 255, 0.5));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal, #00a2ff) 18%, transparent);
+  background: var(--surface, rgba(0, 0, 0, 0.4));
+}
+
+html[data-theme="light"] .modal-x {
+  background: rgba(15, 17, 24, 0.04);
+  border-color: var(--line, #DCD3C0);
+}
+
+html[data-theme="light"] .modal-x:hover {
+  background: rgba(15, 17, 24, 0.08);
+  color: var(--text-primary);
+}
+
+html[data-theme="light"] .wish-vote-item {
+  background: color-mix(in srgb, var(--surface-2, #F3EEE2) 65%, transparent);
+  border-color: var(--line, #DCD3C0);
+}
+
+html[data-theme="light"] .wvi-bar {
+  background: rgba(90, 169, 255, 0.12);
+}
+
+html[data-theme="light"] .wvi-name {
+  color: var(--text-primary, #0F1118);
+}
+
+html[data-theme="light"] .overlay-modal .text-input-field {
+  background: var(--surface, #FCFBF8);
+  border-color: var(--line, #DCD3C0);
+  color: var(--text-primary, #0F1118);
+}
+
+html[data-theme="light"] .overlay-modal .text-input-field:focus {
+  background: var(--surface, #FCFBF8);
+  border-color: var(--signal, #5AA9FF);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal, #5AA9FF) 18%, transparent);
 }
 
 .text-input-field.input-shake {
