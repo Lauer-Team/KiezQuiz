@@ -121,11 +121,117 @@
     const catalog = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(cityId) : [];
     const earned = new Set(earnedIds || []);
     if (!catalog.length) return `<p class="profile-empty">${t('profilePage.noTrophies')}</p>`;
-    return `<div class="trophy-gallery profile-trophy-gallery">${catalog.map((tr) => `
-      <div class="trophy-tile ${earned.has(tr.id) ? 'trophy-tile--earned' : 'trophy-tile--locked'}" title="${escapeHtml(tr.name)}">
+    return `<div class="trophy-gallery profile-trophy-gallery" data-city-id="${escapeHtml(cityId)}">${catalog.map((tr) => `
+      <button type="button" class="trophy-tile ${earned.has(tr.id) ? 'trophy-tile--earned' : 'trophy-tile--locked'}" data-trophy-id="${escapeHtml(tr.id)}" aria-label="${escapeHtml(tr.name)}">
         <span class="trophy-icon">${tr.icon}</span>
         <span class="trophy-name">${escapeHtml(tr.name)}</span>
-      </div>`).join('')}</div>`;
+      </button>`).join('')}</div>`;
+  }
+
+  function bindProfileTrophyClicks(root, save) {
+    if (!root || !window.kiezModals?.bindTrophyClicks) return;
+    root.querySelectorAll('.profile-trophy-gallery[data-city-id]').forEach((gallery) => {
+      const cityId = gallery.dataset.cityId;
+      const branch = save?.cities?.[cityId] || {};
+      const gameCtx = {
+        activeCityId: cityId,
+        trophies: new Set(Array.isArray(branch.trophies) ? branch.trophies : [])
+      };
+      window.kiezModals.bindTrophyClicks(gallery, gameCtx);
+    });
+  }
+
+  function updateHeaderStatsFromSave() {
+    const save = window.saveManager?.loadSave?.();
+    if (!save) return;
+    const xp = parseInt(save.global?.xp, 10) || 0;
+    const streak = parseInt(save.global?.streak, 10) || 0;
+    const bestStreak = parseInt(save.global?.bestStreak, 10) || 0;
+    const level = calculateGlobalLevel(xp);
+    const currentRank = getRanks().find((r) => r.level === level) || getRanks()[0];
+    const nextRank = getRanks().find((r) => r.level === level + 1);
+
+    const xpVal = document.getElementById('stat-xp');
+    const streakVal = document.getElementById('stat-streak');
+    const bestStreakVal = document.getElementById('stat-best-streak');
+    const rankName = document.getElementById('stat-rank');
+    const progFill = document.getElementById('progress-fill');
+    const xpPill = document.getElementById('btn-xp-pill');
+
+    if (xpVal) xpVal.textContent = formatNumber(xp);
+    if (streakVal) streakVal.textContent = `${streak}x`;
+    if (bestStreakVal) bestStreakVal.textContent = t('header.streakBest', { count: bestStreak });
+    if (rankName) rankName.textContent = currentRank.name;
+
+    let pct = 100;
+    if (nextRank && currentRank) {
+      const span = nextRank.minXp - currentRank.minXp;
+      pct = span > 0 ? Math.min(100, ((xp - currentRank.minXp) / span) * 100) : 0;
+    }
+    if (xpPill) {
+      xpPill.style.setProperty('--xp-rank-pct', `${pct}%`);
+      xpPill.title = nextRank
+        ? t('ranks.progressTo', { percent: Math.round(pct), name: nextRank.name, xp: nextRank.minXp })
+        : t('ranks.maxReached');
+    }
+    if (progFill) progFill.style.width = `${pct}%`;
+  }
+
+  function initProfileChrome() {
+    try {
+      window.kiezGlobalHeader?.renderStaticChrome?.();
+      window.kiezGlobalHeader?.syncBrandTheme?.();
+      window.kiezChangelog?.bindTriggers?.(document);
+    } catch (err) {
+      console.warn('Profile chrome init failed:', err);
+    }
+
+    const themeBtn = document.getElementById('btn-theme');
+    if (themeBtn && !themeBtn.dataset.kqThemeBound) {
+      themeBtn.dataset.kqThemeBound = 'true';
+      themeBtn.addEventListener('click', () => window.kiezTheme?.toggleTheme?.());
+    }
+
+    const langBtn = document.getElementById('btn-lang');
+    if (langBtn && langBtn.dataset.kqLangBound !== 'true') {
+      langBtn.dataset.kqLangBound = 'true';
+      langBtn.addEventListener('click', () => {
+        if (typeof setLocale === 'function') {
+          setLocale(getLocale() === 'de' ? 'en' : 'de');
+        }
+      });
+    }
+
+    const muteBtn = document.getElementById('btn-mute');
+    if (muteBtn && muteBtn.dataset.kqMuteBound !== 'true') {
+      muteBtn.dataset.kqMuteBound = 'true';
+      muteBtn.addEventListener('click', () => {
+        const nextMuted = localStorage.getItem('hamburg_muted') !== 'true';
+        localStorage.setItem('hamburg_muted', nextMuted ? 'true' : 'false');
+        muteBtn.classList.toggle('is-muted', nextMuted);
+      });
+    }
+
+    function syncTheme() {
+      const theme = window.kiezTheme?.getTheme?.() || 'dark';
+      document.querySelectorAll('.profile-app-shell').forEach((el) => {
+        el.dataset.theme = theme;
+      });
+      window.kiezGlobalHeader?.syncBrandTheme?.();
+    }
+
+    window.addEventListener('kiezthemechange', syncTheme);
+    syncTheme();
+    syncProfileLangButton();
+  }
+
+  function syncProfileLangButton() {
+    const btn = document.getElementById('btn-lang');
+    if (!btn || typeof getLocale !== 'function') return;
+    btn.textContent = getLocale() === 'de' ? '🇩🇪' : '🇬🇧';
+    const titleKey = getLocale() === 'de' ? 'header.langSwitchToEn' : 'header.langSwitchToDe';
+    btn.dataset.i18nTitle = titleKey;
+    btn.title = t(titleKey);
   }
 
   function renderGlobalAchievementsBlock(save) {
@@ -197,7 +303,7 @@
         </summary>
         <div class="profile-city-details-body log-zone log-zone-city">
           <div class="profile-city-details-actions">
-            <a href="/${escapeHtml(city.id)}/" class="primary-btn profile-city-play-btn">${escapeHtml(cta)} →</a>
+            <a href="/${escapeHtml(city.id)}/" class="kq-btn sig sm profile-city-play-btn">${escapeHtml(cta)} →</a>
           </div>
           <div class="rank-ladder rank-ladder-city">${steps}</div>
           <div class="rank-xp-bar rank-city-bar"><div class="rank-xp-bar-fill" style="width:${rankInfo.percent}%"></div></div>
@@ -285,8 +391,8 @@
     renderGate('locked', `
       <h2>${t('profilePage.loginRequiredTitle')}</h2>
       <p>${t('profilePage.loginRequiredBody')}</p>
-      <button type="button" class="primary-btn" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
-      <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></p>
+      <button type="button" class="kq-btn sig" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
+      <p style="margin-top:1rem;"><a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a></p>
     `);
     document.getElementById('profile-btn-login')?.addEventListener('click', () => {
       window.authManager?.showAuthModal?.();
@@ -297,7 +403,7 @@
     renderGate('locked', `
       <h2>${t('profilePage.noCloudTitle')}</h2>
       <p>${t('profilePage.noCloudBody')}</p>
-      <a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a>
+      <a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a>
     `);
   }
 
@@ -337,7 +443,7 @@
         <div class="profile-widget profile-widget--friends">
           <h3 class="profile-widget-title">${t('profilePage.dashboardFriendsHeading')}</h3>
           <p class="profile-widget-lead">${t('profilePage.dashboardFriendsLogin')}</p>
-          <button type="button" class="secondary-btn profile-btn-login-widget">${t('profilePage.loginBtn')}</button>
+          <button type="button" class="kq-btn ghost sm profile-btn-login-widget">${t('profilePage.loginBtn')}</button>
         </div>`;
     }
 
@@ -472,7 +578,7 @@
       ? `<div class="profile-request-list">${searchResults.map((u) => `
         <div class="profile-request-row">
           <span>@${escapeHtml(u.username || '')}</span>
-          <button type="button" class="secondary-btn profile-btn-add-friend" data-username="${escapeHtml(u.username)}">${t('profilePage.sendRequest')}</button>
+          <button type="button" class="kq-btn ghost sm profile-btn-add-friend" data-username="${escapeHtml(u.username)}">${t('profilePage.sendRequest')}</button>
         </div>`).join('')}</div>`
       : '';
 
@@ -559,7 +665,7 @@
       <section class="profile-panel" id="profile-section-account">
         <p class="profile-panel-intro">${t('profilePage.accountIntro', { name: escapeHtml(name) })}</p>
         <div class="profile-account-actions">
-          <button type="button" class="secondary-btn profile-btn-signout" id="profile-btn-signout">${t('profilePage.signOut')}</button>
+          <button type="button" class="kq-btn ghost profile-btn-signout" id="profile-btn-signout">${t('profilePage.signOut')}</button>
         </div>
         <div class="profile-danger-zone">
           <h3 class="profile-section-title">${t('profilePage.deleteTitle')}</h3>
@@ -573,8 +679,8 @@
     return `
       <section class="profile-panel">
         <p class="profile-panel-intro">${t('profilePage.loginRequiredBody')}</p>
-        <button type="button" class="primary-btn" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
-        <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></p>
+        <button type="button" class="kq-btn sig" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
+        <p style="margin-top:1rem;"><a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a></p>
       </section>`;
   }
 
@@ -589,8 +695,9 @@
       && (activeSection === 'friends' || activeSection === 'account' || activeSection === 'leaderboard')) {
       return `
         <section class="profile-panel">
-          <p class="profile-empty">${t('profilePage.noCloudBody')}</p>
-          <a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a>
+          <h3 class="profile-section-title">${t('profilePage.noCloudTitle')}</h3>
+          <p class="profile-panel-intro">${t('profilePage.noCloudBody')}</p>
+          <a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a>
         </section>`;
     }
     switch (activeSection) {
@@ -628,8 +735,8 @@
         <div class="profile-request-row">
           <span>@${escapeHtml(r.other_username || r.otherUsername || '')}</span>
           <div class="profile-request-actions">
-            <button type="button" class="primary-btn profile-btn-accept" data-id="${escapeHtml(r.id)}">${t('profilePage.accept')}</button>
-            <button type="button" class="secondary-btn profile-btn-reject" data-id="${escapeHtml(r.id)}">${t('profilePage.reject')}</button>
+            <button type="button" class="kq-btn sig sm profile-btn-accept" data-id="${escapeHtml(r.id)}">${t('profilePage.accept')}</button>
+            <button type="button" class="kq-btn ghost sm profile-btn-reject" data-id="${escapeHtml(r.id)}">${t('profilePage.reject')}</button>
           </div>
         </div>`).join('')
       : `<p class="profile-empty">${t('profilePage.noIncoming')}</p>`;
@@ -687,10 +794,24 @@
     setShellVisible(true);
     const main = document.getElementById('profile-main');
     if (!main) return;
-    clearFriendSearchTimer();
-    const save = window.saveManager?.loadSave?.() || window.saveManager?.createEmptySave?.();
-    main.innerHTML = renderSectionContent();
-    bindSectionEvents();
+    let save;
+    try {
+      clearFriendSearchTimer();
+      save = window.saveManager?.loadSave?.() || window.saveManager?.createEmptySave?.();
+      main.innerHTML = renderSectionContent();
+      bindSectionEvents();
+      bindProfileTrophyClicks(main, save);
+      updateHeaderStatsFromSave();
+    } catch (err) {
+      console.error('Profile render failed:', err);
+      main.innerHTML = `
+        <div class="profile-state profile-state--error">
+          <h2>${t('profilePage.loadError')}</h2>
+          <p>${t('profilePage.noCloudBody')}</p>
+          <a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a>
+        </div>`;
+      return;
+    }
     const needsSocial = activeSection === 'dashboard'
       || activeSection === 'friends'
       || activeSection === 'leaderboard';
@@ -840,7 +961,7 @@
         <div class="profile-request-list">
           <div class="profile-request-row">
             <span>@${escapeHtml(user.username)}</span>
-            <button type="button" class="secondary-btn profile-btn-add-friend" data-username="${escapeHtml(user.username)}">${t('profilePage.sendRequest')}</button>
+            <button type="button" class="kq-btn ghost sm profile-btn-add-friend" data-username="${escapeHtml(user.username)}">${t('profilePage.sendRequest')}</button>
           </div>
         </div>`;
       container.querySelector('.profile-btn-add-friend')
@@ -945,7 +1066,7 @@
         </label>
         <div class="profile-delete-actions">
           <button type="button" class="profile-btn-danger" id="profile-delete-confirm" disabled>${t('profilePage.deleteConfirmBtn')}</button>
-          <button type="button" class="secondary-btn" id="profile-delete-cancel">${t('profilePage.deleteCancel')}</button>
+          <button type="button" class="kq-btn ghost" id="profile-delete-cancel">${t('profilePage.deleteCancel')}</button>
         </div>
       </div>
     `, { closeOnBackdrop: true });
@@ -968,7 +1089,7 @@
         return;
       }
       if (typeof openOverlayModal === 'function') {
-        openOverlayModal(`<div class="modal-content"><p>${t('profilePage.deleteFailed')}</p><button class="primary-btn" id="profile-delete-err-close">${t('profilePage.close')}</button></div>`, { closeOnBackdrop: true })
+        openOverlayModal(`<div class="modal-content"><p>${t('profilePage.deleteFailed')}</p><button class="kq-btn sig" id="profile-delete-err-close">${t('profilePage.close')}</button></div>`, { closeOnBackdrop: true })
           .querySelector('#profile-delete-err-close')
           ?.addEventListener('click', function () { closeOverlayModal(this.closest('.overlay-modal')); });
       }
@@ -989,67 +1110,86 @@
   }
 
   async function refreshAccess() {
-    if (!window.authManager?.isConfigured?.() && activeSection !== 'dashboard') {
-      renderNoCloud();
-      return;
-    }
     if (window.authManager?.isConfigured?.()
       && window.authManager.isLoggedIn()
       && (activeSection === 'friends' || activeSection === 'leaderboard' || activeSection === 'dashboard')) {
       await loadSocialData();
     }
     renderDashboard();
+    updateHeaderStatsFromSave();
   }
 
   async function boot() {
-    await initI18n();
-    applyPageMeta('profilePage');
-    applyToDom();
-    setShellVisible(true);
+    try {
+      await initI18n();
+      applyPageMeta('profilePage');
+      applyToDom();
+      initProfileChrome();
+      setShellVisible(true);
 
-    document.querySelectorAll('.profile-nav-item').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        setActiveNav(btn.dataset.section);
+      document.querySelectorAll('.profile-nav-item').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          setActiveNav(btn.dataset.section);
+          await refreshAccess();
+        });
+      });
+
+      window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
+      const profileGameStub = {
+        view: 'hub',
+        activeCityId: 'hamburg',
+        reRenderCurrentView() { void refreshAccess(); }
+      };
+      Object.defineProperty(profileGameStub, '_save', {
+        get() { return window.saveManager.loadSave(); },
+        set(v) { if (v) window.saveManager.persistSave(v); }
+      });
+      window.cloudSync = new CloudSync(window.authManager, profileGameStub);
+
+      window.authManager.onAuthChange(async (user) => {
+        window.authManager.updateHeaderUI();
+        window.kiezAdminBar?.scheduleRender?.();
+        if (user) {
+          await window.cloudSync.handleLoginMerge();
+        }
         await refreshAccess();
       });
-    });
 
-    window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
-    const profileGameStub = {
-      view: 'hub',
-      activeCityId: 'hamburg',
-      reRenderCurrentView() { void refreshAccess(); }
-    };
-    Object.defineProperty(profileGameStub, '_save', {
-      get() { return window.saveManager.loadSave(); },
-      set(v) { if (v) window.saveManager.persistSave(v); }
-    });
-    window.cloudSync = new CloudSync(window.authManager, profileGameStub);
-
-    window.authManager.onAuthChange(async (user) => {
-      window.authManager.updateHeaderUI();
-      window.kiezAdminBar?.scheduleRender?.();
-      if (user) {
-        await window.cloudSync.handleLoginMerge();
+      try {
+        await window.authManager.init();
+        window.authManager.initUI();
+        window.kiezAdminBar?.scheduleRender?.();
+      } catch (err) {
+        console.warn('Profile auth startup failed:', err);
+        window.authManager.initUI();
+        window.kiezAdminBar?.scheduleRender?.();
       }
+
       await refreshAccess();
-    });
 
-    try {
-      await window.authManager.init();
-      window.authManager.initUI();
-      window.kiezAdminBar?.scheduleRender?.();
+      onLocaleChange(() => {
+        applyPageMeta('profilePage');
+        syncProfileLangButton();
+        updateHeaderStatsFromSave();
+        if (document.getElementById('profile-section-dashboard')
+          || document.getElementById('profile-section-friends')
+          || document.getElementById('profile-section-leaderboard')
+          || document.getElementById('profile-section-account')) {
+          renderDashboard();
+        }
+      });
     } catch (err) {
-      console.warn('Profile auth startup failed:', err);
-      window.authManager.initUI();
-      window.kiezAdminBar?.scheduleRender?.();
+      console.error('Profile boot failed:', err);
+      setShellVisible(true);
+      const main = document.getElementById('profile-main');
+      if (main) {
+        main.innerHTML = `
+          <div class="profile-state profile-state--error">
+            <h2>${typeof t === 'function' ? t('profilePage.loadError') : 'Laden fehlgeschlagen'}</h2>
+            <a href="/" class="profile-link-btn kq-btn ghost">${typeof t === 'function' ? t('profilePage.backToLanding') : 'Zur Startseite'}</a>
+          </div>`;
+      }
     }
-
-    await refreshAccess();
-
-    onLocaleChange(() => {
-      applyPageMeta('profilePage');
-    });
   }
 
   if (document.readyState === 'loading') {

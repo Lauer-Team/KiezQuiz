@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="../src/styles/brand.css">
   <link rel="stylesheet" href="../src/styles/app.css">
   <link rel="stylesheet" href="../src/styles/base.css">
+  <link rel="stylesheet" href="../src/styles/hub.css">
   <link rel="stylesheet" href="../src/styles/modals.css">
   <link rel="stylesheet" href="../src/styles/profile.css">
   <link rel="stylesheet" href="../src/styles/redesign.css">
@@ -26,45 +27,89 @@
   <script src="../src/playerRedirect.js"></script>
 </head>
 <body class="profile-page-body kq" data-theme="dark" data-i18n-scope="profile">
-  <div class="profile-app" id="profile-app">
-    <aside class="profile-sidebar" id="profile-sidebar" hidden>
-      <div class="profile-sidebar-brand">
-        <a href="/" class="profile-back-link" data-i18n="profilePage.backToLanding">← Entdecken</a>
-        <p class="profile-sidebar-title" data-i18n="profilePage.title">Dashboard</p>
+  <div class="app-shell kq profile-app-shell" data-theme="dark">
+    <header class="app-header global-header kq-topbar" id="app-header">
+      <a href="/" class="brand brand-link" data-i18n-title="header.homeTitle" title="Zur Startseite">
+        <img class="brand-logo" src="/assets/brand/logo/wortmarke-invers.svg" width="148" height="36" alt="" aria-hidden="true">
+        <h1 class="brand-title visually-hidden">KiezQuiz</h1>
+        <span class="badge" id="header-badge" data-i18n="profilePage.title">Dashboard</span>
+      </a>
+
+      <nav id="header-hub-nav" class="header-hub-nav kq-navlinks" aria-label="Landingpage"></nav>
+
+      <div class="stats-bar">
+        <div class="stat-pill streak-pill" data-i18n-title="header.streakTitle" title="Deine aktuelle Antwortserie">
+          <div class="streak-info">
+            <div class="streak-current">
+              <span class="label" data-i18n="header.streakLabel">Serie 🔥:</span>
+              <span class="value" id="stat-streak">0x</span>
+            </div>
+            <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
+          </div>
+        </div>
+
+        <a href="/profile/" class="stat-pill xp-pill stat-pill-link xp-pill--active" id="btn-xp-pill" data-i18n-title="header.profileTitle" title="Profil & Bestenliste">
+          <div class="xp-pill-body">
+            <div class="xp-pill-row">
+              <span class="label" data-i18n="header.xpLabel">XP:</span>
+              <span class="value" id="stat-xp">0</span>
+              <span class="rank-name" id="stat-rank">Neuling</span>
+            </div>
+            <div class="progress-bg xp-pill-progress" aria-hidden="true">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+        </a>
+
+        <button type="button" class="auth-pill" id="auth-pill" data-i18n-title="header.authTitle" title="">
+          <span class="auth-pill-icon">👤</span>
+          <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
+          <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
+        </button>
+
+        <button type="button" class="changelog-header-btn" data-changelog-trigger data-i18n-title="header.changelogTitle" title="Alle Updates und Neuerungen">
+          <span class="changelog-header-icon" aria-hidden="true">✨</span>
+          <span class="changelog-header-label" data-i18n="footer.changelog">Was ist neu?</span>
+        </button>
+
+        <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
+        <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
+        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"></button>
       </div>
-      <nav class="profile-nav" aria-label="Profil">
-        <button type="button" class="profile-nav-item is-active" data-section="dashboard" data-i18n="profilePage.navDashboard">Dashboard</button>
-        <button type="button" class="profile-nav-item" data-section="friends" data-i18n="profilePage.navFriends">Freunde</button>
-        <button type="button" class="profile-nav-item" data-section="leaderboard" data-i18n="profilePage.navLeaderboard">Bestenliste</button>
-        <button type="button" class="profile-nav-item" data-section="account" data-i18n="profilePage.navAccount">Konto</button>
-      </nav>
-    </aside>
+    </header>
 
-    <div class="profile-main-column">
-      <header class="profile-topbar">
-        <div class="profile-topbar-text">
-          <p class="profile-topbar-eyebrow" data-i18n="profilePage.subtitle">Dein Dashboard</p>
-          <h1 id="profile-page-title" data-i18n="profilePage.navDashboard">Dashboard</h1>
+    <div class="profile-app" id="profile-app">
+      <aside class="profile-sidebar" id="profile-sidebar" hidden>
+        <div class="profile-sidebar-brand">
+          <a href="/" class="profile-back-link" data-i18n="profilePage.backToLanding">← Entdecken</a>
         </div>
-        <div class="profile-topbar-actions">
-          <button type="button" class="auth-pill profile-auth-pill" data-i18n-title="header.authTitle" title="">
-            <span class="auth-pill-icon">👤</span>
-            <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
-            <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
-          </button>
-        </div>
-      </header>
+        <nav class="profile-nav" aria-label="Profil">
+          <button type="button" class="profile-nav-item is-active" data-section="dashboard" data-i18n="profilePage.navDashboard">Dashboard</button>
+          <button type="button" class="profile-nav-item" data-section="friends" data-i18n="profilePage.navFriends">Freunde</button>
+          <button type="button" class="profile-nav-item" data-section="leaderboard" data-i18n="profilePage.navLeaderboard">Bestenliste</button>
+          <button type="button" class="profile-nav-item" data-section="account" data-i18n="profilePage.navAccount">Konto</button>
+        </nav>
+      </aside>
 
-      <main id="profile-main" class="profile-main">
-        <div class="profile-state profile-state--loading" id="profile-state-loading">
-          <p data-i18n="profilePage.loading">Wird geladen…</p>
+      <div class="profile-main-column">
+        <div class="profile-page-head">
+          <span class="profile-page-eyebrow mono" data-i18n="profilePage.subtitle">Dein Dashboard</span>
+          <h2 class="profile-page-title" id="profile-page-title" data-i18n="profilePage.navDashboard">Dashboard</h2>
         </div>
-      </main>
+
+        <main id="profile-main" class="profile-main">
+          <div class="profile-state profile-state--loading" id="profile-state-loading">
+            <p data-i18n="profilePage.loading">Wird geladen…</p>
+          </div>
+        </main>
+      </div>
     </div>
   </div>
 
+  <script src="../src/ui/icons.js"></script>
   <script src="../src/i18n.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>window.SUPABASE_CONFIG = window.SUPABASE_CONFIG || {};</script>
   <script src="../src/supabaseConfig.js"></script>
   <script src="../src/auth.js"></script>
   <script src="../src/data/cities.js"></script>
@@ -75,9 +120,15 @@
   <script src="../src/game/config.js"></script>
   <script src="../src/game/progress.js"></script>
   <script src="../src/game/effects.js"></script>
+  <script src="../src/ui/modals.js"></script>
   <script src="../src/leaderboard.js"></script>
   <script src="../src/social.js"></script>
   <script src="../src/cloudSync.js"></script>
+  <script src="../src/data/changelog.js"></script>
+  <script src="../src/ui/changelog.js"></script>
+  <script src="../src/ui/globalHeader.js"></script>
+  <script src="../src/ui/hub.js"></script>
+  <script src="../src/ui/hubScrollTop.js"></script>
   <script src="../src/ui/profilePage.js"></script>
 </body>
 </html>

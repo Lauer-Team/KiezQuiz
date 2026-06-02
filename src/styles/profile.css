@@ -4,6 +4,8 @@
   min-height: 100dvh;
   margin: 0;
   background-color: var(--bg-main);
+  background-image: var(--bg-grad);
+  background-attachment: fixed;
 }
 
 /* .kq sets overflow:hidden + height:100% on body — allow page scroll */
@@ -11,17 +13,44 @@ body.kq.profile-page-body {
   overflow-x: hidden;
   overflow-y: auto;
   height: auto;
-  background-image:
-    radial-gradient(at 0% 0%, rgba(255, 82, 51, 0.08) 0, transparent 45%),
-    radial-gradient(at 100% 0%, rgba(90, 169, 255, 0.07) 0, transparent 45%),
-    radial-gradient(at 50% 100%, rgba(37, 41, 56, 0.9) 0, transparent 60%);
+}
+
+.profile-app-shell {
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+}
+
+.profile-app-shell.kq {
+  overflow: visible;
+  height: auto;
+}
+
+.profile-app-shell .app-header.global-header {
+  margin-bottom: 0;
+}
+
+.profile-app-shell #btn-theme::after {
+  content: '☀';
+  font-size: 16px;
+}
+
+.profile-app-shell[data-theme="light"] #btn-theme::after {
+  content: '☾';
+}
+
+.profile-app-shell .xp-pill--active {
+  border-color: color-mix(in srgb, var(--signal) 45%, var(--line));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal) 20%, transparent);
 }
 
 .profile-app {
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: calc(100dvh - var(--kq-header-offset, 72px));
+  width: 100%;
+  max-width: min(120rem, 100vw);
+  margin: 0 auto;
 }
 
 .profile-app--ready {
@@ -112,33 +141,26 @@ body.kq.profile-page-body {
   min-width: 0;
 }
 
-.profile-topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-  background: rgba(37, 41, 56, 0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+.profile-page-head {
+  padding: 1.25rem 1.5rem 0.35rem;
 }
 
-.profile-topbar-eyebrow {
-  margin: 0 0 0.2rem;
-  font-size: 0.72rem;
+.profile-page-eyebrow {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
   color: var(--signal);
-  font-weight: 700;
 }
 
-.profile-topbar h1 {
+.profile-page-title {
   margin: 0;
   font-family: var(--font-display);
   font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 800;
   color: var(--kreide);
+  letter-spacing: -0.02em;
 }
 
 .profile-global-rank-card {
@@ -256,24 +278,26 @@ body.kq.profile-page-body {
   color: var(--kreide);
 }
 
+.profile-state--error {
+  border-color: rgba(255, 82, 51, 0.35);
+}
+
 .profile-state p {
   margin: 0 0 1.25rem;
   color: var(--text-secondary);
 }
 
 .profile-link-btn {
-  display: inline-block;
+  display: inline-flex;
   text-decoration: none;
 }
 
 .profile-panel {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
+  background: var(--surface, var(--bg-surface));
+  border: 1px solid var(--line, var(--border-color));
+  border-radius: var(--radius, var(--radius-lg));
   padding: 1.25rem 1.25rem 1.5rem;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 12px 40px -20px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--shadow, 0 12px 40px -20px rgba(0, 0, 0, 0.55));
 }
 
 .profile-panel-intro {
@@ -359,8 +383,7 @@ body.kq.profile-page-body {
   margin-bottom: 0.5rem;
 }
 
-.profile-panel .secondary-btn,
-.profile-panel .primary-btn {
+.profile-panel .kq-btn {
   width: auto;
   min-width: 8rem;
 }
@@ -608,7 +631,7 @@ body.kq.profile-page-body {
 }
 
 @media (max-width: 720px) {
-  .profile-topbar,
+  .profile-page-head,
   .profile-main {
     padding-inline: 1rem;
   }
@@ -793,9 +816,9 @@ body.kq.profile-page-body {
 
 .profile-widget {
   padding: 1rem 1.05rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius, var(--radius-lg));
+  border: 1px solid var(--line, var(--border-color));
+  background: var(--surface, rgba(255, 255, 255, 0.03));
 }
 
 .profile-widget-title {
@@ -916,9 +939,17 @@ body.kq.profile-page-body {
 }
 
 .profile-city-play-btn {
-  display: inline-flex;
   text-decoration: none;
-  width: auto;
+}
+
+.profile-trophy-gallery .trophy-tile {
+  border-color: var(--line, var(--border-color));
+  background: color-mix(in srgb, var(--surface-2, rgba(255, 255, 255, 0.03)) 80%, transparent);
+}
+
+.profile-trophy-gallery .trophy-tile--earned {
+  border-color: color-mix(in srgb, var(--bernstein, #F4B53C) 45%, var(--line));
+  background: color-mix(in srgb, var(--bernstein, #F4B53C) 10%, transparent);
 }
 
 @media (max-width: 960px) {
