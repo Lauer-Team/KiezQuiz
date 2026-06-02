@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+
   <meta charset="UTF-8">
   <meta name="kiezquiz-build" content="dev">
-  <meta name="kiezquiz-design" content="3">
+  <meta name="kiezquiz-design" content="4">
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Besser wissen als Besserwissen.</title>
@@ -21,7 +22,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KiezQuiz">
   <meta property="og:title" content="KiezQuiz">
-  <meta property="og:description" content="Besser wissen als Besserwissen. Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
+  <meta property="og:description" content="Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
   <meta property="og:url" content="https://kiezquiz.de/berlin/">
   <meta property="og:locale" content="de_DE">
   <meta property="og:image" content="https://kiezquiz.de/assets/og-image.jpg">
@@ -58,23 +59,6 @@
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "KiezQuiz – Berlin",
-  "url": "https://kiezquiz.de/berlin/",
-  "applicationCategory": "EducationalApplication",
-  "operatingSystem": "Any",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "EUR"
-  },
-  "description": "Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.",
-  "inLanguage": "de"
-}
-  </script>
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
@@ -105,6 +89,7 @@
 }
   </script>
   <script src="src/versionGuard.js"></script>
+
 </head>
 <body>
   <noscript>
@@ -301,6 +286,7 @@
           </div>
         </div>
 
+        <!-- Bounding Box for SVG Map -->
         <div class="map-container-wrapper" id="map-wrapper" role="img" aria-label="Interaktive Stadtkarte zum Erkunden von Bezirken und Stadtteilen">
 
           <div id="map-prompt-bar" class="map-prompt-bar" hidden aria-live="polite">
@@ -352,6 +338,7 @@
 
   <script src="src/ui/icons.js"></script>
   <script src="src/viewRouter.js"></script>
+  <script src="src/playerRedirect.js"></script>
   <script src="src/appHistory.js"></script>
   <script src="src/ui/hubShell.js"></script>
   <script src="src/bootView.js"></script>

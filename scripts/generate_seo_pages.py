@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-"""Generate city app entry pages (playable + SEO meta) from index.html."""
+"""Generate city app entry pages: full app shell from index.html + per-city SEO head."""
 
-import json
 import html
+import json
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BASE_URL = "https://kiezquiz.de"
 SLOGAN = "Besser wissen als Besserwissen."
+HEAD_TEMPLATE = ROOT / "hamburg" / "index.html"
 
 CITIES = {
     "hamburg": {
         "slug": "hamburg",
         "name": "Hamburg",
-        "title": "Hamburg Stadtteile lernen – Kostenloses Karten-Quiz | KiezQuiz",
         "meta_description": (
             "Lerne alle 104 Hamburger Stadtteile und 7 Bezirke spielerisch auf der Karte. "
             "Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline."
@@ -38,7 +38,6 @@ CITIES = {
     "berlin": {
         "slug": "berlin",
         "name": "Berlin",
-        "title": "Berlin Ortsteile lernen – Kostenloses Karten-Quiz | KiezQuiz",
         "meta_description": (
             "Lerne alle 97 Berliner Ortsteile und 12 Bezirke spielerisch auf der Karte. "
             "Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline."
@@ -62,7 +61,6 @@ CITIES = {
     "frankfurt": {
         "slug": "frankfurt",
         "name": "Frankfurt am Main",
-        "title": "Frankfurt Stadtteile lernen – Kostenloses Karten-Quiz | KiezQuiz",
         "meta_description": (
             "Lerne alle 46 Frankfurter Stadtteile und 16 Ortsbezirke spielerisch auf der Karte. "
             "Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline."
@@ -86,7 +84,6 @@ CITIES = {
     "europe": {
         "slug": "europe",
         "name": "Europa",
-        "title": "Europa Länder & Hauptstädte lernen – Kostenloses Karten-Quiz | KiezQuiz",
         "meta_description": (
             "Lerne alle 44 europäischen Länder und Hauptstädte spielerisch auf der Karte. "
             "Mit EU-Pokalen, XP, Streaks und Trivia — kostenlos, mobil und offline."
@@ -141,57 +138,97 @@ def json_ld_faq(faq_items: list[tuple[str, str]]) -> str:
     return json.dumps(data, ensure_ascii=False, indent=2)
 
 
-def render_city_head(city: dict) -> str:
+def extract_head_inner(page_html: str) -> str:
+    match = re.search(r"<head>(.*)</head>", page_html, re.DOTALL)
+    if not match:
+        raise SystemExit("Could not extract <head> from template")
+    return match.group(1)
+
+
+def extract_app_body(index_html: str) -> str:
+    match = re.search(r"<body>(.*)</body>", index_html, re.DOTALL)
+    if not match:
+        raise SystemExit("index.html: could not extract <body> content")
+    body = match.group(1)
+    body = re.sub(r"\s*<noscript>.*?</noscript>\s*", "\n", body, count=1, flags=re.DOTALL)
+    return body.strip()
+
+
+def patch_city_head(head_inner: str, city: dict) -> str:
     slug = city["slug"]
     page_url = f"{BASE_URL}/{slug}/"
-    title = html.escape(SLOGAN)
     desc = html.escape(city["meta_description"])
-    h1 = html.escape(city["h1"])
+    title = html.escape(SLOGAN)
+    og_desc = html.escape(city["meta_description"])
 
-    return f"""<head>
-  <meta charset="UTF-8">
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>{title}</title>
-  <meta name="description" content="{desc}">
-  <meta name="theme-color" content="#0f1118">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="KiezQuiz">
-  <meta name="format-detection" content="telephone=no">
+    head = head_inner
+    head = re.sub(r"<title>.*?</title>", f"<title>{title}</title>", head, count=1)
+    head = re.sub(
+        r'<meta name="description" content="[^"]*"',
+        f'<meta name="description" content="{desc}"',
+        head,
+        count=1,
+    )
+    head = re.sub(
+        r'<link rel="canonical" href="[^"]*"',
+        f'<link rel="canonical" href="{page_url}"',
+        head,
+        count=1,
+    )
+    head = re.sub(
+        r'<link rel="alternate" hreflang="de" href="[^"]*"',
+        f'<link rel="alternate" hreflang="de" href="{page_url}"',
+        head,
+        count=1,
+    )
+    head = re.sub(
+        r'<link rel="alternate" hreflang="en" href="[^"]*"',
+        f'<link rel="alternate" hreflang="en" href="{page_url}?lang=en"',
+        head,
+        count=1,
+    )
+    head = re.sub(
+        r'<link rel="alternate" hreflang="x-default" href="[^"]*"',
+        f'<link rel="alternate" hreflang="x-default" href="{page_url}"',
+        head,
+        count=1,
+    )
+    head = re.sub(
+        r'<meta property="og:description" content="[^"]*"',
+        f'<meta property="og:description" content="{og_desc}"',
+        head,
+        count=1,
+    )
+    head = re.sub(
+        r'<meta property="og:url" content="[^"]*"',
+        f'<meta property="og:url" content="{page_url}"',
+        head,
+        count=1,
+    )
+    head = re.sub(
+        r'<meta name="twitter:description" content="[^"]*"',
+        f'<meta name="twitter:description" content="{og_desc}"',
+        head,
+        count=1,
+    )
 
-  <link rel="canonical" href="{page_url}">
-  <link rel="alternate" hreflang="de" href="{page_url}">
-  <link rel="alternate" hreflang="en" href="{page_url}?lang=en">
-  <link rel="alternate" hreflang="x-default" href="{page_url}">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="KiezQuiz">
-  <meta property="og:title" content="KiezQuiz">
-  <meta property="og:description" content="{desc}">
-  <meta property="og:url" content="{page_url}">
-  <meta property="og:locale" content="de_DE">
-  <meta property="og:image" content="{BASE_URL}/assets/og-image.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:type" content="image/jpeg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="KiezQuiz">
-  <meta name="twitter:description" content="{desc}">
-  <meta name="twitter:image" content="{BASE_URL}/assets/og-image.jpg">
-
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icons/icon.svg">
-  <link rel="stylesheet" href="src/styles/base.css">
-  <link rel="stylesheet" href="src/styles/hub.css">
-  <script type="application/ld+json">
-{json_ld_webapp(city, page_url)}
-  </script>
-  <script type="application/ld+json">
-{json_ld_faq(city["faq"])}
-  </script>
-</head>"""
+    webapp_ld = json_ld_webapp(city, page_url)
+    faq_ld = json_ld_faq(city["faq"])
+    head = re.sub(
+        r'<script type="application/ld\+json">\s*\{.*?"@type":\s*"WebApplication".*?\}\s*</script>',
+        f"<script type=\"application/ld+json\">\n{webapp_ld}\n  </script>",
+        head,
+        count=1,
+        flags=re.DOTALL,
+    )
+    head = re.sub(
+        r'<script type="application/ld\+json">\s*\{.*?"@type":\s*"FAQPage".*?\}\s*</script>',
+        f"<script type=\"application/ld+json\">\n{faq_ld}\n  </script>",
+        head,
+        count=1,
+        flags=re.DOTALL,
+    )
+    return head
 
 
 def render_noscript(city: dict) -> str:
@@ -215,20 +252,13 @@ def render_noscript(city: dict) -> str:
   </noscript>"""
 
 
-def extract_app_body(index_html: str) -> str:
-    match = re.search(r"<body>(.*)</body>", index_html, re.DOTALL)
-    if not match:
-        raise SystemExit("index.html: could not extract <body> content")
-    body = match.group(1)
-    body = re.sub(r"\s*<noscript>.*?</noscript>\s*", "\n", body, count=1, flags=re.DOTALL)
-    return body.strip()
-
-
-def render_city_page(city: dict, app_body: str) -> str:
-    slug = city["slug"]
+def render_city_page(city: dict, head_inner: str, app_body: str) -> str:
+    head = patch_city_head(head_inner, city)
     return f"""<!DOCTYPE html>
 <html lang="de">
-{render_city_head(city)}
+<head>
+{head}
+</head>
 <body>
 {render_noscript(city)}
 
@@ -240,13 +270,19 @@ def render_city_page(city: dict, app_body: str) -> str:
 
 def main() -> None:
     index_html = (ROOT / "index.html").read_text(encoding="utf-8")
+    head_template = extract_head_inner(HEAD_TEMPLATE.read_text(encoding="utf-8"))
     app_body = extract_app_body(index_html)
+
+    if "redesign.css" not in head_template:
+        raise SystemExit("Head template must include redesign.css")
+    if "versionGuard.js" not in head_template:
+        raise SystemExit("Head template must include versionGuard.js")
 
     for slug, city in CITIES.items():
         out_dir = ROOT / slug
         out_dir.mkdir(exist_ok=True)
         out_file = out_dir / "index.html"
-        out_file.write_text(render_city_page(city, app_body), encoding="utf-8")
+        out_file.write_text(render_city_page(city, head_template, app_body), encoding="utf-8")
         print(f"Wrote {out_file}")
 
 
