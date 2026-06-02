@@ -601,3 +601,159 @@
     padding-inline: 1rem;
   }
 }
+
+/* Player dashboard — overview section */
+.profile-dashboard-hero {
+  margin-bottom: 1.25rem;
+}
+
+.profile-dashboard-greeting {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 700;
+  color: var(--kreide);
+}
+
+.profile-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+
+.profile-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.05rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.profile-stat-card--xp {
+  border-color: rgba(255, 191, 0, 0.25);
+  background: rgba(255, 191, 0, 0.06);
+}
+
+.profile-stat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.profile-stat-value {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--kreide);
+  line-height: 1.1;
+}
+
+.profile-stat-meta {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.profile-stat-bar {
+  margin-top: 0.35rem;
+}
+
+.profile-stat-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.profile-dashboard-cities-lead {
+  margin-top: -0.35rem;
+  margin-bottom: 1rem;
+}
+
+.profile-dashboard-cities {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.profile-city-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem 1.05rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--acc-line, var(--border-color));
+  background: var(--acc-fill-soft, rgba(255, 255, 255, 0.03));
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-fast);
+}
+
+.profile-city-card:hover {
+  border-color: var(--acc, var(--signal));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.profile-city-card--soon {
+  opacity: 0.72;
+}
+
+.profile-city-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.profile-city-card-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--kreide);
+}
+
+.profile-city-card-home {
+  color: var(--signal);
+  margin-left: 0.2rem;
+}
+
+.profile-city-card-rank,
+.profile-city-card-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.profile-city-card-greet,
+.profile-city-card-blurb {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.profile-city-card-stats {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.profile-city-card-cta {
+  margin-top: auto;
+  padding-top: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--acc, var(--signal));
+}

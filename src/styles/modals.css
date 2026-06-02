@@ -148,7 +148,7 @@
 }
 
 body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
-  stroke-width: 0.35px;
-  stroke: var(--bg-main);
+  stroke-width: 0.45px;
+  stroke: rgba(255, 255, 255, 0.14);
 }
 

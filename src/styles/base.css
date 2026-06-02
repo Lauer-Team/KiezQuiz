@@ -899,11 +899,14 @@ body.overlay-open {
 
 /* Gameplay Interactive Section */
 .game-play-area {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 250px;
+  justify-content: flex-start;
+  min-height: 0;
+}
+
+#game-play-area-card.game-play-area {
+  flex: 0 0 auto;
 }
 
 .prompt-box {

@@ -1,6 +1,6 @@
 /* KiezQuiz — Full-screen profile (logged-in users) */
 (function () {
-  let activeSection = 'achievements';
+  let activeSection = 'dashboard';
   let leaderboardCity = 'hamburg';
   let friends = [];
   let friendRequests = [];
@@ -10,6 +10,7 @@
   let leaderboardLoadToken = 0;
 
   const SECTION_TITLES = {
+    dashboard: 'profilePage.navDashboard',
     achievements: 'profilePage.navAchievements',
     friends: 'profilePage.navFriends',
     leaderboard: 'profilePage.navLeaderboard',
@@ -278,7 +279,7 @@
       <h2>${t('profilePage.loginRequiredTitle')}</h2>
       <p>${t('profilePage.loginRequiredBody')}</p>
       <button type="button" class="primary-btn" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
-      <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToApp')}</a></p>
+      <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></p>
     `);
     document.getElementById('profile-btn-login')?.addEventListener('click', () => {
       window.authManager?.showAuthModal?.();
@@ -289,8 +290,122 @@
     renderGate('locked', `
       <h2>${t('profilePage.noCloudTitle')}</h2>
       <p>${t('profilePage.noCloudBody')}</p>
-      <a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToApp')}</a>
+      <a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a>
     `);
+  }
+
+  function computeCityStats(game, city) {
+    if (window.kiezProgress?.getBranchState) {
+      const progression = window.cityRegistry.getBezirkeProgression(city.id);
+      const state = window.kiezProgress.getBranchState(game, city.id);
+      let mastered = 0;
+      let total = 0;
+      city.levels.forEach((lv) => {
+        if (lv.key === 'bezirke' || window.cityRegistry.levelKeyToSegment(lv.key) === 'BEZIRKE') {
+          const unlocked = state.unlockedBezirkIndex + 1;
+          mastered += unlocked;
+          total += lv.count;
+        } else {
+          let solved = 0;
+          progression.forEach((bz) => { solved += state.bezirkProgress[bz.name]?.solved?.size || 0; });
+          mastered += solved;
+          total += lv.count;
+        }
+      });
+      const trophyTotal = typeof getTrophyCatalog === 'function' ? getTrophyCatalog(city.id).length : (city.totalTrophies || 0);
+      return { completion: total ? Math.round((mastered / total) * 100) : 0, trophies: { won: state.trophies.size, total: trophyTotal } };
+    }
+    return { completion: 0, trophies: { won: 0, total: city.totalTrophies || 0 } };
+  }
+
+  function renderDashboardCityCard(city, save, game) {
+    const loc = window.cityRegistry.localizeCity(city);
+    const stats = computeCityStats(game, city);
+    const rankInfo = getProfileCityRankInfo(game, city.id);
+    const isComingSoon = city.status === 'coming_soon';
+    const isFresh = stats.completion === 0;
+    const cta = isComingSoon ? t('hub.comingSoon') : (isFresh ? t('hub.startCity') : t('hub.continueCity'));
+    const accentStyle = Object.entries(window.cityRegistry.accentVars(city.hue))
+      .map(([k, v]) => `${k}:${v}`).join(';');
+    const lastCity = save?.lastCity === city.id;
+    const homeMark = lastCity ? `<span class="profile-city-card-home" title="${escapeHtml(t('hub.homeCity'))}">★</span>` : '';
+
+    if (isComingSoon) {
+      return `
+        <div class="profile-city-card profile-city-card--soon" style="${accentStyle}">
+          <div class="profile-city-card-head">
+            <span class="profile-city-card-name">${escapeHtml(loc.name)}</span>
+            <span class="profile-city-card-badge">${escapeHtml(t('hub.comingSoonBadge'))}</span>
+          </div>
+          <p class="profile-city-card-blurb">${escapeHtml(loc.blurb)}</p>
+        </div>`;
+    }
+
+    return `
+      <a href="/${escapeHtml(city.id)}/" class="profile-city-card" style="${accentStyle}">
+        <div class="profile-city-card-head">
+          <span class="profile-city-card-name">${escapeHtml(loc.name)}${homeMark}</span>
+          <span class="profile-city-card-rank">${escapeHtml(rankInfo.currentRank.name)}</span>
+        </div>
+        <p class="profile-city-card-greet">${escapeHtml(loc.greeting)}</p>
+        <div class="profile-city-card-stats">
+          <span class="profile-city-card-stat">${stats.completion}%</span>
+          <span class="profile-city-card-stat">🏆 ${stats.trophies.won}/${stats.trophies.total}</span>
+        </div>
+        <span class="profile-city-card-cta">${escapeHtml(cta)} →</span>
+      </a>`;
+  }
+
+  function renderDashboardSection() {
+    const save = window.saveManager?.loadSave?.() || window.saveManager?.createEmptySave?.();
+    const game = buildProfileGameContext(save);
+    getPlayableCities().forEach((city) => {
+      window.saveManager?.ensureCityBranch?.(save, city.id);
+    });
+    const name = window.authManager?.getDisplayName?.() || t('auth.player');
+    const { xp, currentRank, nextRank, percent } = getGlobalRankProgressFromSave(save);
+    const streak = parseInt(save?.global?.streak, 10) || 0;
+    const bestStreak = parseInt(save?.global?.bestStreak, 10) || 0;
+    const citiesWithProgress = getPlayableCities().filter((city) => {
+      const stats = computeCityStats(game, city);
+      return stats.completion > 0 || stats.trophies.won > 0;
+    }).length;
+    const progressNote = nextRank
+      ? t('ranks.progressTo', { percent: Math.round(percent), name: nextRank.name, xp: nextRank.minXp })
+      : t('ranks.maxReached');
+    const cityCards = (window.KQ_DATA?.cities || [])
+      .map((city) => renderDashboardCityCard(city, save, game))
+      .join('');
+
+    return `
+      <section class="profile-panel profile-dashboard" id="profile-section-dashboard">
+        <div class="profile-dashboard-hero">
+          <p class="profile-dashboard-greeting">${t('profilePage.dashboardGreeting', { name: escapeHtml(name) })}</p>
+          <p class="profile-panel-intro">${t('profilePage.dashboardIntro')}</p>
+        </div>
+        <div class="profile-dashboard-stats">
+          <div class="profile-stat-card profile-stat-card--xp">
+            <span class="profile-stat-label">${t('header.xpLabel')}</span>
+            <span class="profile-stat-value">${formatNumber(xp)}</span>
+            <span class="profile-stat-meta">${escapeHtml(currentRank.name)}</span>
+            <div class="rank-xp-bar profile-stat-bar"><div class="rank-xp-bar-fill" style="width:${percent}%"></div></div>
+            <span class="profile-stat-hint">${escapeHtml(progressNote)}</span>
+          </div>
+          <div class="profile-stat-card">
+            <span class="profile-stat-label">${t('header.streakLabel')}</span>
+            <span class="profile-stat-value">${streak}x</span>
+            <span class="profile-stat-meta">${t('profilePage.dashboardBestStreak', { count: bestStreak })}</span>
+          </div>
+          <div class="profile-stat-card">
+            <span class="profile-stat-label">${t('profilePage.dashboardCitiesLabel')}</span>
+            <span class="profile-stat-value">${citiesWithProgress}/${getPlayableCities().length}</span>
+            <span class="profile-stat-meta">${t('profilePage.dashboardCitiesMeta')}</span>
+          </div>
+        </div>
+        <h3 class="profile-section-title">${t('profilePage.dashboardCitiesHeading')}</h3>
+        <p class="profile-panel-intro profile-dashboard-cities-lead">${t('profilePage.dashboardCitiesLead')}</p>
+        <div class="profile-dashboard-cities">${cityCards}</div>
+      </section>`;
   }
 
   function renderAchievementsSection() {
@@ -415,19 +530,19 @@
   }
 
   function renderSectionContent() {
-    const needsLogin = activeSection !== 'achievements';
-    if (needsLogin && !window.authManager?.isConfigured?.()) {
-      return `<section class="profile-panel"><p class="profile-empty">${t('profilePage.noCloudBody')}</p><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToApp')}</a></section>`;
+    if (!window.authManager?.isConfigured?.()) {
+      return `<section class="profile-panel"><p class="profile-empty">${t('profilePage.noCloudBody')}</p><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></section>`;
     }
-    if (needsLogin && !window.authManager?.isLoggedIn?.()) {
+    if (!window.authManager?.isLoggedIn?.()) {
       return `
         <section class="profile-panel">
           <p class="profile-panel-intro">${t('profilePage.loginRequiredBody')}</p>
           <button type="button" class="primary-btn" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
-          <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToApp')}</a></p>
+          <p style="margin-top:1rem;"><a href="/" class="profile-link-btn secondary-btn">${t('profilePage.backToLanding')}</a></p>
         </section>`;
     }
     switch (activeSection) {
+      case 'dashboard': return renderDashboardSection();
       case 'friends': return renderFriendsSection();
       case 'leaderboard': return renderLeaderboardSection();
       case 'account': return renderAccountSection();
@@ -786,7 +901,7 @@
     document.querySelectorAll('.profile-nav-item').forEach((btn) => {
       btn.classList.toggle('is-active', btn.dataset.section === section);
     });
-    const titleKey = SECTION_TITLES[section] || SECTION_TITLES.achievements;
+    const titleKey = SECTION_TITLES[section] || SECTION_TITLES.dashboard;
     const titleEl = document.getElementById('profile-page-title');
     if (titleEl) {
       titleEl.textContent = t(titleKey);
@@ -795,10 +910,6 @@
   }
 
   async function refreshAccess() {
-    if (activeSection === 'achievements') {
-      renderDashboard();
-      return;
-    }
     if (!window.authManager?.isConfigured?.()) {
       renderNoCloud();
       return;
@@ -807,7 +918,9 @@
       renderLoginPrompt();
       return;
     }
-    await loadSocialData();
+    if (activeSection === 'friends' || activeSection === 'leaderboard') {
+      await loadSocialData();
+    }
     renderDashboard();
   }
 
@@ -818,16 +931,30 @@
     setShellVisible(true);
 
     document.querySelectorAll('.profile-nav-item').forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         setActiveNav(btn.dataset.section);
-        renderDashboard();
+        await refreshAccess();
       });
     });
 
     window.authManager = new AuthManager(window.SUPABASE_CONFIG || {});
-    window.authManager.onAuthChange(async () => {
+    const profileGameStub = {
+      view: 'hub',
+      activeCityId: 'hamburg',
+      reRenderCurrentView() { void refreshAccess(); }
+    };
+    Object.defineProperty(profileGameStub, '_save', {
+      get() { return window.saveManager.loadSave(); },
+      set(v) { if (v) window.saveManager.persistSave(v); }
+    });
+    window.cloudSync = new CloudSync(window.authManager, profileGameStub);
+
+    window.authManager.onAuthChange(async (user) => {
       window.authManager.updateHeaderUI();
       window.kiezAdminBar?.scheduleRender?.();
+      if (user) {
+        await window.cloudSync.handleLoginMerge();
+      }
       await refreshAccess();
     });
 

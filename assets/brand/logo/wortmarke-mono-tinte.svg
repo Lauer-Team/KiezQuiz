@@ -3,8 +3,8 @@
   <g transform="translate(40 976)">
     <text x="0" y="0" fill="#0F1118" style="font-family:&#39;Bricolage Grotesque&#39;,sans-serif;font-weight:800;font-size:1000px;letter-spacing:-45px;">Kiez</text>
     <g transform="translate(1900 -936) scale(8.22581)">
-      <path fill="#FF5233" fill-rule="evenodd" d="M50 4 C25.7 4 6 23.7 6 48 C6 80 50 120 50 120 C50 120 94 80 94 48 C94 23.7 74.3 4 50 4 Z M50 30 C40 30 31.9 38.1 31.9 48.1 C31.9 58.1 40 66.2 50 66.2 C60 66.2 68.1 58.1 68.1 48.1 C68.1 38.1 60 30 50 30 Z"></path>
-      <line x1="54" y1="50" x2="73" y2="69" stroke="#FF5233" stroke-width="13.5" stroke-linecap="round"></line>
+      <path fill="#0F1118" fill-rule="evenodd" d="M50 4 C25.7 4 6 23.7 6 48 C6 80 50 120 50 120 C50 120 94 80 94 48 C94 23.7 74.3 4 50 4 Z M50 30 C40 30 31.9 38.1 31.9 48.1 C31.9 58.1 40 66.2 50 66.2 C60 66.2 68.1 58.1 68.1 48.1 C68.1 38.1 60 30 50 30 Z"></path>
+      <line x1="54" y1="50" x2="73" y2="69" stroke="#0F1118" stroke-width="13.5" stroke-linecap="round"></line>
     </g>
     <text x="2692.58" y="0" fill="#0F1118" style="font-family:&#39;Bricolage Grotesque&#39;,sans-serif;font-weight:800;font-size:1000px;letter-spacing:-45px;">uiz</text>
   </g>

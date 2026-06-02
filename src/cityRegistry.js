@@ -86,6 +86,13 @@
     return city?.status === 'playable';
   }
 
+  /** Root-absolute URL so maps load from / and /hamburg/ alike */
+  function resolveMapSvgUrl(relativePath) {
+    if (!relativePath) return relativePath;
+    if (/^https?:\/\//i.test(relativePath) || relativePath.startsWith('/')) return relativePath;
+    return `/${relativePath.replace(/^\//, '')}`;
+  }
+
   window.cityRegistry = {
     accentVars,
     applyAccentVars,
@@ -98,6 +105,7 @@
     levelKeyToSegment,
     getCityLevel,
     localizeCity,
+    resolveMapSvgUrl,
     SEGMENT_TO_LEVEL,
     LEVEL_TO_SEGMENT
   };

@@ -48,6 +48,8 @@
     if (typeof openOverlayModal !== 'function' && typeof window.loadGameBundle === 'function') {
       await window.loadGameBundle();
     }
+    if (typeof openOverlayModal !== 'function') return false;
+    return true;
   }
 
   let changelogOpening = false;

@@ -264,7 +264,12 @@ class AuthManager {
     this.updateHeaderUI();
   }
 
-  showAuthModal() {
+  async showAuthModal() {
+    if (typeof openOverlayModal !== 'function') {
+      if (typeof window.loadGameCore === 'function') {
+        await window.loadGameCore();
+      }
+    }
     if (typeof openOverlayModal !== 'function') return;
 
     let activeTab = 'login';

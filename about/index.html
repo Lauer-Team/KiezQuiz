@@ -25,67 +25,128 @@
   <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="../src/styles/base.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,600;10..48,700;10..48,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../src/styles/brand.css">
+  <link rel="stylesheet" href="../src/styles/app.css">
+  <link rel="stylesheet" href="../src/styles/hub.css">
+  <link rel="stylesheet" href="../src/styles/redesign.css">
+  <link rel="stylesheet" href="../src/styles/modals.css">
   <link rel="stylesheet" href="../src/styles/about.css">
+  <script src="../src/theme.js"></script>
   <script>window.KIEZ_SRC_BASE = '../src/';</script>
 </head>
-<body class="about-page-body" data-i18n-scope="about">
-  <div class="about-shell">
-    <header class="about-topbar">
-      <a href="/" class="about-back-link" data-i18n="aboutPage.backLink">← Zurück zum Quiz</a>
-      <button type="button" class="about-lang-toggle" id="about-lang-toggle" title="">🇩🇪</button>
+<body class="about-page-body kq" data-i18n-scope="about">
+  <div class="app-shell kq about-app-shell" data-theme="dark">
+    <header class="app-header global-header kq-topbar" id="app-header">
+      <a href="/" class="brand brand-link" data-i18n-title="header.homeTitle" title="Zur Startseite">
+        <img class="brand-logo" src="../assets/brand/logo/wortmarke-invers.png" width="148" height="36" alt="" aria-hidden="true">
+        <h1 class="brand-title visually-hidden">KiezQuiz</h1>
+      </a>
+      <nav id="header-hub-nav" class="header-hub-nav kq-navlinks" aria-label="Landingpage"></nav>
+      <div class="stats-bar about-header-actions">
+        <a href="/profile/" class="stat-pill xp-pill stat-pill-link" data-i18n-title="header.profileTitle" title="Profil &amp; Bestenliste">
+          <div class="xp-pill-body">
+            <div class="xp-pill-row">
+              <span class="label" data-i18n="header.authTitle">Account</span>
+              <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
+            </div>
+          </div>
+        </a>
+        <button type="button" class="changelog-header-btn" data-changelog-trigger data-i18n-title="header.changelogTitle" title="Alle Updates und Neuerungen">
+          <span class="changelog-header-icon" aria-hidden="true">✨</span>
+          <span class="changelog-header-label" data-i18n="footer.changelog">Was ist neu?</span>
+        </button>
+        <button type="button" class="audio-toggle lang-toggle" id="about-lang-toggle" title="">🇩🇪</button>
+        <button type="button" class="audio-toggle" id="about-btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"></button>
+      </div>
     </header>
 
+    <main class="about-main">
+    <div class="about-shell kq" data-theme="dark">
+
     <section class="about-hero">
-      <img class="about-hero-pin" src="../assets/brand/marke/qpin-signal.svg" width="48" height="60" alt="">
-      <h1 class="about-hero-title">KiezQuiz</h1>
+      <img class="about-hero-logo" src="../assets/brand/logo/wortmarke-primaer.png" width="280" height="68" alt="KiezQuiz">
       <p class="about-hero-claim" data-i18n="aboutPage.heroClaim">Besser wissen als Besserwissen.</p>
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.whatTitle">Was ist KiezQuiz?</h2>
       <p data-i18n="aboutPage.whatBody">KiezQuiz ist ein kostenloses Karten-Quiz …</p>
     </section>
 
-    <section class="about-section about-kalle">
-      <div class="about-kalle-content">
-        <h2 data-i18n="aboutPage.kalleTitle">Wer ist Kalle die Kieztaube?</h2>
-        <p class="about-kalle-intro" data-i18n="aboutPage.kalleIntro">Darf ich vorstellen: Kalle, die Kieztaube.</p>
-        <p data-i18n="aboutPage.kalleBody1">Jede Stadt hat sie …</p>
-        <p data-i18n="aboutPage.kalleBody2">Hinter Kalle steckt …</p>
-        <span class="about-kalle-role" data-i18n="aboutPage.kalleRole">Stadttaube · Entwickler-Pseudonym · Maskottchen</span>
+    <section class="about-section about-kalle kq-card">
+      <div class="about-kalle-inner">
+        <div class="about-kalle-copy">
+          <h2 data-i18n="aboutPage.kalleTitle">Wer ist Kalle die Kieztaube?</h2>
+          <p class="about-kalle-intro" data-i18n="aboutPage.kalleIntro">Darf ich vorstellen: Kalle, die Kieztaube.</p>
+          <p data-i18n="aboutPage.kalleBody1">Jede Stadt hat sie …</p>
+          <p data-i18n="aboutPage.kalleBody2">Hinter Kalle steckt …</p>
+          <span class="about-kalle-role" data-i18n="aboutPage.kalleRole">Stadttaube · Entwickler-Pseudonym · Maskottchen</span>
+        </div>
+        <div class="about-kalle-visual" aria-hidden="true">
+          <img class="about-kalle-figure" src="../assets/brand/mascot/kalle-about.png" width="420" height="auto" alt="">
+        </div>
       </div>
-      <img class="about-kalle-figure" src="../assets/brand/mascot/kalle-about.png" width="320" height="auto" alt="Kalle die Kieztaube">
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.modesTitle">Spielmodi</h2>
       <p data-i18n="aboutPage.modesBody">Entdecker-Modus …</p>
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.citiesTitle">Städte &amp; Wünsche</h2>
       <p data-i18n="aboutPage.citiesBody">Aktuell spielbar …</p>
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.privacyTitle">Datenschutz</h2>
       <p data-i18n="aboutPage.privacyBody">Ohne Account …</p>
     </section>
 
-    <a href="/" class="about-cta" data-i18n="aboutPage.ctaPlay">Jetzt spielen →</a>
+    <a href="/" class="about-cta kq-btn sig" data-i18n="aboutPage.ctaPlay">Jetzt spielen →</a>
 
     <footer class="about-footer">
-      <a href="/about/" data-i18n="footer.credit">Von Kalle der Kieztaube</a>
+      <span data-i18n="footer.credit">Von Kalle der Kieztaube</span>
     </footer>
+    </div>
+    </main>
   </div>
 
+  <script src="../src/ui/icons.js"></script>
   <script src="../src/i18n.js"></script>
+  <script src="../src/data/changelog.js"></script>
+  <script src="../src/ui/changelog.js"></script>
+  <script src="../src/ui/globalHeader.js"></script>
+  <script src="../src/ui/hub.js"></script>
+  <script src="../src/ui/hubScrollTop.js"></script>
   <script>
     (async function () {
+      var themeBtn = document.getElementById('about-btn-theme');
+      if (themeBtn && !themeBtn.dataset.bound) {
+        themeBtn.dataset.bound = 'true';
+        themeBtn.addEventListener('click', function () {
+          window.kiezTheme?.toggleTheme?.();
+        });
+      }
+      function syncTheme() {
+        var theme = window.kiezTheme?.getTheme?.() || 'dark';
+        document.querySelectorAll('.about-app-shell, .about-shell.kq').forEach(function (el) {
+          el.dataset.theme = theme;
+        });
+        window.kiezGlobalHeader?.syncBrandTheme?.();
+      }
+      window.addEventListener('kiezthemechange', syncTheme);
+      syncTheme();
+
       await initI18n();
       applyPageMeta('aboutPage');
       applyToDom();
+      window.kiezGlobalHeader?.renderStaticChrome?.();
+      window.kiezHubScrollTop?.bind?.();
+      window.kiezChangelog?.bindTriggers?.(document);
 
       var langBtn = document.getElementById('about-lang-toggle');
       function syncLangBtn() {
@@ -97,11 +158,15 @@
       langBtn.addEventListener('click', function () {
         setLocale(getLocale() === 'de' ? 'en' : 'de').then(function () {
           applyPageMeta('aboutPage');
+          applyToDom();
+          window.kiezGlobalHeader?.renderStaticChrome?.();
           syncLangBtn();
         });
       });
       onLocaleChange(function () {
         applyPageMeta('aboutPage');
+        applyToDom();
+        window.kiezGlobalHeader?.renderStaticChrome?.();
         syncLangBtn();
       });
     })();

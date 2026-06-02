@@ -13,6 +13,10 @@ window.startKiezQuizGame = async function startKiezQuizGame() {
     window.kiezAdminBar?.scheduleRender?.();
     if (user) {
       await window.cloudSync.handleLoginMerge();
+      if (window.kiezPlayerRedirect?.shouldRedirectToDashboard?.(window.authManager) && game.view === 'hub') {
+        window.kiezPlayerRedirect.redirectToDashboard();
+        return;
+      }
       game.reRenderCurrentView();
       if (game.view === 'city') {
         game.updateMapStates();
@@ -32,8 +36,37 @@ window.startKiezQuizGame = async function startKiezQuizGame() {
 
   onLocaleChange(() => game.reRenderCurrentView());
 
-  // Start game immediately — do not block on Supabase (can hang on slow networks).
-  game.init();
+  const deferHubForAuth = window.kiezPlayerRedirect?.isHomePath?.() && !window.kiezViewRouter?.cityFromPathname?.(window.location.pathname);
+
+  function startGameViews() {
+    game.init();
+    window.kiezAppHistory?.bind?.(game);
+  }
+
+  if (deferHubForAuth) {
+    void (async () => {
+      try {
+        await window.authManager.init();
+        if (window.kiezPlayerRedirect?.shouldRedirectToDashboard?.(window.authManager)) {
+          await window.cloudSync.handleLoginMerge();
+          window.kiezPlayerRedirect.redirectToDashboard();
+          return;
+        }
+        startGameViews();
+        await window.authManager.waitForPendingAuthTasks();
+        window.authManager.initUI();
+        window.kiezAdminBar?.scheduleRender?.();
+      } catch (err) {
+        console.warn('Auth startup failed:', err);
+        startGameViews();
+        window.authManager.initUI();
+      }
+    })();
+    return;
+  }
+
+  // City deep links: start immediately — do not block on Supabase (can hang on slow networks).
+  startGameViews();
 
   void (async () => {
     try {

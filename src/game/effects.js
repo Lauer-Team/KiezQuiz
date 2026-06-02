@@ -64,6 +64,17 @@ function openOverlayModal(html, { closeOnBackdrop = false } = {}) {
   const modal = document.createElement('div');
   modal.className = 'overlay-modal';
   modal.innerHTML = html;
+  Object.assign(modal.style, {
+    position: 'fixed',
+    inset: '0',
+    zIndex: '1000',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1.5rem',
+    background: 'rgba(7, 10, 20, 0.85)',
+    overflowY: 'auto'
+  });
   overlayScrollLockY = window.scrollY;
   document.body.style.top = `-${overlayScrollLockY}px`;
   document.body.classList.add('overlay-open');
