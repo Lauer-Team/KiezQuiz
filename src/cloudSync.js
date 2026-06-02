@@ -265,9 +265,6 @@ class CloudSync {
         this.game.deserializeState(merged);
         this.game.saveState();
         await this.flushSaveNow();
-        if (typeof this.game.showSyncToast === 'function') {
-          this._showMergeToast(t('sync.uploaded'));
-        }
       } else {
         this.game.deserializeState(merged);
         this.game.saveState();
