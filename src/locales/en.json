@@ -203,7 +203,7 @@
     "loginRequiredTitle": "Sign-in required",
     "loginRequiredBody": "Sign in to view your profile, friends, and leaderboards.",
     "loginBtn": "Sign in",
-    "backToLanding": "Explore",
+    "backToLanding": "Home",
     "backToApp": "Back to app",
     "noCloudTitle": "Cloud not configured",
     "noCloudBody": "Supabase is not set up — profile is only available in the live environment.",

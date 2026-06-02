@@ -203,7 +203,7 @@
     "loginRequiredTitle": "Anmeldung erforderlich",
     "loginRequiredBody": "Melde dich an, um dein Profil, Freunde und Bestenlisten zu sehen.",
     "loginBtn": "Anmelden",
-    "backToLanding": "Entdecken",
+    "backToLanding": "Zur Startseite",
     "backToApp": "Zurück zur App",
     "noCloudTitle": "Cloud nicht konfiguriert",
     "noCloudBody": "Supabase ist nicht eingerichtet — das Profil ist nur in der Live-Umgebung verfügbar.",

@@ -483,9 +483,10 @@ html[data-theme="light"] .hub-about-kalle {
 }
 
 .header-dashboard-nav {
-  margin-left: 14px;
-  display: flex;
+  margin-left: 10px;
+  display: inline-flex;
   align-items: center;
+  flex: 0 0 auto;
 }
 
 .header-dashboard-nav[hidden] {

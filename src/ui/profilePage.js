@@ -415,7 +415,6 @@
       <h2>${t('profilePage.loginRequiredTitle')}</h2>
       <p>${t('profilePage.loginRequiredBody')}</p>
       <button type="button" class="kq-btn sig" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
-      <p style="margin-top:1rem;"><a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a></p>
     `);
     document.getElementById('profile-btn-login')?.addEventListener('click', () => {
       window.authManager?.showAuthModal?.();
@@ -426,7 +425,6 @@
     renderGate('locked', `
       <h2>${t('profilePage.noCloudTitle')}</h2>
       <p>${t('profilePage.noCloudBody')}</p>
-      <a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a>
     `);
   }
 
@@ -681,7 +679,6 @@
       <section class="profile-panel">
         <p class="profile-panel-intro">${t('profilePage.loginRequiredBody')}</p>
         <button type="button" class="kq-btn sig" id="profile-btn-login">${t('profilePage.loginBtn')}</button>
-        <p style="margin-top:1rem;"><a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a></p>
       </section>`;
   }
 
@@ -698,7 +695,6 @@
         <section class="profile-panel">
           <h3 class="profile-section-title">${t('profilePage.noCloudTitle')}</h3>
           <p class="profile-panel-intro">${t('profilePage.noCloudBody')}</p>
-          <a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a>
         </section>`;
     }
     switch (activeSection) {
@@ -809,7 +805,6 @@
         <div class="profile-state profile-state--error">
           <h2>${t('profilePage.loadError')}</h2>
           <p>${t('profilePage.noCloudBody')}</p>
-          <a href="/" class="profile-link-btn kq-btn ghost">${t('profilePage.backToLanding')}</a>
         </div>`;
       return;
     }
@@ -1219,7 +1214,6 @@
         main.innerHTML = `
           <div class="profile-state profile-state--error">
             <h2>${typeof t === 'function' ? t('profilePage.loadError') : 'Laden fehlgeschlagen'}</h2>
-            <a href="/" class="profile-link-btn kq-btn ghost">${typeof t === 'function' ? t('profilePage.backToLanding') : 'Zur Startseite'}</a>
           </div>`;
       }
     }

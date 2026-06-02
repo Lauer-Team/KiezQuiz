@@ -207,10 +207,11 @@
       nav.setAttribute('aria-label', t('header.dashboardTitle'));
       nav.innerHTML = `<a href="/profile/" class="hub-nav-dashboard" id="header-dashboard-link"></a>`;
       const header = document.getElementById('app-header');
-      const hubNavEl = document.getElementById('header-hub-nav');
-      if (header) {
-        if (hubNavEl) header.insertBefore(nav, hubNavEl);
-        else header.querySelector('.brand-link')?.insertAdjacentElement('afterend', nav);
+      const brand = header?.querySelector('.brand.brand-link');
+      if (header && brand) {
+        brand.insertAdjacentElement('afterend', nav);
+      } else if (header) {
+        header.prepend(nav);
       }
     }
 

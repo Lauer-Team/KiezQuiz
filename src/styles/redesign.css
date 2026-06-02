@@ -321,6 +321,79 @@ html[data-theme="light"] .app-shell.kq .unlocker-card h3 {
   color: var(--text-3);
 }
 
+html[data-theme="light"] .map-tooltip {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--text-1);
+  box-shadow: var(--shadow);
+}
+
+html[data-theme="light"] .map-tooltip .tooltip-bezirk {
+  color: var(--text-3);
+}
+
+html[data-theme="light"] .map-prompt-bar {
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  border-top-color: var(--line);
+}
+
+html[data-theme="light"] .map-prompt-bar .map-prompt-title {
+  color: var(--text-3);
+}
+
+html[data-theme="light"] .map-prompt-bar .map-prompt-target {
+  color: var(--text-1);
+}
+
+html[data-theme="light"] .map-prompt-bar .map-prompt-target.highlight {
+  color: var(--signal);
+  text-shadow: none;
+}
+
+html[data-theme="light"] .map-prompt-bar .map-prompt-sub {
+  color: var(--text-3);
+}
+
+html[data-theme="light"] .kq-navlinks a,
+html[data-theme="light"] .header-hub-nav.kq-navlinks a {
+  color: var(--text-3);
+}
+
+html[data-theme="light"] .kq-navlinks a:hover,
+html[data-theme="light"] .header-hub-nav.kq-navlinks a:hover {
+  color: var(--text-1);
+  background: var(--surface-2);
+}
+
+html[data-theme="light"] .app-shell.kq .audio-toggle,
+html[data-theme="light"] .app-shell.kq .lang-toggle,
+html[data-theme="light"] .app-shell.kq #btn-theme,
+html[data-theme="light"] .app-shell.kq #btn-settings {
+  color: var(--text-2);
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+html[data-theme="light"] .profile-nav-item {
+  color: var(--text-3);
+}
+
+html[data-theme="light"] .profile-nav-item:hover {
+  color: var(--text-1);
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+
+html[data-theme="light"] .profile-nav-item.is-active {
+  color: var(--text-1);
+  background: color-mix(in srgb, var(--signal) 12%, var(--surface));
+}
+
+html[data-theme="light"] .profile-dashboard-greeting,
+html[data-theme="light"] .profile-sidebar-title {
+  color: var(--text-1);
+}
+
 html[data-theme="light"] .city-tile-greet,
 html[data-theme="light"] .hub-level-tier {
   color: hsl(var(--acc-h, 210) 55% 30%);
@@ -552,7 +625,7 @@ body::selection,
 
 .app-shell.kq.view-city .app-header.global-header {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
 }
@@ -561,18 +634,19 @@ body::selection,
   flex: 0 0 auto;
 }
 
-.app-shell.kq.view-city .app-header.global-header .stats-bar {
-  flex: 0 0 auto;
-  margin-left: auto;
-  flex-wrap: nowrap;
-}
-
 .app-shell.kq.view-city .app-header.global-header #header-city-tabs {
   flex: 0 1 auto;
   min-width: 0;
   width: auto;
+  order: 0;
   overflow: visible;
   padding-bottom: 0;
+}
+
+.app-shell.kq.view-city .app-header.global-header .stats-bar {
+  flex: 1 1 auto;
+  margin-left: auto;
+  flex-wrap: nowrap;
 }
 
 .app-shell.kq.view-city .header-hub-nav:not([hidden]) {
@@ -1215,7 +1289,18 @@ body::selection,
   position: absolute;
   right: 14px;
   bottom: 14px;
-  z-index: 20;
+  z-index: 50;
+}
+
+.app-shell.kq .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls {
+  bottom: calc(14px + 58px);
+}
+
+.app-shell.kq .map-microstates-dock:not([hidden]),
+.app-shell.kq .map-panel > .europe-microstates-bar:not([hidden]) {
+  margin-right: 52px;
+  max-width: calc(100% - 1.5rem - 52px);
+  box-sizing: border-box;
 }
 
 .app-shell.kq .zoom-btns {
@@ -1496,24 +1581,22 @@ body::selection,
     order: 2;
     flex: 1 1 auto;
     min-width: 0;
-    margin-left: auto;
+    margin-left: 0;
     flex-wrap: nowrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .header-dashboard-nav:not([hidden]) {
-    order: 3;
-    flex: 1 1 100%;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
+    order: 1;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+    margin: 0 0 0 10px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
   }
 
   .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .header-hub-nav:not([hidden]) {
-    order: 3;
+    order: 10;
     flex: 1 1 100%;
     width: 100%;
     max-width: 100%;
@@ -1522,6 +1605,12 @@ body::selection,
     justify-content: flex-start;
     overflow-x: visible;
   }
+}
+
+.app-shell.kq.view-city .header-city-menu {
+  left: 0;
+  right: auto;
+  transform: none;
 }
 
 @media (max-width: 640px) {
