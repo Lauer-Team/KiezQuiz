@@ -5,7 +5,6 @@
     const statusClass = earned ? 'trophy-detail--earned' : 'trophy-detail--locked';
     const modal = openOverlayModal(`
       <div class="modal-content trophy-detail-modal ${statusClass}">
-        <button type="button" class="modal-x" id="btn-trophy-x">✕</button>
         <div class="trophy-detail-icon">${trophy.icon}</div>
         <h2 class="trophy-detail-name">${trophy.name}</h2>
         <span class="trophy-detail-status">${statusLabel}</span>
@@ -15,7 +14,6 @@
       </div>
     `, { closeOnBackdrop: true });
 
-    document.getElementById('btn-trophy-x')?.addEventListener('click', () => closeOverlayModal(modal));
     document.getElementById('btn-trophy-close')?.addEventListener('click', () => closeOverlayModal(modal));
   }
 

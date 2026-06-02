@@ -25,86 +25,151 @@
   <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <script>
+  (function(){try{var t=localStorage.getItem('kiezquiz_theme');if(t==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,600;10..48,700;10..48,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../src/styles/brand.css">
+  <link rel="stylesheet" href="../src/styles/app.css">
   <link rel="stylesheet" href="../src/styles/base.css">
+  <link rel="stylesheet" href="../src/styles/hub.css">
+  <link rel="stylesheet" href="../src/styles/redesign.css">
+  <link rel="stylesheet" href="../src/styles/mobile.css">
+  <link rel="stylesheet" href="../src/styles/modals.css">
   <link rel="stylesheet" href="../src/styles/about.css">
+  <script src="../src/theme.js"></script>
   <script>window.KIEZ_SRC_BASE = '../src/';</script>
 </head>
 <body class="about-page-body" data-i18n-scope="about">
-  <div class="about-shell">
-    <header class="about-topbar">
-      <a href="/" class="about-back-link" data-i18n="aboutPage.backLink">← Zurück zum Quiz</a>
-      <button type="button" class="about-lang-toggle" id="about-lang-toggle" title="">🇩🇪</button>
+  <div class="app-shell kq density-compact view-hub about-app-shell" data-theme="dark">
+    <header class="app-header global-header kq-topbar" id="app-header">
+      <a href="/" class="brand brand-link" data-i18n-title="header.homeTitle" title="Zur Startseite">
+        <img class="brand-logo" src="/assets/brand/logo/wortmarke-invers.svg" width="148" height="36" alt="" aria-hidden="true">
+        <h1 class="brand-title visually-hidden">KiezQuiz</h1>
+        <span class="badge" id="header-badge">Städte</span>
+      </a>
+
+      <nav id="header-hub-nav" class="header-hub-nav kq-navlinks" hidden aria-label="Landingpage"></nav>
+
+      <div id="header-city-tabs" class="header-city-tabs" hidden></div>
+
+      <div class="stats-bar">
+        <div class="stat-pill streak-pill" data-i18n-title="header.streakTitle" title="Deine aktuelle Antwortserie">
+          <div class="streak-info">
+            <div class="streak-current">
+              <span class="label" data-i18n="header.streakLabel">Serie 🔥:</span>
+              <span class="value" id="stat-streak">0x</span>
+            </div>
+            <div class="streak-best" id="stat-best-streak">Beste: 0x</div>
+          </div>
+        </div>
+
+        <a href="/profile/" class="stat-pill xp-pill stat-pill-link" id="btn-xp-pill" data-i18n-title="header.profileTitle" title="Profil &amp; Bestenliste öffnen">
+          <div class="xp-pill-body">
+            <div class="xp-pill-row">
+              <span class="label" data-i18n="header.xpLabel">XP:</span>
+              <span class="value" id="stat-xp">0</span>
+              <span class="rank-name" id="stat-rank">Neuling</span>
+            </div>
+            <div class="progress-bg xp-pill-progress" aria-hidden="true">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+        </a>
+
+        <button type="button" class="auth-pill" id="auth-pill" data-i18n-title="header.authTitle" title="Cloud-Speicherung: optional anmelden">
+          <span class="auth-pill-icon">👤</span>
+          <span class="auth-pill-label" data-i18n="header.guest">Gast</span>
+          <span class="auth-pill-action" data-i18n="header.login">Anmelden</span>
+        </button>
+
+        <button type="button" class="changelog-header-btn" data-changelog-trigger data-i18n-title="header.changelogTitle" title="Alle Updates und Neuerungen">
+          <span class="changelog-header-icon" aria-hidden="true">✨</span>
+          <span class="changelog-header-label" data-i18n="footer.changelog">Was ist neu?</span>
+        </button>
+
+        <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
+        <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang &amp; Spielverlauf" hidden aria-hidden="true">📋</button>
+        <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
+        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"></button>
+        <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
+      </div>
     </header>
 
+    <main class="about-main">
+    <div class="about-shell kq" data-theme="dark">
+
     <section class="about-hero">
-      <img class="about-hero-pin" src="../assets/brand/marke/qpin-signal.svg" width="48" height="60" alt="">
-      <h1 class="about-hero-title">KiezQuiz</h1>
+      <img class="about-hero-logo brand-logo" src="/assets/brand/logo/wortmarke-invers.svg" width="320" height="78" alt="KiezQuiz">
       <p class="about-hero-claim" data-i18n="aboutPage.heroClaim">Besser wissen als Besserwissen.</p>
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.whatTitle">Was ist KiezQuiz?</h2>
       <p data-i18n="aboutPage.whatBody">KiezQuiz ist ein kostenloses Karten-Quiz …</p>
     </section>
 
-    <section class="about-section about-kalle">
-      <div class="about-kalle-content">
-        <h2 data-i18n="aboutPage.kalleTitle">Wer ist Kalle die Kieztaube?</h2>
-        <p class="about-kalle-intro" data-i18n="aboutPage.kalleIntro">Darf ich vorstellen: Kalle, die Kieztaube.</p>
-        <p data-i18n="aboutPage.kalleBody1">Jede Stadt hat sie …</p>
-        <p data-i18n="aboutPage.kalleBody2">Hinter Kalle steckt …</p>
-        <span class="about-kalle-role" data-i18n="aboutPage.kalleRole">Stadttaube · Entwickler-Pseudonym · Maskottchen</span>
+    <section class="about-section about-kalle kq-card">
+      <div class="about-kalle-inner">
+        <div class="about-kalle-copy">
+          <h2 data-i18n="aboutPage.kalleTitle">Wer ist Kalle die Kieztaube?</h2>
+          <p class="about-kalle-intro" data-i18n="aboutPage.kalleIntro">Darf ich vorstellen: Kalle, die Kieztaube.</p>
+          <p data-i18n="aboutPage.kalleBody1">Jede Stadt hat sie …</p>
+          <p data-i18n="aboutPage.kalleBody2">Hinter Kalle steckt …</p>
+          <span class="about-kalle-role" data-i18n="aboutPage.kalleRole">Stadttaube · Entwickler-Pseudonym · Maskottchen</span>
+        </div>
+        <div class="about-kalle-visual" aria-hidden="true">
+          <img class="about-kalle-figure" src="../assets/brand/mascot/kalle-about.png" width="420" height="auto" alt="">
+        </div>
       </div>
-      <img class="about-kalle-figure" src="../assets/brand/mascot/kalle-about.png" width="320" height="auto" alt="Kalle die Kieztaube">
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.modesTitle">Spielmodi</h2>
       <p data-i18n="aboutPage.modesBody">Entdecker-Modus …</p>
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.citiesTitle">Städte &amp; Wünsche</h2>
       <p data-i18n="aboutPage.citiesBody">Aktuell spielbar …</p>
     </section>
 
-    <section class="about-section">
+    <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.privacyTitle">Datenschutz</h2>
       <p data-i18n="aboutPage.privacyBody">Ohne Account …</p>
     </section>
 
-    <a href="/" class="about-cta" data-i18n="aboutPage.ctaPlay">Jetzt spielen →</a>
+    <a href="/" class="about-cta kq-btn sig" data-i18n="aboutPage.ctaPlay">Jetzt spielen →</a>
 
     <footer class="about-footer">
-      <a href="/about/" data-i18n="footer.credit">Von Kalle der Kieztaube</a>
+      <span data-i18n="footer.credit">Von Kalle der Kieztaube</span>
     </footer>
+    </div>
+    </main>
   </div>
 
+  <script src="../src/ui/icons.js"></script>
   <script src="../src/i18n.js"></script>
-  <script>
-    (async function () {
-      await initI18n();
-      applyPageMeta('aboutPage');
-      applyToDom();
-
-      var langBtn = document.getElementById('about-lang-toggle');
-      function syncLangBtn() {
-        var isDe = getLocale() === 'de';
-        langBtn.textContent = isDe ? '🇩🇪' : '🇬🇧';
-        langBtn.title = isDe ? t('aboutPage.langSwitchToEn') : t('aboutPage.langSwitchToDe');
-      }
-      syncLangBtn();
-      langBtn.addEventListener('click', function () {
-        setLocale(getLocale() === 'de' ? 'en' : 'de').then(function () {
-          applyPageMeta('aboutPage');
-          syncLangBtn();
-        });
-      });
-      onLocaleChange(function () {
-        applyPageMeta('aboutPage');
-        syncLangBtn();
-      });
-    })();
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>window.SUPABASE_CONFIG = window.SUPABASE_CONFIG || {};</script>
+  <script src="../src/supabaseConfig.js"></script>
+  <script src="../src/auth.js"></script>
+  <script src="../src/data/cities.js"></script>
+  <script src="../src/cityRegistry.js"></script>
+  <script src="../src/cityWishes.js"></script>
+  <script src="../src/ui/adminBar.js"></script>
+  <script src="../src/saveManager.js"></script>
+  <script src="../src/game/config.js"></script>
+  <script src="../src/game/progress.js"></script>
+  <script src="../src/loadScript.js"></script>
+  <script src="../src/data/changelog.js"></script>
+  <script src="../src/ui/changelog.js"></script>
+  <script src="../src/ui/globalHeader.js"></script>
+  <script src="../src/ui/hub.js"></script>
+  <script src="../src/ui/hubScrollTop.js"></script>
+  <script src="../src/cloudSync.js"></script>
+  <script src="../src/ui/aboutPage.js"></script>
 </body>
 </html>

@@ -40,8 +40,20 @@
   <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <script>
+  (function(){try{var t=localStorage.getItem('kiezquiz_theme');if(t==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,600;10..48,700;10..48,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles/brand.css">
+  <link rel="stylesheet" href="src/styles/app.css">
   <link rel="stylesheet" href="src/styles/base.css">
   <link rel="stylesheet" href="src/styles/hub.css">
+  <link rel="stylesheet" href="src/styles/redesign.css">
+  <link rel="stylesheet" href="src/styles/mobile.css">
+  <link rel="stylesheet" href="src/styles/modals.css">
+  <script src="src/theme.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -101,13 +113,17 @@
     </div>
   </noscript>
 
-  <div class="app-shell density-compact">
-    <header class="app-header global-header" id="app-header">
+  <div class="app-shell kq density-compact" data-theme="dark">
+    <header class="app-header global-header kq-topbar" id="app-header">
       <a href="/" class="brand brand-link" data-i18n-title="header.homeTitle" title="Zur Startseite">
-        <img class="brand-logo" src="assets/brand/logo/wortmarke-invers.png" width="148" height="36" alt="KiezQuiz">
+        <img class="brand-logo" src="/assets/brand/logo/wortmarke-invers.svg" width="148" height="36" alt="" aria-hidden="true">
         <h1 class="brand-title visually-hidden">KiezQuiz</h1>
         <span class="badge" id="header-badge">Städte</span>
       </a>
+
+      <nav id="header-hub-nav" class="header-hub-nav kq-navlinks" hidden aria-label="Landingpage"></nav>
+
+      <div id="header-city-tabs" class="header-city-tabs" hidden></div>
 
       <div class="stats-bar">
         <div class="stat-pill streak-pill" data-i18n-title="header.streakTitle" title="Deine aktuelle Antwortserie">
@@ -145,8 +161,9 @@
         </button>
 
         <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
-        <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf">📋</button>
+        <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf" hidden aria-hidden="true">📋</button>
         <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
+        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"></button>
         <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
       </div>
     </header>
@@ -195,35 +212,35 @@
           <h3 data-i18n="modes.selectTitle">Spielmodus wählen</h3>
           <div class="modes-list">
             <button class="mode-btn active" data-mode="EXPLORER" id="mode-explorer">
-              <span class="mode-icon">🗺️</span>
+              <span class="mode-icon" data-mode-icon="EXPLORER"></span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;" data-i18n="modes.explorer.label">Entdecker-Modus</span>
                 <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.explorer.desc">Frei erkunden & Infos lernen</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="LOCATE" id="mode-locate">
-              <span class="mode-icon">🕵️</span>
+              <span class="mode-icon" data-mode-icon="LOCATE"></span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;" data-i18n="modes.locate.label">Stadtteil-Detektiv</span>
                 <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.locate.desc">Finde den Ort auf der Karte</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="QUIZ" id="mode-quiz">
-              <span class="mode-icon">⚡</span>
+              <span class="mode-icon" data-mode-icon="QUIZ"></span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;" data-i18n="modes.quiz.label">Karten-Quiz</span>
                 <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.quiz.desc">Erkenne den blinkenden Ort</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="TYPE_NAME" id="mode-typename">
-              <span class="mode-icon">⌨️</span>
+              <span class="mode-icon" data-mode-icon="TYPE_NAME"></span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;" data-i18n="modes.typeName.label">Namen eingeben</span>
                 <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.typeName.desc">Blinkenden Ort eintippen</span>
               </div>
             </button>
             <button class="mode-btn" data-mode="NAME_ALL" id="mode-nameall">
-              <span class="mode-icon">⏱️</span>
+              <span class="mode-icon" data-mode-icon="NAME_ALL"></span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;" data-i18n="modes.nameAll.label">Nenne alle Orte</span>
                 <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.nameAll.desc">Sporcle-Challenge gegen die Zeit</span>
@@ -252,7 +269,7 @@
         <!-- Bypass progression Toggle -->
         <div class="glass-card" style="padding: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
           <div style="display: flex; flex-direction: column;">
-            <span style="font-weight: 700; font-size: 0.85rem; color: #fff;" data-i18n="progress.unlockAll">Alle Bezirke freischalten</span>
+            <span style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);" data-i18n="progress.unlockAll">Alle Bezirke freischalten</span>
             <span style="font-size: 0.75rem; color: var(--text-secondary);" data-i18n="progress.unlockAllHint">Bypass für Profis (keine Progression)</span>
           </div>
           <label class="switch">
@@ -266,24 +283,23 @@
       <!-- Right Panel: Interactive SVG Map -->
       <section class="map-panel">
 
-        <button type="button" class="control-btn map-center-btn" id="btn-zoom-reset" data-i18n-title="map.zoomResetTitle" data-i18n="map.zoomReset" title="Karte zentrieren">Zentrieren</button>
-
-        <div class="map-island-dock" id="map-island-dock">
-          <div class="island-overlay neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!" hidden>
-            <div class="no-badge"></div>
-            <span data-i18n="map.neuwerkLabel">Neuwerk (Insel-Rätsel) 🏝️</span>
+        <div class="map-topbar">
+          <button type="button" class="map-center-btn" id="btn-zoom-reset" data-i18n-title="map.zoomResetTitle" data-i18n="map.zoomReset" title="Karte zentrieren">Zentrieren</button>
+          <div class="map-island-dock" id="map-island-dock">
+            <div class="island-overlay neuwerk-overlay" id="neuwerk-anchor" data-i18n-title="map.neuwerkTitle" title="Wo liegt eigentlich Neuwerk? Klicke hier!" hidden>
+              <div class="no-badge"></div>
+              <span data-i18n="map.neuwerkLabel">Neuwerk (Insel-Rätsel) 🏝️</span>
+            </div>
+            <div class="island-overlay pfaueninsel-overlay" id="pfaueninsel-anchor" data-i18n-title="map.pfaueninselTitle" title="Wo liegt die Pfaueninsel? Klicke hier!" hidden>
+              <div class="no-badge"></div>
+              <span data-i18n="map.pfaueninselLabel">Pfaueninsel (Insel-Rätsel) 🦚</span>
+            </div>
+            <div class="islands-stack" id="europe-islands-stack" hidden></div>
           </div>
-          <div class="island-overlay pfaueninsel-overlay" id="pfaueninsel-anchor" data-i18n-title="map.pfaueninselTitle" title="Wo liegt die Pfaueninsel? Klicke hier!" hidden>
-            <div class="no-badge"></div>
-            <span data-i18n="map.pfaueninselLabel">Pfaueninsel (Insel-Rätsel) 🦚</span>
-          </div>
-          <div class="islands-stack" id="europe-islands-stack" hidden></div>
         </div>
 
         <!-- Bounding Box for SVG Map -->
         <div class="map-container-wrapper" id="map-wrapper" role="img" aria-label="Interaktive Stadtkarte zum Erkunden von Bezirken und Stadtteilen">
-
-          <div class="europe-microstates-bar" id="europe-microstates-bar" hidden aria-label="Kleine Länder — Schnellzugriff"></div>
 
           <div id="map-prompt-bar" class="map-prompt-bar" hidden aria-live="polite">
             <div class="map-prompt-title" id="map-prompt-title"></div>
@@ -298,6 +314,8 @@
           <div class="map-tooltip" id="map-tooltip"></div>
           
         </div>
+
+        <div class="europe-microstates-bar map-microstates-dock" id="europe-microstates-bar" hidden aria-label="Kleine Länder — Schnellzugriff"></div>
 
         <!-- Map Navigation Controls -->
         <div class="map-controls">
@@ -321,14 +339,19 @@
       <p class="privacy-notice">
         <strong data-i18n="footer.privacy">Datenschutz:</strong> <span data-i18n="footer.privacyText">Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.</span>
       </p>
-      <p class="footer-links">
-        <a href="/about/" class="footer-link-btn" data-i18n="footer.about">Über das KiezQuiz</a>
-      </p>
-      <p class="footer-credit"><a href="/about/" data-i18n="footer.credit">Von Kalle der Kieztaube</a></p>
+      <div class="footer-brand-block">
+        <p class="footer-links">
+          <a href="/about/" class="footer-link-btn" data-i18n="footer.about">Über das KiezQuiz</a>
+        </p>
+        <p class="footer-credit" data-i18n="footer.credit">Von Kalle der Kieztaube</p>
+      </div>
     </footer>
   </div><!-- /app-shell -->
 
+  <script src="src/ui/icons.js"></script>
   <script src="src/viewRouter.js"></script>
+  <script src="src/playerRedirect.js"></script>
+  <script src="src/appHistory.js"></script>
   <script src="src/ui/hubShell.js"></script>
   <script src="src/bootView.js"></script>
 
@@ -343,6 +366,7 @@
   <script src="src/loadScript.js" defer></script>
   <script src="src/ui/globalHeader.js" defer></script>
   <script src="src/ui/hub.js" defer></script>
+  <script src="src/ui/hubScrollTop.js" defer></script>
   <script src="src/data/changelog.js" defer></script>
   <script src="src/ui/changelog.js" defer></script>
   <script src="src/cloudSync.js" defer></script>

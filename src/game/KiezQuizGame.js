@@ -54,6 +54,7 @@ class KiezQuizGame {
     
     this._sessionCityOverride = null;
     this._loadedMapCityId = null;
+    this._cityPlayRun = 0;
     this.loadState();
   }
 
@@ -63,6 +64,15 @@ class KiezQuizGame {
 
   getCityData() {
     return getCityDataArray(this.activeCityId);
+  }
+
+  _mapRoot() {
+    return this.svg || document.getElementById('map-wrapper');
+  }
+
+  _mapPaths(selector = '.stadtteil-path') {
+    const root = this._mapRoot();
+    return root ? root.querySelectorAll(selector) : [];
   }
 
   init() {
@@ -109,7 +119,6 @@ class KiezQuizGame {
       window.kiezHub?.render(this, hubEl);
       if (window.authManager) window.authManager.updateHeaderUI();
       window.kiezAdminBar?.scheduleRender?.();
-      this._maybeShowAppNews();
       return;
     }
 
@@ -117,15 +126,11 @@ class KiezQuizGame {
   }
 
   _swapMapSvg(svgHtml, wrapper) {
-    const old = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
+    wrapper.querySelectorAll('.city-map-svg, .hamburg-map-svg').forEach((el) => el.remove());
     const temp = document.createElement('div');
     temp.innerHTML = svgHtml.trim();
     const newSvg = temp.querySelector('svg');
     if (!newSvg) return;
-    if (old) {
-      old.replaceWith(newSvg);
-      return;
-    }
     const tooltip = wrapper.querySelector('#map-tooltip');
     if (tooltip) wrapper.insertBefore(newSvg, tooltip);
     else wrapper.appendChild(newSvg);
@@ -144,9 +149,10 @@ class KiezQuizGame {
   }
 
   _loadCityMap() {
+    const cityId = this.activeCityId;
     return new Promise(async (resolve) => {
       const wrapper = document.getElementById('map-wrapper');
-      const city = window.cityRegistry.getCity(this.activeCityId);
+      const city = window.cityRegistry.getCity(cityId);
       const nw = document.getElementById('neuwerk-anchor');
       const pf = document.getElementById('pfaueninsel-anchor');
       const europeStack = document.getElementById('europe-islands-stack');
@@ -166,10 +172,11 @@ class KiezQuizGame {
         return;
       }
 
-      const url = city.mapSvg;
+      const url = window.cityRegistry.resolveMapSvgUrl(city.mapSvg);
       try {
         if (!MAP_SVG_CACHE.has(url)) {
           const resp = await fetch(url);
+          if (!resp.ok) throw new Error(`map fetch ${resp.status}`);
           MAP_SVG_CACHE.set(url, await resp.text());
         }
         this._swapMapSvg(MAP_SVG_CACHE.get(url), wrapper);
@@ -178,13 +185,19 @@ class KiezQuizGame {
         console.error('Failed to load city map', err);
         this.svg = wrapper.querySelector('.city-map-svg, .hamburg-map-svg');
       }
+      if (this.activeCityId !== cityId) {
+        resolve();
+        return;
+      }
       this.ensureMapLabelsGroup();
-      this._loadedMapCityId = this.activeCityId;
+      this._loadedMapCityId = cityId;
       resolve();
     });
   }
 
   _initCityPlay() {
+    const runId = ++this._cityPlayRun;
+
     const hubEl = document.getElementById('hub-view');
     const cityEl = document.getElementById('city-view');
     if (hubEl) hubEl.hidden = true;
@@ -195,14 +208,26 @@ class KiezQuizGame {
       cityEl.dataset.city = this.activeCityId;
     }
     this.updateHeaderBadge();
+    window.kiezGlobalHeader?.sync?.(this);
 
-    this._loadCityMap().then(() => {
-      this.mapWrapper = document.querySelector('.map-container-wrapper');
+    return this._loadCityMap().then(() => {
+      if (runId !== this._cityPlayRun) return;
+
+      this.mapWrapper = document.getElementById('map-wrapper') || document.querySelector('.map-container-wrapper');
       this.tooltip = document.getElementById('map-tooltip');
 
       if (this.svg && this.mapWrapper) {
-        this.mapNav = new MapNavigator(this.svg, this.mapWrapper);
+        if (this.mapNav) {
+          this.mapNav.rebindSvg(this.svg);
+        } else {
+          this.mapNav = new MapNavigator(this.svg, this.mapWrapper);
+        }
         this.reorderMapLayers();
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (this.mapNav) this.mapNav.reset();
+          });
+        });
       }
 
       if (this.tooltip && this.tooltip.parentElement !== document.body) {
@@ -247,34 +272,7 @@ class KiezQuizGame {
         this._audioPrimed = true;
       }
 
-      this._maybeShowAppNews();
     });
-  }
-
-  _hasAppNewsContent() {
-    const title = t('appNews.title');
-    return !!(title && title !== 'appNews.title' && String(title).trim());
-  }
-
-  shouldShowAppNews() {
-    const version = typeof APP_NEWS_VERSION === 'number' ? APP_NEWS_VERSION : 0;
-    if (!version || !this._hasAppNewsContent()) return false;
-    const seen = parseInt(this._save?.global?.newsVersionSeen, 10) || 0;
-    return seen < version;
-  }
-
-  markAppNewsSeen() {
-    const version = typeof APP_NEWS_VERSION === 'number' ? APP_NEWS_VERSION : 0;
-    if (!this._save.global) this._save.global = {};
-    this._save.global.newsVersionSeen = version;
-    window.saveManager.persistSave(this._save);
-  }
-
-  _maybeShowAppNews() {
-    if (this._appNewsShownThisSession) return;
-    if (!this.shouldShowAppNews()) return;
-    this._appNewsShownThisSession = true;
-    this.showAppNews();
   }
 
   showHub(persistNav = true) {
@@ -283,13 +281,17 @@ class KiezQuizGame {
       this.endRound(false);
       this.stopNameAllChallenge(false);
     }
+    const wasCity = this.view === 'city';
     this.view = 'hub';
     if (persistNav) {
       this._syncToSaveObject();
       this._save.lastCity = this.activeCityId;
       window.saveManager.persistSave(this._save);
+      if (wasCity) window.kiezAppHistory?.onShowHub?.();
     }
+    window.kiezHubScrollTop?.syncVisibility?.();
     window.kiezCityDashboard?.closeSwitcher();
+    window.kiezGlobalHeader?.closeHeaderCityMenu?.();
     const hubEl = document.getElementById('hub-view');
     const cityEl = document.getElementById('city-view');
     if (cityEl) cityEl.hidden = true;
@@ -309,6 +311,7 @@ class KiezQuizGame {
         this.showComingSoonToast(cityId);
         return;
       }
+      const fromHub = this.view === 'hub';
       if (this.view === 'city' && cityId !== this.activeCityId) {
         this._syncToSaveObject();
       }
@@ -320,8 +323,10 @@ class KiezQuizGame {
       if (persistNav) {
         this._save.lastCity = cityId;
         window.saveManager.persistSave(this._save);
+        window.kiezAppHistory?.onEnterCity?.(this, cityId, fromHub);
       }
       this._initCityPlay();
+      window.kiezHubScrollTop?.syncVisibility?.();
     };
     if (typeof window.loadGameBundle === 'function') {
       window.loadGameBundle().then(run);
@@ -384,36 +389,31 @@ class KiezQuizGame {
 
   setupHeaderListeners() {
     const historyBtn = document.getElementById('btn-history');
-    if (historyBtn && historyBtn.dataset.bound !== 'true') {
-      historyBtn.dataset.bound = 'true';
-      historyBtn.addEventListener('click', () => this.showGameHistory());
+    if (historyBtn) {
+      historyBtn.hidden = true;
+      historyBtn.setAttribute('aria-hidden', 'true');
     }
     const settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn && settingsBtn.dataset.bound !== 'true') {
+    if (settingsBtn && settingsBtn.dataset.kqSettingsBound !== 'true' && settingsBtn.dataset.bound !== 'true') {
       settingsBtn.dataset.bound = 'true';
       settingsBtn.addEventListener('click', () => this.showSettings());
     }
 
-    const langBtn = document.getElementById('btn-lang');
-    if (langBtn && langBtn.dataset.bound !== 'true') {
-      langBtn.dataset.bound = 'true';
-      this.updateLangButton(langBtn);
-      langBtn.addEventListener('click', () => {
-        setLocale(getLocale() === 'de' ? 'en' : 'de');
-      });
-    }
+    this.updateLangButton();
+    this.syncMuteButton();
+  }
 
-    const muteBtn = document.getElementById('btn-mute');
-    if (muteBtn && muteBtn.dataset.bound !== 'true') {
-      muteBtn.dataset.bound = 'true';
-      muteBtn.innerHTML = this.sounds.muted ? '🔇' : '🔊';
-      muteBtn.addEventListener('click', () => {
-        this.sounds.init();
-        const isMuted = this.sounds.toggleMute();
-        muteBtn.innerHTML = isMuted ? '🔇' : '🔊';
-        this.saveState();
-      });
+  syncMuteButton() {
+    if (window.kiezHeaderControls?.syncMuteButton) {
+      window.kiezHeaderControls.syncMuteButton();
+      return;
     }
+    const muteBtn = document.getElementById('btn-mute');
+    if (!muteBtn) return;
+    const muted = !!this.sounds?.muted;
+    muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
+    muteBtn.classList.toggle('is-muted', muted);
+    muteBtn.title = t('header.soundTitle');
   }
 
   setupMobileMapHint() {
@@ -424,6 +424,9 @@ class KiezQuizGame {
   }
 
   setupUIListeners() {
+    if (this._uiListenersBound) return;
+    this._uiListenersBound = true;
+
     // Mode Buttons
     document.querySelectorAll('.mode-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -440,12 +443,21 @@ class KiezQuizGame {
       });
     });
 
-    // Zoom Buttons
-    document.getElementById('btn-zoom-in').addEventListener('click', () => this.mapNav.zoomIn());
-    document.getElementById('btn-zoom-out').addEventListener('click', () => this.mapNav.zoomOut());
-    document.getElementById('btn-zoom-reset').addEventListener('click', () => {
-      if (this.mapNav) this.mapNav.reset();
-    });
+    const zoomIn = document.getElementById('btn-zoom-in');
+    const zoomOut = document.getElementById('btn-zoom-out');
+    const zoomReset = document.getElementById('btn-zoom-reset');
+    if (zoomIn && !zoomIn.dataset.bound) {
+      zoomIn.dataset.bound = 'true';
+      zoomIn.addEventListener('click', () => this.mapNav?.zoomIn());
+    }
+    if (zoomOut && !zoomOut.dataset.bound) {
+      zoomOut.dataset.bound = 'true';
+      zoomOut.addEventListener('click', () => this.mapNav?.zoomOut());
+    }
+    if (zoomReset && !zoomReset.dataset.bound) {
+      zoomReset.dataset.bound = 'true';
+      zoomReset.addEventListener('click', () => this.mapNav?.reset());
+    }
 
     this.setupHeaderListeners();
     
@@ -599,8 +611,8 @@ class KiezQuizGame {
       );
       if (typeof g.muted === 'boolean') {
         this.sounds.muted = g.muted;
-        const muteBtn = document.getElementById('btn-mute');
-        if (muteBtn) muteBtn.innerHTML = g.muted ? '🔇' : '🔊';
+        localStorage.setItem('hamburg_muted', g.muted ? 'true' : 'false');
+        this.syncMuteButton();
       }
       return;
     }
@@ -654,8 +666,7 @@ class KiezQuizGame {
     if (typeof data.muted === 'boolean') {
       this.sounds.muted = data.muted;
       localStorage.setItem('hamburg_muted', data.muted ? 'true' : 'false');
-      const muteBtn = document.getElementById('btn-mute');
-      if (muteBtn) muteBtn.innerHTML = data.muted ? '🔇' : '🔊';
+      this.syncMuteButton();
     }
 
     this._save = window.saveManager.createEmptySave();
@@ -925,7 +936,9 @@ class KiezQuizGame {
       const keys = map[mode];
       if (!keys) return;
       const icon = btn.querySelector('.mode-icon');
-      if (icon && MODE_ICONS[mode]) icon.textContent = MODE_ICONS[mode];
+      const svgIcon = window.kiezIcons?.ModeIcon?.[mode];
+      if (icon && svgIcon) icon.innerHTML = svgIcon;
+      else if (icon && MODE_ICONS[mode]) icon.textContent = MODE_ICONS[mode];
       const col = btn.querySelector(':scope > div');
       if (!col) return;
       const spans = col.querySelectorAll(':scope > span');
@@ -998,10 +1011,16 @@ class KiezQuizGame {
   }
 
   updateLangButton(btn) {
+    if (window.kiezHeaderControls?.syncLangButton) {
+      window.kiezHeaderControls.syncLangButton();
+      return;
+    }
     const el = btn || document.getElementById('btn-lang');
     if (!el) return;
+    const titleKey = getLocale() === 'de' ? 'header.langSwitchToEn' : 'header.langSwitchToDe';
     el.textContent = getLocale() === 'de' ? '🇩🇪' : '🇬🇧';
-    el.title = getLocale() === 'de' ? t('header.langSwitchToEn') : t('header.langSwitchToDe');
+    el.dataset.i18nTitle = titleKey;
+    el.title = t(titleKey);
   }
 
   // Render score, progress-fill, XP etc.
@@ -1069,6 +1088,10 @@ class KiezQuizGame {
       
       // Calculate how many stadtteile are solved out of total in this district
       const totalInDistrict = this.getCityData().filter(d => d.bezirk === bz.name && !d.is_island).length;
+      const progress = this.bezirkProgress[bz.name];
+      if (!progress) {
+        this.bezirkProgress[bz.name] = { solved: new Set() };
+      }
       const solvedInDistrict = this.bezirkProgress[bz.name].solved.size;
       const percent = totalInDistrict > 0 ? Math.round((solvedInDistrict / totalInDistrict) * 100) : 0;
       
@@ -1220,7 +1243,7 @@ class KiezQuizGame {
     if (!this.svg || this.activeCityId !== 'europe') return;
 
     this.svg.querySelectorAll('.micro-hit-target').forEach((el) => el.remove());
-    document.querySelectorAll('.stadtteil-path.micro-state-visible').forEach((p) => {
+    this._mapPaths('.micro-state-visible').forEach((p) => {
       p.classList.remove('micro-state-visible');
     });
 
@@ -1231,7 +1254,7 @@ class KiezQuizGame {
       : (typeof EUROPE_MICRO_HIT_MIN_RADIUS === 'number' ? EUROPE_MICRO_HIT_MIN_RADIUS : 20);
     const byBezirk = new Map();
 
-    document.querySelectorAll('.stadtteil-path:not(.micro-hit-target)').forEach((path) => {
+    this._mapPaths(':not(.micro-hit-target)').forEach((path) => {
       const bezirk = path.getAttribute('data-bezirk');
       if (!bezirk) return;
       const b = path.getBBox();
@@ -1409,8 +1432,15 @@ class KiezQuizGame {
     if (bar) bar.hidden = true;
   }
 
+  syncMapChrome() {
+    const nameAllUi = document.getElementById('name-all-active');
+    const nameAllSession = !!(nameAllUi && nameAllUi.style.display !== 'none');
+    document.body.classList.toggle('map-play-active', !!(this.inRound || nameAllSession));
+  }
+
   setInRoundUI(active) {
     document.body.classList.toggle('in-round', active);
+    this.syncMapChrome();
     if (!active) this.hideMapPromptBar();
   }
 
@@ -1617,13 +1647,13 @@ class KiezQuizGame {
       align-items: center;
       padding: 1rem;
       animation: alertSlideIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      background: rgba(17, 24, 39, 0.9);
+      background: var(--bg-surface);
     `;
     
     alertBox.innerHTML = `
       <div style="font-size: 2rem;">🏆</div>
       <div>
-        <div style="font-weight:700; color:#fff; font-size:0.95rem; margin-bottom: 0.15rem;">${t('achievement.unlocked')}</div>
+        <div style="font-weight:700; color:var(--text-primary); font-size:0.95rem; margin-bottom: 0.15rem;">${t('achievement.unlocked')}</div>
         <div style="font-weight:700; color:var(--color-xp); font-size:0.85rem; margin-bottom: 0.15rem;">${title}</div>
         <div style="font-size:0.75rem; color:var(--text-secondary);">${desc}</div>
       </div>
@@ -1661,7 +1691,7 @@ class KiezQuizGame {
     const modal = openOverlayModal(`
       <div class="modal-content">
         <h2 style="font-size: 2.2rem; color: var(--color-xp); text-shadow: 0 0 15px rgba(255, 191, 0, 0.3);">${t('levelUp.title')}</h2>
-        <p style="margin-top:0.5rem; font-weight:700; font-size: 1.1rem; color:#fff;">${t('levelUp.rank', { name: rank.name })}</p>
+        <p style="margin-top:0.5rem; font-weight:700; font-size: 1.1rem; color:var(--text-primary);">${t('levelUp.rank', { name: rank.name })}</p>
         <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">${t('levelUp.body')}</p>
         <div class="round-end-actions" style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
           <button class="primary-btn" id="btn-lvl-dismiss">${t('levelUp.dismiss')}</button>
@@ -1981,46 +2011,6 @@ class KiezQuizGame {
 
   }
 
-  showAppNews() {
-    const modal = openOverlayModal(`
-      <div class="modal-content" style="max-width: 550px;">
-        <h2>${t('appNews.title')}</h2>
-        <p>${t('appNews.intro')}</p>
-        
-        <div class="modal-features">
-          <div class="mf-item">
-            <span class="mf-icon">${t('appNews.feature1Icon')}</span>
-            <span class="mf-text">
-              <strong>${t('appNews.feature1Title')}</strong>
-              ${t('appNews.feature1Text')}
-            </span>
-          </div>
-          <div class="mf-item">
-            <span class="mf-icon">${t('appNews.feature2Icon')}</span>
-            <span class="mf-text">
-              <strong>${t('appNews.feature2Title')}</strong>
-              ${t('appNews.feature2Text')}
-            </span>
-          </div>
-          <div class="mf-item">
-            <span class="mf-icon">${t('appNews.feature3Icon')}</span>
-            <span class="mf-text">
-              <strong>${t('appNews.feature3Title')}</strong>
-              ${t('appNews.feature3Text')}
-            </span>
-          </div>
-        </div>
-
-        <p style="font-size: 0.8rem; color: var(--text-muted);">${t('appNews.footerTip')}</p>
-        <button class="primary-btn" id="btn-app-news-dismiss">${t('appNews.dismiss')}</button>
-      </div>
-    `);
-    document.getElementById('btn-app-news-dismiss').addEventListener('click', () => {
-      this.markAppNewsSeen();
-      closeOverlayModal(modal);
-    });
-  }
-
   // Mode Setter
   setMode(mode) {
     mode = this.resolveModeForCurrentSegment(mode);
@@ -2064,7 +2054,7 @@ class KiezQuizGame {
   updateMapStates() {
     const unlockedBezirke = this.getUnlockedBezirke();
     
-    document.querySelectorAll('.stadtteil-path').forEach(path => {
+    this._mapPaths().forEach(path => {
       const name = path.getAttribute('data-name');
       const bezirk = path.getAttribute('data-bezirk');
       path.style.pointerEvents = '';
@@ -2092,7 +2082,7 @@ class KiezQuizGame {
   }
 
   resetMapClasses() {
-    document.querySelectorAll('.stadtteil-path').forEach(path => {
+    this._mapPaths().forEach(path => {
       path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect', 'bezirk-excluded');
       path.style.pointerEvents = '';
       path.style.removeProperty('--map-h');
@@ -2118,7 +2108,7 @@ class KiezQuizGame {
     const isSubset = activeBezirke.length < allUnlocked.length;
     if (!isSubset) return;
 
-    document.querySelectorAll('.stadtteil-path').forEach(path => {
+    this._mapPaths().forEach(path => {
       const bezirk = path.getAttribute('data-bezirk');
       if (!activeBezirke.includes(bezirk)) {
         path.classList.add('bezirk-excluded');
@@ -2136,7 +2126,7 @@ class KiezQuizGame {
     if (existing) existing.remove();
 
     const segmentBezirke = new Map();
-    document.querySelectorAll('.stadtteil-path').forEach(path => {
+    this._mapPaths().forEach(path => {
       const bezirk = path.getAttribute('data-bezirk');
       parsePathSegments(path.getAttribute('d')).forEach(([x1, y1, x2, y2]) => {
         const key = segmentKey(x1, y1, x2, y2);
@@ -2205,7 +2195,7 @@ class KiezQuizGame {
 
   // Initialize Map paths and binding event listeners
   initMapPaths() {
-    document.querySelectorAll('.stadtteil-path').forEach((path) => this.bindMapPath(path));
+    this._mapPaths().forEach((path) => this.bindMapPath(path));
   }
 
   bindMapPath(path) {
@@ -2225,7 +2215,7 @@ class KiezQuizGame {
     path.addEventListener('mouseenter', () => {
       if (this.activeSegment === 'BEZIRKE' && !path.classList.contains('locked-path')) {
         const bz = path.getAttribute('data-bezirk');
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${bz}"]`).forEach((p) => {
+        this._mapPaths(`[data-bezirk="${bz}"]`).forEach((p) => {
           p.classList.add('bezirk-hover-highlight');
         });
       }
@@ -2234,7 +2224,7 @@ class KiezQuizGame {
     path.addEventListener('mouseleave', () => {
       if (this.activeSegment === 'BEZIRKE') {
         const bz = path.getAttribute('data-bezirk');
-        document.querySelectorAll(`.stadtteil-path[data-bezirk="${bz}"]`).forEach((p) => {
+        this._mapPaths(`[data-bezirk="${bz}"]`).forEach((p) => {
           p.classList.remove('bezirk-hover-highlight');
         });
       }
@@ -2373,7 +2363,7 @@ class KiezQuizGame {
   }
 
   selectNeighbourhoodByName(name) {
-    const paths = document.querySelectorAll('.stadtteil-path');
+    const paths = this._mapPaths();
     for (const path of paths) {
       if (path.getAttribute('data-name') === name) {
         this.selectNeighbourhood(path, name, path.getAttribute('data-bezirk'));
@@ -2593,7 +2583,7 @@ class KiezQuizGame {
         <!-- Play / Round Controls -->
         <div class="round-setup-card" id="round-setup-ui" style="display: flex; flex-direction: column; gap: 0.75rem; text-align: center;">
           <div style="font-size: 1.8rem;">🎮</div>
-          <h4 style="font-family: var(--font-display); font-weight:700; color: #fff;">${t('game.roundStartTitle')}</h4>
+          <h4 style="font-family: var(--font-display); font-weight:700; color: var(--text-primary);">${t('game.roundStartTitle')}</h4>
           <p style="font-size:0.82rem; color: var(--text-secondary);">
             ${t('game.roundStartDesc')}
             <br><strong>${t('game.timeLimit')}</strong>
@@ -2619,7 +2609,7 @@ class KiezQuizGame {
           <div class="timer-display" id="round-timer-display">10:00</div>
           <!-- Round Indicators -->
           <div style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.6rem; display:flex; justify-content:space-between; align-items:center; font-size:0.8rem; margin-bottom: 0.75rem;">
-            <div id="round-questions-count" style="font-weight: 700; color: #fff;">${t('game.questionCount', { current: 0, total: 0 })}</div>
+            <div id="round-questions-count" style="font-weight: 700; color: var(--text-primary);">${t('game.questionCount', { current: 0, total: 0 })}</div>
             <div style="display:flex; gap:0.75rem;">
               <span style="color: var(--color-correct); font-weight:700;">🟢 <span id="round-correct-count">0</span></span>
               <span style="color: var(--color-incorrect); font-weight:700;">🔴 <span id="round-incorrect-count">0</span></span>
@@ -2739,6 +2729,7 @@ class KiezQuizGame {
     if (this.roundQuestions.length === 0) {
       alert(t('game.noQuestionsAlert'));
       this.inRound = false;
+      this.syncMapChrome();
       return;
     }
 
@@ -2760,7 +2751,7 @@ class KiezQuizGame {
     this.activeSelectPath = null;
     
     // Remove blink state
-    document.querySelectorAll('.stadtteil-path').forEach(p => p.classList.remove('blink', 'selected'));
+    this._mapPaths().forEach(p => p.classList.remove('blink', 'selected'));
 
     if (this.roundIndex >= this.roundQuestions.length) {
       this.finishRound();
@@ -2911,7 +2902,7 @@ class KiezQuizGame {
   getAlreadyAnsweredInRound() {
     const answered = new Set();
     const isBz = this.activeSegment === 'BEZIRKE';
-    document.querySelectorAll('.stadtteil-path.round-correct, .stadtteil-path.round-incorrect').forEach(p => {
+    this._mapPaths('.round-correct, .round-incorrect').forEach(p => {
       if (isBz) {
         answered.add(p.getAttribute('data-bezirk'));
       } else {
@@ -3200,7 +3191,7 @@ class KiezQuizGame {
     const isCorrect = name === this.currentTarget.name;
     
     // Disable map temporary clicks
-    document.querySelectorAll('.stadtteil-path').forEach(p => p.style.pointerEvents = 'none');
+    this._mapPaths().forEach(p => p.style.pointerEvents = 'none');
 
     if (isCorrect) {
       this.roundCorrect++;
@@ -3218,7 +3209,7 @@ class KiezQuizGame {
       this.roundHistory[name] = { correct: true };
       this.roundIndex++;
       setTimeout(() => {
-        document.querySelectorAll('.stadtteil-path').forEach(p => p.style.pointerEvents = 'auto');
+        this._mapPaths().forEach(p => p.style.pointerEvents = 'auto');
         this.nextRoundQuestion();
       }, 1200);
     } else {
@@ -3233,7 +3224,7 @@ class KiezQuizGame {
       this.roundHistory[this.currentTarget.name] = { correct: false };
       this.roundIndex++;
       setTimeout(() => {
-        document.querySelectorAll('.stadtteil-path').forEach(p => p.style.pointerEvents = 'auto');
+        this._mapPaths().forEach(p => p.style.pointerEvents = 'auto');
         this.nextRoundQuestion();
       }, 2500);
     }
@@ -3244,7 +3235,7 @@ class KiezQuizGame {
     this.sounds.init();
     const isCorrect = bezirkClicked === this.currentTarget.name;
 
-    document.querySelectorAll('.stadtteil-path').forEach(p => p.style.pointerEvents = 'none');
+    this._mapPaths().forEach(p => p.style.pointerEvents = 'none');
 
     if (isCorrect) {
       this.roundCorrect++;
@@ -3260,7 +3251,7 @@ class KiezQuizGame {
       this.roundHistory[bezirkClicked] = { correct: true };
       this.roundIndex++;
       setTimeout(() => {
-        document.querySelectorAll('.stadtteil-path').forEach(p => p.style.pointerEvents = 'auto');
+        this._mapPaths().forEach(p => p.style.pointerEvents = 'auto');
         this.nextRoundQuestion();
       }, 1200);
     } else {
@@ -3275,7 +3266,7 @@ class KiezQuizGame {
       this.roundHistory[this.currentTarget.name] = { correct: false };
       this.roundIndex++;
       setTimeout(() => {
-        document.querySelectorAll('.stadtteil-path').forEach(p => p.style.pointerEvents = 'auto');
+        this._mapPaths().forEach(p => p.style.pointerEvents = 'auto');
         this.nextRoundQuestion();
       }, 2500);
     }
@@ -3387,7 +3378,7 @@ class KiezQuizGame {
     container.innerHTML = `
       <div style="display: flex; flex-direction: column; gap: 0.75rem; text-align: center; padding: 0.5rem;">
         <div style="font-size: 2.2rem;">🏁</div>
-        <h3 style="font-family: var(--font-display); font-weight:700; color: #fff;">${t('game.roundEnded')}</h3>
+        <h3 style="font-family: var(--font-display); font-weight:700; color: var(--text-primary);">${t('game.roundEnded')}</h3>
         ${timedOut ? `<p style="font-size:0.85rem; color:var(--color-incorrect); font-weight:700;">${t('game.timeUp')}</p>` : ''}
         <p style="font-size:0.85rem; color:var(--text-secondary);">${t('game.playDuration')} <strong>${this.formatDuration(durationSec)}</strong></p>
         
@@ -3469,7 +3460,7 @@ class KiezQuizGame {
     container.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:center;" id="name-all-setup">
         <div style="font-size:2.2rem;">⏱️</div>
-        <h4 style="font-family:var(--font-display); font-weight:700; color:#fff;">${isBz ? t('nameAll.titleBezirke') : t('nameAll.titleStadtteile')}</h4>
+        <h4 style="font-family:var(--font-display); font-weight:700; color:var(--text-primary);">${isBz ? t('nameAll.titleBezirke') : t('nameAll.titleStadtteile')}</h4>
         <p style="font-size:0.82rem; color:var(--text-secondary);">
           ${isBz ? t('nameAll.introBezirke') : t('nameAll.introStadtteile')}
           ${t('nameAll.introSuffix')}
@@ -3486,7 +3477,7 @@ class KiezQuizGame {
         <div class="timer-display" id="timer-display">10:00</div>
         
         <div style="background: rgba(0,0,0,0.15); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.5rem; display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;">
-          <span style="font-weight:700; color:#fff;">${t('nameAll.found')}</span>
+          <span style="font-weight:700; color:var(--text-primary);">${t('nameAll.found')}</span>
           <span style="font-weight:700; color:var(--color-correct);" id="name-all-counter">0 / 104</span>
         </div>
 
@@ -3533,7 +3524,7 @@ class KiezQuizGame {
     this.nameAllActiveBezirke = selectedBezirke;
     
     // Hide unlocked segment overlays if progression is on, to make it completely blank
-    document.querySelectorAll('.stadtteil-path').forEach(p => {
+    this._mapPaths().forEach(p => {
       p.classList.remove('locked-path', 'unlocked-bezirk', 'discovered');
       p.style.fill = '';
       p.style.stroke = '';
@@ -3546,6 +3537,7 @@ class KiezQuizGame {
     this.nameAllFound.clear();
     this.nameAllIsActive = true;
     this.nameAllTimeLeft = ROUND_TIME_LIMIT;
+    this.syncMapChrome();
 
     document.getElementById('name-all-setup').style.display = 'none';
     document.getElementById('name-all-active').style.display = 'flex';
@@ -3616,6 +3608,7 @@ class KiezQuizGame {
       if (input) input.disabled = true;
       this.stopActiveTimer();
     }
+    this.syncMapChrome();
   }
 
   checkNameAllInput(input, totalCount) {
@@ -3676,6 +3669,7 @@ class KiezQuizGame {
 
   stopNameAllChallenge(surrender = true) {
     this.nameAllIsActive = false;
+    this.syncMapChrome();
     this.svg?.classList.remove('name-all-active');
     this.reorderMapLayers();
     const durationSec = ROUND_TIME_LIMIT - this.nameAllTimeLeft;
@@ -3769,7 +3763,7 @@ class KiezQuizGame {
     container.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:0.75rem; text-align:center; padding: 0.5rem;">
         <div style="font-size:2.2rem;">⏱️</div>
-        <h3 style="font-family:var(--font-display); font-weight:700; color:#fff;">${t('nameAll.challengeEnded')}</h3>
+        <h3 style="font-family:var(--font-display); font-weight:700; color:var(--text-primary);">${t('nameAll.challengeEnded')}</h3>
         
         <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.25rem;">
           ${resultMsg}

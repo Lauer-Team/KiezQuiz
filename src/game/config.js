@@ -17,8 +17,8 @@ const RANK_THRESHOLDS = [
   { level: 10, minXp: 4000, maxXp: Infinity }
 ];
 
-/** Bump when publishing release notes; set matching copy in locales `appNews` (de + en). */
-const APP_NEWS_VERSION = 1;
+/** App-news modal disabled (0 = off). Bump + locale copy only when re-enabling release popover. */
+const APP_NEWS_VERSION = 0;
 
 const CITY_RANK_THRESHOLDS = [
   { level: 1, minDistricts: 0, minTrophies: 0 },

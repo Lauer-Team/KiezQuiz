@@ -21,6 +21,7 @@ window.startKiezQuizGame = async function startKiezQuizGame() {
     } else if (_previousAuthUser) {
       game.resetToGuestState();
     }
+    window.kiezHub?.refreshHubNav?.();
     _previousAuthUser = user;
   });
 
@@ -32,8 +33,8 @@ window.startKiezQuizGame = async function startKiezQuizGame() {
 
   onLocaleChange(() => game.reRenderCurrentView());
 
-  // Start game immediately — do not block on Supabase (can hang on slow networks).
   game.init();
+  window.kiezAppHistory?.bind?.(game);
 
   void (async () => {
     try {
@@ -48,6 +49,7 @@ window.startKiezQuizGame = async function startKiezQuizGame() {
           game.updateIslandBadges();
         }
       }
+      window.kiezHub?.refreshHubNav?.();
     } catch (err) {
       console.warn('Auth startup failed:', err);
       window.authManager.initUI();

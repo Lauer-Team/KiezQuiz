@@ -59,18 +59,35 @@ function launchSadEffects(soundManager) {
 }
 
 let overlayScrollLockY = 0;
+let overlayOpenCount = 0;
 
 function openOverlayModal(html, { closeOnBackdrop = false } = {}) {
   const modal = document.createElement('div');
   modal.className = 'overlay-modal';
   modal.innerHTML = html;
-  overlayScrollLockY = window.scrollY;
-  document.body.style.top = `-${overlayScrollLockY}px`;
-  document.body.classList.add('overlay-open');
+  Object.assign(modal.style, {
+    position: 'fixed',
+    inset: '0',
+    zIndex: '1000',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1.5rem',
+    background: 'rgba(7, 10, 20, 0.85)',
+    overflowY: 'auto'
+  });
+  if (overlayOpenCount === 0) {
+    overlayScrollLockY = window.scrollY;
+    document.body.style.top = `-${overlayScrollLockY}px`;
+    document.body.classList.add('overlay-open');
+  }
+  overlayOpenCount += 1;
   document.body.appendChild(modal);
   if (closeOnBackdrop) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeOverlayModal(modal);
+    modal.addEventListener('pointerdown', (e) => {
+      if (e.target !== modal) return;
+      e.preventDefault();
+      closeOverlayModal(modal);
     });
   }
   return modal;
@@ -78,10 +95,12 @@ function openOverlayModal(html, { closeOnBackdrop = false } = {}) {
 
 function closeOverlayModal(modal) {
   modal.remove();
-  if (!document.querySelector('.overlay-modal')) {
+  overlayOpenCount = Math.max(0, overlayOpenCount - 1);
+  if (overlayOpenCount === 0) {
+    const restoreY = overlayScrollLockY;
     document.body.classList.remove('overlay-open');
     document.body.style.top = '';
-    window.scrollTo(0, overlayScrollLockY);
+    window.scrollTo({ top: restoreY, left: 0, behavior: 'instant' });
   }
 }
 

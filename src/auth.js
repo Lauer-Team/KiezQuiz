@@ -223,8 +223,8 @@ class AuthManager {
       `;
     const guestHtml = `
         <span class="auth-pill-icon">👤</span>
-        <span class="auth-pill-label">${t('header.guest')}</span>
-        <span class="auth-pill-action">${t('header.login')}</span>
+        <a href="/profile/" class="auth-pill-label auth-pill-profile-link" title="${t('header.profileTitle')}">${t('header.guest')}</a>
+        <button type="button" class="auth-pill-action btn-auth-login">${t('header.login')}</button>
       `;
 
     pills.forEach((pill) => {
@@ -243,6 +243,16 @@ class AuthManager {
         await this.signOut();
       });
     });
+
+    document.querySelectorAll('.btn-auth-login').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.showAuthModal();
+      });
+    });
+
+    window.kiezHub?.refreshHubNav?.();
+    window.kiezGlobalHeader?.syncDashboardNavLink?.();
   }
 
   initUI() {
@@ -256,15 +266,26 @@ class AuthManager {
       const pill = e.target.closest('.auth-pill');
       if (!pill) return;
       if (e.target.closest('.btn-auth-logout')) return;
+      if (e.target.closest('.btn-auth-login')) return;
       if (e.target.closest('.auth-pill-profile-link')) return;
       if (this.isLoggedIn()) return;
+      const onProfile = /^\/profile\/?/.test(window.location.pathname);
+      if (!onProfile) {
+        window.location.href = '/profile/';
+        return;
+      }
       this.showAuthModal();
     });
 
     this.updateHeaderUI();
   }
 
-  showAuthModal() {
+  async showAuthModal() {
+    if (typeof openOverlayModal !== 'function') {
+      if (typeof window.loadGameCore === 'function') {
+        await window.loadGameCore();
+      }
+    }
     if (typeof openOverlayModal !== 'function') return;
 
     let activeTab = 'login';

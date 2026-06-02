@@ -27,6 +27,19 @@ class MapNavigator {
     this.updateTransform();
   }
 
+  rebindSvg(svgElement) {
+    this._cancelViewBoxAnimation();
+    this.svg = svgElement;
+    this._baseViewBox = null;
+    this.currentViewBox = null;
+    this.viewBoxZoomActive = false;
+    this.zoom = 1;
+    this.panX = 0;
+    this.panY = 0;
+    this._captureBaseViewBox();
+    this.updateTransform(false);
+  }
+
   _captureBaseViewBox() {
     if (this._baseViewBox || !this.svg) return;
     const vb = this.svg.viewBox?.baseVal;
@@ -46,15 +59,14 @@ class MapNavigator {
   }
 
   _exitViewBoxZoom() {
-    if (!this.viewBoxZoomActive) return;
     this.viewBoxZoomActive = false;
     if (this._baseViewBox) {
-      this._setViewBox(this._baseViewBox);
+      this._setViewBox({ ...this._baseViewBox });
     }
     this.zoom = 1;
     this.panX = 0;
     this.panY = 0;
-    this.updateTransform();
+    this.updateTransform(false);
   }
 
   _cancelViewBoxAnimation() {
@@ -132,8 +144,8 @@ class MapNavigator {
   getPanBounds() {
     const cw = this.container.clientWidth;
     const ch = this.container.clientHeight;
-    const baseW = this.svg.offsetWidth || cw;
-    const baseH = this.svg.offsetHeight || ch;
+    const baseW = Math.min(this.svg.clientWidth || cw, cw);
+    const baseH = Math.min(this.svg.clientHeight || ch, ch);
     const scaledW = baseW * this.zoom;
     const scaledH = baseH * this.zoom;
     const overscroll = Math.min(cw, ch) * 0.12;

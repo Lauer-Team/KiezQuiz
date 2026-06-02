@@ -899,11 +899,14 @@ body.overlay-open {
 
 /* Gameplay Interactive Section */
 .game-play-area {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 250px;
+  justify-content: flex-start;
+  min-height: 0;
+}
+
+#game-play-area-card.game-play-area {
+  flex: 0 0 auto;
 }
 
 .prompt-box {
@@ -1652,6 +1655,24 @@ body.in-round .map-container-wrapper {
   }
 }
 
+.map-panel > .europe-microstates-bar,
+.map-panel > .map-microstates-dock {
+  position: static;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  z-index: 48;
+  flex-shrink: 0;
+  margin: 0 0.75rem 0.65rem;
+}
+
+.map-container-wrapper > .europe-microstates-bar {
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.65rem;
+}
+
 .europe-microstates-bar {
   position: absolute;
   left: 0.75rem;
@@ -1662,10 +1683,11 @@ body.in-round .map-container-wrapper {
   flex-direction: column;
   gap: 0.35rem;
   padding: 0.5rem 0.55rem;
-  background: rgba(17, 24, 39, 0.88);
-  border: 1px solid var(--border-color);
+  background: color-mix(in srgb, var(--bg-surface) 58%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-color) 72%, transparent);
   border-radius: var(--radius-md);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   pointer-events: auto;
 
   &[hidden] {
@@ -1698,9 +1720,11 @@ body.in-round .map-container-wrapper {
   gap: 0.3rem;
   padding: 0.35rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  border: 1px solid color-mix(in srgb, var(--border-color) 72%, transparent);
+  background: color-mix(in srgb, var(--bg-surface) 68%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text-primary);
   font-size: 0.68rem;
   font-family: var(--font-sans);
   cursor: pointer;
@@ -1709,8 +1733,8 @@ body.in-round .map-container-wrapper {
 
   &:hover,
   &:focus-visible {
-    border-color: rgba(255, 255, 255, 0.28);
-    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--border-color-glow, var(--border-color));
+    background: color-mix(in srgb, var(--text-primary) 10%, var(--bg-surface));
     outline: none;
   }
 
@@ -2505,7 +2529,7 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     font-size: 0.82rem;
   }
   
-  .xp-pill {
+  .app-header:not(.global-header) .xp-pill {
     flex: 1 1 11rem;
     min-width: 0;
   }
@@ -2537,48 +2561,49 @@ body.segment-bezirke .stadtteil-path:hover:not(.bezirk-hover-highlight):not(.sel
     gap: 0.75rem;
   }
   
-  .app-header {
+  /* Legacy city layout only — .global-header is the shared hub topbar */
+  .app-header:not(.global-header) {
     padding: 0.85rem 1rem;
     border-radius: var(--radius-md);
     flex-direction: column;
     align-items: stretch;
   }
-  
-  .brand {
+
+  .app-header:not(.global-header) .brand {
     justify-content: space-between;
     width: 100%;
   }
-  
-  .brand .badge {
+
+  .app-header:not(.global-header) .brand .badge {
     display: none;
   }
-  
-  .stats-bar {
+
+  .app-header:not(.global-header) .stats-bar {
     width: 100%;
     justify-content: flex-start;
     gap: 0.5rem;
   }
-  
-  .xp-pill {
+
+  .app-header:not(.global-header) .xp-pill {
     width: 100%;
     order: 5;
   }
 
-  .audio-toggle {
+  .app-header:not(.global-header) .audio-toggle {
     min-width: 44px;
     min-height: 44px;
     width: 44px;
     height: 44px;
   }
 
-  .changelog-header-btn {
+  .app-header:not(.global-header) .changelog-header-btn {
     padding: 0.42rem;
     min-width: 44px;
     min-height: 44px;
     justify-content: center;
   }
 
-  .changelog-header-btn .changelog-header-label {
+  .app-header:not(.global-header) .changelog-header-btn .changelog-header-label {
     display: none;
   }
   
@@ -2814,6 +2839,10 @@ a.auth-pill-profile-link:hover {
 
 .auth-pill:not(.auth-pill--logged-in) .auth-pill-action {
   pointer-events: none;
+}
+
+.auth-pill:not(.auth-pill--logged-in) .auth-pill-action.btn-auth-login {
+  pointer-events: auto;
 }
 
 .auth-modal-content {

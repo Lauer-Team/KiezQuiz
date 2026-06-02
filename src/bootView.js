@@ -16,6 +16,11 @@
       hub.hidden = true;
       city.hidden = false;
       city.dataset.city = route.cityId;
+      var shell = document.querySelector('.app-shell');
+      if (shell) {
+        shell.classList.add('view-city');
+        shell.classList.remove('view-hub');
+      }
     } else {
       hub.hidden = false;
       city.hidden = true;
