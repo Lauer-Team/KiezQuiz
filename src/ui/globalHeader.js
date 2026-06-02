@@ -178,6 +178,52 @@
     });
   }
 
+  function shouldShowDashboardLink() {
+    if (/^\/profile\/?/.test(window.location.pathname)) return false;
+    if (window.authManager?.isLoggedIn?.()) return true;
+    try {
+      const save = window.saveManager?.loadSave?.();
+      return !!(save && window.saveManager?.hasAnyProgress?.(save));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function syncDashboardNavLink() {
+    const hubNav = document.getElementById('header-hub-nav');
+    const hubHasDashboard = hubNav && !hubNav.hidden && hubNav.querySelector('.hub-nav-dashboard');
+    const show = shouldShowDashboardLink() && !hubHasDashboard;
+    let nav = document.getElementById('header-dashboard-nav');
+
+    if (!show) {
+      if (nav) nav.hidden = true;
+      return;
+    }
+
+    if (!nav) {
+      nav = document.createElement('nav');
+      nav.id = 'header-dashboard-nav';
+      nav.className = 'header-dashboard-nav';
+      nav.setAttribute('aria-label', t('header.dashboardTitle'));
+      nav.innerHTML = `<a href="/profile/" class="hub-nav-dashboard" id="header-dashboard-link"></a>`;
+      const header = document.getElementById('app-header');
+      const hubNavEl = document.getElementById('header-hub-nav');
+      if (header) {
+        if (hubNavEl) header.insertBefore(nav, hubNavEl);
+        else header.querySelector('.brand-link')?.insertAdjacentElement('afterend', nav);
+      }
+    }
+
+    const link = nav.querySelector('.hub-nav-dashboard');
+    if (link) {
+      link.textContent = t('header.dashboardLink');
+      link.dataset.i18n = 'header.dashboardLink';
+      link.title = t('header.dashboardTitle');
+      link.dataset.i18nTitle = 'header.dashboardTitle';
+    }
+    nav.hidden = false;
+  }
+
   function applyWordmark() {
     syncBrandTheme();
     document.querySelectorAll('.brand-link .brand-logo').forEach((img) => {
@@ -249,6 +295,7 @@
     }
 
     bindXpPill(game);
+    syncDashboardNavLink();
     syncHeaderOffset();
   }
 
@@ -307,11 +354,15 @@
       aboutLink.classList.add('on');
       aboutLink.setAttribute('aria-current', 'page');
     }
+    syncDashboardNavLink();
     syncHeaderOffset();
   }
 
   if (typeof onLocaleChange === 'function') {
-    onLocaleChange(() => window.kiezHub?.refreshHubNav?.());
+    onLocaleChange(() => {
+      window.kiezHub?.refreshHubNav?.();
+      syncDashboardNavLink();
+    });
   }
 
   window.kiezGlobalHeader = {
@@ -324,6 +375,8 @@
     syncBrandTheme,
     logoPathForTheme,
     renderStaticChrome,
+    syncDashboardNavLink,
+    shouldShowDashboardLink,
     syncHeaderOffset
   };
 })();

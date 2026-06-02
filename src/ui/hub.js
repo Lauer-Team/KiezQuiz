@@ -338,14 +338,7 @@
   }
 
   function shouldShowDashboardLink() {
-    if (/^\/profile\/?/.test(window.location.pathname)) return false;
-    if (window.authManager?.isLoggedIn?.()) return true;
-    try {
-      const save = window.saveManager?.loadSave?.();
-      return !!(save && window.saveManager?.hasAnyProgress?.(save));
-    } catch (e) {
-      return false;
-    }
+    return window.kiezGlobalHeader?.shouldShowDashboardLink?.() ?? false;
   }
 
   function dashboardNavLinkHtml() {
@@ -368,6 +361,7 @@
       return `<a href="${href}" data-hub-scroll="${s.id}">${escapeHtml(t(s.navKey))}</a>`;
     }).join('');
     nav.innerHTML = sectionLinks + dashboardNavLinkHtml();
+    window.kiezGlobalHeader?.syncDashboardNavLink?.();
     if (useHomeLinks) return;
     if (nav.dataset.bound !== 'true') {
       nav.dataset.bound = 'true';
@@ -386,6 +380,7 @@
       nav.hidden = true;
       nav.innerHTML = '';
     }
+    window.kiezGlobalHeader?.syncDashboardNavLink?.();
   }
 
   function bindLandingInteractions(container, game) {
@@ -562,7 +557,10 @@
 
   function refreshHubNav() {
     const nav = document.getElementById('header-hub-nav');
-    if (!nav || nav.hidden) return;
+    if (!nav || nav.hidden) {
+      window.kiezGlobalHeader?.syncDashboardNavLink?.();
+      return;
+    }
     const game = window.kiezQuizGame || window.hamburgGame;
     const onGameHub = game?.view === 'hub' && isLandingHubPath();
     renderHubNav(onGameHub ? {} : { homeLinks: true });

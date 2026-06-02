@@ -252,6 +252,7 @@ class AuthManager {
     });
 
     window.kiezHub?.refreshHubNav?.();
+    window.kiezGlobalHeader?.syncDashboardNavLink?.();
   }
 
   initUI() {
