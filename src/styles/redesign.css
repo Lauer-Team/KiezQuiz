@@ -883,13 +883,13 @@ body::selection,
 .app-shell.kq #btn-history::after { content: '📋'; font-size: 16px; }
 .app-shell.kq #btn-settings::after { content: '⚙'; font-size: 16px; }
 
-.app-shell.kq #btn-theme::after {
-  content: '☀';
+.app-shell.kq #btn-theme .theme-toggle-icon {
   font-size: 16px;
+  line-height: 1;
 }
 
-.app-shell[data-theme="light"] #btn-theme::after {
-  content: '☾';
+.app-shell.kq #btn-theme::after {
+  content: none;
 }
 
 /* Hub: hide game chrome header extras on landing */

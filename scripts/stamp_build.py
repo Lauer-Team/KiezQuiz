@@ -9,13 +9,36 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 # Bump when a release must force fresh CSS/JS for all returning visitors (e.g. redesign).
-DESIGN_REVISION = 2
+DESIGN_REVISION = 3
 SRC_ATTR_RE = re.compile(
     r'(?P<prefix>(?:href|src)="(?:\.\./)?src/[^"?]+)(?:\?[^"]*)?(?P<suffix>")'
 )
 
 
+def inject_build_meta(html: str, build: str) -> str:
+    meta = (
+        f'<meta name="kiezquiz-build" content="{build}">\n'
+        f'  <meta name="kiezquiz-design" content="{DESIGN_REVISION}">'
+    )
+    if 'name="kiezquiz-build"' in html:
+        html = re.sub(
+            r'<meta name="kiezquiz-build" content="[^"]*">',
+            f'<meta name="kiezquiz-build" content="{build}">',
+            html,
+            count=1,
+        )
+        html = re.sub(
+            r'<meta name="kiezquiz-design" content="[^"]*">',
+            f'<meta name="kiezquiz-design" content="{DESIGN_REVISION}">',
+            html,
+            count=1,
+        )
+        return html
+    return html.replace('<meta charset="UTF-8">', f'<meta charset="UTF-8">\n  {meta}', 1)
+
+
 def stamp_html(html: str, build: str) -> str:
+    html = inject_build_meta(html, build)
     token = f'?v={build}'
 
     def repl(match: re.Match[str]) -> str:

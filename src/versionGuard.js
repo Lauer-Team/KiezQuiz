@@ -1,6 +1,6 @@
 /**
  * Stellt sicher, dass nach einem Deploy alle /src/-Assets frisch geladen werden.
- * Spielstand (localStorage) bleibt erhalten.
+ * Spielstand in localStorage bleibt erhalten.
  */
 (function () {
   'use strict';
@@ -9,6 +9,15 @@
   var RELOAD_FLAG = 'kiezquiz_build_reload';
   var build = null;
   var designRev = 0;
+
+  function readInlineMeta() {
+    var buildEl = document.querySelector('meta[name="kiezquiz-build"]');
+    var designEl = document.querySelector('meta[name="kiezquiz-design"]');
+    return {
+      build: buildEl && buildEl.content ? String(buildEl.content) : null,
+      design: designEl && designEl.content ? parseInt(designEl.content, 10) || 0 : 0
+    };
+  }
 
   function getVersionFromNetwork() {
     try {
@@ -20,7 +29,7 @@
       if (xhr.status >= 200 && xhr.status < 300) {
         return JSON.parse(xhr.responseText);
       }
-    } catch (e) { /* ignore */ }
+    } catch (e) { /* ignore — iOS kann sync XHR blockieren */ }
     return null;
   }
 
@@ -54,13 +63,25 @@
 
   function stampDomAssets() {
     if (!build) return;
-    var sel = 'link[rel="stylesheet"][href*="src/"], script[src*="src/"]';
-    document.querySelectorAll(sel).forEach(function (el) {
+    document.querySelectorAll('link[rel="stylesheet"][href], script[src]').forEach(function (el) {
       var attr = el.tagName === 'LINK' ? 'href' : 'src';
       var href = el.getAttribute(attr);
-      if (!href) return;
+      if (!href || (href.indexOf('/src/') === -1 && href.indexOf('src/') !== 0)) return;
       var next = assetUrl(href);
       if (next !== href) el.setAttribute(attr, next);
+    });
+  }
+
+  function refreshStylesheetsIfNeeded() {
+    if (!build) return;
+    document.querySelectorAll('link[rel="stylesheet"][href*="src/"]').forEach(function (link) {
+      var href = link.getAttribute('href');
+      if (!href || href.indexOf('v=' + build) !== -1) return;
+      var next = assetUrl(href.replace(/([?&])v=[^&]+/, '').replace(/\?$/, ''));
+      var fresh = link.cloneNode(true);
+      fresh.setAttribute('href', next);
+      link.parentNode.insertBefore(fresh, link.nextSibling);
+      link.remove();
     });
   }
 
@@ -69,6 +90,7 @@
       if (!location.search || location.search.indexOf('_kq=') === -1) return;
       var u = new URL(location.href);
       u.searchParams.delete('_kq');
+      u.searchParams.delete('_cb');
       var next = u.pathname + u.search + u.hash;
       history.replaceState(null, '', next || u.pathname);
     } catch (e) { /* ignore */ }
@@ -93,12 +115,16 @@
     sessionStorage.setItem(RELOAD_FLAG, '1');
     var url = new URL(location.href);
     url.searchParams.set('_kq', build);
+    url.searchParams.set('_cb', String(Date.now()));
     location.replace(url.toString());
   }
 
-  var meta = getVersionFromNetwork();
-  if (meta && meta.build) build = String(meta.build);
-  if (meta && meta.design != null) designRev = parseInt(meta.design, 10) || 0;
+  var inline = readInlineMeta();
+  var net = getVersionFromNetwork();
+  if (net && net.build) build = String(net.build);
+  else if (inline.build) build = inline.build;
+  if (net && net.design != null) designRev = parseInt(net.design, 10) || 0;
+  else if (inline.design) designRev = inline.design;
 
   window.kiezAssetUrl = assetUrl;
   window.KIEZQUIZ_BUILD = build || '';
@@ -115,7 +141,16 @@
     };
   }
 
-  if (!build) return;
+  function finishBoot() {
+    stampDomAssets();
+    refreshStylesheetsIfNeeded();
+    cleanReloadQuery();
+  }
+
+  if (!build) {
+    document.addEventListener('DOMContentLoaded', finishBoot);
+    return;
+  }
 
   try {
     var prevBuild = localStorage.getItem(STORAGE_KEY);
@@ -124,8 +159,11 @@
     if (sessionStorage.getItem(RELOAD_FLAG)) {
       sessionStorage.removeItem(RELOAD_FLAG);
       persistVersion();
-      stampDomAssets();
-      cleanReloadQuery();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', finishBoot);
+      } else {
+        finishBoot();
+      }
       return;
     }
 
@@ -137,6 +175,9 @@
     persistVersion();
   } catch (e) { /* ignore */ }
 
-  stampDomAssets();
-  cleanReloadQuery();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', finishBoot);
+  } else {
+    finishBoot();
+  }
 })();

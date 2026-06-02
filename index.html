@@ -2,6 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <meta name="kiezquiz-build" content="dev">
+  <meta name="kiezquiz-design" content="3">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>KiezQuiz · Besser wissen als Besserwissen.</title>
   <meta name="description" content="Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.">
@@ -43,7 +45,6 @@
   <script>
   (function(){try{var t=localStorage.getItem('kiezquiz_theme');if(t==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
   </script>
-  <script src="src/versionGuard.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,600;10..48,700;10..48,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -100,6 +101,7 @@
     ]
   }
   </script>
+  <script src="src/versionGuard.js"></script>
 </head>
 <body>
   <noscript>
@@ -164,7 +166,7 @@
         <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
         <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf" hidden aria-hidden="true">📋</button>
         <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
-        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"></button>
+        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"><span class="theme-toggle-icon" aria-hidden="true">☀</span></button>
         <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
       </div>
     </header>

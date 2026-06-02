@@ -54,13 +54,9 @@ body.kq.profile-page-body {
   flex-wrap: nowrap;
 }
 
-.profile-app-shell #btn-theme::after {
-  content: '☀';
+.profile-app-shell #btn-theme .theme-toggle-icon {
   font-size: 16px;
-}
-
-.profile-app-shell[data-theme="light"] #btn-theme::after {
-  content: '☾';
+  line-height: 1;
 }
 
 .profile-app-shell .xp-pill--active {

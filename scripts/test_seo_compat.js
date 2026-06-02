@@ -57,9 +57,12 @@ assert(indexHtml.includes('<noscript>'), 'homepage noscript fallback');
 assert(!indexHtml.includes('<!-- Inlined Map SVG -->'), 'inline Hamburg SVG removed from HTML');
 
 const profileHtml = fs.readFileSync(path.join(root, 'profile/index.html'), 'utf8');
-const vgHeadIdx = profileHtml.indexOf('versionGuard.js');
 const profileCssIdx = profileHtml.indexOf('styles/brand.css');
-assert(vgHeadIdx !== -1 && vgHeadIdx < profileCssIdx, 'profile loads versionGuard before CSS');
+const profileVgIdx = profileHtml.indexOf('versionGuard.js');
+const profileHeadEnd = profileHtml.indexOf('</head>');
+assert(profileVgIdx !== -1 && profileVgIdx > profileCssIdx, 'profile loads versionGuard after CSS');
+assert(profileVgIdx < profileHeadEnd, 'profile versionGuard is in head');
+assert(indexHtml.includes('name="kiezquiz-design"'), 'index.html has design meta');
 
 for (const slug of ['hamburg', 'berlin', 'frankfurt']) {
   const cityHtml = fs.readFileSync(path.join(root, slug, 'index.html'), 'utf8');
