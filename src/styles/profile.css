@@ -54,11 +54,6 @@ body.kq.profile-page-body {
   flex-wrap: nowrap;
 }
 
-.profile-app-shell #btn-theme .theme-toggle-icon {
-  font-size: 16px;
-  line-height: 1;
-}
-
 .profile-app-shell .xp-pill--active {
   border-color: color-mix(in srgb, var(--signal) 45%, var(--line));
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal) 20%, transparent);
@@ -1104,4 +1099,112 @@ body.kq.profile-page-body {
   .profile-dashboard-aside .profile-widget {
     flex: 1 1 min(100%, 280px);
   }
+}
+
+/* —— Settings panel —— */
+.profile-settings-panel {
+  max-width: 40rem;
+}
+
+.profile-settings-block {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.profile-settings-block:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.profile-settings-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.profile-settings-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-settings-manual-label {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.profile-settings-manual.is-hidden {
+  display: none;
+}
+
+.profile-settings-switch {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface-hover);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.profile-settings-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: var(--text-primary);
+  transition: transform 0.2s ease;
+}
+
+.profile-settings-switch.is-on {
+  background: color-mix(in srgb, var(--signal) 35%, var(--bg-surface));
+  border-color: color-mix(in srgb, var(--signal) 55%, var(--border-color));
+}
+
+.profile-settings-switch.is-on::after {
+  transform: translateX(1.25rem);
+}
+
+.profile-settings-segment {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.profile-settings-segment-btn {
+  flex: 1 1 auto;
+  min-width: 7rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.profile-settings-segment-btn.is-active {
+  border-color: color-mix(in srgb, var(--signal) 50%, var(--border-color));
+  background: color-mix(in srgb, var(--signal) 12%, var(--bg-surface));
+  color: var(--text-primary);
+}
+
+.profile-settings-block--danger .profile-btn-danger {
+  margin-top: 0.65rem;
 }

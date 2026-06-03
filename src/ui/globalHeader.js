@@ -342,13 +342,6 @@
       historyBtn.setAttribute('aria-hidden', 'true');
     }
 
-    const settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn) {
-      const showSettings = game.view === 'city' || isProfilePage();
-      settingsBtn.hidden = !showSettings;
-      settingsBtn.setAttribute('aria-hidden', showSettings ? 'false' : 'true');
-    }
-
     const xpPill = document.getElementById('btn-xp-pill');
     if (xpPill) {
       const onHub = game.view === 'hub';
@@ -434,11 +427,6 @@
     }
     if (isProfilePage()) {
       renderProfileCityPicker();
-      const settingsBtn = document.getElementById('btn-settings');
-      if (settingsBtn) {
-        settingsBtn.hidden = false;
-        settingsBtn.setAttribute('aria-hidden', 'false');
-      }
     }
     syncDashboardNavLink();
     syncHeaderOffset();

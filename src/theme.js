@@ -1,28 +1,61 @@
 /* KiezQuiz — Light/Dark theme (Papier/Tinte). Separate from save data. */
 (function () {
-  const KEY = 'kiezquiz_theme';
-  const DEFAULT = 'dark';
+  const KEY_AUTO = 'kiezquiz_theme_auto';
+  const KEY_MANUAL = 'kiezquiz_theme';
+  const KEY_ROLLOUT_AUTO = 'kiezquiz_theme_rollout_auto';
+  const LIGHT_HOUR_START = 7;
+  const LIGHT_HOUR_END = 19;
 
-  function getTheme() {
+  let autoRefreshTimer = null;
+  let migrated = false;
+
+  function themeFromLocalTime(date = new Date()) {
+    const h = date.getHours();
+    return h >= LIGHT_HOUR_START && h < LIGHT_HOUR_END ? 'light' : 'dark';
+  }
+
+  /** One-time: enable time-based theme for every existing visitor (opt-out in profile settings). */
+  function migrateThemeStorage() {
+    if (migrated) return;
+    migrated = true;
     try {
-      return localStorage.getItem(KEY) || DEFAULT;
+      if (localStorage.getItem(KEY_ROLLOUT_AUTO) === '1') return;
+      localStorage.setItem(KEY_AUTO, '1');
+      const legacy = localStorage.getItem(KEY_MANUAL);
+      if (legacy === 'auto') localStorage.removeItem(KEY_MANUAL);
+      localStorage.setItem(KEY_ROLLOUT_AUTO, '1');
+    } catch (_) { /* ignore */ }
+  }
+
+  function isThemeAuto() {
+    migrateThemeStorage();
+    try {
+      return localStorage.getItem(KEY_AUTO) !== '0';
     } catch (_) {
-      return DEFAULT;
+      return true;
     }
   }
 
-  function syncThemeButtonIcon() {
-    const btn = document.getElementById('btn-theme');
-    if (!btn) return;
-    const icon = btn.querySelector('.theme-toggle-icon');
-    const label = getTheme() === 'light' ? '☾' : '☀';
-    if (icon) icon.textContent = label;
-    else btn.textContent = label;
-    btn.setAttribute('aria-pressed', getTheme() === 'light' ? 'true' : 'false');
+  function getManualTheme() {
+    migrateThemeStorage();
+    try {
+      return localStorage.getItem(KEY_MANUAL) === 'light' ? 'light' : 'dark';
+    } catch (_) {
+      return 'dark';
+    }
   }
 
-  function applyTheme(theme) {
-    const t = theme === 'light' ? 'light' : 'dark';
+  function resolveTheme() {
+    return isThemeAuto() ? themeFromLocalTime() : getManualTheme();
+  }
+
+  /** Resolved appearance: 'light' | 'dark'. */
+  function getTheme() {
+    return resolveTheme();
+  }
+
+  function applyTheme(resolved) {
+    const t = resolved === 'light' ? 'light' : 'dark';
     document.documentElement.dataset.theme = t;
     document.documentElement.style.colorScheme = t;
     if (document.body) document.body.dataset.theme = t;
@@ -32,48 +65,89 @@
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.content = t === 'light' ? '#F1ECE0' : '#0F1118';
     window.kiezGlobalHeader?.syncBrandTheme?.();
-    syncThemeButtonIcon();
   }
 
-  function setTheme(theme) {
-    const t = theme === 'light' ? 'light' : 'dark';
-    try { localStorage.setItem(KEY, t); } catch (_) { /* ignore */ }
-    applyTheme(t);
-    window.dispatchEvent(new CustomEvent('kiezthemechange', { detail: { theme: t } }));
-    return t;
-  }
-
-  function toggleTheme() {
-    return setTheme(getTheme() === 'dark' ? 'light' : 'dark');
-  }
-
-  function bindThemeButton() {
-    const btn = document.getElementById('btn-theme');
-    if (!btn || btn.dataset.kqThemeBound === 'true') return;
-    btn.dataset.kqThemeBound = 'true';
-    if (!btn.querySelector('.theme-toggle-icon')) {
-      const span = document.createElement('span');
-      span.className = 'theme-toggle-icon';
-      span.setAttribute('aria-hidden', 'true');
-      btn.textContent = '';
-      btn.appendChild(span);
+  function msUntilNextScheduleBoundary() {
+    const now = new Date();
+    const next = new Date(now);
+    const h = now.getHours();
+    if (h >= LIGHT_HOUR_START && h < LIGHT_HOUR_END) {
+      next.setHours(LIGHT_HOUR_END, 0, 0, 0);
+    } else if (h < LIGHT_HOUR_START) {
+      next.setHours(LIGHT_HOUR_START, 0, 0, 0);
+    } else {
+      next.setDate(next.getDate() + 1);
+      next.setHours(LIGHT_HOUR_START, 0, 0, 0);
     }
-    syncThemeButtonIcon();
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleTheme();
-    });
+    return Math.max(0, next.getTime() - now.getTime());
   }
 
-  window.kiezTheme = { getTheme, setTheme, toggleTheme, applyTheme, syncThemeButtonIcon };
+  function scheduleAutoRefresh() {
+    if (autoRefreshTimer) {
+      clearTimeout(autoRefreshTimer);
+      autoRefreshTimer = null;
+    }
+    if (!isThemeAuto()) return;
+    autoRefreshTimer = setTimeout(() => {
+      autoRefreshTimer = null;
+      applyTheme(resolveTheme());
+      scheduleAutoRefresh();
+    }, msUntilNextScheduleBoundary() + 50);
+  }
 
-  applyTheme(getTheme());
-  bindThemeButton();
+  function emitThemeChange() {
+    const resolved = resolveTheme();
+    window.dispatchEvent(new CustomEvent('kiezthemechange', {
+      detail: { theme: resolved, auto: isThemeAuto(), manual: getManualTheme() },
+    }));
+    return resolved;
+  }
+
+  function setThemeAuto(enabled) {
+    migrateThemeStorage();
+    try {
+      if (enabled) {
+        localStorage.setItem(KEY_AUTO, '1');
+      } else {
+        const freeze = resolveTheme();
+        localStorage.setItem(KEY_AUTO, '0');
+        localStorage.setItem(KEY_MANUAL, freeze);
+      }
+    } catch (_) { /* ignore */ }
+    applyTheme(resolveTheme());
+    scheduleAutoRefresh();
+    return emitThemeChange();
+  }
+
+  function setManualTheme(theme) {
+    if (isThemeAuto()) return getTheme();
+    const t = theme === 'light' ? 'light' : 'dark';
+    try { localStorage.setItem(KEY_MANUAL, t); } catch (_) { /* ignore */ }
+    applyTheme(t);
+    return emitThemeChange();
+  }
+
+  window.kiezTheme = {
+    getTheme,
+    isThemeAuto,
+    getManualTheme,
+    resolveTheme,
+    themeFromLocalTime,
+    setThemeAuto,
+    setManualTheme,
+    applyTheme,
+  };
+
+  applyTheme(resolveTheme());
+  scheduleAutoRefresh();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !isThemeAuto()) return;
+    applyTheme(resolveTheme());
+    scheduleAutoRefresh();
+  });
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      applyTheme(getTheme());
-      bindThemeButton();
-    });
+    document.addEventListener('DOMContentLoaded', () => applyTheme(resolveTheme()));
   }
 })();

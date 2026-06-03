@@ -393,12 +393,6 @@ class KiezQuizGame {
       historyBtn.hidden = true;
       historyBtn.setAttribute('aria-hidden', 'true');
     }
-    const settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn && settingsBtn.dataset.kqSettingsBound !== 'true' && settingsBtn.dataset.bound !== 'true') {
-      settingsBtn.dataset.bound = 'true';
-      settingsBtn.addEventListener('click', () => this.showSettings());
-    }
-
     this.updateLangButton();
     this.syncMuteButton();
   }
@@ -1972,54 +1966,7 @@ class KiezQuizGame {
   }
 
   showSettings() {
-    const auth = window.authManager;
-    const cloudConfigured = auth?.isConfigured();
-    const loggedIn = auth?.isLoggedIn();
-    let cloudStatusHtml;
-    if (!cloudConfigured) {
-      cloudStatusHtml = `<p class="settings-cloud-status">${t('settings.cloudNotConfigured')}</p>`;
-    } else if (loggedIn) {
-      cloudStatusHtml = `<p class="settings-cloud-status settings-cloud-status--active">${t('settings.cloudLoggedIn', { name: auth._escapeHtml(auth.getDisplayName()) })}</p>`;
-    } else {
-      cloudStatusHtml = `<p class="settings-cloud-status">${t('settings.cloudGuest')}</p>`;
-    }
-
-    const resetCloudSuffix = loggedIn ? t('settings.resetCloudSuffix') : '';
-
-    const modal = openOverlayModal(`
-      <div class="modal-content" style="max-width: 400px;">
-        <h2>${t('settings.title')}</h2>
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 1rem 0;">
-        <div class="settings-cloud-block" style="margin-bottom: 1.2rem;">
-          <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.cloudTitle')}</strong>
-          ${cloudStatusHtml}
-        </div>
-        <div class="settings-privacy-block" style="margin-bottom: 1.2rem;">
-          <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.privacyTitle')}</strong>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.5;">${t('settings.privacyBody')}</p>
-        </div>
-        <div style="margin-bottom: 1.2rem;">
-          <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.resetTitle')}</strong>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.resetBody', { cloudSuffix: resetCloudSuffix })}</p>
-          <button id="btn-settings-reset" style="background: rgba(220,50,50,0.2); border: 1px solid rgba(220,50,50,0.5); color: #ff6b6b; padding: 0.5rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem;">${t('settings.resetBtn')}</button>
-        </div>
-        <button class="primary-btn" id="btn-settings-close" style="margin-top: 0.5rem;">${t('settings.close')}</button>
-      </div>
-    `, { closeOnBackdrop: true });
-    modal.querySelector('#btn-settings-close')?.addEventListener('click', () => closeOverlayModal(modal));
-    modal.querySelector('#btn-settings-reset')?.addEventListener('click', () => this.resetGame());
-
-    if (loggedIn) {
-      const profileSlot = document.createElement('div');
-      profileSlot.style.marginBottom = '1.2rem';
-      profileSlot.innerHTML = `
-        <strong style="display:block; margin-bottom: 0.4rem;">${t('settings.profileTitle')}</strong>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 0.8rem 0;">${t('settings.profileBody')}</p>
-        <a href="/profile/" class="secondary-btn" style="display:inline-block;text-decoration:none;text-align:center;">${t('settings.profileBtn')}</a>`;
-      const cloudBlock = modal.querySelector('.settings-cloud-block');
-      cloudBlock?.insertAdjacentElement('afterend', profileSlot);
-    }
-
+    window.location.href = '/profile/?section=settings';
   }
 
   // Mode Setter

@@ -43,7 +43,7 @@
   <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <script>
-  (function(){try{var t=localStorage.getItem('kiezquiz_theme');if(t==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
+  (function(){try{var R='kiezquiz_theme_rollout_auto';if(localStorage.getItem(R)!=='1'){localStorage.setItem('kiezquiz_theme_auto','1');var t=localStorage.getItem('kiezquiz_theme');if(t==='auto')localStorage.removeItem('kiezquiz_theme');localStorage.setItem(R,'1');}var a=localStorage.getItem('kiezquiz_theme_auto');var auto=a!=='0';var r=localStorage.getItem('kiezquiz_theme');if(auto){var h=new Date().getHours();r=(h>=7&&h<19)?'light':'dark';}else{r=r==='light'?'light':'dark';}if(r==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -166,8 +166,6 @@
         <button class="audio-toggle" id="btn-mute" data-i18n-title="header.soundTitle" title="Sound ein/ausschalten">🔊</button>
         <button class="audio-toggle" id="btn-history" data-i18n-title="header.historyTitle" title="Log: Pokale, Rang & Spielverlauf" hidden aria-hidden="true">📋</button>
         <button class="audio-toggle lang-toggle" id="btn-lang" data-i18n-title="header.langSwitchToEn" title="Switch to English">🇩🇪</button>
-        <button type="button" class="audio-toggle" id="btn-theme" data-i18n-title="header.themeTitle" title="Design umschalten" aria-label="Design umschalten"><span class="theme-toggle-icon" aria-hidden="true">☀</span></button>
-        <button class="audio-toggle" id="btn-settings" data-i18n-title="header.settingsTitle" title="Einstellungen">⚙️</button>
       </div>
     </header>
 

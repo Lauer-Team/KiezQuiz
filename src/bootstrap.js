@@ -86,25 +86,6 @@
 
   window.loadGameCore = loadGameCore;
 
-  function openSettingsModal() {
-    var game = window.kiezQuizGame || window.hamburgGame;
-    if (game && typeof game.showSettings === 'function') {
-      game.showSettings();
-      return;
-    }
-    var chain = typeof window.loadGameCore === 'function'
-      ? window.loadGameCore()
-      : Promise.resolve();
-    chain.then(function () {
-      if (!window.kiezQuizGame && !window.hamburgGame && typeof window.startKiezQuizGame === 'function') {
-        return window.startKiezQuizGame();
-      }
-    }).then(function () {
-      var g = window.kiezQuizGame || window.hamburgGame;
-      if (g && typeof g.showSettings === 'function') g.showSettings();
-    });
-  }
-
   function syncLangButton() {
     var btn = document.getElementById('btn-lang');
     if (!btn || typeof getLocale !== 'function') return;
@@ -127,21 +108,6 @@
   }
 
   function bindHeaderControls() {
-    var themeBtn = document.getElementById('btn-theme');
-    if (themeBtn && !themeBtn.dataset.kqThemeBound && !themeBtn.dataset.bound) {
-      themeBtn.dataset.kqThemeBound = 'true';
-      themeBtn.addEventListener('click', function () {
-        window.kiezTheme?.toggleTheme?.();
-      });
-    }
-    var settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn && !settingsBtn.dataset.kqSettingsBound) {
-      settingsBtn.dataset.kqSettingsBound = 'true';
-      settingsBtn.addEventListener('click', function () {
-        openSettingsModal();
-      });
-    }
-
     var langBtn = document.getElementById('btn-lang');
     if (langBtn && langBtn.dataset.kqLangBound !== 'true') {
       langBtn.dataset.kqLangBound = 'true';

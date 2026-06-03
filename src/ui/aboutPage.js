@@ -62,26 +62,7 @@
     btn.title = t('header.soundTitle');
   }
 
-  function openSettingsModal() {
-    const chain = typeof window.loadGameCore === 'function'
-      ? window.loadGameCore()
-      : Promise.resolve();
-    chain.then(() => {
-      if (!window.kiezQuizGame && typeof KiezQuizGame === 'function') {
-        window.kiezQuizGame = new KiezQuizGame();
-        window.hamburgGame = window.kiezQuizGame;
-      }
-      window.kiezQuizGame?.showSettings?.();
-    });
-  }
-
   function bindHeaderControls() {
-    const themeBtn = document.getElementById('btn-theme');
-    if (themeBtn && !themeBtn.dataset.kqThemeBound) {
-      themeBtn.dataset.kqThemeBound = 'true';
-      themeBtn.addEventListener('click', () => window.kiezTheme?.toggleTheme?.());
-    }
-
     const langBtn = document.getElementById('btn-lang');
     if (langBtn && langBtn.dataset.kqLangBound !== 'true') {
       langBtn.dataset.kqLangBound = 'true';
@@ -102,11 +83,6 @@
       });
     }
 
-    const settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn && !settingsBtn.dataset.kqSettingsBound) {
-      settingsBtn.dataset.kqSettingsBound = 'true';
-      settingsBtn.addEventListener('click', openSettingsModal);
-    }
   }
 
   function syncTheme() {

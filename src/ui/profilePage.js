@@ -16,13 +16,13 @@
     friends: 'profilePage.navFriends',
     leaderboard: 'profilePage.navLeaderboard',
     account: 'profilePage.navAccount',
+    settings: 'profilePage.navSettings',
     'admin-city-wishes': 'adminPage.navCityWishes',
     'admin-player-activity': 'adminPage.navPlayerActivity',
-    'admin-changelog': 'header.adminChangelog',
-    'admin-settings': 'header.settingsTitle'
+    'admin-changelog': 'header.adminChangelog'
   };
 
-  const ADMIN_SECTIONS = new Set(['admin-city-wishes', 'admin-player-activity', 'admin-changelog', 'admin-settings']);
+  const ADMIN_SECTIONS = new Set(['admin-city-wishes', 'admin-player-activity', 'admin-changelog']);
 
   function parseInitialSection() {
     try {
@@ -210,17 +210,16 @@
     window.kiezGlobalHeader?.renderProfileCityPicker?.();
   }
 
-  function openSettingsModal() {
+  async function runGameReset() {
     const chain = typeof window.loadGameCore === 'function'
       ? window.loadGameCore()
       : Promise.resolve();
-    chain.then(() => {
-      if (!window.kiezQuizGame && typeof KiezQuizGame === 'function') {
-        window.kiezQuizGame = new KiezQuizGame();
-        window.hamburgGame = window.kiezQuizGame;
-      }
-      window.kiezQuizGame?.showSettings?.();
-    });
+    await chain;
+    if (!window.kiezQuizGame && typeof KiezQuizGame === 'function') {
+      window.kiezQuizGame = new KiezQuizGame();
+      window.hamburgGame = window.kiezQuizGame;
+    }
+    await window.kiezQuizGame?.resetGame?.();
   }
 
   function initProfileChrome() {
@@ -230,18 +229,6 @@
       window.kiezChangelog?.bindTriggers?.(document);
     } catch (err) {
       console.warn('Profile chrome init failed:', err);
-    }
-
-    const settingsBtn = document.getElementById('btn-settings');
-    if (settingsBtn && !settingsBtn.dataset.kqSettingsBound) {
-      settingsBtn.dataset.kqSettingsBound = 'true';
-      settingsBtn.addEventListener('click', openSettingsModal);
-    }
-
-    const themeBtn = document.getElementById('btn-theme');
-    if (themeBtn && !themeBtn.dataset.kqThemeBound) {
-      themeBtn.dataset.kqThemeBound = 'true';
-      themeBtn.addEventListener('click', () => window.kiezTheme?.toggleTheme?.());
     }
 
     const langBtn = document.getElementById('btn-lang');
@@ -272,7 +259,10 @@
       window.kiezGlobalHeader?.syncBrandTheme?.();
     }
 
-    window.addEventListener('kiezthemechange', syncTheme);
+    window.addEventListener('kiezthemechange', () => {
+      syncTheme();
+      syncSettingsThemeControls(document);
+    });
     syncTheme();
     syncProfileLangButton();
   }
@@ -747,12 +737,101 @@
       </section>`;
   }
 
-  function renderAdminSettingsSection() {
+  function renderSettingsCloudStatus() {
+    const auth = window.authManager;
+    if (!auth?.isConfigured?.()) {
+      return `<p class="settings-cloud-status">${t('settings.cloudNotConfigured')}</p>`;
+    }
+    if (auth.isLoggedIn?.()) {
+      return `<p class="settings-cloud-status settings-cloud-status--active">${t('settings.cloudLoggedIn', { name: auth._escapeHtml(auth.getDisplayName()) })}</p>`;
+    }
+    return `<p class="settings-cloud-status">${t('settings.cloudGuest')}</p>`;
+  }
+
+  function renderSettingsSection() {
+    const loggedIn = window.authManager?.isLoggedIn?.();
+    const resetCloudSuffix = loggedIn ? t('settings.resetCloudSuffix') : '';
+    const themeAuto = window.kiezTheme?.isThemeAuto?.() !== false;
+    const manual = window.kiezTheme?.getManualTheme?.() || 'dark';
+
     return `
-      <section class="profile-panel profile-admin-action" id="profile-section-admin-settings">
-        <p class="profile-panel-intro">${t('profilePage.adminSettingsIntro')}</p>
-        <button type="button" class="kq-btn sig" id="profile-admin-open-settings">${t('header.settingsTitle')}</button>
+      <section class="profile-panel profile-settings-panel" id="profile-section-settings">
+        <p class="profile-panel-intro">${t('profilePage.settingsIntro')}</p>
+
+        <div class="profile-settings-block">
+          <h3 class="profile-section-title">${t('settings.themeAutoTitle')}</h3>
+          <div class="profile-settings-row">
+            <p class="profile-settings-hint">${t('settings.themeAutoBody')}</p>
+            <button type="button" class="profile-settings-switch ${themeAuto ? 'is-on' : ''}" id="profile-theme-auto" role="switch" aria-checked="${themeAuto ? 'true' : 'false'}" aria-label="${escapeHtml(t('settings.themeAutoTitle'))}"></button>
+          </div>
+          <div class="profile-settings-manual ${themeAuto ? 'is-hidden' : ''}" id="profile-theme-manual" ${themeAuto ? 'hidden' : ''}>
+            <p class="profile-settings-manual-label">${t('settings.themeManualTitle')}</p>
+            <div class="profile-settings-segment" role="group" aria-label="${escapeHtml(t('settings.themeManualTitle'))}">
+              <button type="button" class="profile-settings-segment-btn ${manual === 'light' ? 'is-active' : ''}" data-theme-pick="light">${escapeHtml(t('settings.themeLight'))}</button>
+              <button type="button" class="profile-settings-segment-btn ${manual === 'dark' ? 'is-active' : ''}" data-theme-pick="dark">${escapeHtml(t('settings.themeDark'))}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-settings-block">
+          <h3 class="profile-section-title">${t('settings.cloudTitle')}</h3>
+          ${renderSettingsCloudStatus()}
+        </div>
+
+        <div class="profile-settings-block">
+          <h3 class="profile-section-title">${t('settings.privacyTitle')}</h3>
+          <p class="profile-settings-hint">${t('settings.privacyBody')}</p>
+        </div>
+
+        <div class="profile-settings-block profile-settings-block--danger">
+          <h3 class="profile-section-title">${t('settings.resetTitle')}</h3>
+          <p class="profile-settings-hint">${t('settings.resetBody', { cloudSuffix: resetCloudSuffix })}</p>
+          <button type="button" class="profile-btn-danger" id="profile-settings-reset">${t('settings.resetBtn')}</button>
+        </div>
       </section>`;
+  }
+
+  function syncSettingsThemeControls(root) {
+    const section = root?.querySelector?.('#profile-section-settings')
+      || document.getElementById('profile-section-settings');
+    if (!section) return;
+    const themeAuto = window.kiezTheme?.isThemeAuto?.() !== false;
+    const manual = window.kiezTheme?.getManualTheme?.() || 'dark';
+    const autoBtn = section.querySelector('#profile-theme-auto');
+    const manualWrap = section.querySelector('#profile-theme-manual');
+    if (autoBtn) {
+      autoBtn.classList.toggle('is-on', themeAuto);
+      autoBtn.setAttribute('aria-checked', themeAuto ? 'true' : 'false');
+    }
+    if (manualWrap) {
+      manualWrap.classList.toggle('is-hidden', themeAuto);
+      manualWrap.hidden = themeAuto;
+    }
+    section.querySelectorAll('[data-theme-pick]').forEach((btn) => {
+      btn.classList.toggle('is-active', btn.dataset.themePick === manual);
+    });
+  }
+
+  function bindSettingsSectionEvents(root) {
+    const section = root?.querySelector?.('#profile-section-settings');
+    if (!section) return;
+
+    section.querySelector('#profile-theme-auto')?.addEventListener('click', () => {
+      const nextAuto = !window.kiezTheme?.isThemeAuto?.();
+      window.kiezTheme?.setThemeAuto?.(nextAuto);
+      syncSettingsThemeControls(section);
+    });
+
+    section.querySelectorAll('[data-theme-pick]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        window.kiezTheme?.setManualTheme?.(btn.dataset.themePick);
+        syncSettingsThemeControls(section);
+      });
+    });
+
+    section.querySelector('#profile-settings-reset')?.addEventListener('click', () => {
+      void runGameReset();
+    });
   }
 
   async function loadAdminWishCount() {
@@ -785,8 +864,7 @@
     const items = [
       { section: 'admin-city-wishes', labelKey: 'adminPage.navCityWishes', badge },
       { section: 'admin-player-activity', labelKey: 'adminPage.navPlayerActivity', badge: '' },
-      { section: 'admin-changelog', labelKey: 'header.adminChangelog', badge: '' },
-      { section: 'admin-settings', labelKey: 'header.settingsTitle', badge: '' }
+      { section: 'admin-changelog', labelKey: 'header.adminChangelog', badge: '' }
     ];
 
     nav.innerHTML = items.map((item) => `
@@ -828,13 +906,13 @@
         return window.kiezAdminSections?.renderPlayerActivitySection?.() || '';
       }
       if (activeSection === 'admin-changelog') return renderAdminChangelogSection();
-      if (activeSection === 'admin-settings') return renderAdminSettingsSection();
     }
     switch (activeSection) {
       case 'dashboard': return renderDashboardSection();
       case 'friends': return renderFriendsSection();
       case 'leaderboard': return renderLeaderboardSection();
       case 'account': return renderAccountSection();
+      case 'settings': return renderSettingsSection();
       default: return renderDashboardSection();
     }
   }
@@ -968,8 +1046,6 @@
 
     if (activeSection === 'admin-changelog') {
       requestAnimationFrame(() => window.kiezChangelog?.show?.());
-    } else if (activeSection === 'admin-settings') {
-      requestAnimationFrame(() => openSettingsModal());
     }
   }
 
@@ -1080,9 +1156,10 @@
     main.querySelector('#profile-admin-open-changelog')?.addEventListener('click', () => {
       window.kiezChangelog?.show?.();
     });
-    main.querySelector('#profile-admin-open-settings')?.addEventListener('click', () => {
-      openSettingsModal();
-    });
+
+    if (activeSection === 'settings') {
+      bindSettingsSectionEvents(main);
+    }
 
     if (activeSection === 'admin-city-wishes' && isAdmin) {
       window.kiezAdminSections?.bindSectionEvents?.(main, () => renderDashboard());
@@ -1389,7 +1466,7 @@
           || document.getElementById('profile-section-admin-city-wishes')
           || document.getElementById('profile-section-admin-player-activity')
           || document.getElementById('profile-section-admin-changelog')
-          || document.getElementById('profile-section-admin-settings')) {
+          || document.getElementById('profile-section-settings')) {
           renderDashboard();
         }
         renderAdminNav();
