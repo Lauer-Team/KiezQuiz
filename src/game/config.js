@@ -4,6 +4,9 @@
  * Pure modular JavaScript with Web Audio Synth and Custom SVG Zoom/Pan.
  * ------------------------------------------------------------- */
 
+/** XP awarded for each correct answer (all modes). */
+const XP_PER_HIT = 25;
+
 const RANK_THRESHOLDS = [
   { level: 1, minXp: 0, maxXp: 99 },
   { level: 2, minXp: 100, maxXp: 249 },

@@ -843,8 +843,8 @@
     "bezirkeSegment": " (Boroughs)",
     "yourRank": "Your rank",
     "trophies": "Trophies ({won} / {total})",
-    "xpHint1": "XP: Each correct answer in Detective mode gives +15 XP · Quiz & type-name modes +10 XP · \"Name all places\" +6 per hit.",
-    "xpHint2": "Streaks unlock XP bonuses: From 3: ×1.5 · from 5: ×2.",
+    "xpHint1": "XP: Every hit in any mode gives +25 XP.",
+    "xpHint2": "Streaks unlock XP bonuses: From 10: ×1.2 · from 25: ×1.5 · from 50: ×2 (on the 25 base XP).",
     "xpHint3": "Boroughs unlock separately via borough progress.",
     "xpPlus": "{xp}+ XP"
   },

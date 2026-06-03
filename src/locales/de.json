@@ -955,8 +955,8 @@
     "bezirkeSegment": " (Bezirke)",
     "yourRank": "Dein Rang",
     "trophies": "Pokale ({won} / {total})",
-    "xpHint1": "XP: Jede richtige Antwort im Detektiv-Modus gibt je +15 XP · im Quiz & beim Namen eingeben je +10 XP · Im „Nenne alle Orte“-Modus je +6 pro Treffer.",
-    "xpHint2": "Serien schalten XP-Boni frei: Ab 3: ×1,5 · ab 5: ×2.",
+    "xpHint1": "XP: Jeder Treffer in jedem Modus gibt +25 XP.",
+    "xpHint2": "Serien schalten XP-Boni frei: Ab 10: ×1,2 · ab 25: ×1,5 · ab 50: ×2 (auf die 25 Basis-XP).",
     "xpHint3": "Bezirke schaltest du separat über den Bezirks-Fortschritt frei.",
     "xpPlus": "{xp}+ XP"
   },

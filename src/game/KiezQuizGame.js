@@ -698,11 +698,16 @@ class KiezQuizGame {
   }
 
   // Award XP to player and handle leveling up
-  addXp(amount, options = {}) {
+  addXp(amountOrOptions, maybeOptions = {}) {
+    const options =
+      typeof amountOrOptions === 'object' && amountOrOptions !== null ? amountOrOptions : maybeOptions;
     const { quiet = false } = options;
-    const gained = amount * (this.streak >= 5 ? 2 : (this.streak >= 3 ? 1.5 : 1));
-    const roundedGained = Math.round(gained);
-    this.xp += roundedGained;
+    let multiplier = 1;
+    if (this.streak >= 50) multiplier = 2;
+    else if (this.streak >= 25) multiplier = 1.5;
+    else if (this.streak >= 10) multiplier = 1.2;
+    const gained = Math.round(XP_PER_HIT * multiplier);
+    this.xp += gained;
     
     if (this.xp > this.highScore) {
       this.highScore = this.xp;
@@ -717,7 +722,7 @@ class KiezQuizGame {
     
     this.saveState();
     if (!quiet) this.renderStats();
-    return roundedGained;
+    return gained;
   }
 
   resetStreak() {
@@ -3124,7 +3129,7 @@ class KiezQuizGame {
     this.sounds.init();
     this.roundCorrect++;
     this.incrementStreak();
-    const xp = this.addXp(10);
+    const xp = this.addXp();
     this.sounds.playCorrect();
 
     if (isBz) {
@@ -3169,7 +3174,7 @@ class KiezQuizGame {
     if (isCorrect) {
       this.roundCorrect++;
       this.incrementStreak();
-      const xp = this.addXp(10);
+      const xp = this.addXp();
       this.sounds.playCorrect();
 
       // Highlight map
@@ -3218,7 +3223,7 @@ class KiezQuizGame {
     if (isCorrect) {
       this.roundCorrect++;
       this.incrementStreak();
-      const xp = this.addXp(15);
+      const xp = this.addXp();
       this.sounds.playCorrect();
 
       path.classList.add('round-correct');
@@ -3262,7 +3267,7 @@ class KiezQuizGame {
     if (isCorrect) {
       this.roundCorrect++;
       this.incrementStreak();
-      const xp = this.addXp(15);
+      const xp = this.addXp();
       this.sounds.playCorrect();
 
       document.querySelectorAll(`.stadtteil-path[data-bezirk="${bezirkClicked}"]`).forEach(p => p.classList.add('round-correct'));
@@ -3681,7 +3686,7 @@ class KiezQuizGame {
         this.checkParadiseTrophy(matchName);
       }
 
-      this.addXp(6, { quiet: true });
+      this.addXp({ quiet: true });
 
       document.getElementById('name-all-counter').textContent = `${this.nameAllFound.size} / ${totalCount}`;
 
