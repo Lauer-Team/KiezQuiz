@@ -275,6 +275,8 @@ def main() -> None:
 
     if "redesign.css" not in head_template:
         raise SystemExit("Head template must include redesign.css")
+    if "device/phone.css" not in head_template:
+        raise SystemExit("Head template must include device/phone.css (device layouts)")
     if "versionGuard.js" not in head_template:
         raise SystemExit("Head template must include versionGuard.js")
 

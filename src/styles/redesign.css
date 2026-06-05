@@ -1,7 +1,7 @@
 /* ============================================================
    KiezQuiz Redesign — bridges existing markup to CI .kq system
    Loaded after base.css + app.css. Does NOT touch save/auth logic.
-   Mobile overrides: mobile.css (linked after this file in HTML).
+   Device layouts: src/styles/device/{desktop,tablet,phone,touch}.css (after this file).
    ============================================================ */
 
 /* --- Token bridge: map legacy vars → CI tokens --- */
@@ -1583,113 +1583,13 @@ body:not(.map-play-active) .app-shell.kq .map-panel:has(.map-microstates-dock:no
   display: none !important;
 }
 
-/* Responsive (hub/header; city play → mobile.css) */
-@media (max-width: 900px) {
-  .app-shell.kq.view-hub .dashboard-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-
-  .app-shell.kq .choices-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .app-shell.kq .stats-bar {
-    gap: 6px;
-  }
-
-  .app-shell.kq .changelog-header-label {
-    display: none;
-  }
-
-  .app-shell.kq.view-city .app-header.global-header {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .app-shell.kq.view-city .app-header.global-header .stats-bar {
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  .header-city-tabs {
-    order: unset;
-    flex: 1 1 auto;
-    justify-content: flex-start;
-  }
-
-  .header-city-menu {
-    left: 0;
-    transform: none;
-  }
-}
-
-@media (max-width: 768px) {
-  /* Landing/profile/about: row 1 = logo + auth/icons; row 2 = nav pills */
-  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) {
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    align-content: flex-start;
-    row-gap: 10px;
-    column-gap: 12px;
-    border-radius: 0;
-    padding: 12px clamp(12px, 3vw, 16px);
-  }
-
-  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .brand.brand-link {
-    order: 1;
-    flex: 0 0 auto;
-  }
-
-  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .stats-bar {
-    order: 2;
-    flex: 1 1 auto;
-    min-width: 0;
-    margin-left: 0;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-  }
-
-  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .header-dashboard-nav:not([hidden]) {
-    order: 1;
-    flex: 0 0 auto;
-    width: auto;
-    max-width: none;
-    margin: 0 0 0 10px;
-    display: flex;
-  }
-
-  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) .header-hub-nav:not([hidden]) {
-    order: 10;
-    flex: 1 1 100%;
-    width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    overflow-x: visible;
-  }
-}
+/* Device layouts: src/styles/device/ (phone, tablet, desktop, touch) */
+/* Responsive (moved to device/) */
 
 .app-shell.kq.view-city .header-city-menu {
   left: 0;
   right: auto;
   transform: none;
-}
-
-@media (max-width: 640px) {
-  .app-shell.kq .app-header.global-header:has(.header-hub-nav:not([hidden])) {
-    padding: 12px clamp(12px, 3vw, 16px);
-  }
-
-  .app-shell.kq .auth-pill-label {
-    display: none;
-  }
-
-  .app-shell.kq .streak-pill .streak-best {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

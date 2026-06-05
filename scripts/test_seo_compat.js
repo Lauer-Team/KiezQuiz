@@ -80,6 +80,7 @@ if (failed) {
 }
 const seoGen = fs.readFileSync(path.join(root, 'scripts/generate_seo_pages.py'), 'utf8');
 assert(seoGen.includes('redesign.css'), 'generate_seo_pages keeps redesign.css in head template');
+assert(seoGen.includes('device/phone.css'), 'generate_seo_pages keeps device/phone.css in head template');
 assert(seoGen.includes('versionGuard.js'), 'generate_seo_pages keeps versionGuard.js');
 
 if (failed) {

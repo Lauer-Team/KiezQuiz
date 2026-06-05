@@ -1,0 +1,13 @@
+/* ============================================================
+   KiezQuiz — Desktop layout
+   Breakpoint: min-width 1025px
+   Bearbeite NUR diese Datei für Computer-Layout.
+   Siehe src/styles/device/README.md
+   ============================================================ */
+
+@media (min-width: 1025px) {
+  /* from base.css */
+    .map-prompt-bar {
+      display: none !important;
+    }
+}

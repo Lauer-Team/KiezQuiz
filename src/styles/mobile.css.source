@@ -1,0 +1,1216 @@
+/* ============================================================
+   KiezQuiz — Mobile / Touch (CI AppMobile)
+   Map-first city play: full-width map card, modes below. Desktop unchanged.
+   Loaded after redesign.css (do not @import from redesign — invalid at EOF).
+   ============================================================ */
+
+/* --- City view: map-first stack (≤900px) --- */
+@media (max-width: 900px) {
+  .app-shell.kq.view-city,
+  .app-shell.kq:has(#city-view:not([hidden])) {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100dvh;
+    max-height: 100dvh;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-shell.kq.view-city .app-footer,
+  .app-shell.kq:has(#city-view:not([hidden])) .app-footer {
+    display: none;
+  }
+
+  .app-shell.kq.view-city .city-view-root,
+  .app-shell.kq:has(#city-view:not([hidden])) .city-view-root {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .app-shell.kq.view-city .city-view-root .app-container,
+  .app-shell.kq:has(#city-view:not([hidden])) .city-view-root .app-container {
+    flex: 1 0 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* DOM: console then map — flex order puts map on top (CI mockup) */
+  .app-shell.kq.view-city .dashboard-grid,
+  .app-shell.kq:has(#city-view:not([hidden])) .dashboard-grid,
+  #city-view:not([hidden]) .dashboard-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 0 auto;
+    min-height: 0;
+    width: 100%;
+    max-width: 100%;
+    gap: 0;
+    grid-template-columns: none !important;
+    grid-template-rows: none !important;
+    align-items: stretch;
+  }
+
+  .app-shell.kq.view-city .map-panel,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-panel,
+  #city-view:not([hidden]) .map-panel {
+    order: 1;
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "mapstack";
+    overflow: visible;
+    position: relative;
+  }
+
+  .app-shell.kq.view-city .map-topbar,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-topbar {
+    display: contents;
+  }
+
+  .app-shell.kq.view-city .map-center-btn,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-center-btn {
+    grid-area: mapstack;
+    align-self: start;
+    justify-self: start;
+    z-index: 36;
+    margin: 8px 0 0 max(14px, env(safe-area-inset-left));
+    box-shadow: var(--shadow);
+  }
+
+  .app-shell.kq.view-city .map-island-dock,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-island-dock {
+    grid-area: mapstack;
+    align-self: start;
+    justify-self: end;
+    position: relative;
+    z-index: 35;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+    width: auto;
+    max-width: min(calc(100% - 120px), 72vw);
+    margin: 8px max(10px, env(safe-area-inset-right)) 0 0;
+    padding: 6px 8px 2px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .app-shell.kq.view-city .map-island-dock:not(:has(.island-overlay:not([hidden]), .europe-island-overlay:not([hidden]), .islands-stack:not([hidden]))),
+  .app-shell.kq:has(#city-view:not([hidden])) .map-island-dock:not(:has(.island-overlay:not([hidden]), .europe-island-overlay:not([hidden]), .islands-stack:not([hidden]))) {
+    display: none;
+  }
+
+  .app-shell.kq.view-city .map-island-dock::after,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-island-dock::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 88%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .app-shell.kq.view-city .map-island-dock .island-overlay,
+  .app-shell.kq.view-city .map-island-dock .islands-stack,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-island-dock .islands-stack {
+    position: static;
+    display: contents;
+  }
+
+  .app-shell.kq.view-city .map-island-dock .island-overlay,
+  .app-shell.kq.view-city .map-island-dock .europe-island-overlay,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-island-dock .island-overlay,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-island-dock .europe-island-overlay {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    max-width: none;
+  }
+
+  .app-shell.kq.view-city .map-container-wrapper,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-container-wrapper,
+  #city-view:not([hidden]) .map-container-wrapper {
+    grid-area: mapstack;
+    z-index: 1;
+    width: auto;
+    margin: 0 max(14px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left));
+    height: min(48vh, 48dvh);
+    min-height: min(260px, 42dvh);
+    max-height: min(420px, 56dvh);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .app-shell.kq.view-city .map-panel > .europe-microstates-bar,
+  .app-shell.kq.view-city .map-microstates-dock,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-microstates-dock {
+    grid-area: mapstack;
+    align-self: end;
+    justify-self: stretch;
+    z-index: 34;
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    margin: 0 max(14px, env(safe-area-inset-right)) 10px max(14px, env(safe-area-inset-left));
+    pointer-events: auto;
+  }
+
+  .app-shell.kq.view-city .map-microstates-dock::after,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-microstates-dock::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 36px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 88%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .app-shell.kq.view-city .map-controls,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-controls {
+    grid-area: mapstack;
+    align-self: end;
+    justify-self: end;
+    position: static;
+    z-index: 40;
+    margin: 0 max(10px, env(safe-area-inset-right)) 10px 0;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-controls,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-controls,
+  body.map-play-active .app-shell.kq.view-city .map-controls,
+  body.map-play-active .app-shell.kq:has(#city-view:not([hidden])) .map-controls {
+    margin-bottom: calc(50px + env(safe-area-inset-bottom, 0px));
+  }
+
+  body:not(.map-play-active) .app-shell.kq.view-city .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls,
+  body:not(.map-play-active) .app-shell.kq:has(#city-view:not([hidden])) .map-panel:has(.map-microstates-dock:not([hidden])) .map-controls {
+    margin-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-shell.kq.view-city .console-panel,
+  .app-shell.kq:has(#city-view:not([hidden])) .console-panel,
+  #city-view:not([hidden]) .console-panel {
+    order: 2;
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    max-height: none;
+    overflow: visible;
+    border-right: none;
+    border-top: none;
+    padding: 12px max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    gap: 14px;
+  }
+
+  .app-shell.kq.view-city .map-prompt-bar,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    text-align: left;
+  }
+
+  .app-shell.kq.view-city .map-prompt-bar .map-prompt-title,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar .map-prompt-title {
+    margin: 0;
+    flex: 0 0 auto;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    max-width: 34%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell.kq.view-city .map-prompt-bar .map-prompt-target,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar .map-prompt-target {
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.15;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell.kq.view-city .map-prompt-bar .map-prompt-sub,
+  .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar .map-prompt-sub {
+    display: none;
+  }
+
+  .app-shell.kq.view-city .segment-selector,
+  .app-shell.kq:has(#city-view:not([hidden])) .segment-selector {
+    order: 1;
+  }
+
+  .app-shell.kq.view-city .mode-selector,
+  .app-shell.kq:has(#city-view:not([hidden])) .mode-selector {
+    order: 2;
+  }
+
+  .app-shell.kq.view-city #game-play-area-card,
+  .app-shell.kq:has(#city-view:not([hidden])) #game-play-area-card {
+    order: 3;
+  }
+
+  .app-shell.kq.view-city #unlocker-card-container,
+  .app-shell.kq:has(#city-view:not([hidden])) #unlocker-card-container {
+    order: 4;
+  }
+
+  .app-shell.kq.view-city .console-panel,
+  .app-shell.kq:has(#city-view:not([hidden])) .console-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-shell.kq .stats-bar {
+    align-items: center;
+  }
+
+  .app-shell.kq .mode-selector h3 {
+    margin: 0 0 14px;
+    line-height: 1.35;
+  }
+
+  /* Horizontal mode strip (CI AppMobile) */
+  .app-shell.kq .mode-selector .modes-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .app-shell.kq .mode-selector .modes-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-shell.kq .mode-selector .mode-btn {
+    flex: 0 0 84px;
+    width: 84px;
+    min-width: 84px;
+    max-width: 84px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    gap: 7px;
+    padding: 11px 6px;
+    min-height: 44px;
+  }
+
+  /* Adaptive segment tabs (Überblick/Detail + count) */
+  .app-shell.kq .segment-selector.adaptive {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    border-radius: var(--radius);
+    padding: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+  }
+
+  .app-shell.kq .segment-selector.adaptive .segment-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    min-height: 44px;
+    border-radius: var(--radius-s);
+    text-align: left;
+    width: 100%;
+  }
+
+  .app-shell.kq .segment-selector.adaptive .seg-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .app-shell.kq .segment-selector.adaptive .seg-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell.kq .segment-selector.adaptive .seg-count {
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .app-shell.kq .empty-info {
+    align-items: stretch;
+    text-align: left;
+    padding: 1rem 0.25rem;
+  }
+
+  .app-shell.kq .empty-info p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
+    line-height: 1.45;
+  }
+
+  .app-shell.kq .map-controls {
+    padding: 0;
+    background: transparent;
+    border: none;
+    gap: 0;
+  }
+
+  .app-shell.kq .map-controls .map-hint {
+    display: none !important;
+  }
+
+  .app-shell.kq .mode-selector .mode-btn .mode-icon {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border-radius: 8px;
+  }
+
+  .app-shell.kq .mode-selector .mode-btn .mode-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .app-shell.kq .mode-selector .mode-btn > div {
+    align-items: center;
+    gap: 0;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .app-shell.kq .mode-selector .mode-btn > div span:first-child {
+    font-size: 11px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-shell.kq .mode-selector .mode-btn > div span:last-child {
+    display: none;
+  }
+
+  .app-shell.kq .glass-card {
+    padding: 14px 16px;
+  }
+
+  .app-shell.kq .mode-selector {
+    min-width: 0;
+    overflow: hidden;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    position: relative;
+  }
+
+  .app-shell.kq .mode-selector::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    right: 0;
+    bottom: 4px;
+    width: 44px;
+    height: 96px;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 88%, transparent) 42%,
+      transparent 100%
+    );
+  }
+
+  .app-shell.kq .mode-selector.glass-card {
+    padding: 0;
+  }
+
+  .app-shell.kq .map-center-btn {
+    min-height: 36px;
+    padding: 5px 11px;
+    font-size: 10px;
+  }
+
+  .app-shell.kq .control-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Active round: map + play sheet (CI QuizMobile) */
+  body.in-round .app-shell.kq.view-city,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) {
+    overflow: hidden;
+  }
+
+  body.in-round .app-shell.kq.view-city .dashboard-grid,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .dashboard-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-panel,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-panel {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "mapstack";
+  }
+
+  body.in-round .app-shell.kq.view-city .console-panel,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .console-panel {
+    flex: 0 0 auto;
+    max-height: min(46vh, 46dvh);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 12px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  body.in-round .app-shell.kq.view-city .segment-selector,
+  body.in-round .app-shell.kq.view-city .mode-selector,
+  body.in-round .app-shell.kq.view-city #unlocker-card-container,
+  body.in-round .app-shell.kq.view-city .console-panel > .glass-card:has(#toggle-progression) {
+    display: none !important;
+  }
+
+  body.in-round .app-shell.kq.view-city #round-active-ui .prompt-box {
+    display: none;
+  }
+
+  body.in-round .app-shell.kq.view-city #game-play-area-card {
+    max-height: none;
+    overflow: visible;
+    border: none;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  body.in-round .app-shell.kq.view-city #game-play-area-card.glass-card {
+    padding: 0;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-container-wrapper,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-container-wrapper {
+    width: auto;
+    margin: 0;
+    height: 100%;
+    min-height: min(220px, 34dvh);
+    max-height: none;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-center-btn,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-center-btn {
+    margin: 8px 0 0 max(10px, env(safe-area-inset-left));
+  }
+
+  body.in-round .app-shell.kq.view-city .map-prompt-bar,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px 5px 8px;
+    text-align: left;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-prompt-bar .map-prompt-title,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar .map-prompt-title {
+    margin: 0;
+    flex: 0 0 auto;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    max-width: 34%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-prompt-bar .map-prompt-target,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar .map-prompt-target {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 0.92rem;
+    line-height: 1.15;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.in-round .app-shell.kq.view-city .map-prompt-bar .map-prompt-sub,
+  body.in-round .app-shell.kq:has(#city-view:not([hidden])) .map-prompt-bar .map-prompt-sub {
+    display: none;
+  }
+
+  body.in-round .app-shell.kq .choices-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  body.in-round .app-shell.kq .choice-btn {
+    min-height: 48px;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  body.in-round .app-shell.kq .prompt-box .prompt-target {
+    font-size: 1.35rem;
+  }
+}
+
+/* --- Phones (≤640px) --- */
+@media (max-width: 640px) {
+  .app-shell.kq.view-city .app-header.global-header {
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px max(12px, env(safe-area-inset-right)) 10px max(12px, env(safe-area-inset-left));
+    gap: 8px;
+  }
+
+  .app-shell.kq .app-header.global-header .brand.brand-link {
+    order: 0;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .app-shell.kq.view-city .app-header.global-header #header-city-tabs {
+    order: 1;
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 0;
+    max-width: min(180px, 48vw);
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 0;
+  }
+
+  .app-shell.kq.view-city .header-dashboard-nav:not([hidden]) {
+    order: 2;
+    margin: 0 0 0 6px;
+  }
+
+  .app-shell.kq.view-city .header-city-picker {
+    max-width: 100%;
+  }
+
+  .app-shell.kq.view-city .header-city-toggle {
+    max-width: min(100%, 280px);
+  }
+
+  .app-shell.kq.view-city .header-city-menu {
+    left: 0;
+    right: auto;
+    transform: none;
+    max-width: min(300px, calc(100vw - 24px));
+  }
+
+  .app-shell.kq .app-header.global-header {
+    justify-content: flex-start;
+  }
+
+  .app-shell.kq .app-header.global-header .stats-bar {
+    margin-left: 0;
+    justify-content: flex-start;
+  }
+
+  .app-shell.kq .header-dashboard-nav:not([hidden]) {
+    order: 2;
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0 0 0 8px;
+  }
+
+  .app-shell.kq .app-header.global-header .stats-bar {
+    order: 10;
+  }
+
+  .app-shell.kq .header-hub-nav:not([hidden]) {
+    order: 10;
+    flex: 1 1 100%;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .app-shell.kq.view-city .app-header.global-header .stats-bar {
+    order: 10;
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    margin-left: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .app-shell.kq.view-city .app-header.global-header .stats-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-shell.kq.view-city .app-header.global-header .stats-bar {
+    position: relative;
+    padding-right: 4px;
+  }
+
+  .app-shell.kq.view-city .app-header.global-header .stats-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .profile-app-shell .header-hub-nav:not([hidden]) {
+    order: 10;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  .profile-app-shell .app-header.global-header .stats-bar {
+    order: 2;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    margin-left: 0;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: relative;
+    padding-right: 4px;
+    padding-bottom: 2px;
+  }
+
+  .profile-app-shell .app-header.global-header .stats-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .profile-app-shell .app-header.global-header .stats-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .profile-app-shell .app-header.global-header {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .profile-app-shell .app-header.global-header .brand.brand-link {
+    order: 0;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .profile-app-shell .app-header.global-header #header-city-tabs {
+    order: 1;
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 0;
+    max-width: min(180px, 48vw);
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .profile-app-shell .header-city-picker {
+    max-width: 100%;
+  }
+
+  .profile-app-shell .header-city-toggle {
+    max-width: min(100%, 280px);
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .profile-app-shell .xp-pill .rank-name {
+    margin-left: 0;
+  }
+
+  .app-shell.kq .stat-pill,
+  .app-shell.kq .xp-pill {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+  }
+
+  .app-shell.kq .xp-pill-body {
+    flex: 0 0 auto;
+  }
+
+  .app-shell.kq .auth-pill-label {
+    display: none;
+  }
+
+  .app-shell.kq .changelog-header-label {
+    display: none;
+  }
+
+  .app-shell.kq .auth-pill,
+  .app-shell.kq .changelog-header-btn {
+    flex-shrink: 0;
+    align-self: center;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-shell.kq .auth-pill {
+    padding: 0 12px;
+    gap: 6px;
+    border-radius: 999px;
+  }
+
+  .app-shell.kq .changelog-header-btn {
+    width: 40px;
+    min-width: 40px;
+    padding: 0;
+    border-radius: 11px;
+  }
+
+  .app-shell.kq .changelog-header-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .app-shell.kq .audio-toggle,
+  .app-shell.kq .lang-toggle,
+  .app-shell.kq #btn-theme,
+  .app-shell.kq #btn-settings {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    align-self: center;
+  }
+
+  .app-shell.kq.view-city .brand .brand-logo {
+    height: 28px;
+    max-width: min(120px, 38vw);
+  }
+
+  .app-shell.kq.view-city .header-city-toggle {
+    max-width: min(180px, 48vw);
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .app-shell.kq.view-city .streak-pill .streak-best {
+    display: none;
+  }
+
+  .app-shell.kq.view-city .xp-pill {
+    min-width: 5.25rem;
+    max-width: min(7.75rem, 34vw);
+    overflow: hidden;
+    align-items: center;
+  }
+
+  .app-shell.kq.view-city .xp-pill-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .app-shell.kq.view-city .xp-pill .xp-pill-row {
+    flex-wrap: nowrap;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .app-shell.kq.view-city .xp-pill .rank-name {
+    display: block;
+    margin-left: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .app-shell.kq.view-city .xp-pill .value {
+    display: none;
+  }
+
+  .app-shell.kq.view-city .stat-pill {
+    padding: 5px 10px 5px 6px;
+  }
+
+  .app-shell.kq.view-city .streak-pill::before,
+  .app-shell.kq.view-city .xp-pill::before {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+  }
+
+  .app-shell.kq.view-city .streak-pill .streak-current .value,
+  .app-shell.kq.view-city .xp-pill .rank-name {
+    font-size: 14px;
+  }
+
+  .app-shell.kq .segment-selector {
+    margin: 0;
+  }
+
+  .app-shell.kq .segment-btn {
+    min-height: 44px;
+    font-size: 13px;
+  }
+
+  .app-shell.kq .text-input-field {
+    min-height: 48px;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  .app-shell.kq .primary-btn,
+  .app-shell.kq .secondary-btn {
+    min-height: 48px;
+  }
+
+  .app-shell.kq .bezirk-picker {
+    max-height: min(200px, 28dvh);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-shell.kq .bezirk-picker-item {
+    min-height: 44px;
+    padding: 0.55rem 0.65rem;
+  }
+
+  .app-shell.kq .autocomplete-item {
+    min-height: 44px;
+  }
+
+  .app-shell.kq .timer-display {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  .app-shell.kq .map-prompt-bar .map-prompt-target {
+    font-size: 1.15rem;
+  }
+
+  .app-shell.kq .map-microstates-dock,
+  .app-shell.kq .map-panel > .europe-microstates-bar {
+    padding: 8px 10px;
+    border-radius: var(--radius-s);
+    box-sizing: border-box;
+    max-width: calc(100% - 56px);
+  }
+
+  .app-shell.kq .europe-microstates-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-right: 8px;
+  }
+
+  .app-shell.kq .europe-microstates-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hub landing */
+  .app-shell.kq.view-hub {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-shell.kq.view-hub .hub-view-root {
+    padding-bottom: max(5.5rem, calc(env(safe-area-inset-bottom) + 3.5rem));
+  }
+
+  .hub-landing {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .hub-landing-hero {
+    padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+  }
+
+  .hub-landing-picker {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .hub-landing-picker .kq-cities {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  .hub-landing-copy h1 {
+    font-size: clamp(2rem, 10vw, 2.75rem);
+  }
+
+  .hub-map-frame {
+    height: clamp(200px, 38vh, 300px);
+  }
+
+  .hub-map-preview .kq-legend {
+    bottom: 10px;
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+
+  .hub-xp-float {
+    left: 8px;
+    bottom: 8px;
+    max-width: min(200px, 58vw);
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .hub-scroll-top {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(72px, calc(env(safe-area-inset-bottom) + 56px));
+  }
+
+  .app-shell.kq.view-hub .app-header.global-header:has(.header-hub-nav:not([hidden])) {
+    padding-top: max(10px, env(safe-area-inset-top));
+  }
+
+  .app-shell.kq.view-hub .header-hub-nav:not([hidden]) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px;
+  }
+
+  .app-shell.kq.view-hub .header-hub-nav:not([hidden])::-webkit-scrollbar {
+    display: none;
+  }
+
+  .app-shell.kq.view-hub .header-hub-nav:not([hidden]) {
+    position: relative;
+    padding-right: 4px;
+  }
+
+  .app-shell.kq.view-hub .header-hub-nav:not([hidden])::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  body.kq.profile-page-body .header-hub-nav:not([hidden]) {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: relative;
+    padding-right: 4px;
+  }
+
+  body.kq.profile-page-body .header-hub-nav:not([hidden])::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.kq.profile-page-body .header-hub-nav:not([hidden])::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(
+      to left,
+      var(--bg) 0%,
+      color-mix(in srgb, var(--bg) 90%, transparent) 45%,
+      transparent 100%
+    );
+  }
+
+  .app-shell.kq.view-hub .changelog-header-btn .changelog-header-label {
+    display: none;
+  }
+
+  .app-shell.kq .unlocker-card > div:first-child {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .overlay-modal {
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    align-items: flex-end;
+  }
+
+  .overlay-modal .modal-content {
+    width: 100%;
+    max-width: none;
+    max-height: min(92dvh, calc(100dvh - env(safe-area-inset-top) - 12px));
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* --- Narrow phones (≤380px) --- */
+@media (max-width: 380px) {
+  .app-shell.kq .mode-selector .mode-btn {
+    flex: 0 0 68px;
+    width: 68px;
+    min-width: 68px;
+    max-width: 68px;
+  }
+
+  body.in-round .app-shell.kq .choices-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Touch: no hover lift */
+@media (hover: none) and (pointer: coarse) {
+  .app-shell.kq .mode-selector .mode-btn:hover,
+  .app-shell.kq .choice-btn:hover,
+  .app-shell.kq .glass-card:hover {
+    transform: none;
+  }
+
+  .app-shell.kq .mode-selector .mode-btn:active,
+  .app-shell.kq .choice-btn:active {
+    transform: scale(0.98);
+    opacity: 0.92;
+  }
+}
+
+/* Profile (mobile playability) */
+@media (max-width: 720px) {
+  body.kq.profile-page-body .profile-nav {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  body.kq.profile-page-body .profile-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.kq.profile-page-body .profile-nav-item {
+    flex: 0 0 auto;
+    min-height: 44px;
+  }
+
+  body.kq.profile-page-body .profile-dashboard-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body.kq.profile-page-body .profile-btn,
+  body.kq.profile-page-body .profile-search-row .text-input-field {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 400px) {
+  body.kq.profile-page-body .profile-dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+}

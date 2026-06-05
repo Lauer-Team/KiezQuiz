@@ -518,13 +518,6 @@ html[data-theme="light"] .hub-about-kalle {
   margin-left: 14px;
 }
 
-@media (max-width: 768px) {
-  .app-shell.kq .header-hub-nav:not([hidden]),
-  .app-shell.kq .header-dashboard-nav:not([hidden]) {
-    margin-left: 0;
-  }
-}
-
 /* Loose pills — no segmented bar or vertical divider strokes */
 .header-hub-nav.kq-navlinks {
   gap: 8px;
@@ -750,50 +743,4 @@ html[data-theme="light"] .hub-about-kalle {
   display: none !important;
 }
 
-@media (max-width: 960px) {
-  .hub-landing-hero {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding-top: 16px;
-  }
-
-  .hub-landing-visual {
-    order: -1;
-  }
-
-  .hub-map-frame {
-    height: clamp(200px, 36vh, 320px);
-  }
-
-  .hub-xp-float {
-    left: 12px;
-    bottom: -12px;
-  }
-
-  .hub-modes-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 520px) {
-  .hub-modes-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 900px) {
-  .hub-about-unified .hub-about-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hub-about-unified .hub-about-visual {
-    order: -1;
-    min-height: 240px;
-    border-radius: var(--radius, 18px);
-  }
-
-  .hub-about-unified .hub-about-kalle {
-    min-height: 240px;
-    border-radius: var(--radius, 18px);
-  }
-}
+/* Device layouts: src/styles/device/ (phone, tablet, desktop, touch) */
