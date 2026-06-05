@@ -81,6 +81,29 @@ CITIES = {
             ),
         ],
     },
+    "duesseldorf": {
+        "slug": "duesseldorf",
+        "name": "Düsseldorf",
+        "meta_description": (
+            "Lerne alle 50 Düsseldorfer Stadtteile und 10 Stadtbezirke spielerisch auf der Karte. "
+            "Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline."
+        ),
+        "h1": "Düsseldorf Stadtteile und Stadtbezirke spielerisch lernen",
+        "faq": [
+            (
+                "Wie viele Stadtteile hat Düsseldorf?",
+                "Düsseldorf ist in 10 Stadtbezirke und 50 Stadtteile unterteilt. KiezQuiz deckt alle offiziellen Stadtteile ab.",
+            ),
+            (
+                "Ist KiezQuiz kostenlos?",
+                "Ja — KiezQuiz ist komplett kostenlos, ohne Werbung und ohne Pflicht-Registrierung.",
+            ),
+            (
+                "Funktioniert das Quiz auf dem Handy?",
+                "Ja. Die Karte unterstützt Touch-Gesten zum Zoomen und Verschieben und kann als App installiert werden.",
+            ),
+        ],
+    },
     "europe": {
         "slug": "europe",
         "name": "Europa",

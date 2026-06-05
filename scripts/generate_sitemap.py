@@ -11,6 +11,7 @@ URLS = [
     "/hamburg/",
     "/berlin/",
     "/frankfurt/",
+    "/duesseldorf/",
     "/europe/",
 ]
 

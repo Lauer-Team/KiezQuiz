@@ -3,9 +3,9 @@
     "title": "KiezQuiz · Besser wissen als Besserwissen.",
     "ogTitle": "KiezQuiz",
     "slogan": "Besser wissen als Besserwissen.",
-    "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
-    "ogDescription": "Besser wissen als Besserwissen. Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97) und Frankfurt (46). Mit XP, Streaks und Trivia — mobil & offline.",
-    "manifestDescription": "Hamburg, Berlin & Frankfurt — Bezirke und Stadtteile spielerisch lernen"
+    "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97), Frankfurt (46) und Düsseldorf (50). Mit XP, Streaks und Trivia — mobil & offline.",
+    "ogDescription": "Besser wissen als Besserwissen. Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97), Frankfurt (46) und Düsseldorf (50). Mit XP, Streaks und Trivia — mobil & offline.",
+    "manifestDescription": "Hamburg, Berlin, Frankfurt & Düsseldorf — Bezirke und Stadtteile spielerisch lernen"
   },
   "header": {
     "badge": "Gamified Learning",
@@ -409,6 +409,21 @@
     "progressHint": "Ortsbezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Frankfurt-Rang"
   },
+  "cityRanksDuesseldorf": {
+    "1": { "name": "Touri" },
+    "2": { "name": "Rhein-Neuling" },
+    "3": { "name": "Düsseldorfer Jung / Maus" },
+    "4": { "name": "Rhein-Kapitän" },
+    "5": { "name": "Düsseldorf-Experte" },
+    "6": { "name": "Ur-Düsseldorfer" },
+    "7": { "name": "Stadtbezirks-Babo" },
+    "8": { "name": "König von Düsseldorf" },
+    "fallback": "Touri",
+    "maxReached": "Höchster Düsseldorf-Rang erreicht — alle Stadtbezirke & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Stadtbezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Düsseldorf-Rang"
+  },
   "cityRanksEurope": {
     "1": { "name": "Tourist" },
     "2": { "name": "Backpacker" },
@@ -550,6 +565,26 @@
       "unlockDesc": "Benenne alle 16 Ortsbezirke in der Challenge!"
     }
   },
+  "trophiesDuesseldorf": {
+    "paradise_explorer": {
+      "name": "Altstadt-Entdecker!",
+      "unlockTitle": "Altstadt-Entdecker! 🎭",
+      "desc": "Tippe „Altstadt“ zum ersten Mal richtig – in einem beliebigen Modus.",
+      "unlockDesc": "Du hast die Altstadt zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "König von Düsseldorf",
+      "unlockTitle": "König von Düsseldorf 👑",
+      "desc": "Benenne alle Stadtteile in „Nenne alle Orte“.",
+      "unlockDesc": "Finde alle Stadtteile in der Sporcle-Challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Stadtbezirks-Babo",
+      "unlockTitle": "Stadtbezirks-Babo 🏛️",
+      "desc": "Benenne alle 10 Stadtbezirke in der Challenge.",
+      "unlockDesc": "Benenne alle 10 Stadtbezirke in der Challenge!"
+    }
+  },
   "trophies": {
     "neuwerk_island": {
       "name": "Neuwerk-Insulaner",
@@ -599,6 +634,7 @@
     "defaultBezirk": "Ein bedeutender Bezirk Hamburgs.",
     "defaultBezirkBerlin": "Ein bedeutender Bezirk Berlins.",
     "defaultBezirkFrankfurt": "Ein bedeutender Ortsbezirk Frankfurts.",
+    "defaultBezirkDuesseldorf": "Ein bedeutender Stadtbezirk Düsseldorfs.",
     "defaultCountryEurope": "Ein souveräner Staat in Europa.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
     "templates": {
@@ -836,11 +872,13 @@
     "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
     "emptyBezirkBerlin": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "emptyBezirkFrankfurt": "Klicke auf einen Ortsbezirk der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
+    "emptyBezirkDuesseldorf": "Klicke auf einen Stadtbezirk der Karte, um spannende Metadaten und Düsseldorfer Fakten anzuzeigen!",
     "emptyCountryEurope": "Klicke auf ein Land der Europakarte, um Bevölkerung, Fläche und Hauptstadt zu entdecken!",
     "emptyCapitalEurope": "Klicke auf ein Land, um die Hauptstadt und Fakten zu sehen!",
     "capitalsEurope": "Hauptstadt",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
     "emptyStadtteilFrankfurt": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
+    "emptyStadtteilDuesseldorf": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Düsseldorfer Fakten anzuzeigen!",
     "emptyOrtsteil": "Klicke auf einen Ortsteil der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "residents": "Einwohner",
     "area": "Fläche",
@@ -854,7 +892,8 @@
     "avgDensity": "Durchschnittliche Dichte",
     "subdistricts": "Stadtteile ({count})",
     "subdistrictsBerlin": "Ortsteile ({count})",
-    "subdistrictsFrankfurt": "Stadtteile ({count})"
+    "subdistrictsFrankfurt": "Stadtteile ({count})",
+    "subdistrictsDuesseldorf": "Stadtteile ({count})"
   },
   "game": {
     "roundStartTitle": "Durchlauf starten",
@@ -1077,7 +1116,7 @@
     "citiesSectionLead": "Wähle eine Stadt — mit Fortschritt, Pokalen und Leveln wie bisher.",
     "guideTitle": "Spielanleitung",
     "guideLead": "So spielst du KiezQuiz — von der Stadtwahl über Bezirke und Stadtteile bis zu XP, Serien und der Sporcle-Challenge.",
-    "guideStep1": "Stadt wählen — Hamburg, Berlin, Frankfurt oder Europa. Oben „Wähle deine Stadt“ oder unten eine Stadtkarte.",
+    "guideStep1": "Stadt wählen — Hamburg, Berlin, Frankfurt, Düsseldorf oder Europa. Oben „Wähle deine Stadt“ oder unten eine Stadtkarte.",
     "guideStep2": "Überblick vs. Detail — Bezirke (große Einheiten) oder Stadtteile/Ortsteile (fein). Der Regler oben im Spiel wechselt die Ebene.",
     "guideStep3": "Entdecker-Modus — Karte frei erkunden, Orte antippen und Kurzinfos lesen. Ideal zum Kennenlernen ohne Druck.",
     "guideStep4": "Karten-Quiz — Ein Ort blinkt auf der Karte; du wählst die passende Antwort. Treffer geben XP und verlängern deine Serie.",
@@ -1158,6 +1197,18 @@
         "stadtteil": "Stadtteil"
       }
     },
+    "duesseldorf": {
+      "greeting": "Jo!",
+      "blurb": "10 Stadtbezirke · 50 Stadtteile",
+      "levels": {
+        "stadtbezirke": "Stadtbezirke",
+        "stadtteile": "Stadtteile"
+      },
+      "singular": {
+        "stadtbezirk": "Stadtbezirk",
+        "stadtteil": "Stadtteil"
+      }
+    },
     "europe": {
       "greeting": "Willkommen in Europa!",
       "blurb": "44 Länder · 44 Hauptstädte",
@@ -1186,7 +1237,7 @@
     "modesTitle": "Spielmodi",
     "modesBody": "Entdecker-Modus zum freien Erkunden, Karten-Quiz zum Anklicken, Detektiv zum Suchen, Challenge unter Zeitdruck und Eingabe-Modus zum Tippen — für jeden Lerntyp das Richtige.",
     "citiesTitle": "Städte & Wünsche",
-    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
+    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, Düsseldorf und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
     "privacyTitle": "Datenschutz",
     "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.",
     "ctaPlay": "Jetzt spielen →",

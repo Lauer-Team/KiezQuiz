@@ -3,9 +3,9 @@
     "title": "KiezQuiz · Don't be a Know-it-all. Know it all.",
     "ogTitle": "KiezQuiz",
     "slogan": "Don't be a Know-it-all. Know it all.",
-    "description": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
-    "ogDescription": "Don't be a Know-it-all. Know it all. Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97) and Frankfurt (46). With XP, streaks and trivia — mobile & offline.",
-    "manifestDescription": "Hamburg, Berlin & Frankfurt — learn districts through play"
+    "description": "Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97), Frankfurt (46) and Düsseldorf (50). With XP, streaks and trivia — mobile & offline.",
+    "ogDescription": "Don't be a Know-it-all. Know it all. Free map quiz: Learn all boroughs and neighbourhoods of Hamburg (104), Berlin (97), Frankfurt (46) and Düsseldorf (50). With XP, streaks and trivia — mobile & offline.",
+    "manifestDescription": "Hamburg, Berlin, Frankfurt & Düsseldorf — learn districts through play"
   },
   "header": {
     "badge": "Gamified Learning",
@@ -409,6 +409,21 @@
     "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "Frankfurt rank"
   },
+  "cityRanksDuesseldorf": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Rhine Rookie" },
+    "3": { "name": "Düsseldorf Local" },
+    "4": { "name": "Rhine Captain" },
+    "5": { "name": "Düsseldorf Expert" },
+    "6": { "name": "True Düsseldorfer" },
+    "7": { "name": "District Boss" },
+    "8": { "name": "King of Düsseldorf" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Düsseldorf rank reached — all districts & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Düsseldorf rank"
+  },
   "cityRanksEurope": {
     "1": { "name": "Tourist" },
     "2": { "name": "Backpacker" },
@@ -550,6 +565,26 @@
       "unlockDesc": "Name all 16 districts in the challenge!"
     }
   },
+  "trophiesDuesseldorf": {
+    "paradise_explorer": {
+      "name": "Old Town Explorer!",
+      "unlockTitle": "Old Town Explorer! 🎭",
+      "desc": "Correctly tap \"Altstadt\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Altstadt for the first time."
+    },
+    "meister_alle_stadtteile": {
+      "name": "King of Düsseldorf",
+      "unlockTitle": "King of Düsseldorf 👑",
+      "desc": "Name all neighbourhoods in \"Name all places\".",
+      "unlockDesc": "Find every neighbourhood in the Sporcle challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "District Boss",
+      "unlockTitle": "District Boss 🏛️",
+      "desc": "Name all 10 districts in the challenge.",
+      "unlockDesc": "Name all 10 districts in the challenge!"
+    }
+  },
   "trophies": {
     "neuwerk_island": {
       "name": "Neuwerk Islander",
@@ -599,6 +634,7 @@
     "defaultBezirk": "A significant borough of Hamburg.",
     "defaultBezirkBerlin": "A significant borough of Berlin.",
     "defaultBezirkFrankfurt": "A significant district of Frankfurt.",
+    "defaultBezirkDuesseldorf": "A significant district of Düsseldorf.",
     "defaultCountryEurope": "A sovereign state in Europe.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
     "templates": {
@@ -724,11 +760,13 @@
     "emptyBezirk": "Click a borough on the map to see fascinating metadata and Hanseatic facts!",
     "emptyBezirkBerlin": "Click a borough on the map to see fascinating metadata and Berlin facts!",
     "emptyBezirkFrankfurt": "Click a district on the map to see fascinating metadata and Frankfurt facts!",
+    "emptyBezirkDuesseldorf": "Click a district on the map to see fascinating metadata and Düsseldorf facts!",
     "emptyCountryEurope": "Click a country on the map of Europe to discover population, area and capital!",
     "emptyCapitalEurope": "Click a country to see its capital and facts!",
     "capitalsEurope": "Capital",
     "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
     "emptyStadtteilFrankfurt": "Click a neighbourhood on the map to see fascinating metadata and Frankfurt facts!",
+    "emptyStadtteilDuesseldorf": "Click a neighbourhood on the map to see fascinating metadata and Düsseldorf facts!",
     "emptyOrtsteil": "Click a neighbourhood on the map to see fascinating metadata and Berlin facts!",
     "residents": "Population",
     "area": "Area",
@@ -742,7 +780,8 @@
     "avgDensity": "Average density",
     "subdistricts": "Districts ({count})",
     "subdistrictsBerlin": "Neighbourhoods ({count})",
-    "subdistrictsFrankfurt": "Neighbourhoods ({count})"
+    "subdistrictsFrankfurt": "Neighbourhoods ({count})",
+    "subdistrictsDuesseldorf": "Neighbourhoods ({count})"
   },
   "game": {
     "roundStartTitle": "Start a run",
@@ -965,7 +1004,7 @@
     "citiesSectionLead": "Pick a city — with progress, trophies and levels as before.",
     "guideTitle": "How to play",
     "guideLead": "How to play KiezQuiz — from picking a city through districts and neighborhoods to XP, streaks and the Sporcle challenge.",
-    "guideStep1": "Pick a city — Hamburg, Berlin, Frankfurt or Europe. Use “Choose your city” at the top or a city card below.",
+    "guideStep1": "Pick a city — Hamburg, Berlin, Frankfurt, Düsseldorf or Europe. Use “Choose your city” at the top or a city card below.",
     "guideStep2": "Overview vs. detail — districts (large areas) or neighborhoods (fine-grained). The in-game toggle switches the level.",
     "guideStep3": "Explorer mode — freely explore the map, tap places and read short facts. Great for learning without pressure.",
     "guideStep4": "Map quiz — one place blinks on the map; pick the matching answer. Hits earn XP and extend your streak.",
@@ -1046,6 +1085,18 @@
         "stadtteil": "Neighbourhood"
       }
     },
+    "duesseldorf": {
+      "greeting": "Jo!",
+      "blurb": "10 districts · 50 neighbourhoods",
+      "levels": {
+        "stadtbezirke": "Districts",
+        "stadtteile": "Neighbourhoods"
+      },
+      "singular": {
+        "stadtbezirk": "District",
+        "stadtteil": "Neighbourhood"
+      }
+    },
     "europe": {
       "greeting": "Welcome to Europe!",
       "blurb": "44 countries · 44 capitals",
@@ -1074,7 +1125,7 @@
     "modesTitle": "Game modes",
     "modesBody": "Explorer mode for free discovery, map quiz for clicking, detective for searching, challenge under time pressure and typing mode — something for every learning style.",
     "citiesTitle": "Cities & wishes",
-    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
+    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Düsseldorf and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
     "privacyTitle": "Privacy",
     "privacyBody": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username and save data are encrypted via TLS and stored with Supabase (EU) — no sharing with third parties.",
     "ctaPlay": "Play now →",

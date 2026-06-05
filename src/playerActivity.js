@@ -2,7 +2,7 @@
  * Player game volume — log rounds + admin analytics RPCs.
  */
 (function () {
-  const VALID_CITIES = new Set(['hamburg', 'berlin', 'frankfurt', 'europe']);
+  const VALID_CITIES = new Set(['hamburg', 'berlin', 'frankfurt', 'duesseldorf', 'europe']);
 
   function getSupabase() {
     return window.authManager?.supabase || null;

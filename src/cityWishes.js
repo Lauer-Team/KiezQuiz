@@ -16,7 +16,6 @@
     Stuttgart: 143,
     Dresden: 121,
     Nürnberg: 98,
-    Düsseldorf: 87,
     Hannover: 76,
     Bremen: 68,
     Dortmund: 61,

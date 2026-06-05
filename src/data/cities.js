@@ -72,6 +72,19 @@
     { name: 'Vatikanstadt', xpNeeded: 2150 }
   ];
 
+  const DUESSELDORF_BEZIRKE_PROGRESSION = [
+    { name: 'Stadtbezirk 1', xpNeeded: 0 },
+    { name: 'Stadtbezirk 2', xpNeeded: 50 },
+    { name: 'Stadtbezirk 3', xpNeeded: 150 },
+    { name: 'Stadtbezirk 4', xpNeeded: 300 },
+    { name: 'Stadtbezirk 5', xpNeeded: 450 },
+    { name: 'Stadtbezirk 6', xpNeeded: 600 },
+    { name: 'Stadtbezirk 7', xpNeeded: 750 },
+    { name: 'Stadtbezirk 8', xpNeeded: 950 },
+    { name: 'Stadtbezirk 9', xpNeeded: 1150 },
+    { name: 'Stadtbezirk 10', xpNeeded: 1350 }
+  ];
+
   const FRANKFURT_BEZIRKE_PROGRESSION = [
     { name: 'Innenstadt I', xpNeeded: 0 },
     { name: 'Innenstadt II', xpNeeded: 50 },
@@ -150,6 +163,24 @@
       paradiseTarget: 'Westend-Süd'
     },
     {
+      id: 'duesseldorf',
+      name: 'Düsseldorf',
+      greetingKey: 'cities.duesseldorf.greeting',
+      blurbKey: 'cities.duesseldorf.blurb',
+      hue: 295,
+      status: 'playable',
+      levels: [
+        { key: 'stadtbezirke', labelKey: 'cities.duesseldorf.levels.stadtbezirke', singularKey: 'cities.duesseldorf.singular.stadtbezirk', tierKey: 'cities.tier.overview', count: 10 },
+        { key: 'stadtteile', labelKey: 'cities.duesseldorf.levels.stadtteile', singularKey: 'cities.duesseldorf.singular.stadtteil', tierKey: 'cities.tier.detail', count: 50 }
+      ],
+      dataGlobal: 'DUESSELDORF_DATA',
+      mapSvg: 'src/data/duesseldorf_map.svg',
+      progression: DUESSELDORF_BEZIRKE_PROGRESSION,
+      trophyCatalog: 'duesseldorf',
+      totalTrophies: 13,
+      paradiseTarget: 'Altstadt'
+    },
+    {
       id: 'europe',
       name: 'Europa',
       greetingKey: 'cities.europe.greeting',
@@ -176,6 +207,7 @@
     HAMBURG_BEZIRKE_PROGRESSION,
     BERLIN_BEZIRKE_PROGRESSION,
     FRANKFURT_BEZIRKE_PROGRESSION,
+    DUESSELDORF_BEZIRKE_PROGRESSION,
     EUROPE_COUNTRIES_PROGRESSION
   };
 })();

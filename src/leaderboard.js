@@ -2,7 +2,7 @@
  * City best scores — Supabase RPC submit_best_score (logged-in users only).
  */
 (function () {
-  const VALID_CITIES = new Set(['hamburg', 'berlin', 'frankfurt']);
+  const VALID_CITIES = new Set(['hamburg', 'berlin', 'frankfurt', 'duesseldorf']);
 
   function isBetterRun(a, b) {
     if (!b) return true;

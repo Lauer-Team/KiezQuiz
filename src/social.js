@@ -83,7 +83,7 @@
     return { rows: Array.isArray(data) ? data : [], error: null };
   }
 
-  const LEADERBOARD_CITIES = new Set(['hamburg', 'berlin', 'frankfurt']);
+  const LEADERBOARD_CITIES = new Set(['hamburg', 'berlin', 'frankfurt', 'duesseldorf']);
 
   async function getCityLeaderboard(cityId, limit) {
     const city = String(cityId || '').toLowerCase().trim();

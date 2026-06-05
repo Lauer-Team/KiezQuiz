@@ -68,7 +68,7 @@
   }
 
   function getLeaderboardCities() {
-    return getPlayableCities().filter((c) => ['hamburg', 'berlin', 'frankfurt'].includes(c.id));
+    return getPlayableCities().filter((c) => ['hamburg', 'berlin', 'frankfurt', 'duesseldorf'].includes(c.id));
   }
 
   function buildProfileGameContext(save) {
