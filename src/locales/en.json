@@ -700,7 +700,17 @@
       "Nieder-Erlenbach": ["Small-town character in Frankfurt's north.", "Rural charm with orchards and fields.", "Former independent municipality, annexed in 1910."],
       "Harheim": ["Northernmost neighbourhood at the edge of the Wetterau.", "Rural flair with fields and orchards.", "Annexed to Frankfurt in 1928."],
       "Nieder-Eschbach": ["Quiet residential district in the north-east.", "Many single-family homes and green spaces.", "Borders Bad Vilbel and the Taunus hills."],
-      "Bergen-Enkheim": ["Easternmost district with vineyards and apple wine.", "Bergen-Enkheim market attracts visitors.", "Rural character despite big-city affiliation."]
+      "Bergen-Enkheim": ["Easternmost district with vineyards and apple wine.", "Bergen-Enkheim market attracts visitors.", "Rural character despite big-city affiliation."],
+      "Altstadt": ["District 1 — the historic core: Altstadt, Carlstadt, Stadtmitte, Pempelfort, Derendorf and Golzheim.", "Königsallee, Rhine promenade and major museums are here.", "The smallest but most densely urban heart of the city."],
+      "Flingern": ["District 2 — east of the centre: Flingern Nord, Flingern Süd and Düsseltal.", "Known for the Zoopark quarter and lively pub streets.", "A traditional workers' quarter with a strong scene."],
+      "Unterbilk": ["District 3 — south of the centre: Unterbilk, Bilk, harbour, Hamm and Flehe.", "Media Harbour and the Rhine Towers shape the western skyline.", "Popular residential and nightlife area with high density."],
+      "Oberkassel": ["District 4 — the only left-bank district: Oberkassel, Heerdt, Lörick and Niederkassel.", "Upscale villas on the Rhine and Nordpark.", "Separated from the rest of the city by the river — with its own identity."],
+      "Stockum": ["District 5 — north: Stockum, Lohausen, Kaiserswerth, Wittlaer, Kalkum and Angermund.", "Trade fair grounds, airport and Klemensplatz are here.", "Lots of green space and formerly rural villages within the city."],
+      "Unterrath": ["District 6 — Lichtenbroich, Unterrath, Rath and Mörsenbroich.", "Strong post-war growth — typical residential quarters.", "Good links towards the airport and northern neighbours."],
+      "Gerresheim": ["District 7 — east: Gerresheim, Grafenberg, Ludenberg, Hubbelrath and Knittkuhl.", "Once an independent town — today with basilica and lively centre.", "Hilly location on the edge of the Bergisches Land."],
+      "Eller": ["District 8 — south-east: Eller, Lierenfeld, Vennhausen and Unterbach.", "Ellersee and nearby recreation areas attract residents.", "A good mix of housing and light industry."],
+      "Benrath": ["District 9 — the large southern district: Benrath, Wersten, Urdenbach and Holthausen.", "Benrath Palace and its park are landmarks.", "Many detached homes and quiet suburbs on the city edge."],
+      "Garath": ["District 10 — Garath and Hellerhof in the far south.", "Large post-war housing estates shape the area.", "Strong neighbourhood communities and civic engagement."]
     },
     "specific": {
       "St. Pauli": "Home to the famous Kiez (neighborhood), the Reeperbahn, and FC St. Pauli. Once a suburb outside Hamburg's city limits.",

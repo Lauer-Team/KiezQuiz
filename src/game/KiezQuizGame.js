@@ -3050,9 +3050,11 @@ class KiezQuizGame {
 
     const correctAnswer = this.currentTarget.name;
     const cleanStr = str => this.normalizeGuess(str);
-    const isCorrect = cleanStr(typedValue) === cleanStr(correctAnswer);
-    const input = document.getElementById('type-name-input');
     const isBz = this.activeSegment === 'BEZIRKE';
+    const aliasName = isBz ? resolveBezirkGuessName(this.activeCityId, cleanStr(typedValue)) : null;
+    const isCorrect = cleanStr(typedValue) === cleanStr(correctAnswer)
+      || (aliasName && cleanStr(aliasName) === cleanStr(correctAnswer));
+    const input = document.getElementById('type-name-input');
 
     if (!isCorrect) {
       this.sounds.playIncorrect();
@@ -3600,8 +3602,10 @@ class KiezQuizGame {
 
     let matchName = null;
     if (isBz) {
+      const aliasName = resolveBezirkGuessName(this.activeCityId, cleanVal);
+      const guessVal = aliasName ? cleanStr(aliasName) : cleanVal;
       const bz = this.getProgression().find(b =>
-        cleanStr(b.name) === cleanVal && this.nameAllActiveBezirke.includes(b.name)
+        cleanStr(b.name) === guessVal && this.nameAllActiveBezirke.includes(b.name)
       );
       if (bz) matchName = bz.name;
     } else {

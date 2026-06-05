@@ -35,7 +35,17 @@
     'Nieder-Erlenbach': 95,
     Harheim: 160,
     'Nieder-Eschbach': 220,
-    'Bergen-Enkheim': 15
+    'Bergen-Enkheim': 15,
+    Altstadt: 295,
+    Flingern: 340,
+    Unterbilk: 210,
+    Oberkassel: 175,
+    Stockum: 130,
+    Unterrath: 45,
+    Gerresheim: 25,
+    Eller: 310,
+    Benrath: 95,
+    Garath: 260
   };
 
   const HAMBURG_CSS_KEYS = {

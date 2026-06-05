@@ -812,6 +812,56 @@
         "Östlichster Ortsbezirk mit Weinbergen und Apfelwein.",
         "Bergen-Enkheimer Markt zieht Besucher an.",
         "Ländlicher Charakter trotz Großstadt-Zugehörigkeit."
+      ],
+      "Altstadt": [
+        "Stadtbezirk 1 — das historische Zentrum mit Altstadt, Carlstadt, Stadtmitte, Pempelfort, Derendorf und Golzheim.",
+        "Hier liegen die Königsallee, der Rheinufer-Promenadenweg und die wichtigsten Museen.",
+        "Der kleinste, aber urban dichteste Kern der Landeshauptstadt."
+      ],
+      "Flingern": [
+        "Stadtbezirk 2 — östlich der Innenstadt mit Flingern Nord, Flingern Süd und Düsseltal.",
+        "Bekannt für das Zoopark-Viertel und lebendige Kneipenstraßen.",
+        "Traditionelles Arbeiterviertel mit starkem Szene-Charakter."
+      ],
+      "Unterbilk": [
+        "Stadtbezirk 3 — südlich der Innenstadt mit Unterbilk, Bilk, Hafen, Hamm und Flehe.",
+        "Der Medienhafen und die Rheintürme prägen das westliche Stadtpanorama.",
+        "Beliebtes Wohn- und Ausgehviertel mit hoher Bevölkerungsdichte."
+      ],
+      "Oberkassel": [
+        "Stadtbezirk 4 — der einzige linksrheinische Bezirk mit Oberkassel, Heerdt, Lörick und Niederkassel.",
+        "Noble Villenviertel am Rhein und der Nordpark.",
+        "Vom Rest der Stadt durch den Fluss getrennt — mit eigener Identität."
+      ],
+      "Stockum": [
+        "Stadtbezirk 5 — nördlich gelegen mit Stockum, Lohausen, Kaiserswerth, Wittlaer, Kalkum und Angermund.",
+        "Messe Düsseldorf, der Flughafen und der Klemensplatz liegen hier.",
+        "Viele Grünflächen und ehemals ländliche Ortsteile im Stadtgebiet."
+      ],
+      "Unterrath": [
+        "Stadtbezirk 6 — mit Lichtenbroich, Unterrath, Rath und Mörsenbroich.",
+        "Starkes Wachstum in den Nachkriegsjahren — typische Wohnquartiere.",
+        "Gute Anbindung Richtung Flughafen und nördliche Nachbarstädte."
+      ],
+      "Gerresheim": [
+        "Stadtbezirk 7 — östlich mit Gerresheim, Grafenberg, Ludenberg, Hubbelrath und Knittkuhl.",
+        "Einst eigenständige Stadt — heute mit Basilika und lebendigem Ortskern.",
+        "Hügelige Lage am Rande des Bergischen Landes."
+      ],
+      "Eller": [
+        "Stadtbezirk 8 — südöstlich mit Eller, Lierenfeld, Vennhausen und Unterbach.",
+        "Ellersee und Naherholungsgebiete locken Anwohner an.",
+        "Guter Mix aus Wohngebieten und Gewerbe."
+      ],
+      "Benrath": [
+        "Stadtbezirk 9 — der südlichste große Bezirk mit Benrath, Wersten, Urdenbach und Holthausen.",
+        "Schloss Benrath und der Schlosspark sind Wahrzeichen.",
+        "Viele Einfamilienhäuser und ruhige Wohnlagen am Stadtrand."
+      ],
+      "Garath": [
+        "Stadtbezirk 10 — mit Garath und Hellerhof im Süden Düsseldorfs.",
+        "Großsiedlungen der Nachkriegsmoderne prägen das Bild.",
+        "Engagierte Nachbarschaften und viel Gemeinschaftsleben."
       ]
     },
     "specific": {

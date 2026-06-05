@@ -5,6 +5,25 @@ import re
 import os
 from html import unescape
 
+# Düsseldorf Stadtbezirke haben keine offiziellen Eigennamen (nur Nummern).
+# Für das Quiz nutzen wir die prägendsten Kern-Stadtteile je Bezirk.
+DUESSELDORF_BEZIRK_BY_NUM = {
+    "1": "Altstadt",
+    "2": "Flingern",
+    "3": "Unterbilk",
+    "4": "Oberkassel",
+    "5": "Stockum",
+    "6": "Unterrath",
+    "7": "Gerresheim",
+    "8": "Eller",
+    "9": "Benrath",
+    "10": "Garath",
+}
+
+
+def bezirk_name(sb_num):
+    return DUESSELDORF_BEZIRK_BY_NUM.get(str(sb_num).strip(), f"Stadtbezirk {sb_num}")
+
 
 def main():
     print("Starting data generation for Düsseldorf Stadtteile...")
@@ -44,7 +63,7 @@ def main():
         if not re.search(r"\d", pop):
             pop = "0"
         wiki_data[st_name] = {
-            "bezirk": f"Stadtbezirk {sb_num}",
+            "bezirk": bezirk_name(sb_num),
             "area_km2": area,
             "population": pop,
         }

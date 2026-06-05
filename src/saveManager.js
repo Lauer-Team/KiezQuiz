@@ -133,10 +133,37 @@
     }
   }
 
+  const DUESSELDORF_BEZIRK_RENAME = {
+    'Stadtbezirk 1': 'Altstadt',
+    'Stadtbezirk 2': 'Flingern',
+    'Stadtbezirk 3': 'Unterbilk',
+    'Stadtbezirk 4': 'Oberkassel',
+    'Stadtbezirk 5': 'Stockum',
+    'Stadtbezirk 6': 'Unterrath',
+    'Stadtbezirk 7': 'Gerresheim',
+    'Stadtbezirk 8': 'Eller',
+    'Stadtbezirk 9': 'Benrath',
+    'Stadtbezirk 10': 'Garath'
+  };
+
+  function migrateDuesseldorfBezirkNames(cityData) {
+    if (!cityData?.regionProgress) return;
+    Object.entries(DUESSELDORF_BEZIRK_RENAME).forEach(([oldName, newName]) => {
+      if (!Object.prototype.hasOwnProperty.call(cityData.regionProgress, oldName)) return;
+      const solved = cityData.regionProgress[oldName];
+      const existing = cityData.regionProgress[newName] || [];
+      cityData.regionProgress[newName] = [...new Set([...existing, ...solved])];
+      delete cityData.regionProgress[oldName];
+    });
+  }
+
   function ensureCityBranch(save, cityId) {
     if (!save.cities[cityId]) {
       const city = window.cityRegistry?.getCity(cityId);
       save.cities[cityId] = emptyCityState(city?.progression);
+    }
+    if (cityId === 'duesseldorf') {
+      migrateDuesseldorfBezirkNames(save.cities[cityId]);
     }
     return save.cities[cityId];
   }

@@ -125,6 +125,34 @@ function getCityRankName(level, cityId) {
   return t(`${key}.${level}.name`) || t(`${key}.fallback`);
 }
 
+const DUESSELDORF_BEZIRK_GUESS_ALIASES = {
+  '1': 'Altstadt',
+  '2': 'Flingern',
+  '3': 'Unterbilk',
+  '4': 'Oberkassel',
+  '5': 'Stockum',
+  '6': 'Unterrath',
+  '7': 'Gerresheim',
+  '8': 'Eller',
+  '9': 'Benrath',
+  '10': 'Garath',
+  stadtbezirk1: 'Altstadt',
+  stadtbezirk2: 'Flingern',
+  stadtbezirk3: 'Unterbilk',
+  stadtbezirk4: 'Oberkassel',
+  stadtbezirk5: 'Stockum',
+  stadtbezirk6: 'Unterrath',
+  stadtbezirk7: 'Gerresheim',
+  stadtbezirk8: 'Eller',
+  stadtbezirk9: 'Benrath',
+  stadtbezirk10: 'Garath'
+};
+
+function resolveBezirkGuessName(cityId, normalizedGuess) {
+  if (cityId !== 'duesseldorf') return null;
+  return DUESSELDORF_BEZIRK_GUESS_ALIASES[normalizedGuess] || null;
+}
+
 function getTriviaTemplates(bezirk, cityId) {
   const templates = tMap('trivia.templates', bezirk);
   if (Array.isArray(templates)) return templates;

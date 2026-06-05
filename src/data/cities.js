@@ -73,16 +73,16 @@
   ];
 
   const DUESSELDORF_BEZIRKE_PROGRESSION = [
-    { name: 'Stadtbezirk 1', xpNeeded: 0 },
-    { name: 'Stadtbezirk 2', xpNeeded: 50 },
-    { name: 'Stadtbezirk 3', xpNeeded: 150 },
-    { name: 'Stadtbezirk 4', xpNeeded: 300 },
-    { name: 'Stadtbezirk 5', xpNeeded: 450 },
-    { name: 'Stadtbezirk 6', xpNeeded: 600 },
-    { name: 'Stadtbezirk 7', xpNeeded: 750 },
-    { name: 'Stadtbezirk 8', xpNeeded: 950 },
-    { name: 'Stadtbezirk 9', xpNeeded: 1150 },
-    { name: 'Stadtbezirk 10', xpNeeded: 1350 }
+    { name: 'Altstadt', xpNeeded: 0 },
+    { name: 'Flingern', xpNeeded: 50 },
+    { name: 'Unterbilk', xpNeeded: 150 },
+    { name: 'Oberkassel', xpNeeded: 300 },
+    { name: 'Stockum', xpNeeded: 450 },
+    { name: 'Unterrath', xpNeeded: 600 },
+    { name: 'Gerresheim', xpNeeded: 750 },
+    { name: 'Eller', xpNeeded: 950 },
+    { name: 'Benrath', xpNeeded: 1150 },
+    { name: 'Garath', xpNeeded: 1350 }
   ];
 
   const FRANKFURT_BEZIRKE_PROGRESSION = [
