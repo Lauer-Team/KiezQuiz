@@ -257,6 +257,48 @@
       </button>`;
   }
 
+  function brandPvmCardsHtml() {
+    const cards = [
+      { cls: 'hub-pvm-card--purpose', kickerKey: 'hub.pvmPurposeKicker', titleKey: 'hub.pvmPurposeTitle', bodyKey: 'hub.pvmPurposeBody' },
+      { cls: 'hub-pvm-card--vision', kickerKey: 'hub.pvmVisionKicker', titleKey: 'hub.pvmVisionTitle', bodyKey: 'hub.pvmVisionBody' },
+      { cls: 'hub-pvm-card--mission', kickerKey: 'hub.pvmMissionKicker', titleKey: 'hub.pvmMissionTitle', bodyKey: 'hub.pvmMissionBody' }
+    ];
+    return `
+      <div class="hub-pvm-grid" aria-label="${escapeHtml(t('hub.pvmAria'))}">
+        ${cards.map((c) => `
+          <article class="hub-pvm-card kq-card ${c.cls}">
+            <div class="hub-pvm-kicker mono">${escapeHtml(t(c.kickerKey))}</div>
+            <h4 class="hub-pvm-title">${escapeHtml(t(c.titleKey))}</h4>
+            <p class="hub-pvm-body">${escapeHtml(t(c.bodyKey))}</p>
+          </article>`).join('')}
+      </div>`;
+  }
+
+  function brandTimelineHtml() {
+    const steps = [
+      { phaseKey: 'hub.storyPhase1', titleKey: 'hub.storyTitle1', bodyKey: 'hub.storyBody1', success: false },
+      { phaseKey: 'hub.storyPhase2', titleKey: 'hub.storyTitle2', bodyKey: 'hub.storyBody2', success: false },
+      { phaseKey: 'hub.storyPhase3', titleKey: 'hub.storyTitle3', bodyKey: 'hub.storyBody3', success: false },
+      { phaseKey: 'hub.storyPhase4', titleKey: 'hub.storyTitle4', bodyKey: 'hub.storyBody4', success: false },
+      { phaseKey: 'hub.storyPhase5', titleKey: 'hub.storyTitle5', bodyKey: 'hub.storyBody5', success: true }
+    ];
+    return `
+      <div class="hub-story-card kq-card">
+        <div class="hub-section-head hub-story-head">
+          <span class="hub-section-eyebrow mono">${escapeHtml(t('hub.storyKicker'))}</span>
+          <h4 class="hub-story-heading">${escapeHtml(t('hub.storyTitle'))}</h4>
+        </div>
+        <div class="hub-timeline" role="list">
+          ${steps.map((s) => `
+            <div class="hub-timeline-step${s.success ? ' is-success' : ''}" role="listitem">
+              <div class="hub-timeline-phase mono">${escapeHtml(t(s.phaseKey))}</div>
+              <strong class="hub-timeline-title">${escapeHtml(t(s.titleKey))}</strong>
+              <p class="hub-timeline-body">${escapeHtml(t(s.bodyKey))}</p>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
   function guideSectionHtml() {
     const steps = [
       'hub.guideStep1', 'hub.guideStep2', 'hub.guideStep3', 'hub.guideStep4',
@@ -274,7 +316,7 @@
             const parts = t(key).split(' — ');
             const title = parts[0] || t(key);
             const body = parts.slice(1).join(' — ') || '';
-            return `<div class="hub-guide-step kq-card"><span class="hub-step-num mono">${i + 1}</span><div><strong>${escapeHtml(title)}</strong>${body ? `<span>${escapeHtml(body)}</span>` : ''}</div></div>`;
+            return `<div class="hub-guide-step"><span class="hub-step-num mono">${i + 1}</span><div><strong>${escapeHtml(title)}</strong>${body ? `<span>${escapeHtml(body)}</span>` : ''}</div></div>`;
           }).join('')}</div>
         </div>
       </section>`;
@@ -299,20 +341,28 @@
   function aboutSectionHtml() {
     return `
       <section class="hub-landing-section hub-section-about hub-section-bleed" id="hub-ueber-uns">
-        <div class="hub-about-unified kq-card hub-section-bleed-inner hub-section-pill">
-          <div class="hub-about-grid">
-            <div class="hub-about-copy">
-              <div class="hub-section-head">
-                <span class="hub-section-eyebrow mono">${escapeHtml(t('hub.sectionAboutKicker'))}</span>
-                <h3>${escapeHtml(t('hub.navAbout'))}</h3>
+        <div class="hub-section-bleed-inner">
+          <div class="hub-brand-block hub-section-pill">
+          ${brandPvmCardsHtml()}
+          <div class="hub-brand-story-grid">
+            ${brandTimelineHtml()}
+            <div class="hub-about-unified kq-card">
+              <div class="hub-about-grid">
+                <div class="hub-about-copy">
+                  <div class="hub-section-head">
+                    <span class="hub-section-eyebrow mono">${escapeHtml(t('hub.sectionAboutKicker'))}</span>
+                    <h3>${escapeHtml(t('hub.navAbout'))}</h3>
+                  </div>
+                  <p class="hub-section-lead">${escapeHtml(t('aboutPage.whatBody'))}</p>
+                  <p class="hub-about-kalle-line"><strong>${escapeHtml(t('aboutPage.kalleIntro'))}</strong> ${escapeHtml(t('aboutPage.kalleBody1'))}</p>
+                  <a href="/about/" class="kq-btn ghost sm">${escapeHtml(t('footer.about'))} →</a>
+                </div>
+                <div class="hub-about-visual" aria-hidden="true">
+                  <img class="hub-about-kalle" src="assets/brand/mascot/kalle-about.png" width="704" height="384" alt="" loading="lazy" decoding="async">
+                </div>
               </div>
-              <p class="hub-section-lead">${escapeHtml(t('aboutPage.whatBody'))}</p>
-              <p class="hub-about-kalle-line"><strong>${escapeHtml(t('aboutPage.kalleIntro'))}</strong> ${escapeHtml(t('aboutPage.kalleBody1'))}</p>
-              <a href="/about/" class="kq-btn ghost sm">${escapeHtml(t('footer.about'))} →</a>
             </div>
-            <div class="hub-about-visual" aria-hidden="true">
-              <img class="hub-about-kalle" src="assets/brand/mascot/kalle-about.png" width="420" height="420" alt="">
-            </div>
+          </div>
           </div>
         </div>
       </section>`;

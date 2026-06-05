@@ -850,6 +850,18 @@
     .hub-modes-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    .hub-pvm-grid {
+      flex-direction: column;
+    }
+
+    .hub-brand-story-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hub-about-unified .hub-about-grid {
+      grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 767px) {
@@ -860,13 +872,11 @@
 
     .hub-about-unified .hub-about-visual {
       order: -1;
-      min-height: 240px;
       border-radius: var(--radius, 18px);
     }
 
     .hub-about-unified .hub-about-kalle {
-      min-height: 240px;
-      border-radius: var(--radius, 18px);
+      border-radius: 0;
     }
 }
 
