@@ -128,6 +128,7 @@
     "termsLink": "Nutzungsbedingungen",
     "cookieSettings": "Cookie-Einstellungen",
     "licensesLink": "Lizenzen",
+    "accessibilityLink": "Barrierefreiheit",
     "copyright": "© 2026 KiezQuiz. Alle Rechte vorbehalten.",
     "changelog": "Was ist neu?",
     "about": "Über das KiezQuiz",
@@ -354,7 +355,9 @@
     "registering": "Wird registriert…",
     "emailRegistered": "E-Mail bereits registriert.",
     "invalidCredentials": "Benutzername, E-Mail oder Passwort falsch.",
-    "passwordMin": "Passwort muss mindestens 6 Zeichen haben.",
+    "passwordMin": "Passwort muss mindestens 8 Zeichen haben.",
+    "ageLabel": "Ich bestätige, dass ich mindestens <strong>16 Jahre</strong> alt bin.",
+    "ageRequired": "Bitte bestätige, dass du mindestens 16 Jahre alt bist.",
     "invalidEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
     "genericError": "Ein Fehler ist aufgetreten.",
     "cloudNotConfigured": "Cloud-Speicherung ist nicht konfiguriert.",
@@ -369,7 +372,7 @@
     "forgotSending": "Wird gesendet…",
     "forgotSuccess": "Falls ein Account existiert, haben wir dir eine E-Mail geschickt. Bitte auch den Spam-Ordner prüfen.",
     "resetTitle": "Neues Passwort setzen",
-    "resetIntro": "Wähle ein neues Passwort für deinen Account (mindestens 6 Zeichen).",
+    "resetIntro": "Wähle ein neues Passwort für deinen Account (mindestens 8 Zeichen).",
     "resetSubmit": "Passwort speichern",
     "resetSaving": "Wird gespeichert…",
     "resetDoneTitle": "Passwort gespeichert",
@@ -1491,7 +1494,8 @@
         {
           "title": "2. Allgemeines",
           "paragraphs": [
-            "KiezQuiz ist ein kostenloses, werbefreies Karten-Quiz. Wir verarbeiten personenbezogene Daten nur, soweit dies für den Betrieb der Website und die Bereitstellung unserer Dienste technisch notwendig oder zur Erfüllung eines Vertrags erforderlich ist. Wir setzen kein Tracking, kein Google Analytics und keine Werbe-Cookies ein."
+            "KiezQuiz ist ein kostenloses, werbefreies Karten-Quiz. Wir verarbeiten personenbezogene Daten nur, soweit dies für den Betrieb der Website und die Bereitstellung unserer Dienste technisch notwendig oder zur Erfüllung eines Vertrags erforderlich ist. Wir setzen kein Tracking, kein Google Analytics und keine Werbe-Cookies ein.",
+            "Diese Datenschutzerklärung gilt für die Website kiezquiz.de und die native KiezQuiz-App (Capacitor), soweit dieselbe Web-Logik und dieselben Backend-Dienste genutzt werden."
           ]
         },
         {
@@ -1507,7 +1511,7 @@
             "Wenn Sie sich registrieren, verarbeiten wir folgende Daten:"
           ],
           "list": [
-            "E-Mail-Adresse (für Authentifizierung und Passwort-Reset)",
+            "E-Mail-Adresse (für Authentifizierung, E-Mail-Bestätigung bei Registrierung und Passwort-Reset)",
             "Benutzername (öffentlich sichtbar in Bestenlisten und Freundeslisten)",
             "Passwort (ausschließlich als kryptographischer Hash gespeichert, niemals im Klartext)",
             "Spielstand (JSON-Format)",
@@ -1522,7 +1526,28 @@
           ]
         },
         {
-          "title": "5. Hosting (GitHub Pages)",
+          "title": "5. Stadtbezirk-Wünsche & Gast-ID",
+          "paragraphs": [
+            "Wenn Sie eine neue Stadt wünschen oder für einen Wunsch abstimmen, speichern wir den Stadtnamen sowie entweder Ihre Nutzer-ID (mit Account) oder eine zufällige Gast-ID im localStorage Ihres Browsers. Die Gast-ID dient ausschließlich der Zuordnung von Wünschen und Abstimmungen ohne Account und der Missbrauchsprävention (Cooldown). Sie wird nicht für Tracking oder Profilbildung genutzt.",
+            "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an sinnvoller Feature-Planung und fairen Nutzungslimits). Speicherdauer: bis zur Bearbeitung des Wunsches bzw. Löschung durch den Betreiber; die Gast-ID im Browser bleibt bis zur manuellen Löschung im Browser."
+          ]
+        },
+        {
+          "title": "6. Spielaktivitäts-Protokoll (nur mit Account)",
+          "paragraphs": [
+            "Für eingeloggte Nutzer protokollieren wir anonymisierte Spielmetadaten (Stadt, Modus, Trefferquote, Dauer, Zeitstempel) in der Tabelle <code>player_game_log</code>, um Spielvolumen und Stabilität auszuwerten. Es werden keine Inhalte einzelner Antworten gespeichert.",
+            "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an Betrieb, Fehleranalyse und fairen Limits). Speicherdauer: bis zur Account-Löschung."
+          ]
+        },
+        {
+          "title": "7. Transaktionale E-Mails (Resend.com)",
+          "paragraphs": [
+            "Für registrierte Nutzer versenden wir gelegentlich transaktionale E-Mails (z. B. Hinweis auf wesentliche Änderungen der Nutzungsbedingungen, Passwort-Reset über Supabase Auth). Der Versand erfolgt über Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
+            "Verarbeitete Daten: E-Mail-Adresse, Betreff und Inhalt der Nachricht. Mit Resend besteht bzw. ist ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO abzuschließen. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. lit. f (Betriebssicherheit). Speicherdauer: beim E-Mail-Dienstleister gemäß deren Richtlinien; bei uns bis Account-Löschung."
+          ]
+        },
+        {
+          "title": "8. Hosting (GitHub Pages)",
           "paragraphs": [
             "Diese Website wird über GitHub Pages gehostet, einen Dienst der GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (Tochterunternehmen der Microsoft Corporation).",
             "Beim Aufruf unserer Website werden automatisch Zugriffsprotokolle (Server-Logs) erfasst. Diese können folgende Daten enthalten:"
@@ -1541,13 +1566,19 @@
           ]
         },
         {
-          "title": "6. Selbst gehostete Bibliotheken",
+          "title": "9. Selbst gehostete Bibliotheken",
           "paragraphs": [
             "Die Supabase-JavaScript-Bibliothek (<code>@supabase/supabase-js</code>) und alle Schriftarten werden ausschließlich von kiezquiz.de ausgeliefert (<code>/assets/js/</code>, <code>/assets/fonts/</code>). Es erfolgen keine Abrufe bei externen CDNs (z. B. jsDelivr oder Google Fonts)."
           ]
         },
         {
-          "title": "7. Ihre Rechte als betroffene Person",
+          "title": "10. Entwickler-Bot (Telegram, nur Betreiber)",
+          "paragraphs": [
+            "Zur internen Weiterentwicklung betreibt der Verantwortliche einen optionalen Telegram-Bot auf einem privaten Server. Dieser verarbeitet ausschließlich Nachrichten des Betreibers (Entwicklungsanweisungen) und keine personenbezogenen Daten von KiezQuiz-Nutzerinnen und -Nutzern. Endnutzer interagieren nicht mit Telegram. Es findet keine Übermittlung von Account-, Spielstands- oder Bestenlistendaten an Telegram statt."
+          ]
+        },
+        {
+          "title": "11. Ihre Rechte als betroffene Person",
           "paragraphs": [
             "Sie haben gegenüber uns folgende Rechte:"
           ],
@@ -1564,28 +1595,30 @@
           ]
         },
         {
-          "title": "8. Beschwerderecht",
+          "title": "12. Beschwerderecht",
           "paragraphs": [
             "Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren. Zuständig für Hamburg ist:",
             "Der Hamburgische Beauftragte für Datenschutz und Informationsfreiheit (HmbBfDI)<br>Ludwig-Erhard-Str. 22, 20459 Hamburg<br>E-Mail: <a href=\"mailto:mailbox@datenschutz.hamburg.de\">mailbox@datenschutz.hamburg.de</a><br>Web: <a href=\"https://www.datenschutz.hamburg.de\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.datenschutz.hamburg.de</a>"
           ]
         },
         {
-          "title": "9. Mindestalter",
+          "title": "13. Mindestalter",
           "paragraphs": [
             "KiezQuiz richtet sich nicht an Kinder unter 16 Jahren. Für die Erstellung eines Nutzeraccounts ist ein Mindestalter von 16 Jahren erforderlich (Art. 8 DSGVO i. V. m. § 1 Abs. 1 Nr. 1 DSGVO-AnpUG-EU). Wir erheben wissentlich keine personenbezogenen Daten von Personen unter 16 Jahren. Wenn Sie Kenntnis davon erhalten, dass uns ein Kind unter 16 Jahren Daten übermittelt hat, wenden Sie sich bitte an <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>, damit wir diese Daten unverzüglich löschen können."
           ]
         },
         {
-          "title": "10. Speicherdauer",
+          "title": "14. Speicherdauer",
           "list": [
             "Server-Logs (GitHub Pages): maximal 30 Tage",
-            "Account-Daten: bis zur Account-Löschung durch den Nutzer",
+            "Account-Daten und Spielaktivitäts-Protokoll: bis zur Account-Löschung durch den Nutzer",
+            "Stadtbezirk-Wünsche: bis zur Bearbeitung bzw. manuellen Löschung",
+            "Gast-ID (localStorage): bis zur manuellen Löschung im Browser",
             "localStorage (Spielstand ohne Account): bis zur manuellen Löschung im Browser durch den Nutzer"
           ]
         },
         {
-          "title": "11. Einwilligungen über PIMS",
+          "title": "15. Einwilligungen über PIMS",
           "paragraphs": [
             "Gemäß § 26 TDDDG i. V. m. der Einwilligungsverordnung (EinwV) haben Sie die Möglichkeit, Einwilligungen in die Datenverarbeitung über anerkannte Dienste zur datenschutzfreundlichen Voreinstellung (Personal Information Management Systems, PIMS) zu erteilen oder zu widerrufen. Da wir aktuell keine einwilligungspflichtigen Dienste einsetzen, ist kein PIMS-Einsatz derzeit erforderlich. Sollten wir zukünftig einwilligungspflichtige Dienste integrieren, werden wir PIMS-Signale berücksichtigen."
           ]
@@ -1740,6 +1773,45 @@
           "title": "Kontakt",
           "paragraphs": [
             "Fragen zu Lizenzen oder Nutzungsrechten: <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>"
+          ]
+        }
+      ]
+    },
+    "accessibility": {
+      "title": "Barrierefreiheit",
+      "metaDescription": "Erklärung zur Barrierefreiheit von KiezQuiz gemäß BFSG: Stand, bekannte Einschränkungen, Feedback-Kontakt.",
+      "sections": [
+        {
+          "title": "Stand der Erklärung",
+          "paragraphs": [
+            "Diese Erklärung zur Barrierefreiheit gilt für die Website <a href=\"https://kiezquiz.de/\">kiezquiz.de</a> (Stand: 10. Juni 2026). Sie wurde auf Grundlage einer Selbstbewertung erstellt."
+          ]
+        },
+        {
+          "title": "Konformitätsstatus",
+          "paragraphs": [
+            "KiezQuiz ist ein interaktives Karten-Quiz mit SVG-Karten, Touch- und Tastatursteuerung. Die Website erfüllt derzeit <strong>nicht vollständig</strong> die Anforderungen der WCAG 2.1 Stufe AA. Wir arbeiten schrittweise an Verbesserungen."
+          ]
+        },
+        {
+          "title": "Bekannte Einschränkungen",
+          "list": [
+            "Die interaktive Karte ist primär visuell und per Maus/Touch bedient; nicht alle Kartenfunktionen sind vollständig per Tastatur und Screenreader zugänglich.",
+            "Einige Modals und dynamische Spielzustände haben noch unvollständige ARIA-Beschriftungen.",
+            "Kontrast und Fokus-Indikatoren werden laufend geprüft, sind aber noch nicht durchgängig auf AA-Niveau."
+          ]
+        },
+        {
+          "title": "Feedback & Kontakt",
+          "paragraphs": [
+            "Wenn Sie Barrieren bei der Nutzung von KiezQuiz feststellen oder uns Hinweise geben möchten, schreiben Sie an: <a href=\"mailto:info@kiezquiz.de?subject=Barrierefreiheit%20KiezQuiz\">info@kiezquiz.de</a>. Wir bemühen uns um eine Antwort innerhalb von vier Wochen.",
+            "Zuständige Durchsetzungsstelle in Hamburg: <a href=\"https://www.lbs.hamburg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">Landesbetrieb Verkehr (LBV)</a> — Schlichtungsstelle nach dem BFSG."
+          ]
+        },
+        {
+          "title": "Technische Grundlagen",
+          "paragraphs": [
+            "Die Website nutzt semantisches HTML, responsive Layouts und teilweise ARIA-Attribute. Rechtstexte sind auch ohne JavaScript abrufbar (statischer Fallback)."
           ]
         }
       ]

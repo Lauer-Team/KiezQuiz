@@ -45,7 +45,7 @@
 | **Daten** | E-Mail, Benutzername, Passwort-Hash, Spielstand (JSON), Freundesliste, Stadt-Wünsche |
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. b DSGVO |
 | **Empfänger** | Supabase Inc. — EU West Europe (Irland, eu-west-1) |
-| **AVV/DPA** | Supabase DPA akzeptiert |
+| **AVV/DPA** | Supabase DPA akzeptiert (10.06.2026) |
 | **Speicherdauer** | Bis Account-Löschung durch Nutzer |
 
 ---
@@ -105,8 +105,35 @@
 | **Zweck** | Information über wesentliche NB-Änderungen |
 | **Daten** | E-Mail-Adresse registrierter Nutzer |
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. b DSGVO |
-| **Empfänger** | Supabase Auth (Versand), Edge Function notify-terms-change |
+| **Empfänger** | Resend.com (Versand), Supabase Edge Function |
+| **AVV/DPA** | Resend DPA abgeschlossen (10.06.2026) |
 | **Speicherdauer** | Bis Account-Löschung |
+
+---
+
+## 9. Spielaktivitäts-Protokoll
+
+| Feld | Inhalt |
+|------|--------|
+| **Zweck** | Auswertung Spielvolumen, Stabilität (Admin) |
+| **Betroffene** | Registrierte Nutzer |
+| **Daten** | user_id, Stadt, Modus, Treffer, Dauer, Zeitstempel |
+| **Rechtsgrundlage** | Art. 6 Abs. 1 lit. f DSGVO |
+| **Empfänger** | Supabase EU |
+| **Speicherdauer** | Bis Account-Löschung |
+
+---
+
+## 10. Telegram-Entwickler-Bot (intern)
+
+| Feld | Inhalt |
+|------|--------|
+| **Zweck** | Interne Code-Weiterentwicklung durch Betreiber |
+| **Betroffene** | Nur Betreiber (keine Endnutzer) |
+| **Daten** | Telegram-Nachrichten des Betreibers |
+| **Rechtsgrundlage** | Art. 6 Abs. 1 lit. f DSGVO (Betrieb) |
+| **Empfänger** | Telegram FZ-LLC — keine KiezQuiz-Nutzerdaten |
+| **AVV** | Nicht erforderlich solange keine Endnutzer-Daten übermittelt werden |
 
 ---
 

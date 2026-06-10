@@ -411,3 +411,12 @@ html[data-theme="light"] .kq-cookie-banner__btn--primary:hover {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+.legal-static-notice {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px dashed var(--border, #363B4F);
+  border-radius: 0.5rem;
+}

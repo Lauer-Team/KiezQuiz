@@ -210,7 +210,7 @@ class AuthManager {
     if (!this.supabase) {
       return { error: t('auth.cloudNotConfigured') };
     }
-    if ((newPassword || '').length < 6) {
+    if ((newPassword || '').length < 8) {
       return { error: t('auth.passwordMin') };
     }
     const { error } = await this.supabase.auth.updateUser({ password: newPassword });
@@ -246,7 +246,7 @@ class AuthManager {
     if (!trimmedName) {
       return { error: t('auth.usernameRequired') };
     }
-    if ((password || '').length < 6) {
+    if ((password || '').length < 8) {
       return { error: t('auth.passwordMin') };
     }
 
@@ -403,7 +403,7 @@ class AuthManager {
           </label>
           <label class="auth-field">
             <span>${t('auth.password')}</span>
-            <input type="password" id="auth-password" autocomplete="current-password" required minlength="6">
+            <input type="password" id="auth-password" autocomplete="current-password" required minlength="8">
           </label>
           <p class="auth-forgot-wrap">
             <button type="button" class="auth-link-btn" id="auth-forgot-password">${t('auth.forgotPassword')}</button>
@@ -422,7 +422,11 @@ class AuthManager {
           </label>
           <label class="auth-field">
             <span>${t('auth.password')}</span>
-            <input type="password" id="auth-password-reg" autocomplete="new-password" required minlength="6">
+            <input type="password" id="auth-password-reg" autocomplete="new-password" required minlength="8">
+          </label>
+          <label class="auth-terms">
+            <input type="checkbox" id="auth-age-confirm" required>
+            <span>${t('auth.ageLabel')}</span>
           </label>
           <label class="auth-terms">
             <input type="checkbox" id="auth-terms-accept" required>
@@ -488,7 +492,14 @@ class AuthManager {
       const email = document.getElementById('auth-email-reg').value;
       const password = document.getElementById('auth-password-reg').value;
       const termsAccepted = document.getElementById('auth-terms-accept')?.checked;
+      const ageConfirmed = document.getElementById('auth-age-confirm')?.checked;
       errEl.hidden = true;
+
+      if (!ageConfirmed) {
+        errEl.textContent = t('auth.ageRequired');
+        errEl.hidden = false;
+        return;
+      }
 
       if (!termsAccepted) {
         errEl.textContent = t('auth.termsRequired');
@@ -585,11 +596,11 @@ class AuthManager {
         <form class="auth-form" id="auth-form-reset">
           <label class="auth-field">
             <span>${t('auth.newPassword')}</span>
-            <input type="password" id="auth-new-password" autocomplete="new-password" required minlength="6">
+            <input type="password" id="auth-new-password" autocomplete="new-password" required minlength="8">
           </label>
           <label class="auth-field">
             <span>${t('auth.confirmPassword')}</span>
-            <input type="password" id="auth-confirm-password" autocomplete="new-password" required minlength="6">
+            <input type="password" id="auth-confirm-password" autocomplete="new-password" required minlength="8">
           </label>
           <p class="auth-error" id="auth-reset-error" hidden></p>
           <button type="submit" class="primary-btn auth-submit">${t('auth.resetSubmit')}</button>

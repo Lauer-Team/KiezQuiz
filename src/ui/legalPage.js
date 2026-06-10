@@ -141,6 +141,7 @@
       '<a href="/impressum/">' + escapeHtml(t('footer.imprintLink')) + '</a>' +
       '<a href="/nutzungsbedingungen/">' + escapeHtml(t('footer.termsLink')) + '</a>' +
       '<a href="/lizenzen/">' + escapeHtml(t('footer.licensesLink')) + '</a>' +
+      '<a href="/barrierefreiheit/">' + escapeHtml(t('footer.accessibilityLink')) + '</a>' +
       '<button type="button" class="footer-legal-btn" data-cookie-settings>' + escapeHtml(t('footer.cookieSettings')) + '</button>' +
       '<a href="/about/">' + escapeHtml(t('footer.about')) + '</a>' +
       '</nav>';

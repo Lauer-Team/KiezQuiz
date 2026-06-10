@@ -128,6 +128,7 @@
     "termsLink": "Terms of use",
     "cookieSettings": "Cookie settings",
     "licensesLink": "Licences",
+    "accessibilityLink": "Accessibility",
     "copyright": "© 2026 KiezQuiz. All rights reserved.",
     "changelog": "What's new?",
     "about": "About KiezQuiz",
@@ -354,7 +355,9 @@
     "registering": "Registering…",
     "emailRegistered": "Email already registered.",
     "invalidCredentials": "Username, email, or password incorrect.",
-    "passwordMin": "Password must be at least 6 characters.",
+    "passwordMin": "Password must be at least 8 characters.",
+    "ageLabel": "I confirm that I am at least <strong>16 years</strong> old.",
+    "ageRequired": "Please confirm that you are at least 16 years old.",
     "invalidEmail": "Please enter a valid email address.",
     "genericError": "An error occurred.",
     "cloudNotConfigured": "Cloud save is not configured.",
@@ -369,7 +372,7 @@
     "forgotSending": "Sending…",
     "forgotSuccess": "If an account exists, we sent you an email. Please check your spam folder too.",
     "resetTitle": "Set new password",
-    "resetIntro": "Choose a new password for your account (at least 6 characters).",
+    "resetIntro": "Choose a new password for your account (at least 8 characters).",
     "resetSubmit": "Save password",
     "resetSaving": "Saving…",
     "resetDoneTitle": "Password saved",
@@ -1339,7 +1342,8 @@
         {
           "title": "2. General",
           "paragraphs": [
-            "KiezQuiz is a free, ad-free map quiz. We process personal data only to the extent technically necessary to operate the website and provide our services, or to fulfil a contract. We do not use tracking, Google Analytics, or advertising cookies."
+            "KiezQuiz is a free, ad-free map quiz. We process personal data only to the extent technically necessary to operate the website and provide our services, or to fulfil a contract. We do not use tracking, Google Analytics, or advertising cookies.",
+            "This privacy policy applies to kiezquiz.de and the native KiezQuiz app (Capacitor) where the same web logic and backend services are used."
           ]
         },
         {
@@ -1355,7 +1359,7 @@
             "If you register, we process the following data:"
           ],
           "list": [
-            "Email address (for authentication and password reset)",
+            "Email address (for authentication, email confirmation on registration, and password reset)",
             "Username (publicly visible in leaderboards and friend lists)",
             "Password (stored as a cryptographic hash only, never in plain text)",
             "Game progress (JSON format)",
@@ -1370,7 +1374,28 @@
           ]
         },
         {
-          "title": "5. Hosting (GitHub Pages)",
+          "title": "5. City requests & guest ID",
+          "paragraphs": [
+            "When you request a new city or vote on a request, we store the city name and either your user ID (with an account) or a random guest ID in your browser's localStorage. The guest ID is used solely to associate requests and votes without an account and to prevent abuse (cooldown). It is not used for tracking or profiling.",
+            "Legal basis: Art. 6 para. 1 lit. f GDPR (legitimate interest in sensible feature planning and fair usage limits). Retention: until the request is processed or deleted by the operator; the guest ID in the browser remains until manually cleared."
+          ]
+        },
+        {
+          "title": "6. Game activity log (account holders only)",
+          "paragraphs": [
+            "For logged-in users we record anonymised game metadata (city, mode, score ratio, duration, timestamp) in the <code>player_game_log</code> table to evaluate play volume and stability. Individual answer content is not stored.",
+            "Legal basis: Art. 6 para. 1 lit. f GDPR (legitimate interest in operation, error analysis and fair limits). Retention: until account deletion."
+          ]
+        },
+        {
+          "title": "7. Transactional email (Resend.com)",
+          "paragraphs": [
+            "For registered users we occasionally send transactional emails (e.g. notice of material changes to the terms of use, password reset via Supabase Auth). Delivery is via Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
+            "Data processed: email address, subject and body of the message. A data processing agreement pursuant to Art. 28 GDPR must be in place with Resend. Legal basis: Art. 6 para. 1 lit. b GDPR (contract performance) or lit. f (operational security). Retention: at the email provider per their policies; with us until account deletion."
+          ]
+        },
+        {
+          "title": "8. Hosting (GitHub Pages)",
           "paragraphs": [
             "This website is hosted via GitHub Pages, a service of GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (a subsidiary of Microsoft Corporation).",
             "When you visit our website, access logs (server logs) are automatically recorded, which may include:"
@@ -1389,13 +1414,19 @@
           ]
         },
         {
-          "title": "6. Self-hosted libraries",
+          "title": "9. Self-hosted libraries",
           "paragraphs": [
             "The Supabase JavaScript library (<code>@supabase/supabase-js</code>) and all fonts are served exclusively from kiezquiz.de (<code>/assets/js/</code>, <code>/assets/fonts/</code>). No requests are made to external CDNs (e.g. jsDelivr or Google Fonts)."
           ]
         },
         {
-          "title": "7. Your Rights as a Data Subject",
+          "title": "10. Developer bot (Telegram, operator only)",
+          "paragraphs": [
+            "For internal development the controller operates an optional Telegram bot on a private server. It processes messages from the operator only (development instructions) and no personal data of KiezQuiz users. End users do not interact with Telegram. No account, save or leaderboard data is transmitted to Telegram."
+          ]
+        },
+        {
+          "title": "11. Your Rights as a Data Subject",
           "paragraphs": [
             "You have the following rights against us:"
           ],
@@ -1412,28 +1443,30 @@
           ]
         },
         {
-          "title": "8. Right to Lodge a Complaint",
+          "title": "12. Right to Lodge a Complaint",
           "paragraphs": [
             "You have the right to lodge a complaint with a data protection supervisory authority. The competent authority for Hamburg is:",
             "Der Hamburgische Beauftragte für Datenschutz und Informationsfreiheit (HmbBfDI)<br>Ludwig-Erhard-Str. 22, 20459 Hamburg<br>Email: <a href=\"mailto:mailbox@datenschutz.hamburg.de\">mailbox@datenschutz.hamburg.de</a><br>Web: <a href=\"https://www.datenschutz.hamburg.de\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.datenschutz.hamburg.de</a>"
           ]
         },
         {
-          "title": "9. Minimum Age",
+          "title": "13. Minimum Age",
           "paragraphs": [
             "KiezQuiz is not directed at children under the age of 16. Creating a user account requires a minimum age of 16 (Art. 8 GDPR in conjunction with § 1 para. 1 no. 1 DSGVO-AnpUG-EU). We do not knowingly collect personal data from persons under the age of 16. If you become aware that a child under 16 has submitted data to us, please contact info@kiezquiz.de so that we can delete the data without delay."
           ]
         },
         {
-          "title": "10. Retention Periods",
+          "title": "14. Retention Periods",
           "list": [
             "Server logs (GitHub Pages): maximum 30 days",
-            "Account data: until account deletion by the user",
+            "Account data and game activity log: until account deletion by the user",
+            "City requests: until processed or manually deleted",
+            "Guest ID (localStorage): until manually cleared in the browser",
             "localStorage (game progress without account): until manually cleared in the browser by the user"
           ]
         },
         {
-          "title": "11. Consent via PIMS",
+          "title": "15. Consent via PIMS",
           "paragraphs": [
             "Pursuant to § 26 TDDDG in conjunction with the Consent Ordinance (EinwV), you may grant or withdraw consent to data processing via recognised personal information management systems (PIMS). As we currently do not use any consent-requiring services, no PIMS interaction is required at this time. Should we integrate consent-requiring services in the future, we will support PIMS signals accordingly."
           ]
@@ -1588,6 +1621,45 @@
           "title": "Contact",
           "paragraphs": [
             "Licence or usage questions: <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>"
+          ]
+        }
+      ]
+    },
+    "accessibility": {
+      "title": "Accessibility",
+      "metaDescription": "Accessibility statement for KiezQuiz under the BFSG: status, known limitations and feedback contact.",
+      "sections": [
+        {
+          "title": "Statement date",
+          "paragraphs": [
+            "This accessibility statement applies to <a href=\"https://kiezquiz.de/\">kiezquiz.de</a> (as of 10 June 2026). It was prepared on the basis of a self-assessment."
+          ]
+        },
+        {
+          "title": "Conformance status",
+          "paragraphs": [
+            "KiezQuiz is an interactive map quiz with SVG maps, touch and keyboard controls. The website does <strong>not yet fully meet</strong> WCAG 2.1 Level AA. We are working on improvements step by step."
+          ]
+        },
+        {
+          "title": "Known limitations",
+          "list": [
+            "The interactive map is primarily visual and mouse/touch driven; not all map features are fully accessible via keyboard and screen reader.",
+            "Some modals and dynamic game states still have incomplete ARIA labelling.",
+            "Contrast and focus indicators are being reviewed but are not yet consistently at AA level."
+          ]
+        },
+        {
+          "title": "Feedback & contact",
+          "paragraphs": [
+            "If you encounter barriers using KiezQuiz or wish to send feedback, email: <a href=\"mailto:info@kiezquiz.de?subject=Accessibility%20KiezQuiz\">info@kiezquiz.de</a>. We aim to respond within four weeks.",
+            "Enforcement body in Hamburg: <a href=\"https://www.lbs.hamburg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">Landesbetrieb Verkehr (LBV)</a> — mediation under the BFSG."
+          ]
+        },
+        {
+          "title": "Technical basis",
+          "paragraphs": [
+            "The site uses semantic HTML, responsive layouts and partial ARIA attributes. Legal texts are also available without JavaScript (static fallback)."
           ]
         }
       ]

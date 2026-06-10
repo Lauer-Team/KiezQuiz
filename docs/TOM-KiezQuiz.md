@@ -19,7 +19,8 @@
 | Kein Google Fonts | Schriften lokal unter `/assets/fonts/` | ✅ |
 | Admin-Zugänge | 2FA auf GitHub + Supabase Dashboard | ✅ |
 | API-Schlüssel | Service-Role-Key nur lokal/CI-Secrets, nie im Repo | ✅ |
-| Leaked-Password-Check | Supabase Auth → HaveIBeenPwned (optional aktivieren) | ⚠️ Empfohlen |
+| Leaked-Password-Check | Supabase Auth → HaveIBeenPwned (nur Pro Tier) | ⛔ bewusst nicht — Free-Tier-Projekt; Mindestlänge 8 Zeichen stattdessen |
+| E-Mail-Bestätigung | Supabase Auth: Confirm email bei Registrierung aktiv | ✅ (Produktion, seit 10.06.2026) |
 
 ---
 
@@ -63,19 +64,23 @@
 |----------|-----------|--------|
 | Verantwortlicher benannt | Jeremiah J. Lauer, info@kiezquiz.de | ✅ |
 | VVT geführt | `docs/VVT-KiezQuiz.md` | ✅ |
-| AVV Supabase | DPA akzeptiert | ✅ |
-| AVV GitHub/Microsoft | Standard-DPA heruntergeladen | ✅ |
+| AVV Supabase | DPA akzeptiert (10.06.2026) | ✅ |
+| AVV GitHub/Microsoft | DPA archiviert (10.06.2026) | ✅ |
+| AVV Resend | DPA abgeschlossen (10.06.2026) | ✅ |
 | Löschkonzept | Account-Löschung in App; Gast-Daten nur localStorage | ✅ |
-| Mindestalter | 16 Jahre bei Registrierung (DSE + NB) | ✅ |
+| Mindestalter | 16 Jahre — Checkbox bei Registrierung + DSE/NB | ✅ |
+| Barrierefreiheitserklärung | `/barrierefreiheit/` | ✅ |
+| Rechts-Fallback ohne JS | `scripts/generate_legal_static.py` im Deploy | ✅ |
 
 ---
 
 ## 6. Empfohlene nächste Schritte (optional)
 
-1. **Leaked Password Protection** in Supabase Auth aktivieren (Dashboard → Authentication → Security)
-2. **Backup prüfen:** monatlich GitHub Action „Supabase monthly backup“ + E-Mail-Erinnerung am 2. — Artifact archivieren — siehe `docs/BACKUP-SUPABASE.md`
-3. **Account-Löschung testen:** Testaccount anlegen, spielen, löschen, in Table Editor prüfen ob alle Zeilen weg sind
-4. **HSTS-Header:** Bei Migration zu Cloudflare Pages oder Netlify (siehe `docs/SEO-SETUP.md`)
+1. **Backup prüfen:** monatlich GitHub Action „Supabase monthly backup“ + E-Mail-Erinnerung am 2. — Artifact archivieren — siehe `docs/BACKUP-SUPABASE.md`
+2. **Account-Löschung testen:** Testaccount anlegen, spielen, löschen, in Table Editor prüfen ob alle Zeilen weg sind
+3. **HSTS-Header:** Bei Migration zu Cloudflare Pages oder Netlify (siehe `docs/SEO-SETUP.md`)
+
+> **Leaked Password Protection** (HaveIBeenPwned) ist bei Supabase nur im Pro Tier verfügbar. Für das kostenlose KiezQuiz bewusst nicht genutzt; Ausgleich: Passwort-Mindestlänge 8 Zeichen in der App.
 
 ---
 

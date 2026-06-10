@@ -439,7 +439,7 @@ Vollständiger Ablauf: **`docs/TERMS-CHANGE-PROCESS.md`**
 | Problem | Lösung |
 |---------|--------|
 | „Cloud-Speicherung ist nicht konfiguriert“ | Keys in `supabaseConfig.js` prüfen — keine Platzhalter mehr |
-| Registrierung schlägt fehl | E-Mail-Bestätigung in Supabase deaktiviert? |
+| Registrierung schlägt fehl | E-Mail-Bestätigung ist in Produktion **aktiv** — Nutzer muss Bestätigungslink öffnen. Für lokale Tests ggf. temporär deaktivieren (Dashboard → Authentication → Providers → Email) |
 | Spielstand sync nicht | Browser-Konsole (F12) → Netzwerk/Console auf Fehler prüfen |
 | RLS-Fehler | SQL-Skript aus Schritt 2 erneut ausführen |
 | NB-Versand HTTP 401 | `NOTIFY_TERMS_SECRET` in Supabase = `notifySecret` in lokaler Config |

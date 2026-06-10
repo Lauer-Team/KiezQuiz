@@ -4,21 +4,21 @@
  */
 (function () {
   var STORAGE_KEY = 'kiezquiz_legal_notice_v1';
-  var BANNER_VERSION = '3';
+  var BANNER_VERSION = '4';
   var TERMS_DISMISS_PREFIX = 'kiezquiz_terms_notice_';
   var lastFocusedBeforeBanner = null;
 
   var COPY = {
     de: {
       aria: 'Datenschutzhinweis',
-      body: 'Diese Website verwendet localStorage, um Ihren Spielstand lokal in Ihrem Browser zu speichern – ohne Account, ohne Server. Wenn Sie sich registrieren, setzt Supabase technisch notwendige Session-Cookies für die Authentifizierung. Wir nutzen kein Tracking und keine Werbe-Cookies. Weitere Informationen in unserer ',
+      body: 'Diese Website verwendet localStorage für technisch notwendige Zwecke: Spielstand, Sprache, Theme und — bei Stadt-Wünschen ohne Account — eine zufällige Gast-ID zur Zuordnung von Wünschen. Mit Registrierung setzt Supabase Session-Cookies für die Authentifizierung. Kein Tracking, keine Werbe-Cookies. Details in der ',
       privacy: 'Datenschutzerklärung',
       imprint: 'Impressum',
       accept: 'Verstanden'
     },
     en: {
       aria: 'Privacy notice',
-      body: 'This website uses localStorage to save your game progress locally in your browser – no account, no server. If you register, Supabase sets technically necessary session cookies for authentication. We use no tracking and no advertising cookies. See our ',
+      body: 'This website uses localStorage for technically necessary purposes: game progress, language, theme and — for city requests without an account — a random guest ID to associate requests. If you register, Supabase sets session cookies for authentication. No tracking or advertising cookies. See our ',
       privacy: 'Privacy Policy',
       imprint: 'Imprint',
       accept: 'Got it'

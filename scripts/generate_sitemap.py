@@ -12,6 +12,7 @@ URLS = [
     "/datenschutz/",
     "/nutzungsbedingungen/",
     "/lizenzen/",
+    "/barrierefreiheit/",
     "/hamburg/",
     "/berlin/",
     "/frankfurt/",
