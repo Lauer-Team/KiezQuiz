@@ -81,6 +81,29 @@ CITIES = {
             ),
         ],
     },
+    "muenchen": {
+        "slug": "muenchen",
+        "name": "München",
+        "meta_description": (
+            "Lerne alle 108 Münchner Bezirksteile und 25 Stadtbezirke spielerisch auf der Karte. "
+            "Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline."
+        ),
+        "h1": "München Bezirksteile und Stadtbezirke spielerisch lernen",
+        "faq": [
+            (
+                "Wie viele Stadtbezirke hat München?",
+                "München ist in 25 Stadtbezirke und 108 Bezirksteile unterteilt. KiezQuiz deckt alle offiziellen Verwaltungseinheiten ab.",
+            ),
+            (
+                "Ist KiezQuiz kostenlos?",
+                "Ja — KiezQuiz ist komplett kostenlos, ohne Werbung und ohne Pflicht-Registrierung.",
+            ),
+            (
+                "Funktioniert das Quiz auf dem Handy?",
+                "Ja. Die Karte unterstützt Touch-Gesten zum Zoomen und Verschieben und kann als App installiert werden.",
+            ),
+        ],
+    },
     "duesseldorf": {
         "slug": "duesseldorf",
         "name": "Düsseldorf",

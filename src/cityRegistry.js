@@ -7,6 +7,7 @@
 
   const LEVEL_TO_SEGMENT = {
     stadtteile: 'STADTTEILE',
+    bezirksteile: 'STADTTEILE',
     bezirke: 'BEZIRKE',
     ortsteile: 'STADTTEILE',
     stadtbezirke: 'BEZIRKE',

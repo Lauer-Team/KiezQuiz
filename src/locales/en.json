@@ -409,6 +409,21 @@
     "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "Frankfurt rank"
   },
+  "cityRanksMuenchen": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Oktoberfest Rookie" },
+    "3": { "name": "Munich Local" },
+    "4": { "name": "Isar Captain" },
+    "5": { "name": "Munich Expert" },
+    "6": { "name": "True Münchner" },
+    "7": { "name": "District Boss" },
+    "8": { "name": "King of Munich" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Munich rank reached — all districts & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Munich rank"
+  },
   "cityRanksDuesseldorf": {
     "1": { "name": "Tourist" },
     "2": { "name": "Rhine Rookie" },
@@ -565,6 +580,26 @@
       "unlockDesc": "Name all 16 districts in the challenge!"
     }
   },
+  "trophiesMuenchen": {
+    "paradise_explorer": {
+      "name": "Schwabing Explorer!",
+      "unlockTitle": "Schwabing Explorer! 🍺",
+      "desc": "Correctly tap \"Schwabing\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Schwabing for the first time."
+    },
+    "meister_alle_stadtteile": {
+      "name": "King of Munich",
+      "unlockTitle": "King of Munich 👑",
+      "desc": "Name all district sections in \"Name all places\".",
+      "unlockDesc": "Find every district section in the Sporcle challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "District Boss",
+      "unlockTitle": "District Boss 🏛️",
+      "desc": "Name all 25 districts in the challenge.",
+      "unlockDesc": "Name all 25 districts in the challenge!"
+    }
+  },
   "trophiesDuesseldorf": {
     "paradise_explorer": {
       "name": "Old Town Explorer!",
@@ -634,6 +669,7 @@
     "defaultBezirk": "A significant borough of Hamburg.",
     "defaultBezirkBerlin": "A significant borough of Berlin.",
     "defaultBezirkFrankfurt": "A significant district of Frankfurt.",
+    "defaultBezirkMuenchen": "A significant district of Munich.",
     "defaultBezirkDuesseldorf": "A significant district of Düsseldorf.",
     "defaultCountryEurope": "A sovereign state in Europe.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
@@ -742,6 +778,7 @@
       "Reinickendorf": "Tegeler See for swimming — with a view of the airship hangar.",
       "Altstadt": "Historic centre with Römer, imperial cathedral and the famous Römerberg square.",
       "Westend-Süd": "Banking district and skyline — Frankfurt's landmark high-rise cluster.",
+      "Schwabing": "Artists' and students' quarter — Münchner Freiheit, pubs, and the English Garden.",
       "Sachsenhausen": "Apple wine pubs, museum embankment and the lively Dörfchen quarter.",
       "Höchst": "Old town with Justinus Church — part of the UNESCO Limes World Heritage.",
       "Flughafen": "Frankfurt Airport — one of Europe's largest airports and a global hub.",
@@ -770,12 +807,14 @@
     "emptyBezirk": "Click a borough on the map to see fascinating metadata and Hanseatic facts!",
     "emptyBezirkBerlin": "Click a borough on the map to see fascinating metadata and Berlin facts!",
     "emptyBezirkFrankfurt": "Click a district on the map to see fascinating metadata and Frankfurt facts!",
+    "emptyBezirkMuenchen": "Click a district on the map to see fascinating metadata and Munich facts!",
     "emptyBezirkDuesseldorf": "Click a district on the map to see fascinating metadata and Düsseldorf facts!",
     "emptyCountryEurope": "Click a country on the map of Europe to discover population, area and capital!",
     "emptyCapitalEurope": "Click a country to see its capital and facts!",
     "capitalsEurope": "Capital",
     "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
     "emptyStadtteilFrankfurt": "Click a neighbourhood on the map to see fascinating metadata and Frankfurt facts!",
+    "emptyBezirksteilMuenchen": "Click a district section on the map to see fascinating metadata and Munich facts!",
     "emptyStadtteilDuesseldorf": "Click a neighbourhood on the map to see fascinating metadata and Düsseldorf facts!",
     "emptyOrtsteil": "Click a neighbourhood on the map to see fascinating metadata and Berlin facts!",
     "residents": "Population",
@@ -791,6 +830,7 @@
     "subdistricts": "Districts ({count})",
     "subdistrictsBerlin": "Neighbourhoods ({count})",
     "subdistrictsFrankfurt": "Neighbourhoods ({count})",
+    "subdistrictsMuenchen": "District sections ({count})",
     "subdistrictsDuesseldorf": "Neighbourhoods ({count})"
   },
   "game": {
@@ -1093,6 +1133,18 @@
       "singular": {
         "stadtbezirk": "District",
         "stadtteil": "Neighbourhood"
+      }
+    },
+    "muenchen": {
+      "greeting": "Servus!",
+      "blurb": "25 districts · 108 district sections",
+      "levels": {
+        "stadtbezirke": "Districts",
+        "bezirksteile": "District sections"
+      },
+      "singular": {
+        "stadtbezirk": "District",
+        "bezirksteil": "District section"
       }
     },
     "duesseldorf": {

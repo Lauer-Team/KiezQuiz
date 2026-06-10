@@ -280,6 +280,26 @@
       }
     },
     {
+      date: '2026-06-10',
+      version: '2.1.0',
+      de: {
+        title: 'München',
+        items: [
+          'München als neue spielbare Stadt mit 25 Stadtbezirken und 108 Bezirksteilen',
+          'Offizielle Karte aus dem Open-Data-Portal der Landeshauptstadt München',
+          'Eigene Ränge, Pokale und SEO-Seite unter /muenchen/'
+        ]
+      },
+      en: {
+        title: 'Munich',
+        items: [
+          'Munich as a new playable city with 25 districts and 108 district sections',
+          'Official map data from the City of Munich open data portal',
+          'Dedicated ranks, trophies, and SEO page at /muenchen/'
+        ]
+      }
+    },
+    {
       date: '2026-06-02',
       version: '2.0.0',
       de: {

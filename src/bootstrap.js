@@ -16,6 +16,7 @@
     'src/data/hamburg_data.js',
     'src/data/berlin_data.js',
     'src/data/frankfurt_data.js',
+    'src/data/muenchen_data.js',
     'src/data/duesseldorf_data.js',
     'src/data/europe_data.js',
     'src/data/europe_islands.js',

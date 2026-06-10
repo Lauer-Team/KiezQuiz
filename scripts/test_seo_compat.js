@@ -64,7 +64,7 @@ assert(profileVgIdx !== -1 && profileVgIdx > profileCssIdx, 'profile loads versi
 assert(profileVgIdx < profileHeadEnd, 'profile versionGuard is in head');
 assert(indexHtml.includes('name="kiezquiz-design"'), 'index.html has design meta');
 
-for (const slug of ['hamburg', 'berlin', 'frankfurt', 'duesseldorf']) {
+for (const slug of ['hamburg', 'berlin', 'frankfurt', 'muenchen', 'duesseldorf']) {
   const cityHtml = fs.readFileSync(path.join(root, slug, 'index.html'), 'utf8');
   assert(cityHtml.includes('twitter:image'), `${slug} has twitter:image`);
   assert(cityHtml.includes('og:image:width'), `${slug} has og:image dimensions`);

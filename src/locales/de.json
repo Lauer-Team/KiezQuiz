@@ -409,6 +409,21 @@
     "progressHint": "Ortsbezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Frankfurt-Rang"
   },
+  "cityRanksMuenchen": {
+    "1": { "name": "Touri" },
+    "2": { "name": "Wiesn-Neuling" },
+    "3": { "name": "Münchner Jung / Maus" },
+    "4": { "name": "Isar-Kapitän" },
+    "5": { "name": "München-Experte" },
+    "6": { "name": "Ur-Münchner" },
+    "7": { "name": "Stadtbezirks-Babo" },
+    "8": { "name": "König von München" },
+    "fallback": "Touri",
+    "maxReached": "Höchster München-Rang erreicht — alle Stadtbezirke & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Stadtbezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "München-Rang"
+  },
   "cityRanksDuesseldorf": {
     "1": { "name": "Touri" },
     "2": { "name": "Rhein-Neuling" },
@@ -565,6 +580,26 @@
       "unlockDesc": "Benenne alle 16 Ortsbezirke in der Challenge!"
     }
   },
+  "trophiesMuenchen": {
+    "paradise_explorer": {
+      "name": "Schwabing-Entdecker!",
+      "unlockTitle": "Schwabing-Entdecker! 🍺",
+      "desc": "Tippe „Schwabing“ zum ersten Mal richtig – in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Schwabing zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "König von München",
+      "unlockTitle": "König von München 👑",
+      "desc": "Benenne alle Bezirksteile in „Nenne alle Orte“.",
+      "unlockDesc": "Finde alle Bezirksteile in der Sporcle-Challenge!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Stadtbezirks-Babo",
+      "unlockTitle": "Stadtbezirks-Babo 🏛️",
+      "desc": "Benenne alle 25 Stadtbezirke in der Challenge.",
+      "unlockDesc": "Benenne alle 25 Stadtbezirke in der Challenge!"
+    }
+  },
   "trophiesDuesseldorf": {
     "paradise_explorer": {
       "name": "Altstadt-Entdecker!",
@@ -634,6 +669,7 @@
     "defaultBezirk": "Ein bedeutender Bezirk Hamburgs.",
     "defaultBezirkBerlin": "Ein bedeutender Bezirk Berlins.",
     "defaultBezirkFrankfurt": "Ein bedeutender Ortsbezirk Frankfurts.",
+    "defaultBezirkMuenchen": "Ein bedeutender Stadtbezirk Münchens.",
     "defaultBezirkDuesseldorf": "Ein bedeutender Stadtbezirk Düsseldorfs.",
     "defaultCountryEurope": "Ein souveräner Staat in Europa.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
@@ -894,6 +930,7 @@
       "Reinickendorf": "Tegeler See lädt zum Baden ein — mit Blick auf die Luftschiffhalle.",
       "Altstadt": "Historisches Zentrum mit Römer, Kaiserdom und dem berühmten Römerberg.",
       "Westend-Süd": "Bankenviertel und Skyline — Frankfurts Wahrzeichen mit den Hochhäusern.",
+      "Schwabing": "Künstler- und Studentenviertel — mit Münchner Freiheit, Kneipen und dem Englischen Garten.",
       "Sachsenhausen": "Apfelwein-Kneipen, Museumsufer und das lebendige Dörfchen.",
       "Höchst": "Altstadt mit Justinuskirche — Teil des UNESCO-Welterbes Limes.",
       "Flughafen": "Frankfurt Airport — einer der größten Flughäfen Europas und Drehkreuz der Welt.",
@@ -922,12 +959,14 @@
     "emptyBezirk": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
     "emptyBezirkBerlin": "Klicke auf einen Bezirk der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "emptyBezirkFrankfurt": "Klicke auf einen Ortsbezirk der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
+    "emptyBezirkMuenchen": "Klicke auf einen Stadtbezirk der Karte, um spannende Metadaten und Münchner Fakten anzuzeigen!",
     "emptyBezirkDuesseldorf": "Klicke auf einen Stadtbezirk der Karte, um spannende Metadaten und Düsseldorfer Fakten anzuzeigen!",
     "emptyCountryEurope": "Klicke auf ein Land der Europakarte, um Bevölkerung, Fläche und Hauptstadt zu entdecken!",
     "emptyCapitalEurope": "Klicke auf ein Land, um die Hauptstadt und Fakten zu sehen!",
     "capitalsEurope": "Hauptstadt",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
     "emptyStadtteilFrankfurt": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
+    "emptyBezirksteilMuenchen": "Klicke auf einen Bezirksteil der Karte, um spannende Metadaten und Münchner Fakten anzuzeigen!",
     "emptyStadtteilDuesseldorf": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Düsseldorfer Fakten anzuzeigen!",
     "emptyOrtsteil": "Klicke auf einen Ortsteil der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "residents": "Einwohner",
@@ -943,6 +982,7 @@
     "subdistricts": "Stadtteile ({count})",
     "subdistrictsBerlin": "Ortsteile ({count})",
     "subdistrictsFrankfurt": "Stadtteile ({count})",
+    "subdistrictsMuenchen": "Bezirksteile ({count})",
     "subdistrictsDuesseldorf": "Stadtteile ({count})"
   },
   "game": {
@@ -1245,6 +1285,18 @@
       "singular": {
         "stadtbezirk": "Ortsbezirk",
         "stadtteil": "Stadtteil"
+      }
+    },
+    "muenchen": {
+      "greeting": "Servus!",
+      "blurb": "25 Stadtbezirke · 108 Bezirksteile",
+      "levels": {
+        "stadtbezirke": "Stadtbezirke",
+        "bezirksteile": "Bezirksteile"
+      },
+      "singular": {
+        "stadtbezirk": "Stadtbezirk",
+        "bezirksteil": "Bezirksteil"
       }
     },
     "duesseldorf": {

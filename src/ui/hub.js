@@ -5,10 +5,11 @@
     hamburg: ['Altona', 'Ottensen', 'St. Pauli', 'Eimsbüttel', 'Eppendorf', 'Winterhude', 'Barmbek', 'St. Georg', 'HafenCity', 'Wilhelmsburg', 'Blankenese', 'Harburg'],
     berlin: ['Mitte', 'Wedding', 'Pankow', 'Pr. Berg', 'Friedrichshain', 'Kreuzberg', 'Neukölln', 'Schöneberg', 'Charlottenburg', 'Tempelhof', 'Spandau', 'Lichtenberg'],
     frankfurt: ['Innenstadt', 'Bahnhofsv.', 'Gallus', 'Bockenheim', 'Westend', 'Nordend', 'Bornheim', 'Ostend', 'Sachsenh.', 'Niederrad', 'Höchst', 'Bergen'],
+    muenchen: ['Altstadt', 'Lehel', 'Schwabing', 'Maxvorstadt', 'Glockenbach', 'Au', 'Haidhausen', 'Sendling', 'Nymphenburg', 'Bogenhausen', 'Perlach', 'Pasing'],
     duesseldorf: ['Altstadt', 'Unterbilk', 'Oberkassel', 'Benrath', 'Golzheim', 'Flingern', 'Derendorf', 'Kaisersw.', 'Hafen', 'Heerdt', 'Stockum', 'Gerresheim'],
     europe: ['Paris', 'London', 'Berlin', 'Madrid', 'Rom', 'Wien', 'Amsterdam', 'Brüssel', 'Prag', 'Warschau', 'Stockholm', 'Oslo']
   };
-  const PREVIEW_IDX = { hamburg: 4, berlin: 1, frankfurt: 6, duesseldorf: 0, europe: 2 };
+  const PREVIEW_IDX = { hamburg: 4, berlin: 1, frankfurt: 6, muenchen: 2, duesseldorf: 0, europe: 2 };
   const PREVIEW_LAKE = { hamburg: true };
   const MAP_PREVIEW_CACHE = new Map();
 

@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+
+
+
+
+
   <meta charset="UTF-8">
   <meta name="kiezquiz-build" content="dev">
-  <meta name="kiezquiz-design" content="7">
+  <meta name="kiezquiz-design" content="5">
+  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>KiezQuiz · Besser wissen als Besserwissen.</title>
-  <meta name="description" content="Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97), Frankfurt (46) und Düsseldorf (50). Mit XP, Streaks und Trivia — mobil & offline.">
+  <title>Besser wissen als Besserwissen.</title>
+  <meta name="description" content="Lerne alle 108 Münchner Bezirksteile und 25 Stadtbezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
   <meta name="theme-color" content="#0f1118">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="KiezQuiz">
   <meta name="format-detection" content="telephone=no">
 
-  <!-- Link-Vorschau: Open Graph (WhatsApp, Signal, Telegram, Facebook, …) -->
-  <link rel="canonical" href="https://kiezquiz.de/">
-  <link rel="alternate" hreflang="de" href="https://kiezquiz.de/">
-  <link rel="alternate" hreflang="en" href="https://kiezquiz.de/?lang=en">
-  <link rel="alternate" hreflang="x-default" href="https://kiezquiz.de/">
+  <link rel="canonical" href="https://kiezquiz.de/muenchen/">
+  <link rel="alternate" hreflang="de" href="https://kiezquiz.de/muenchen/">
+  <link rel="alternate" hreflang="en" href="https://kiezquiz.de/muenchen/?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://kiezquiz.de/muenchen/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="KiezQuiz">
   <meta property="og:title" content="KiezQuiz">
-  <meta property="og:description" content="Besser wissen als Besserwissen. Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97), Frankfurt (46) und Düsseldorf (50). Mit XP, Streaks und Trivia — mobil & offline.">
-  <meta property="og:url" content="https://kiezquiz.de/">
+  <meta property="og:description" content="Lerne alle 108 Münchner Bezirksteile und 25 Stadtbezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
+  <meta property="og:url" content="https://kiezquiz.de/muenchen/">
   <meta property="og:locale" content="de_DE">
   <meta property="og:image" content="https://kiezquiz.de/assets/og-image.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:type" content="image/jpeg">
 
-  <!-- Link-Vorschau: Twitter / X Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="KiezQuiz">
-  <meta property="og:image:alt" content="KiezQuiz — Besser wissen als Besserwissen">
-  <meta name="twitter:description" content="Besser wissen als Besserwissen. Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97), Frankfurt (46) und Düsseldorf (50). Mit XP, Streaks und Trivia — mobil & offline.">
+  <meta name="twitter:description" content="Lerne alle 108 Münchner Bezirksteile und 25 Stadtbezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.">
   <meta name="twitter:image" content="https://kiezquiz.de/assets/og-image.jpg">
 
   <link rel="manifest" href="manifest.webmanifest">
@@ -43,6 +46,7 @@
   <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="icon" href="/icons/favicon-16.png" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
   <script>
   (function(){try{var R='kiezquiz_theme_rollout_auto';if(localStorage.getItem(R)!=='1'){localStorage.setItem('kiezquiz_theme_auto','1');var t=localStorage.getItem('kiezquiz_theme');if(t==='auto')localStorage.removeItem('kiezquiz_theme');localStorage.setItem(R,'1');}var a=localStorage.getItem('kiezquiz_theme_auto');var auto=a!=='0';var r=localStorage.getItem('kiezquiz_theme');if(auto){var h=new Date().getHours();r=(h>=7&&h<19)?'light':'dark';}else{r=r==='light'?'light':'dark';}if(r==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
   </script>
@@ -61,68 +65,55 @@
   <link rel="stylesheet" href="src/styles/modals.css">
   <script src="src/theme.js"></script>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "KiezQuiz",
-    "url": "https://kiezquiz.de/",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "Any",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
-    "description": "Kostenloses Karten-Quiz: Lerne alle Bezirke und Ortsteile von Hamburg (104), Berlin (97), Frankfurt (46) und Düsseldorf (50). Mit XP, Streaks und Trivia — mobil und offline.",
-    "inLanguage": ["de", "en"]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Welche Städte bietet KiezQuiz?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Aktuell Hamburg (104 Stadtteile), Berlin (97 Ortsteile), Frankfurt am Main (46 Stadtteile) und Düsseldorf (50 Stadtteile). Weitere Städte sind per Wunschliste geplant."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Ist KiezQuiz kostenlos?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Ja. Das Quiz ist kostenlos, ohne Werbung und ohne Pflicht-Registrierung. Optional kannst du dich anmelden, um den Fortschritt zu synchronisieren."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Funktioniert KiezQuiz offline?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Ja. KiezQuiz läuft im Browser als Progressive Web App und speichert deinen Spielstand lokal. Nach der Installation kannst du auch offline spielen."
-        }
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Wie viele Stadtbezirke hat München?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "München ist in 25 Stadtbezirke und 108 Bezirksteile unterteilt. KiezQuiz deckt alle offiziellen Verwaltungseinheiten ab."
       }
-    ]
-  }
+    },
+    {
+      "@type": "Question",
+      "name": "Ist KiezQuiz kostenlos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja — KiezQuiz ist komplett kostenlos, ohne Werbung und ohne Pflicht-Registrierung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Funktioniert das Quiz auf dem Handy?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Die Karte unterstützt Touch-Gesten zum Zoomen und Verschieben und kann als App installiert werden."
+      }
+    }
+  ]
+}
   </script>
   <script src="src/versionGuard.js"></script>
+
+
+
+
+
 </head>
 <body>
   <noscript>
     <div style="max-width:720px;margin:0 auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.6;">
-      <h1>KiezQuiz – Bezirke und Stadtteile spielerisch lernen</h1>
-      <p>Kostenloses Karten-Quiz für Hamburg, Berlin, Frankfurt, München und Düsseldorf. JavaScript ist für die interaktive Karte erforderlich.</p>
-      <p>
-        <a href="/hamburg/">Hamburg</a> ·
-        <a href="/berlin/">Berlin</a> ·
-        <a href="/frankfurt/">Frankfurt</a> ·
-        <a href="/muenchen/">München</a> ·
-        <a href="/duesseldorf/">Düsseldorf</a>
-      </p>
+      <h1>München Bezirksteile und Stadtbezirke spielerisch lernen</h1>
+      <p>Lerne alle 108 Münchner Bezirksteile und 25 Stadtbezirke spielerisch auf der Karte. Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline.</p>
+      <p>JavaScript ist für die interaktive Karte erforderlich.</p>
+      <p><a href="/hamburg/">Hamburg</a> · <a href="/berlin/">Berlin</a> · <a href="/frankfurt/">Frankfurt am Main</a> · <a href="/duesseldorf/">Düsseldorf</a> · <a href="/europe/">Europa</a> · <a href="/">Alle Städte</a></p>
     </div>
   </noscript>
 
-  <div class="app-shell kq density-compact" data-theme="dark">
+<div class="app-shell kq density-compact" data-theme="dark">
     <header class="app-header global-header kq-topbar" id="app-header">
       <a href="/" class="brand brand-link" data-i18n-title="header.homeTitle" title="Zur Startseite">
         <img class="brand-logo" src="/assets/brand/logo/wortmarke-invers.svg" width="148" height="36" alt="" aria-hidden="true">
@@ -178,12 +169,11 @@
     <div id="hub-view" class="hub-view-root" hidden>
       <article class="seo-hub-fallback" hidden aria-hidden="true">
         <h1>KiezQuiz – Bezirke und Stadtteile spielerisch lernen</h1>
-        <p>Kostenloses Karten-Quiz für Hamburg, Berlin, Frankfurt am Main, München und Düsseldorf. Lerne alle Bezirke und Ortsteile auf interaktiven Karten — mit XP, Streaks, Trivia und Pokalen. Keine Anmeldung nötig, mobil und offline spielbar.</p>
+        <p>Kostenloses Karten-Quiz für Hamburg, Berlin, Frankfurt am Main und Düsseldorf. Lerne alle Bezirke und Ortsteile auf interaktiven Karten — mit XP, Streaks, Trivia und Pokalen. Keine Anmeldung nötig, mobil und offline spielbar.</p>
         <nav aria-label="Städte">
           <a href="/hamburg/">Hamburg (104 Stadtteile)</a> ·
           <a href="/berlin/">Berlin (97 Ortsteile)</a> ·
           <a href="/frankfurt/">Frankfurt (46 Stadtteile)</a> ·
-          <a href="/muenchen/">München (108 Bezirksteile)</a> ·
           <a href="/duesseldorf/">Düsseldorf (50 Stadtteile)</a>
         </nav>
         <h2>Hamburg</h2>
@@ -192,8 +182,6 @@
         <p>Berlin hat 12 Bezirke und 97 Ortsteile — von Mitte über Kreuzberg bis Marzahn-Hellersdorf. Lerne die Hauptstadt spielerisch: Klicke Ortsteile an, finde sie auf der Karte oder tippe Namen unter Zeitdruck ein.</p>
         <h2>Frankfurt am Main</h2>
         <p>Frankfurt umfasst 16 Ortsbezirke und 46 Stadtteile — von der Innenstadt bis Bergen-Enkheim. Das kostenlose Quiz hilft dir, Mainmetropole und Finanzstadt geografisch wirklich zu kennen.</p>
-        <h2>München</h2>
-        <p>München gliedert sich in 25 Stadtbezirke und 108 Bezirksteile — von Altstadt-Lehel über Schwabing bis Laim. Lerne die bayerische Landeshauptstadt spielerisch auf der interaktiven Karte.</p>
         <h2>Düsseldorf</h2>
         <p>Düsseldorf gliedert sich in 10 Stadtbezirke und 50 Stadtteile — von der Altstadt über Unterbilk bis Benrath. Lerne die Landeshauptstadt am Rhein spielerisch auf der interaktiven Karte.</p>
       </article>

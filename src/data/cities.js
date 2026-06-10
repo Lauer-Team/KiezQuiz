@@ -72,6 +72,34 @@
     { name: 'Vatikanstadt', xpNeeded: 2150 }
   ];
 
+  const MUENCHEN_BEZIRKE_PROGRESSION = [
+    { name: 'Altstadt-Lehel', xpNeeded: 0 },
+    { name: 'Ludwigsvorstadt-Isarvorstadt', xpNeeded: 50 },
+    { name: 'Maxvorstadt', xpNeeded: 100 },
+    { name: 'Schwabing-West', xpNeeded: 200 },
+    { name: 'Au-Haidhausen', xpNeeded: 300 },
+    { name: 'Sendling', xpNeeded: 400 },
+    { name: 'Sendling-Westpark', xpNeeded: 500 },
+    { name: 'Schwanthalerhöhe', xpNeeded: 600 },
+    { name: 'Neuhausen-Nymphenburg', xpNeeded: 700 },
+    { name: 'Moosach', xpNeeded: 850 },
+    { name: 'Milbertshofen-Am Hart', xpNeeded: 1000 },
+    { name: 'Schwabing-Freimann', xpNeeded: 1150 },
+    { name: 'Bogenhausen', xpNeeded: 1300 },
+    { name: 'Berg am Laim', xpNeeded: 1450 },
+    { name: 'Trudering-Riem', xpNeeded: 1600 },
+    { name: 'Ramersdorf-Perlach', xpNeeded: 1750 },
+    { name: 'Obergiesing-Fasangarten', xpNeeded: 1900 },
+    { name: 'Untergiesing-Harlaching', xpNeeded: 2050 },
+    { name: 'Thalkirchen-Obersendling-Forstenried-Fürstenried-Solln', xpNeeded: 2200 },
+    { name: 'Hadern', xpNeeded: 2350 },
+    { name: 'Pasing-Obermenzing', xpNeeded: 2500 },
+    { name: 'Aubing-Lochhausen-Langwied', xpNeeded: 2650 },
+    { name: 'Allach-Untermenzing', xpNeeded: 2800 },
+    { name: 'Feldmoching-Hasenbergl', xpNeeded: 2950 },
+    { name: 'Laim', xpNeeded: 3100 }
+  ];
+
   const DUESSELDORF_BEZIRKE_PROGRESSION = [
     { name: 'Altstadt', xpNeeded: 0 },
     { name: 'Flingern', xpNeeded: 50 },
@@ -163,6 +191,24 @@
       paradiseTarget: 'Westend-Süd'
     },
     {
+      id: 'muenchen',
+      name: 'München',
+      greetingKey: 'cities.muenchen.greeting',
+      blurbKey: 'cities.muenchen.blurb',
+      hue: 220,
+      status: 'playable',
+      levels: [
+        { key: 'stadtbezirke', labelKey: 'cities.muenchen.levels.stadtbezirke', singularKey: 'cities.muenchen.singular.stadtbezirk', tierKey: 'cities.tier.overview', count: 25 },
+        { key: 'bezirksteile', labelKey: 'cities.muenchen.levels.bezirksteile', singularKey: 'cities.muenchen.singular.bezirksteil', tierKey: 'cities.tier.detail', count: 108 }
+      ],
+      dataGlobal: 'MUENCHEN_DATA',
+      mapSvg: 'src/data/muenchen_map.svg',
+      progression: MUENCHEN_BEZIRKE_PROGRESSION,
+      trophyCatalog: 'muenchen',
+      totalTrophies: 28,
+      paradiseTarget: 'Schwabing'
+    },
+    {
       id: 'duesseldorf',
       name: 'Düsseldorf',
       greetingKey: 'cities.duesseldorf.greeting',
@@ -207,6 +253,7 @@
     HAMBURG_BEZIRKE_PROGRESSION,
     BERLIN_BEZIRKE_PROGRESSION,
     FRANKFURT_BEZIRKE_PROGRESSION,
+    MUENCHEN_BEZIRKE_PROGRESSION,
     DUESSELDORF_BEZIRKE_PROGRESSION,
     EUROPE_COUNTRIES_PROGRESSION
   };

@@ -1,7 +1,7 @@
 /* KiezQuiz — single source for initial hub vs. city routing */
 (function () {
   var SAVE_KEY = 'kiezquiz_save_v2';
-  var PLAYABLE = { hamburg: true, berlin: true, frankfurt: true, duesseldorf: true, europe: true };
+  var PLAYABLE = { hamburg: true, berlin: true, frankfurt: true, muenchen: true, duesseldorf: true, europe: true };
 
   function hasV1Save() {
     return localStorage.getItem('hh_xp') !== null ||

@@ -178,6 +178,7 @@
           ensureCityBranch(parsed, 'hamburg');
           ensureCityBranch(parsed, 'berlin');
           ensureCityBranch(parsed, 'frankfurt');
+          ensureCityBranch(parsed, 'muenchen');
           ensureCityBranch(parsed, 'duesseldorf');
           ensureCityBranch(parsed, 'europe');
           if (parsed.cities.hamburg) {

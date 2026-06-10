@@ -65,6 +65,16 @@ const CITY_LOCALE_CONFIG = {
     specialIds: ['paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
     detailUnit: 'Stadtteil'
   },
+  muenchen: {
+    rankKey: 'cityRanksMuenchen',
+    trophyNs: 'trophiesMuenchen',
+    defaultBezirkTrivia: 'trivia.defaultBezirkMuenchen',
+    emptyBezirk: 'explorer.emptyBezirkMuenchen',
+    emptyDetail: 'explorer.emptyBezirksteilMuenchen',
+    subdistricts: 'explorer.subdistrictsMuenchen',
+    specialIds: ['paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
+    detailUnit: 'Bezirksteil'
+  },
   duesseldorf: {
     rankKey: 'cityRanksDuesseldorf',
     trophyNs: 'trophiesDuesseldorf',
@@ -185,6 +195,7 @@ function getCityDataArray(cityId) {
   if (window[key]) return window[key];
   if (key === 'BERLIN_DATA' && typeof BERLIN_DATA !== 'undefined') return BERLIN_DATA;
   if (key === 'FRANKFURT_DATA' && typeof FRANKFURT_DATA !== 'undefined') return FRANKFURT_DATA;
+  if (key === 'MUENCHEN_DATA' && typeof MUENCHEN_DATA !== 'undefined') return MUENCHEN_DATA;
   if (key === 'DUESSELDORF_DATA' && typeof DUESSELDORF_DATA !== 'undefined') return DUESSELDORF_DATA;
   if (key === 'EUROPE_DATA' && typeof EUROPE_DATA !== 'undefined') return EUROPE_DATA;
   if (key === 'EUROPE_ISLAND_EGGS' && typeof EUROPE_ISLAND_EGGS !== 'undefined') return EUROPE_ISLAND_EGGS;
