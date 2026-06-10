@@ -322,6 +322,10 @@ class AuthManager {
             <span>${t('auth.password')}</span>
             <input type="password" id="auth-password-reg" autocomplete="new-password" required minlength="6">
           </label>
+          <label class="auth-terms">
+            <input type="checkbox" id="auth-terms-accept" required>
+            <span>${t('auth.termsLabel')}</span>
+          </label>
           <p class="auth-error" id="auth-error-reg" hidden></p>
           <button type="submit" class="primary-btn auth-submit">${t('auth.registerSubmit')}</button>
         </form>
@@ -376,7 +380,14 @@ class AuthManager {
       const username = document.getElementById('auth-username').value;
       const email = document.getElementById('auth-email-reg').value;
       const password = document.getElementById('auth-password-reg').value;
+      const termsAccepted = document.getElementById('auth-terms-accept')?.checked;
       errEl.hidden = true;
+
+      if (!termsAccepted) {
+        errEl.textContent = t('auth.termsRequired');
+        errEl.hidden = false;
+        return;
+      }
 
       const submitBtn = registerForm.querySelector('.auth-submit');
       submitBtn.disabled = true;

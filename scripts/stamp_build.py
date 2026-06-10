@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 # Bump when a release must force fresh CSS/JS for all returning visitors (e.g. redesign).
-DESIGN_REVISION = 7
+DESIGN_REVISION = 9
 SRC_ATTR_RE = re.compile(
     r'(?P<prefix>(?:href|src)="(?:\.\./)?src/[^"?]+)(?:\?[^"]*)?(?P<suffix>")'
 )

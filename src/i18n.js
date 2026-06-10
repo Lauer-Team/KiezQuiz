@@ -37,6 +37,7 @@ function t(key, vars) {
   const value = getNested(_messages, key);
   if (typeof value === 'string') return interpolate(value, vars);
   if (Array.isArray(value)) return value.map((item) => (typeof item === 'string' ? interpolate(item, vars) : item));
+  if (value !== undefined && value !== null) return value;
   return key;
 }
 

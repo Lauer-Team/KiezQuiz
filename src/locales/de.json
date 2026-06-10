@@ -122,7 +122,13 @@
   },
   "footer": {
     "privacy": "Datenschutz:",
-    "privacyText": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.",
+    "privacyText": "Spielstand lokal im Browser. Optionaler Account: Daten verschlüsselt bei Supabase (EU). Keine Tracking-Cookies.",
+    "privacyLink": "Datenschutz",
+    "imprintLink": "Impressum",
+    "termsLink": "Nutzungsbedingungen",
+    "cookieSettings": "Cookie-Einstellungen",
+    "licensesLink": "Lizenzen",
+    "copyright": "© 2026 KiezQuiz. Alle Rechte vorbehalten.",
     "changelog": "Was ist neu?",
     "about": "Über das KiezQuiz",
     "credit": "Von Kalle der Kieztaube"
@@ -142,7 +148,7 @@
     "cloudLoggedIn": "Eingeloggt als <strong>{name}</strong>. Dein Spielstand wird automatisch synchronisiert.",
     "cloudGuest": "Nicht eingeloggt — Spielstand nur lokal. Tippe oben rechts auf „Anmelden“ für Cloud-Sync.",
     "privacyTitle": "🔒 Datenschutz",
-    "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert (localStorage). Mit optionalem Account werden Spielstände verschlüsselt über TLS bei Supabase (EU) gespeichert — E-Mail, Benutzername und Spielstand. Keine Weitergabe an Dritte. Details in der Setup-Anleitung unter docs/SUPABASE-SETUP.md.",
+    "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert (localStorage). Mit optionalem Account werden Spielstände verschlüsselt über TLS bei Supabase (EU) gespeichert. Details in der <a href=\"/datenschutz/\">Datenschutzerklärung</a>.",
     "resetTitle": "🗑️ Spielstand zurücksetzen",
     "resetBody": "Löscht alle XP, Achievements und Fortschritte{cloudSuffix}. Frischer Start als Quiddje.",
     "resetCloudSuffix": " (lokal und in der Cloud)",
@@ -299,6 +305,7 @@
     "noFriendsForLb": "Füge Freunde hinzu, um euch zu vergleichen.",
     "loadError": "Bestenliste konnte nicht geladen werden.",
     "accountIntro": "Eingeloggt als {name}.",
+    "accountLegal": "Mit deinem Account gelten die <a href=\"/nutzungsbedingungen/\">Nutzungsbedingungen</a> und die <a href=\"/datenschutz/\">Datenschutzerklärung</a>. Cloud-Daten: Spielstand, Freunde, Bestenlisten.",
     "signOut": "Abmelden",
     "deleteTitle": "Account löschen",
     "deleteBody": "Löscht deinen Account und alle Cloud-Daten unwiderruflich.",
@@ -343,7 +350,9 @@
     "genericError": "Ein Fehler ist aufgetreten.",
     "cloudNotConfigured": "Cloud-Speicherung ist nicht konfiguriert.",
     "usernameRequired": "Bitte einen Benutzernamen eingeben.",
-    "identifierRequired": "Bitte Benutzername oder E-Mail eingeben."
+    "identifierRequired": "Bitte Benutzername oder E-Mail eingeben.",
+    "termsLabel": "Ich akzeptiere die <a href=\"/nutzungsbedingungen/\" target=\"_blank\" rel=\"noopener\">Nutzungsbedingungen</a> und habe die <a href=\"/datenschutz/\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a> zur Kenntnis genommen.",
+    "termsRequired": "Bitte Nutzungsbedingungen und Datenschutz bestätigen."
   },
   "sync": {
     "restored": "☁️ Spielstand aus der Cloud wiederhergestellt.",
@@ -1383,9 +1392,296 @@
     "citiesTitle": "Städte & Wünsche",
     "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, Düsseldorf und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
     "privacyTitle": "Datenschutz",
-    "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert — keine Weitergabe an Dritte.",
+    "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand verschlüsselt über TLS bei Supabase (EU) gespeichert. Ausführlich in der <a href=\"/datenschutz/\">Datenschutzerklärung</a>.",
+    "licensesTitle": "Open Source & Lizenzen",
+    "licensesBody": "KiezQuiz nutzt Open-Source-Bibliotheken und freie Schriftarten. Eine vollständige Übersicht mit Lizenznamen und Links findest du unter <a href=\"/lizenzen/\">Open Source &amp; Lizenzen</a>. Der Quellcode der App selbst ist nicht Open Source.",
     "ctaPlay": "Jetzt spielen →",
     "langSwitchToEn": "Switch to English",
     "langSwitchToDe": "Auf Deutsch wechseln"
+  },
+  "legalPages": {
+    "updated": "Stand: {date}",
+    "backHome": "← Zurück zum Quiz",
+    "navLabel": "Rechtliches",
+    "addressMissing": "Hinweis für den Betreiber: Postanschrift in src/data/legalConfig.js eintragen (Pflichtangabe nach § 5 DDG).",
+    "impressum": {
+      "title": "Impressum",
+      "metaDescription": "Impressum und Anbieterkennzeichnung für KiezQuiz nach § 5 DDG und § 18 MStV.",
+      "sections": [
+        {
+          "title": "Anbieter",
+          "paragraphs": ["{{operator}}"]
+        },
+        {
+          "title": "Kontakt",
+          "paragraphs": [
+            "Für Anfragen zu KiezQuiz erreichst du uns per E-Mail an die oben genannte Adresse. Wir antworten in der Regel innerhalb weniger Werktage."
+          ]
+        },
+        {
+          "title": "Verantwortlich für den Inhalt (§ 18 Abs. 2 MStV)",
+          "paragraphs": [
+            "Jeremiah J. Lauer<br>Anschrift wie oben."
+          ]
+        },
+        {
+          "title": "EU-Streitschlichtung",
+          "paragraphs": [
+            "Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href=\"https://ec.europa.eu/consumers/odr/\" target=\"_blank\" rel=\"noopener noreferrer\">https://ec.europa.eu/consumers/odr/</a>. Wir sind nicht verpflichtet und nicht bereit, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen."
+          ]
+        },
+        {
+          "title": "Haftung für Inhalte",
+          "paragraphs": [
+            "Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Wir bemühen uns um sorgfältige, aktuelle Geodaten und Quizinhalte, übernehmen jedoch keine Gewähr für Vollständigkeit und Richtigkeit — insbesondere bei Grenzverläufen, Verwaltungszuordnungen und Trivia-Texten.",
+            "KiezQuiz dient der spielerischen Orientierung und ersetzt keine amtlichen Karten oder Auskünfte von Behörden."
+          ]
+        },
+        {
+          "title": "Haftung für Links",
+          "paragraphs": [
+            "Unser Angebot kann Links zu externen Websites Dritter enthalten. Auf deren Inhalte haben wir keinen Einfluss; für diese fremden Inhalte übernehmen wir keine Gewähr. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich."
+          ]
+        },
+        {
+          "title": "Urheberrecht",
+          "paragraphs": [
+            "Die von uns erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung und Verbreitung außerhalb der Grenzen des Urheberrechts bedürfen unserer schriftlichen Zustimmung."
+          ]
+        },
+        {
+          "title": "Altersempfehlung",
+          "paragraphs": [
+            "KiezQuiz ist ein unverbindliches Geografie-Lernspiel ohne jugendgefährdende Inhalte und für alle Altersgruppen geeignet. Die optionale Account-Registrierung richtet sich an Personen ab 16 Jahren (siehe <a href=\"/nutzungsbedingungen/\">Nutzungsbedingungen</a>)."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Datenschutzerklärung",
+      "metaDescription": "Datenschutzerklärung für KiezQuiz: lokale Speicherung, optionaler Account, Supabase (EU), keine Tracking-Cookies.",
+      "sections": [
+        {
+          "title": "1. Verantwortlicher",
+          "paragraphs": ["{{operator}}", "Website: <a href=\"https://kiezquiz.de/\">https://kiezquiz.de</a>"]
+        },
+        {
+          "title": "2. Überblick",
+          "paragraphs": [
+            "KiezQuiz ist ein kostenloses Lernspiel ohne Werbung. Wir setzen keine Analyse- oder Marketing-Cookies ein. Dein Spielstand wird standardmäßig nur lokal in deinem Browser gespeichert. Ein Account ist optional und dient der geräteübergreifenden Sicherung sowie sozialen Funktionen (Freunde, Bestenlisten)."
+          ]
+        },
+        {
+          "title": "3. Rechtsgrundlagen",
+          "list": [
+            "Art. 6 Abs. 1 lit. b DSGVO — Vertrag/Account (Registrierung, Cloud-Speicher, Freunde)",
+            "Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse (technischer Betrieb, Missbrauchsprävention, lokale Speicherung für Spielbarkeit)",
+            "Art. 6 Abs. 1 lit. a DSGVO — Einwilligung, soweit du sie ausdrücklich gibst (z. B. Registrierung nach Bestätigung der Nutzungsbedingungen)"
+          ]
+        },
+        {
+          "title": "4. Lokale Speicherung (ohne Account)",
+          "paragraphs": [
+            "Wir speichern Spielstand, Einstellungen (Sprache, Theme, Sound), Gast-ID für Stadt-Wünsche und technische Versionsmarker in <strong>localStorage</strong> deines Browsers. Diese Daten verlassen dein Gerät nicht und werden nicht an uns übertragen.",
+            "Du kannst sie jederzeit löschen, indem du die Website-Daten deines Browsers entfernst oder in den Einstellungen den Spielstand zurücksetzt."
+          ]
+        },
+        {
+          "title": "5. Optionaler Account & Cloud-Speicher",
+          "paragraphs": [
+            "Bei Registrierung verarbeiten wir E-Mail-Adresse, Benutzername und Passwort (gehasht — nicht lesbar für uns) über unseren Auftragsverarbeiter <strong>Supabase Inc.</strong>, Hosting in der <strong>EU (Frankfurt)</strong>. Übertragen werden außerdem dein Spielstand (JSON), Freundschaften, Bestenlisteneinträge und Stadt-Wünsche, sofern du diese Funktionen nutzt.",
+            "Zweck: geräteübergreifende Synchronisation, Freundesfunktionen und öffentliche Bestenlisten. Du kannst deinen Account jederzeit in den Profileinstellungen löschen; dabei werden die zugehörigen Cloud-Daten entfernt."
+          ]
+        },
+        {
+          "title": "6. Hosting & technische Dienste",
+          "list": [
+            "<strong>GitHub Pages</strong> (Microsoft/GitHub, USA) — Auslieferung der statischen Website; dabei können Server-Logdaten (IP-Adresse, Zeitpunkt, angeforderte URL, User-Agent) in Logfiles fallen. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (Betrieb der Website).",
+            "<strong>Supabase Inc.</strong> (EU-Region Frankfurt) — Authentifizierung und Datenbank für optionale Account-Funktionen. Mit Supabase besteht ein Auftragsverarbeitungsvertrag (AVV/DPA) gemäß Art. 28 DSGVO.",
+            "<strong>jsDelivr</strong> (USA/EU-CDN) — Auslieferung der Supabase-Client-Bibliothek. Beim Laden kann deine IP-Adresse an den CDN-Betreiber übermittelt werden.",
+            "<strong>Schriftarten</strong> — Webfonts (Bricolage Grotesque, Hanken Grotesk, Space Mono) werden <strong>selbst gehostet</strong> auf kiezquiz.de; es erfolgt kein Abruf bei Google Fonts."
+          ]
+        },
+        {
+          "title": "7. Drittlandübermittlung",
+          "paragraphs": [
+            "Account- und Spieldaten werden in der EU (Frankfurt) bei Supabase verarbeitet. Für die reine Website-Auslieferung und das CDN können Verarbeitungen in den USA (GitHub, jsDelivr) nicht ausgeschlossen werden. Soweit erforderlich stützen wir Übermittlungen auf geeignete Garantien (z. B. EU-Standardvertragsklauseln der Auftragsverarbeiter)."
+          ]
+        },
+        {
+          "title": "8. Cookies, localStorage & TDDDG",
+          "paragraphs": [
+            "Wir setzen <strong>keine</strong> Werbe-, Profiling- oder Reichweitenmessungs-Cookies ein. Spielstand und Einstellungen liegen in <strong>localStorage</strong> (technisch notwendig für die Grundfunktion, § 25 Abs. 2 Nr. 2 TDDDG). Supabase kann für die Anmeldung technisch notwendige Session-Cookies setzen, solange du eingeloggt bist.",
+            "Der Hinweis am Seitenrand erklärt die lokale Speicherung. Mit „Verstanden“ speicherst du nur deine Kenntnisnahme lokal (<code>kiezquiz_legal_notice_v1</code>). Über „Cookie-Einstellungen“ im Footer kannst du den Hinweis erneut aufrufen.",
+            "Sobald gültige <strong>PIMS</strong>-Signale (Einwilligungs-Verwaltungsverordnung, EinwV) von deinem Browser oder Endgerät empfangen werden, können wir darauf reagieren und ggf. auf einen separaten Banner verzichten."
+          ]
+        },
+        {
+          "title": "9. Speicherdauer",
+          "list": [
+            "Lokaler Spielstand: bis du ihn löschst oder den Browser-Datenspeicher leerst",
+            "Account-Daten: bis zur Löschung des Accounts oder auf Anfrage",
+            "Server-Logs beim Hosting-Anbieter: nach deren Standardfristen (in der Regel wenige Tage bis Wochen)"
+          ]
+        },
+        {
+          "title": "10. Deine Rechte",
+          "paragraphs": [
+            "Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch gegen Verarbeitung auf Basis berechtigter Interessen. Zur Ausübung genügt eine E-Mail an die oben genannte Kontaktadresse.",
+            "Du kannst dich bei einer Datenschutz-Aufsichtsbehörde beschweren, z. B. bei der für deinen Wohnsitz zuständigen Landesbehörde."
+          ]
+        },
+        {
+          "title": "11. Kinder & Jugendschutz",
+          "paragraphs": [
+            "KiezQuiz richtet sich an ein allgemeines Publikum. Account-Registrierung setzt voraus, dass du mindestens 16 Jahre alt bist oder die Einwilligung einer erziehungsberechtigten Person hast."
+          ]
+        },
+        {
+          "title": "12. Änderungen",
+          "paragraphs": [
+            "Wir passen diese Erklärung an, wenn sich Funktionen oder Rechtslage ändern. Die aktuelle Fassung findest du stets unter <a href=\"/datenschutz/\">/datenschutz/</a>."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "metaDescription": "Nutzungsbedingungen für den optionalen KiezQuiz-Account, Cloud-Speicher, Freunde und Bestenlisten.",
+      "sections": [
+        {
+          "title": "1. Geltungsbereich",
+          "paragraphs": [
+            "Diese Bedingungen gelten für die kostenlose Nutzung von KiezQuiz unter <a href=\"https://kiezquiz.de/\">kiezquiz.de</a>. Das Spielen ohne Account ist davon unberührt. Für die Registrierung eines optionalen Accounts gelten zusätzlich diese Nutzungsbedingungen und die <a href=\"/datenschutz/\">Datenschutzerklärung</a>."
+          ]
+        },
+        {
+          "title": "2. Leistungsbeschreibung",
+          "paragraphs": [
+            "KiezQuiz bietet ein kostenloses, werbefreies Karten-Quiz zu Städten und Regionen. Der optionale Account ermöglicht Cloud-Synchronisation des Spielstands, Freundeslisten, Freundes-Bestenlisten und öffentliche Ranglisten-Einträge mit deinem gewählten Benutzernamen.",
+            "Wir entwickeln KiezQuiz kontinuierlich weiter und können Funktionen ändern, aussetzen oder einstellen — ohne Anspruch auf ununterbrochene Verfügbarkeit."
+          ]
+        },
+        {
+          "title": "3. Registrierung & Account",
+          "list": [
+            "Du gibst bei der Registrierung wahrheitsgemäße Angaben an und wählst einen Benutzernamen, der keine Rechte Dritter verletzt und nicht beleidigend ist.",
+            "Du bist mindestens <strong>16 Jahre</strong> alt oder hast die Einwilligung einer erziehungsberechtigten Person.",
+            "Du bist für die Geheimhaltung deines Passworts verantwortlich.",
+            "Ein Account pro Person; automatisierte Massenregistrierungen sind untersagt.",
+            "Du kannst deinen Account jederzeit in den Profileinstellungen löschen."
+          ]
+        },
+        {
+          "title": "4. Nutzer:inhalte & Verhalten",
+          "paragraphs": [
+            "Dein Benutzername und Bestenlisteneinträge können für andere sichtbar sein. Du verpflichtest dich, keine rechtswidrigen, diskriminierenden oder irreführenden Inhalte zu verwenden.",
+            "Wir können Accounts bei Missbrauch (z. B. Manipulation von Bestenlisten, Belästigung über Freundesanfragen) sperren oder löschen."
+          ]
+        },
+        {
+          "title": "5. Geodaten & Quizinhalte",
+          "paragraphs": [
+            "Karten, Bezirksgrenzen und Trivia dienen dem Lernen und der Unterhaltung. Sie können vereinfacht oder veraltet sein und ersetzen keine amtlichen Quellen.",
+            "KiezQuiz wird „wie besehen“ bereitgestellt; wir übernehmen keine Haftung für Entscheidungen, die du auf Basis der Quizinhalte triffst."
+          ]
+        },
+        {
+          "title": "6. Haftung",
+          "paragraphs": [
+            "Wir haften unbeschränkt bei Vorsatz und grober Fahrlässigkeit sowie bei Verletzung von Leben, Körper oder Gesundheit. Bei leichter Fahrlässigkeit haften wir nur bei Verletzung wesentlicher Vertragspflichten, begrenzt auf den vorhersehbaren, typischen Schaden.",
+            "Da KiezQuiz kostenlos ist, ist die Haftung für Datenverlust auf den typischen Wiederherstellungsaufwand begrenzt, sofern du nicht regelmäßig eigene Sicherungen (lokal oder Cloud) nutzt."
+          ]
+        },
+        {
+          "title": "7. Urheberrecht & Lizenzen",
+          "paragraphs": [
+            "Karten, Quiztexte, Grafiken und Software von KiezQuiz sind urheberrechtlich geschützt. Durch die Nutzung erhältst du kein Eigentum an unseren Inhalten.",
+            "Dein Benutzername und öffentliche Bestenlisteneinträge stellen nutzergenerierte Angaben dar. Du räumst uns das einfache, weltweite, unentgeltliche Recht ein, diese zur Darstellung im Dienst zu verwenden.",
+            "Geodaten und Karten basieren auf eigenen Aufbereitungen amtlicher und offener Quellen. Kartendaten der Städte werden nicht live von Drittanbieter-Kartenservern geladen.",
+            "Eingebundene Open-Source-Komponenten und Schriftlizenzen sind unter <a href=\"/lizenzen/\">Open Source &amp; Lizenzen</a> aufgeführt."
+          ]
+        },
+        {
+          "title": "8. Widerruf & kostenpflichtige Leistungen",
+          "paragraphs": [
+            "KiezQuiz ist derzeit <strong>kostenlos</strong>. Es besteht kein entgeltlicher Vertrag und daher kein gesetzliches Widerrufsrecht im Sinne des Fernabsatzrechts.",
+            "Sollten wir später kostenpflichtige Funktionen einführen, informieren wir gesondert über Preis, Vertragsschluss und Widerrufsbelehrung."
+          ]
+        },
+        {
+          "title": "9. Jugendschutz",
+          "paragraphs": [
+            "Das Spiel enthält keine jugendgefährdenden Inhalte und ist für alle Altersgruppen geeignet. Account-Funktionen richten sich an Nutzerinnen und Nutzer ab 16 Jahren.",
+            "Bei künftigen Erweiterungen (z. B. Chat, nutzergenerierte Medien, Gewinnspiele) prüfen wir den Jugendmedienschutz erneut."
+          ]
+        },
+        {
+          "title": "10. Änderungen",
+          "paragraphs": [
+            "Wir können diese Bedingungen anpassen. Bei wesentlichen Änderungen informieren wir angemessen (z. B. im Changelog). Die weitere Nutzung des Accounts nach Inkrafttreten gilt als Zustimmung, sofern du nicht widersprichst und den Account löschst."
+          ]
+        },
+        {
+          "title": "11. Schlussbestimmungen",
+          "paragraphs": [
+            "Es gilt deutsches Recht. Gerichtsstand ist — soweit zulässig — der Sitz des Betreibers.",
+            "Für Reklamationen und Fragen erreichst du uns per E-Mail an <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a> (siehe auch <a href=\"/impressum/\">Impressum</a>).",
+            "Sollten einzelne Klauseln unwirksam sein, bleiben die übrigen wirksam."
+          ]
+        }
+      ]
+    },
+    "licenses": {
+      "title": "Open Source & Lizenzen",
+      "metaDescription": "Open-Source-Komponenten und Lizenzen von KiezQuiz: Supabase JavaScript Client (MIT), Schriftarten (SIL OFL 1.1).",
+      "intro": [
+        "KiezQuiz ist eine eigenständige Webanwendung. Der Quellcode der App, Karten, Quiztexte und Grafiken sind urheberrechtlich geschützt und nicht als Open Source veröffentlicht — sofern unten nicht anders angegeben.",
+        "Für den Betrieb werden die folgenden Open-Source-Komponenten und freien Schriftarten eingesetzt. Wir danken den jeweiligen Autorinnen und Autoren."
+      ],
+      "runtimeTitle": "Eingebundene Bibliotheken (Website)",
+      "fontsTitle": "Schriftarten (selbst gehostet)",
+      "devTitle": "Nur Entwicklung (nicht auf kiezquiz.de ausgeliefert)",
+      "tableComponent": "Komponente",
+      "tablePurpose": "Verwendung",
+      "tableLicense": "Lizenz",
+      "tableDelivery": "Bereitstellung",
+      "components": {
+        "supabase-js": "Optionaler Account: Authentifizierung, Cloud-Speicher, Freunde, Bestenlisten (per jsDelivr CDN geladen)",
+        "bricolage": "Display-Schrift für Überschriften und Marken-Typografie",
+        "hanken": "Fließtext und UI",
+        "space-mono": "Monospace für technische Labels und Codes",
+        "http-server": "Lokaler Testserver für Entwickler (npm run dev)"
+      },
+      "sections": [
+        {
+          "title": "Eigene Software",
+          "paragraphs": [
+            "Quiz-Logik, Karten, Geodaten-Aufbereitungen, UI und Maskottchen-Grafiken von KiezQuiz sind proprietär (© 2026 KiezQuiz / Jeremiah J. Lauer), sofern nicht oben als Open Source ausgewiesen.",
+            "Icons im Interface sind eigene Inline-SVGs. System-Emojis (Unicode) unterliegen keiner separaten Lizenz."
+          ]
+        },
+        {
+          "title": "Abhängigkeiten von @supabase/supabase-js",
+          "paragraphs": [
+            "Das Supabase-Client-Paket bringt weitere npm-Abhängigkeiten mit (überwiegend MIT-Lizenz, z. B. Auth-, Realtime- und Storage-Module). Details: <a href=\"https://www.npmjs.com/package/@supabase/supabase-js?activeTab=dependencies\" target=\"_blank\" rel=\"noopener noreferrer\">npm-Abhängigkeitsliste</a>."
+          ]
+        },
+        {
+          "title": "Schriftlizenzen (OFL)",
+          "list": [
+            "Bricolage Grotesque, Hanken Grotesk und Space Mono stehen unter der <a href=\"https://openfontlicense.org\" target=\"_blank\" rel=\"noopener noreferrer\">SIL Open Font License 1.1</a>.",
+            "Die Schriftdateien liegen unter <code>/assets/fonts/</code> und werden ausschließlich von kiezquiz.de ausgeliefert.",
+            "Voller Lizenztext: <a href=\"/assets/fonts/OFL.txt\">OFL.txt</a>"
+          ]
+        },
+        {
+          "title": "Kontakt",
+          "paragraphs": [
+            "Fragen zu Lizenzen oder Nutzungsrechten: <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>"
+          ]
+        }
+      ]
+    }
   }
 }

@@ -1,0 +1,333 @@
+/* Legal pages & cookie notice */
+.legal-page-body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  background-color: var(--bg, #0F1118);
+  background-image: var(--bg-grad);
+}
+
+body.legal-page-body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+}
+
+.app-shell.legal-app-shell.kq {
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+}
+
+.legal-main {
+  width: min(56rem, calc(100vw - 2.5rem));
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 1.25rem max(1.25rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+  flex: 1;
+}
+
+.legal-shell.kq {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  min-height: 0;
+  overflow: visible;
+  height: auto;
+}
+
+.legal-hero {
+  margin-bottom: 1rem;
+  padding: 1.25rem 0 0.5rem;
+}
+
+.legal-hero h1 {
+  font-family: var(--display, var(--font-display));
+  font-weight: 800;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  margin: 0 0 0.35rem;
+}
+
+.legal-updated {
+  font-family: var(--mono, var(--font-mono));
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.legal-section {
+  margin-bottom: 1.1rem;
+  padding: 1.25rem 1.35rem;
+}
+
+.legal-section h2 {
+  font-family: var(--display, var(--font-display));
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  margin: 0 0 0.65rem;
+}
+
+.legal-section p,
+.legal-section li {
+  color: var(--text-2);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.legal-section p {
+  margin: 0 0 0.65rem;
+}
+
+.legal-section p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section ul {
+  margin: 0 0 0.65rem;
+  padding-left: 1.2rem;
+}
+
+.legal-section li {
+  margin-bottom: 0.35rem;
+}
+
+.legal-section a {
+  color: var(--signal);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal-operator-block {
+  font-style: normal;
+  line-height: 1.55;
+}
+
+.legal-operator-block .legal-missing-address {
+  display: block;
+  margin-top: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px dashed var(--signal);
+  color: var(--signal);
+  font-size: 0.82rem;
+}
+
+.legal-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  justify-content: center;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.legal-footer-nav a {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-3);
+  text-decoration: none;
+}
+
+.legal-footer-nav a:hover {
+  color: var(--signal);
+}
+
+.legal-back-link {
+  display: inline-flex;
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--signal);
+  text-decoration: none;
+}
+
+.legal-back-link:hover {
+  text-decoration: underline;
+}
+
+/* Cookie / storage notice */
+.kq-cookie-banner {
+  position: fixed;
+  left: max(0.75rem, env(safe-area-inset-left));
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: max(0.75rem, env(safe-area-inset-bottom));
+  z-index: 12000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.75rem 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface, #171923) 94%, transparent);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  animation: kq-cookie-in 0.35s ease;
+}
+
+@keyframes kq-cookie-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.kq-cookie-banner[hidden] {
+  display: none !important;
+}
+
+.kq-cookie-banner__text {
+  flex: 1 1 16rem;
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.kq-cookie-banner__text a {
+  color: var(--signal);
+  font-weight: 600;
+}
+
+.footer-legal-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-legal-btn:hover {
+  color: var(--signal);
+}
+
+.footer-copyright {
+  margin: 0.25rem 0 0;
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+.legal-license-table-wrap {
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+
+.legal-license-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.legal-license-table th,
+.legal-license-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.55rem 0.65rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-2);
+}
+
+.legal-license-table th {
+  font-family: var(--mono, var(--font-mono));
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.legal-license-table a {
+  color: var(--signal);
+  font-weight: 600;
+}
+
+.legal-license-version {
+  color: var(--text-3);
+  font-size: 0.78em;
+}
+
+.kq-cookie-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.kq-cookie-banner__btn {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--text-1);
+}
+
+.kq-cookie-banner__btn--primary {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: var(--bg, #0f1118);
+}
+
+.auth-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+
+.auth-terms input {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.auth-terms a {
+  color: var(--signal);
+}
+
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem 0.45rem;
+  margin: 0.35rem 0 0;
+}
+
+.footer-legal-links a {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-legal-links a:hover {
+  color: var(--signal);
+}
+
+.footer-legal-sep {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  user-select: none;
+  opacity: 0.6;
+}
+
+.profile-legal-hint a {
+  color: var(--signal);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

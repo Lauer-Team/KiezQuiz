@@ -689,6 +689,7 @@
         <div class="profile-account-actions">
           <button type="button" class="kq-btn ghost profile-btn-signout" id="profile-btn-signout">${t('profilePage.signOut')}</button>
         </div>
+        <p class="profile-legal-hint profile-account-legal">${t('profilePage.accountLegal')}</p>
         <div class="profile-danger-zone">
           <h3 class="profile-section-title">${t('profilePage.deleteTitle')}</h3>
           <p>${t('profilePage.deleteBody')}</p>
@@ -780,7 +781,7 @@
 
         <div class="profile-settings-block">
           <h3 class="profile-section-title">${t('settings.privacyTitle')}</h3>
-          <p class="profile-settings-hint">${t('settings.privacyBody')}</p>
+          <p class="profile-settings-hint profile-legal-hint">${t('settings.privacyBody')}</p>
         </div>
 
         <div class="profile-settings-block profile-settings-block--danger">

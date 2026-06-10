@@ -1,0 +1,9 @@
+Copyright (c) 2026 KiezQuiz — font files self-hosted under SIL Open Font License 1.1.
+
+This folder contains the following font families:
+  - Bricolage Grotesque (Copyright The Bricolage Grotesque Project Authors)
+  - Hanken Grotesk (Copyright The Hanken Grotesk Project Authors)
+  - Space Mono (Copyright The Space Mono Project Authors)
+
+These fonts are licensed under the SIL Open Font License, Version 1.1.
+Full licence text: https://openfontlicense.org

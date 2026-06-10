@@ -8,6 +8,10 @@ BASE_URL = "https://kiezquiz.de"
 URLS = [
     "/",
     "/about/",
+    "/impressum/",
+    "/datenschutz/",
+    "/nutzungsbedingungen/",
+    "/lizenzen/",
     "/hamburg/",
     "/berlin/",
     "/frankfurt/",

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="kiezquiz-build" content="dev">
+  <meta name="kiezquiz-design" content="8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Datenschutz · KiezQuiz</title>
+  <meta name="description" content="Datenschutzerklärung für KiezQuiz: lokale Speicherung, optionaler Account, Supabase (EU), keine Tracking-Cookies.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0F1118">
+  <link rel="canonical" href="https://kiezquiz.de/datenschutz/">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml">
+  <script>
+  (function(){try{var R='kiezquiz_theme_rollout_auto';if(localStorage.getItem(R)!=='1'){localStorage.setItem('kiezquiz_theme_auto','1');var t=localStorage.getItem('kiezquiz_theme');if(t==='auto')localStorage.removeItem('kiezquiz_theme');localStorage.setItem(R,'1');}var a=localStorage.getItem('kiezquiz_theme_auto');var auto=a!=='0';var r=localStorage.getItem('kiezquiz_theme');if(auto){var h=new Date().getHours();r=(h>=7&&h<19)?'light':'dark';}else{r=r==='light'?'light':'dark';}if(r==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
+  </script>
+  <link rel="stylesheet" href="../src/styles/brand.css">
+  <link rel="stylesheet" href="../src/styles/base.css">
+  <link rel="stylesheet" href="../src/styles/redesign.css">
+  <link rel="stylesheet" href="../src/styles/legal.css">
+  <script src="../src/theme.js"></script>
+  <script>window.KIEZ_SRC_BASE = '../src/';</script>
+  <script src="../src/versionGuard.js"></script>
+</head>
+<body class="legal-page-body" data-legal-page="privacy">
+  <main class="legal-main">
+    <div class="legal-shell kq" data-theme="dark">
+      <header class="legal-hero">
+        <a href="/" class="legal-back-link" style="margin-top:0;margin-bottom:0.75rem;">← KiezQuiz</a>
+        <h1 data-i18n="legalPages.privacy.title">Datenschutzerklärung</h1>
+        <p class="legal-updated" id="legal-updated"></p>
+        <button type="button" class="kq-cookie-banner__btn" id="legal-lang-btn" style="margin-top:0.75rem;">🇩🇪</button>
+      </header>
+      <div id="legal-content"></div>
+    </div>
+  </main>
+  <script src="../src/data/legalConfig.js"></script>
+  <script src="../src/i18n.js"></script>
+  <script src="../src/ui/legalPage.js"></script>
+  <script src="../src/ui/cookieConsent.js"></script>
+  <script>
+  (function(){
+    var btn=document.getElementById('legal-lang-btn');
+    if(!btn)return;
+    function sync(){if(typeof getLocale!=='function')return;btn.textContent=getLocale()==='de'?'🇩🇪':'🇬🇧';}
+    btn.addEventListener('click',function(){if(typeof setLocale==='function')setLocale(getLocale()==='de'?'en':'de');});
+    document.addEventListener('DOMContentLoaded',sync);
+    if(typeof onLocaleChange==='function')onLocaleChange(sync);
+  })();
+  </script>
+</body>
+</html>

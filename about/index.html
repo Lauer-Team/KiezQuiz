@@ -31,9 +31,6 @@
   <script>
   (function(){try{var R='kiezquiz_theme_rollout_auto';if(localStorage.getItem(R)!=='1'){localStorage.setItem('kiezquiz_theme_auto','1');var t=localStorage.getItem('kiezquiz_theme');if(t==='auto')localStorage.removeItem('kiezquiz_theme');localStorage.setItem(R,'1');}var a=localStorage.getItem('kiezquiz_theme_auto');var auto=a!=='0';var r=localStorage.getItem('kiezquiz_theme');if(auto){var h=new Date().getHours();r=(h>=7&&h<19)?'light':'dark';}else{r=r==='light'?'light':'dark';}if(r==='light'){document.documentElement.dataset.theme='light';document.documentElement.style.colorScheme='light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content='#F1ECE0';}}catch(e){}})();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,600;10..48,700;10..48,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../src/styles/brand.css">
   <link rel="stylesheet" href="../src/styles/app.css">
   <link rel="stylesheet" href="../src/styles/base.css">
@@ -143,12 +140,34 @@
 
     <section class="about-section kq-card">
       <h2 data-i18n="aboutPage.privacyTitle">Datenschutz</h2>
-      <p data-i18n="aboutPage.privacyBody">Ohne Account …</p>
+      <p data-i18n-html="aboutPage.privacyBody">Ohne Account …</p>
+      <p class="about-legal-links">
+        <a href="/datenschutz/" data-i18n="footer.privacyLink">Datenschutz</a> ·
+        <a href="/impressum/" data-i18n="footer.imprintLink">Impressum</a> ·
+        <a href="/nutzungsbedingungen/" data-i18n="footer.termsLink">Nutzungsbedingungen</a>
+      </p>
+    </section>
+
+    <section class="about-section kq-card">
+      <h2 data-i18n="aboutPage.licensesTitle">Open Source &amp; Lizenzen</h2>
+      <p data-i18n-html="aboutPage.licensesBody">KiezQuiz nutzt …</p>
     </section>
 
     <a href="/" class="about-cta kq-btn sig" data-i18n="aboutPage.ctaPlay">Jetzt spielen →</a>
 
     <footer class="about-footer">
+      <nav class="footer-legal-links" aria-label="Rechtliches">
+        <a href="/datenschutz/" data-i18n="footer.privacyLink">Datenschutz</a>
+        <span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="/impressum/" data-i18n="footer.imprintLink">Impressum</a>
+        <span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="/nutzungsbedingungen/" data-i18n="footer.termsLink">Nutzungsbedingungen</a>
+        <span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="/lizenzen/" data-i18n="footer.licensesLink">Lizenzen</a>
+        <span class="footer-legal-sep" aria-hidden="true">·</span>
+        <button type="button" class="footer-legal-btn" data-cookie-settings data-i18n="footer.cookieSettings">Cookie-Einstellungen</button>
+      </nav>
+      <p class="footer-copyright" data-i18n="footer.copyright">© 2026 KiezQuiz. Alle Rechte vorbehalten.</p>
       <span data-i18n="footer.credit">Von Kalle der Kieztaube</span>
     </footer>
     </div>
@@ -175,5 +194,6 @@
   <script src="../src/ui/hubScrollTop.js"></script>
   <script src="../src/cloudSync.js"></script>
   <script src="../src/ui/aboutPage.js"></script>
+  <script src="../src/ui/cookieConsent.js"></script>
 </body>
 </html>

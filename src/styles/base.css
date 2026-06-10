@@ -3,7 +3,7 @@
  * Brand CI 2026 — highly optimized, responsive, Safari-compatible.
  * ------------------------------------------------------------- */
 
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+@import url('fonts.css');
 
 :root {
   /* Brand palette */
@@ -184,6 +184,56 @@ body.overlay-open {
   color: var(--kreide);
   border-color: var(--border-color-glow);
   background: rgba(255, 255, 255, 0.07);
+}
+
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem 0.45rem;
+  margin: 0.35rem 0 0;
+}
+
+.footer-legal-links a {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.footer-legal-links a:hover {
+  color: var(--signal);
+}
+
+.footer-legal-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-legal-btn:hover {
+  color: var(--signal);
+}
+
+.footer-copyright {
+  margin: 0.25rem 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.footer-legal-sep {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+  user-select: none;
+  opacity: 0.6;
 }
 
 /* “Was ist neu?” — header & footer entry points */

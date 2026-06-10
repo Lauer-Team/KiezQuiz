@@ -152,6 +152,21 @@ html[data-theme="light"] .about-icon-btn::after,
   margin-bottom: 0;
 }
 
+.about-legal-links {
+  margin-top: 0.75rem !important;
+  font-size: 0.88rem !important;
+}
+
+.about-legal-links a {
+  color: var(--signal);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.about-legal-links a:hover {
+  text-decoration: underline;
+}
+
 .about-kalle {
   margin-bottom: 1.25rem;
   padding: 0;
