@@ -1391,7 +1391,7 @@
           "title": "7. Transactional email (Resend.com)",
           "paragraphs": [
             "For registered users we occasionally send transactional emails (e.g. notice of material changes to the terms of use, password reset via Supabase Auth). Delivery is via Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
-            "Data processed: email address, subject and body of the message. A data processing agreement pursuant to Art. 28 GDPR must be in place with Resend. Legal basis: Art. 6 para. 1 lit. b GDPR (contract performance) or lit. f (operational security). Retention: at the email provider per their policies; with us until account deletion."
+            "Data processed: email address, subject and body of the message. A data processing agreement pursuant to Art. 28 GDPR is in place with Resend. Legal basis: Art. 6 para. 1 lit. b GDPR (contract performance) or lit. f (operational security). Retention: at the email provider per their policies; with us until account deletion."
           ]
         },
         {
@@ -1653,7 +1653,7 @@
           "title": "Feedback & contact",
           "paragraphs": [
             "If you encounter barriers using KiezQuiz or wish to send feedback, email: <a href=\"mailto:info@kiezquiz.de?subject=Accessibility%20KiezQuiz\">info@kiezquiz.de</a>. We aim to respond within four weeks.",
-            "Enforcement body in Hamburg: <a href=\"https://www.lbs.hamburg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">Landesbetrieb Verkehr (LBV)</a> — mediation under the BFSG."
+            "Enforcement authority in Hamburg: <a href=\"https://www.hamburg.de/bjv\" target=\"_blank\" rel=\"noopener noreferrer\">Authority for Justice and Consumer Protection Hamburg</a>. Nationwide, the <a href=\"https://www.schlichtungsstelle-bgg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">BGG mediation service</a> at the Federal Government Commissioner for Matters relating to Persons with Disabilities (BMAS) is also available for out-of-court resolution."
           ]
         },
         {

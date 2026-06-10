@@ -1543,7 +1543,7 @@
           "title": "7. Transaktionale E-Mails (Resend.com)",
           "paragraphs": [
             "Für registrierte Nutzer versenden wir gelegentlich transaktionale E-Mails (z. B. Hinweis auf wesentliche Änderungen der Nutzungsbedingungen, Passwort-Reset über Supabase Auth). Der Versand erfolgt über Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
-            "Verarbeitete Daten: E-Mail-Adresse, Betreff und Inhalt der Nachricht. Mit Resend besteht bzw. ist ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO abzuschließen. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. lit. f (Betriebssicherheit). Speicherdauer: beim E-Mail-Dienstleister gemäß deren Richtlinien; bei uns bis Account-Löschung."
+            "Verarbeitete Daten: E-Mail-Adresse, Betreff und Inhalt der Nachricht. Mit Resend besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. lit. f (Betriebssicherheit). Speicherdauer: beim E-Mail-Dienstleister gemäß deren Richtlinien; bei uns bis Account-Löschung."
           ]
         },
         {
@@ -1805,7 +1805,7 @@
           "title": "Feedback & Kontakt",
           "paragraphs": [
             "Wenn Sie Barrieren bei der Nutzung von KiezQuiz feststellen oder uns Hinweise geben möchten, schreiben Sie an: <a href=\"mailto:info@kiezquiz.de?subject=Barrierefreiheit%20KiezQuiz\">info@kiezquiz.de</a>. Wir bemühen uns um eine Antwort innerhalb von vier Wochen.",
-            "Zuständige Durchsetzungsstelle in Hamburg: <a href=\"https://www.lbs.hamburg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">Landesbetrieb Verkehr (LBV)</a> — Schlichtungsstelle nach dem BFSG."
+            "Zuständige Durchsetzungsbehörde in Hamburg: <a href=\"https://www.hamburg.de/bjv\" target=\"_blank\" rel=\"noopener noreferrer\">Behörde für Justiz und Verbraucherschutz Hamburg</a>. Bundesweit steht außerdem die <a href=\"https://www.schlichtungsstelle-bgg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">Schlichtungsstelle nach dem BGG</a> beim Beauftragten der Bundesregierung für die Belange von Menschen mit Behinderungen (BMAS) zur außergerichtlichen Klärung zur Verfügung."
           ]
         },
         {

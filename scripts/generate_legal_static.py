@@ -125,13 +125,21 @@ def build_content(page_key: str, legal: dict, op: dict, last_updated: str) -> st
 def inject_html(path: Path, content: str) -> None:
     text = path.read_text(encoding="utf-8")
     pattern = re.compile(
-        r'(<div id="legal-content">)(.*?)(</div>)',
+        r'<div id="legal-content">\s*(?:<div class="legal-static-fallback">.*?</div>\s*)?</div>',
         re.DOTALL,
     )
-    new_text, n = pattern.subn(rf"\1\n{content}\n      \3", text, count=1)
+    replacement = f'<div id="legal-content">\n{content}\n      </div>'
+    new_text, n = pattern.subn(replacement, text, count=1)
     if n != 1:
         print(f"WARN: could not inject into {path}", file=sys.stderr)
         return
+    # Older regex runs left duplicate closing divs before </main>
+    new_text = re.sub(
+        r"(\n      </div>\n)(      </div>\n)+(\s*</div>\n  </main>)",
+        r"\1\3",
+        new_text,
+        count=1,
+    )
     path.write_text(new_text, encoding="utf-8")
     print(f"✓ {path.relative_to(ROOT)}")
 
