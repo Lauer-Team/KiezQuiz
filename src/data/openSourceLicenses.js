@@ -7,11 +7,12 @@ window.KIEZ_OSS_LICENSES = {
     {
       id: 'supabase-js',
       name: '@supabase/supabase-js',
-      version: '2.x',
+      version: '2.49.8',
       license: 'MIT',
       licenseUrl: 'https://github.com/supabase/supabase-js/blob/master/LICENSE',
       projectUrl: 'https://github.com/supabase/supabase-js',
-      delivery: 'jsDelivr CDN (npm)'
+      delivery: 'self-hosted (/assets/js/supabase-2.49.8.min.js)',
+      copyright: 'Supabase Inc.'
     }
   ],
   fonts: [

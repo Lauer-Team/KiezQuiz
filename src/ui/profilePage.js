@@ -683,9 +683,41 @@
 
   function renderAccountSection() {
     const name = window.authManager?.getDisplayName?.() || '';
+    const email = window.authManager?.user?.email || '';
     return `
       <section class="profile-panel" id="profile-section-account">
         <p class="profile-panel-intro">${t('profilePage.accountIntro', { name: escapeHtml(name) })}</p>
+
+        <div class="profile-account-block">
+          <h3 class="profile-section-title">${t('profilePage.emailTitle')}</h3>
+          <p class="profile-settings-hint">${t('profilePage.emailCurrent', { email: escapeHtml(email) })}</p>
+          <form class="profile-account-form" id="profile-change-email-form">
+            <label class="auth-field">
+              <span>${t('profilePage.emailNew')}</span>
+              <input type="email" id="profile-new-email" autocomplete="email" required>
+            </label>
+            <p class="profile-settings-hint">${t('profilePage.emailChangeHint')}</p>
+            <p class="profile-feedback" id="profile-email-feedback" hidden></p>
+            <button type="submit" class="kq-btn ghost">${t('profilePage.emailChangeBtn')}</button>
+          </form>
+        </div>
+
+        <div class="profile-account-block">
+          <h3 class="profile-section-title">${t('profilePage.passwordTitle')}</h3>
+          <form class="profile-account-form" id="profile-change-password-form">
+            <label class="auth-field">
+              <span>${t('auth.newPassword')}</span>
+              <input type="password" id="profile-new-password" autocomplete="new-password" required minlength="6">
+            </label>
+            <label class="auth-field">
+              <span>${t('auth.confirmPassword')}</span>
+              <input type="password" id="profile-confirm-password" autocomplete="new-password" required minlength="6">
+            </label>
+            <p class="profile-feedback" id="profile-password-feedback" hidden></p>
+            <button type="submit" class="kq-btn ghost">${t('profilePage.passwordChangeBtn')}</button>
+          </form>
+        </div>
+
         <div class="profile-account-actions">
           <button type="button" class="kq-btn ghost profile-btn-signout" id="profile-btn-signout">${t('profilePage.signOut')}</button>
         </div>
@@ -1146,6 +1178,8 @@
       showDeleteConfirmModal();
     });
 
+    bindAccountSectionEvents(main);
+
     bindFriendSearchAutocomplete(main);
     bindFriendRequestActions(main);
 
@@ -1190,6 +1224,71 @@
         window.location.href = `/${cityId}/`;
       });
     }
+  }
+
+  function bindAccountSectionEvents(root) {
+    const emailForm = root.querySelector('#profile-change-email-form');
+    const passwordForm = root.querySelector('#profile-change-password-form');
+    if (!emailForm && !passwordForm) return;
+
+    emailForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const feedback = root.querySelector('#profile-email-feedback');
+      const input = root.querySelector('#profile-new-email');
+      const submitBtn = emailForm.querySelector('button[type="submit"]');
+      if (!feedback || !input || !submitBtn) return;
+
+      feedback.hidden = true;
+      feedback.classList.remove('profile-feedback--error');
+      submitBtn.disabled = true;
+
+      const { error } = await window.authManager?.changeEmail?.(input.value);
+      submitBtn.disabled = false;
+
+      if (error) {
+        feedback.textContent = error;
+        feedback.classList.add('profile-feedback--error');
+        feedback.hidden = false;
+        return;
+      }
+      feedback.textContent = t('profilePage.emailChangePending');
+      feedback.hidden = false;
+      input.value = '';
+    });
+
+    passwordForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const feedback = root.querySelector('#profile-password-feedback');
+      const password = root.querySelector('#profile-new-password')?.value || '';
+      const confirm = root.querySelector('#profile-confirm-password')?.value || '';
+      const submitBtn = passwordForm.querySelector('button[type="submit"]');
+      if (!feedback || !submitBtn) return;
+
+      feedback.hidden = true;
+      feedback.classList.remove('profile-feedback--error');
+
+      if (password !== confirm) {
+        feedback.textContent = t('auth.passwordMismatch');
+        feedback.classList.add('profile-feedback--error');
+        feedback.hidden = false;
+        return;
+      }
+
+      submitBtn.disabled = true;
+      const { error } = await window.authManager?.updatePassword?.(password);
+      submitBtn.disabled = false;
+
+      if (error) {
+        feedback.textContent = error;
+        feedback.classList.add('profile-feedback--error');
+        feedback.hidden = false;
+        return;
+      }
+      feedback.textContent = t('profilePage.passwordChangeSuccess');
+      feedback.hidden = false;
+      root.querySelector('#profile-new-password').value = '';
+      root.querySelector('#profile-confirm-password').value = '';
+    });
   }
 
   function bindFriendSearchAutocomplete(root) {

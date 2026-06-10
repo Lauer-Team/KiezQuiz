@@ -1,5 +1,10 @@
 .DS_Store
-.cursor/
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
+!.cursor/hooks/
+!.cursor/hooks/**
+!.cursor/hooks.json
 *.log
 LOCAL-INFO.md
 node_modules/
@@ -8,3 +13,11 @@ _site/
 
 # Lokale Supabase-Keys (Vorlage: src/supabaseConfig.example.js)
 src/supabaseConfig.js
+
+# NB-Benachrichtigung (Secrets + Versand-Log)
+scripts/terms-notify.config.json
+scripts/.terms-notify-log.json
+
+# Supabase-Backup (DB-URI + Dumps — nie committen)
+scripts/backup-supabase.config.json
+backups/

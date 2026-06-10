@@ -12,5 +12,21 @@ window.KIEZ_LEGAL = {
     phone: '+49 151 29575097'
   },
   responsibleContent: 'Jeremiah J. Lauer',
-  lastUpdated: '2026-06-10'
+  editorialResponsible: 'Jeremiah J. Lauer',
+  lastUpdated: '10. Juni 2026',
+  lastUpdatedEn: '10 June 2026',
+  supabaseJsVersion: '2.49.8',
+  supervisoryAuthority: {
+    name: 'Hamburgischer Beauftragter für Datenschutz und Informationsfreiheit (HmbBfDI)',
+    address: 'Ludwig-Erhard-Str. 22, 20459 Hamburg',
+    email: 'mailbox@datenschutz.hamburg.de',
+    url: 'https://www.datenschutz.hamburg.de'
+  },
+  /** Wesentliche NB-Änderungen: version bumpen, effectiveDate (+30 Tage), dann notify_terms_change.py */
+  terms: {
+    version: '2026-06-10',
+    effectiveDate: '2026-07-10',
+    lastNotifiedVersion: null,
+    pendingNotice: false
+  }
 };

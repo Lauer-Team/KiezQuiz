@@ -1,0 +1,7 @@
+{
+  "telegram_bot_token": "HIER-DEIN-BOT-TOKEN-VON-BOTFATHER",
+  "telegram_user_id": 123456789,
+  "repo_path": "/home/DEINNAME/KiezQuiz",
+  "agent_bin": "agent",
+  "model": "auto"
+}

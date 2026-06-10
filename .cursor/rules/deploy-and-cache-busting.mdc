@@ -1,0 +1,43 @@
+---
+description: 
+alwaysApply: true
+---
+
+# Deploy & Cache-Busting (KiezQuiz)
+
+## Live gehen
+
+1. Änderungen auf **`main`** pushen → GitHub Actions (`Deploy to GitHub Pages`) deployt automatisch nach https://kiezquiz.de
+2. Deploy-Pipeline (`.github/workflows/deploy.yml`):
+   - `generate_seo_pages.py` + `generate_sitemap.py`
+   - rsync nach `_site/`
+   - **`stamp_build.py "${{ github.sha }}" _site`** — schreibt `version.json`, stampet alle `src/`-URLs in HTML mit `?v=<sha>`, injiziert Build-Meta-Tags
+3. Nach Deploy prüfen: `curl https://kiezquiz.de/version.json` (build = Git-SHA, design = aktuelle Revision)
+
+## Wie Browser die neue Version bekommen
+
+- **`src/versionGuard.js`** — läuft am **Ende von `<head>`** (nach CSS), erkennt neue Builds via `/version.json`, triggert einmaligen Reload, bustet alle `/src/`-Assets via `window.kiezAssetUrl()` und fetch-Patch
+- **`version.json`** — `{ "build": "<sha>", "design": <n> }`; Spielstand in localStorage bleibt erhalten
+- **`scripts/stamp_build.py`** — `DESIGN_REVISION` erhöhen, wenn ein Release **alle** Besucher zum frischen Laden zwingen soll (z. B. Redesign, große CSS-Änderung). Dann auch `version.json` und `<meta name="kiezquiz-design">` in HTML anpassen
+
+## Pflicht bei HTML-Änderungen
+
+- Jede neue Seite braucht `<script src="…/src/versionGuard.js">` am Ende von `<head>`
+- Build-Meta: `<meta name="kiezquiz-build">` und `<meta name="kiezquiz-design">`
+- Stadtseiten (`hamburg/`, `berlin/`, …) **nicht manuell pflegen** — werden von `generate_seo_pages.py` aus `hamburg/index.html`-Head + `index.html`-Body generiert. Head-Template muss `redesign.css`, `device/phone.css` (plus desktop/tablet/touch), `versionGuard.js` und alle CSS enthalten
+- **Geräte-Layouts:** nur `src/styles/device/{desktop,tablet,phone,touch}.css` bearbeiten — siehe `src/styles/device/README.md`
+- Dynamische Assets über `window.kiezAssetUrl()` (siehe `loadScript.js`, `bootstrap.js`, `i18n.js`, `cityRegistry.js`)
+
+## Häufige Fehler
+
+- `generate_seo_pages.py` überschreibt Stadtseiten beim Deploy — fehlende CSS dort = altes Design auf Mobile
+- `versionGuard.js` **vor** CSS-Links = Stylesheets werden nicht gebustet
+- `DESIGN_REVISION` vergessen zu erhöhen = Nutzer mit gleichem Build-SHA sehen kein Update
+
+## Nach Deploy verifizieren
+
+```bash
+curl -sS https://kiezquiz.de/version.json
+curl -sS https://kiezquiz.de/hamburg/ | grep -E 'redesign|versionGuard|kiezquiz-design'
+node scripts/test_seo_compat.js
+```

@@ -1,0 +1,45 @@
+name: Supabase monthly backup
+
+on:
+  schedule:
+    # 1. des Monats, 03:00 UTC (~04:00/05:00 DE je nach Sommerzeit)
+    - cron: "0 3 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Validate secret
+        env:
+          KIEZ_SUPABASE_DB_URL: ${{ secrets.KIEZ_SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$KIEZ_SUPABASE_DB_URL" ]; then
+            echo "::error::GitHub Secret KIEZ_SUPABASE_DB_URL fehlt."
+            echo "Setup: python3 scripts/setup_supabase_backup.py"
+            exit 1
+          fi
+
+      - name: Export Supabase backup
+        env:
+          KIEZ_SUPABASE_DB_URL: ${{ secrets.KIEZ_SUPABASE_DB_URL }}
+        run: |
+          python3 scripts/export_supabase_backup.py --retain 3
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ github.run_number }}
+          path: |
+            backups/supabase/kiezquiz-*.sql.gz
+            backups/supabase/manifest.json
+          retention-days: 90
+          if-no-files-found: error

@@ -126,6 +126,11 @@
           return '<li>' + item + '</li>';
         }).join('') + '</ul>';
       }
+      if (section && Array.isArray(section.afterList)) {
+        body += section.afterList.map(function (para) {
+          return '<p>' + para + '</p>';
+        }).join('');
+      }
       return '<section class="legal-section kq-card">' + title + body + '</section>';
     }).join('');
   }
@@ -152,7 +157,9 @@
   function syncUpdated() {
     var el = document.getElementById('legal-updated');
     if (!el) return;
-    var date = (window.KIEZ_LEGAL && window.KIEZ_LEGAL.lastUpdated) || '';
+    var cfg = window.KIEZ_LEGAL || {};
+    var lang = (typeof getLocale === 'function' ? getLocale() : 'de');
+    var date = (lang === 'en' && cfg.lastUpdatedEn) ? cfg.lastUpdatedEn : (cfg.lastUpdated || '');
     el.textContent = t('legalPages.updated', { date: date });
   }
 

@@ -93,3 +93,22 @@ Use when announcing KiezQuiz publicly. Prepare assets once, then post on launch 
 - [ ] Monitor GSC **Performance** and **Coverage** for crawl errors.
 - [ ] Track referrers in analytics (if added later).
 - [ ] Collect city wishlist feedback via in-app wish tile.
+
+## Security headers (HSTS) — GitHub Pages limitation
+
+GitHub Pages does **not** support custom HTTP response headers via a `_headers` file (unlike Netlify or Cloudflare Pages). You cannot set `Strict-Transport-Security`, `X-Frame-Options`, etc. on the origin directly.
+
+**Current mitigation:** GitHub Pages enforces HTTPS for `*.github.io` and custom domains; visitors to `http://kiezquiz.de` are redirected to HTTPS automatically.
+
+**For full HSTS preload** (max-age 31536000, includeSubDomains), migrate hosting to **Cloudflare Pages** or **Netlify** and add a root `_headers` file:
+
+```
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+```
+
+Alternatively, put Cloudflare in front of the custom domain as a reverse proxy and set headers in Cloudflare dashboard → Rules → Transform Rules.

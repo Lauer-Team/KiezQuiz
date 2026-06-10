@@ -1,0 +1,16 @@
+[Unit]
+Description=KiezQuiz Telegram Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=DEIN_LINUX_USERNAME
+WorkingDirectory=/home/DEIN_LINUX_USERNAME/KiezQuiz/telegram-agent
+Environment=PATH=/home/DEIN_LINUX_USERNAME/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/DEIN_LINUX_USERNAME/KiezQuiz/telegram-agent/.venv/bin/python bot.py
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

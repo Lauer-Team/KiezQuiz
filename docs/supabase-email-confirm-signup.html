@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bestätige deine E-Mail-Adresse</title>
+</head>
+<body style="margin:0;padding:0;background-color:#0F1118;">
+
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
+    Ein Klick — und dein KiezQuiz-Account ist startklar.
+  </div>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#0F1118;">
+    <tr>
+      <td align="center" style="padding:40px 16px 48px;">
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;">
+
+          <!-- Logo: PNG (SVG wird in Gmail/Outlook blockiert) + Text-Fallback -->
+          <tr>
+            <td align="center" style="padding:0 0 28px;">
+              <a href="{{ .SiteURL }}" style="text-decoration:none;display:inline-block;">
+                <img
+                  src="https://kiezquiz.de/assets/brand/logo/wortmarke-primaer.png"
+                  width="200"
+                  height="86"
+                  alt="KiezQuiz — Geografie-Quiz für deine Stadt"
+                  style="display:block;border:0;outline:none;text-decoration:none;width:200px;max-width:200px;height:auto;"
+                >
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="background-color:#171A24;border:1px solid #363B4F;border-radius:18px;padding:36px 32px 32px;">
+
+              <p style="margin:0 0 20px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF5233;">
+                Account
+              </p>
+
+              <h1 style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:28px;font-weight:800;line-height:1.15;color:#FCFBF8;">
+                Bestätige deine E-Mail-Adresse
+              </h1>
+
+              <p style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.55;color:#C5C9D4;">
+                Willkommen bei KiezQuiz! Du hast dich mit <strong style="color:#FCFBF8;">{{ .Email }}</strong> registriert.
+              </p>
+              <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.55;color:#C5C9D4;">
+                Klicke auf den Button, um deine E-Mail zu bestätigen und deinen Spielstand geräteübergreifend zu sichern.
+              </p>
+
+              <!-- Bulletproof-Button (ohne MSO-Kommentare — die verstecken den Link) -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td align="center" style="padding:0 0 28px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" bgcolor="#FF5233" style="background-color:#FF5233;border-radius:12px;">
+                          <a
+                            href="{{ .ConfirmationURL }}"
+                            style="display:inline-block;padding:14px 32px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;line-height:1.2;color:#ffffff;text-decoration:none;border-radius:12px;"
+                          >
+                            E-Mail bestätigen
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#9AA0B0;">
+                Button funktioniert nicht? Öffne diesen Link:
+              </p>
+              <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;">
+                <a href="{{ .ConfirmationURL }}" style="color:#5AA9FF;text-decoration:underline;font-weight:600;">Bestätigungslink öffnen</a>
+              </p>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td style="height:1px;background-color:#363B4F;font-size:0;line-height:0;">&nbsp;</td>
+                </tr>
+              </table>
+
+              <p style="margin:24px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.55;color:#9AA0B0;">
+                Du hast dich nicht registriert? Ignoriere diese E-Mail — es wird kein Account angelegt.
+              </p>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:28px 8px 0;">
+              <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#9AA0B0;">
+                <a href="{{ .SiteURL }}" style="color:#C5C9D4;text-decoration:none;">kiezquiz.de</a>
+                &nbsp;·&nbsp;
+                <a href="https://kiezquiz.de/datenschutz/" style="color:#9AA0B0;text-decoration:underline;">Datenschutz</a>
+              </p>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;color:#565b6e;">
+                KiezQuiz · Geografie-Quiz für deine Stadt
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

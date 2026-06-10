@@ -1,0 +1,32 @@
+name: Supabase backup reminder
+
+on:
+  schedule:
+    # 2. des Monats, 09:00 UTC — einen Tag nach dem automatischen Backup (1.)
+    - cron: "0 9 2 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Resend secret
+        env:
+          KIEZ_RESEND_API_KEY: ${{ secrets.KIEZ_RESEND_API_KEY }}
+        run: |
+          if [ -z "$KIEZ_RESEND_API_KEY" ]; then
+            echo "::error::GitHub Secret KIEZ_RESEND_API_KEY fehlt."
+            echo "Resend API Key von resend.com → GitHub Secrets → Actions"
+            exit 1
+          fi
+
+      - name: Send monthly backup reminder
+        env:
+          KIEZ_RESEND_API_KEY: ${{ secrets.KIEZ_RESEND_API_KEY }}
+          KIEZ_BACKUP_REMINDER_TO: info@kiezquiz.de
+        run: python3 scripts/send_backup_reminder.py --send

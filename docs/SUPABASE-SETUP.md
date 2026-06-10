@@ -419,6 +419,21 @@ GitHub Actions deployt nach Pages (Secrets müssen gesetzt sein). Dann testen:
 
 ---
 
+## 7. NB-Änderungen: E-Mail an alle Nutzer
+
+Bei wesentlichen Änderungen der Nutzungsbedingungen müssen registrierte Nutzer per E-Mail informiert werden (§ 10 NB).
+
+**Bereits eingerichtet:** Edge Function `notify-terms-change` im Projekt KiezQuiz Backend.
+
+**Einmalig Secrets setzen:** Edge Functions → `notify-terms-change` → Secrets:
+
+- `NOTIFY_TERMS_SECRET` — siehe `scripts/terms-notify.config.json` (lokal, via `python3 scripts/setup_terms_notify.py`)
+- `RESEND_API_KEY` — von [resend.com](https://resend.com), Domain `kiezquiz.de` verifizieren
+
+Vollständiger Ablauf: **`docs/TERMS-CHANGE-PROCESS.md`**
+
+---
+
 ## Fehlerbehebung
 
 | Problem | Lösung |
@@ -427,6 +442,23 @@ GitHub Actions deployt nach Pages (Secrets müssen gesetzt sein). Dann testen:
 | Registrierung schlägt fehl | E-Mail-Bestätigung in Supabase deaktiviert? |
 | Spielstand sync nicht | Browser-Konsole (F12) → Netzwerk/Console auf Fehler prüfen |
 | RLS-Fehler | SQL-Skript aus Schritt 2 erneut ausführen |
+| NB-Versand HTTP 401 | `NOTIFY_TERMS_SECRET` in Supabase = `notifySecret` in lokaler Config |
+| NB-Versand Resend-Fehler | `RESEND_API_KEY` in Supabase Secrets, Domain verifiziert |
+| Kein DB-Backup (Free Tier) | Monatlicher Export: `docs/BACKUP-SUPABASE.md` |
+
+---
+
+## Backups (Free Tier)
+
+Supabase Free hat keine automatischen DB-Backups. Einrichtung:
+
+```bash
+python3 scripts/setup_supabase_backup.py
+# databaseUrl in scripts/backup-supabase.config.json eintragen
+python3 scripts/export_supabase_backup.py
+```
+
+Optional automatisch jeden Monat via GitHub Actions (Secret `KIEZ_SUPABASE_DB_URL`). Details: **`docs/BACKUP-SUPABASE.md`**
 
 ---
 

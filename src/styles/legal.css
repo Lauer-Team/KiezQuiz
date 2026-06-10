@@ -153,6 +153,49 @@ body.legal-page-body {
 }
 
 /* Cookie / storage notice */
+.kq-terms-notice {
+  position: sticky;
+  top: 0;
+  z-index: 13000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 1rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, #c9a227 40%, transparent);
+  background: color-mix(in srgb, #c9a227 18%, var(--surface, #171923));
+  color: var(--text, #f5f5f5);
+  font-size: 0.9rem;
+}
+
+.kq-terms-notice__text {
+  margin: 0;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.kq-terms-notice__text a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.kq-terms-notice__btn {
+  flex-shrink: 0;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #c9a227 55%, transparent);
+  background: color-mix(in srgb, #c9a227 25%, transparent);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.kq-terms-notice__btn:hover {
+  background: color-mix(in srgb, #c9a227 35%, transparent);
+}
+
 .kq-cookie-banner {
   position: fixed;
   left: max(0.75rem, env(safe-area-inset-left));
@@ -199,16 +242,7 @@ body.legal-page-body {
   background: none;
   padding: 0;
   font: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.footer-legal-btn:hover {
-  color: var(--signal);
 }
 
 .footer-copyright {
@@ -283,6 +317,8 @@ body.legal-page-body {
 
 /* Banner sits on <body>, outside .app-shell — needs explicit theme tokens */
 html[data-theme="dark"] .kq-cookie-banner {
+  --signal: #FF5233;
+  --signal-tief: #E23E22;
   --surface: #171A24;
   --surface-2: #252938;
   --line: #363B4F;
@@ -293,6 +329,8 @@ html[data-theme="dark"] .kq-cookie-banner {
 }
 
 html[data-theme="light"] .kq-cookie-banner {
+  --signal: #FF5233;
+  --signal-tief: #E23E22;
   --surface: #FCFBF8;
   --surface-2: #F3EEE2;
   --line: #DCD3C0;
@@ -302,22 +340,23 @@ html[data-theme="light"] .kq-cookie-banner {
   box-shadow: 0 16px 40px -20px rgba(60, 50, 30, 0.35);
 }
 
-html[data-theme="dark"] .kq-cookie-banner__btn {
+html[data-theme="dark"] .kq-cookie-banner__btn:not(.kq-cookie-banner__btn--primary),
+html[data-theme="light"] .kq-cookie-banner__btn:not(.kq-cookie-banner__btn--primary) {
   background: var(--surface-2);
   color: var(--text-1);
 }
 
-html[data-theme="light"] .kq-cookie-banner__btn {
-  background: var(--surface-2);
-  color: var(--text-1);
-}
-
-html[data-theme="dark"] .kq-cookie-banner__btn--primary {
-  color: #0F1118;
-}
-
+html[data-theme="dark"] .kq-cookie-banner__btn--primary,
 html[data-theme="light"] .kq-cookie-banner__btn--primary {
-  color: #FCFBF8;
+  background: var(--signal);
+  border-color: var(--signal);
+  color: #fff;
+}
+
+html[data-theme="dark"] .kq-cookie-banner__btn--primary:hover,
+html[data-theme="light"] .kq-cookie-banner__btn--primary:hover {
+  background: var(--signal-tief);
+  border-color: var(--signal-tief);
 }
 
 .auth-terms {
@@ -347,14 +386,16 @@ html[data-theme="light"] .kq-cookie-banner__btn--primary {
   margin: 0.35rem 0 0;
 }
 
-.footer-legal-links a {
+.footer-legal-links a,
+.footer-legal-links .footer-legal-btn {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--text-muted);
   text-decoration: none;
 }
 
-.footer-legal-links a:hover {
+.footer-legal-links a:hover,
+.footer-legal-links .footer-legal-btn:hover {
   color: var(--signal);
 }
 

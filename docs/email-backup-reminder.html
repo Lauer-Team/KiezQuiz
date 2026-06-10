@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monatlicher Daten-Export — KiezQuiz</title>
+</head>
+<body style="margin:0;padding:0;background-color:#0F1118;">
+
+  <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
+    Erinnerung: Supabase-Daten exportieren und archivieren (DSGVO / TOMs).
+  </div>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#0F1118;">
+    <tr>
+      <td align="center" style="padding:40px 16px 48px;">
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;">
+
+          <tr>
+            <td align="center" style="padding:0 0 28px;">
+              <a href="{{SITE_URL}}" style="text-decoration:none;display:inline-block;">
+                <img
+                  src="https://kiezquiz.de/assets/brand/logo/wortmarke-primaer.png"
+                  width="200"
+                  height="86"
+                  alt="KiezQuiz — Geografie-Quiz für deine Stadt"
+                  style="display:block;border:0;outline:none;text-decoration:none;width:200px;max-width:200px;height:auto;"
+                >
+              </a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="background-color:#171A24;border:1px solid #363B4F;border-radius:18px;padding:36px 32px 32px;">
+
+              <p style="margin:0 0 20px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#FF5233;">
+                Betrieb &amp; Datenschutz
+              </p>
+
+              <h1 style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:28px;font-weight:800;line-height:1.15;color:#FCFBF8;">
+                Monatlicher Daten-Export
+              </h1>
+
+              <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.55;color:#C5C9D4;">
+                <strong style="color:#FCFBF8;">Warum?</strong> Supabase Free Tier hat keine automatischen Datenbank-Backups.
+                Für die TOMs (Art.&nbsp;32 DSGVO) sichern wir die Nutzerdaten monatlich per SQL-Export —
+                Profile, Spielstände, Freunde, Bestenlisten usw. (Schema <code style="color:#FCFBF8;">public</code>).
+              </p>
+
+              <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.55;color:#C5C9D4;">
+                GitHub Actions erstellt am <strong style="color:#FCFBF8;">1. jeden Monats</strong> automatisch ein Backup.
+                Diese E-Mail erinnert dich daran, es herunterzuladen und dauerhaft zu archivieren.
+              </p>
+
+              <h2 style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;color:#FCFBF8;">
+                Schritt 1 — Backup prüfen &amp; herunterladen
+              </h2>
+              <ol style="margin:0 0 24px;padding-left:20px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#C5C9D4;">
+                <li style="margin-bottom:8px;">GitHub → Actions → <strong style="color:#FCFBF8;">Supabase monthly backup</strong></li>
+                <li style="margin-bottom:8px;">Letzten Run öffnen — Status muss grün sein</li>
+                <li style="margin-bottom:8px;">Unter <strong style="color:#FCFBF8;">Artifacts</strong> die Datei <code style="color:#FCFBF8;">supabase-backup-…</code> herunterladen</li>
+              </ol>
+
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td align="center" style="padding:0 0 28px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td align="center" bgcolor="#FF5233" style="background-color:#FF5233;border-radius:12px;">
+                          <a href="{{ACTIONS_URL}}" style="display:inline-block;padding:14px 32px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;line-height:1.2;color:#ffffff;text-decoration:none;border-radius:12px;">
+                            GitHub Actions öffnen
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <h2 style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;color:#FCFBF8;">
+                Schritt 2 — Dauerhaft archivieren
+              </h2>
+              <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#C5C9D4;">
+                GitHub speichert Artifacts nur <strong style="color:#FCFBF8;">90 Tage</strong>.
+                Kopie ablegen in z.&nbsp;B. Ordner „Rechtsdokumente / KiezQuiz Backups“, iCloud Drive oder externe Festplatte.
+              </p>
+
+              <h2 style="margin:0 0 12px;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;color:#FCFBF8;">
+                Alternative: Manuell auf dem Mac
+              </h2>
+              <pre style="margin:0 0 24px;padding:16px;background-color:#0F1118;border:1px solid #363B4F;border-radius:10px;font-family:Menlo,Monaco,Consolas,monospace;font-size:13px;line-height:1.5;color:#C5C9D4;white-space:pre-wrap;">python3 scripts/setup_supabase_backup.py   # einmalig
+python3 scripts/export_supabase_backup.py --dry-run
+python3 scripts/export_supabase_backup.py</pre>
+
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#8B90A0;">
+                Vollständige Anleitung: <a href="{{DOCS_URL}}" style="color:#FF5233;text-decoration:underline;">docs/BACKUP-SUPABASE.md</a>
+              </p>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:28px 16px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#636878;">
+              Automatische Erinnerung · {{MONTH_LABEL}} · KiezQuiz Betrieb
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

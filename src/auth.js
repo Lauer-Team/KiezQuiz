@@ -28,6 +28,13 @@ class AuthManager {
     return !!this.user;
   }
 
+  getAuthRedirectUrl() {
+    if (typeof window !== 'undefined' && window.location?.origin) {
+      return `${window.location.origin}/profile/?section=account`;
+    }
+    return 'https://kiezquiz.de/profile/?section=account';
+  }
+
   getDisplayName() {
     return this.profile?.username || this.user?.email?.split('@')[0] || t('auth.player');
   }
@@ -86,7 +93,11 @@ class AuthManager {
       this._notify(null, null);
     }
 
-    this.supabase.auth.onAuthStateChange(async (_event, session) => {
+    this.supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        this._pendingPasswordRecovery = true;
+        this._schedulePasswordRecoveryModal();
+      }
       if (session?.user) {
         const profile = await this._loadProfile(session.user.id);
         this._notify(session.user, profile);
@@ -134,6 +145,99 @@ class AuthManager {
     return message || t('auth.genericError');
   }
 
+  async _resolveEmail(identifier) {
+    const trimmed = (identifier || '').trim();
+    if (!trimmed) {
+      return { email: null, error: t('auth.identifierRequired') };
+    }
+    if (trimmed.includes('@')) {
+      return { email: trimmed, error: null };
+    }
+    const { data, error } = await this.supabase.rpc('get_email_for_username', { p_username: trimmed });
+    if (error) {
+      console.warn('Username-Lookup fehlgeschlagen:', error.message);
+      return { email: null, error: t('auth.invalidCredentials') };
+    }
+    if (!data) {
+      return { email: null, error: t('auth.invalidCredentials') };
+    }
+    return { email: data, error: null };
+  }
+
+  _cleanAuthHashFromUrl() {
+    try {
+      const url = new URL(window.location.href);
+      if (url.hash && (url.hash.includes('access_token') || url.hash.includes('type='))) {
+        history.replaceState(null, '', url.pathname + url.search);
+      }
+    } catch (_) { /* ignore */ }
+  }
+
+  _schedulePasswordRecoveryModal() {
+    if (this._passwordRecoveryScheduled) return;
+    this._passwordRecoveryScheduled = true;
+    const show = () => {
+      this._passwordRecoveryScheduled = false;
+      if (!this._pendingPasswordRecovery) return;
+      this._pendingPasswordRecovery = false;
+      void this.showPasswordResetModal();
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', show, { once: true });
+    } else {
+      setTimeout(show, 150);
+    }
+  }
+
+  async requestPasswordReset(identifier) {
+    if (!this.supabase) {
+      return { error: t('auth.cloudNotConfigured') };
+    }
+    const { email, error: resolveError } = await this._resolveEmail(identifier);
+    if (resolveError) {
+      return { error: resolveError };
+    }
+    const { error } = await this.supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: this.getAuthRedirectUrl()
+    });
+    if (error) {
+      return { error: this._mapAuthError(error.message) };
+    }
+    return { error: null };
+  }
+
+  async updatePassword(newPassword) {
+    if (!this.supabase) {
+      return { error: t('auth.cloudNotConfigured') };
+    }
+    if ((newPassword || '').length < 6) {
+      return { error: t('auth.passwordMin') };
+    }
+    const { error } = await this.supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      return { error: this._mapAuthError(error.message) };
+    }
+    return { error: null };
+  }
+
+  async changeEmail(newEmail) {
+    if (!this.supabase) {
+      return { error: t('auth.cloudNotConfigured') };
+    }
+    const trimmed = (newEmail || '').trim();
+    if (!trimmed.includes('@')) {
+      return { error: t('auth.invalidEmail') };
+    }
+    const { error } = await this.supabase.auth.updateUser(
+      { email: trimmed },
+      { emailRedirectTo: this.getAuthRedirectUrl() }
+    );
+    if (error) {
+      return { error: this._mapAuthError(error.message) };
+    }
+    return { error: null };
+  }
+
   async signUp(username, email, password) {
     if (!this.supabase) {
       return { error: t('auth.cloudNotConfigured') };
@@ -149,7 +253,10 @@ class AuthManager {
     const { data, error } = await this.supabase.auth.signUp({
       email: email.trim(),
       password,
-      options: { data: { username: trimmedName } }
+      options: {
+        data: { username: trimmedName },
+        emailRedirectTo: this.getAuthRedirectUrl()
+      }
     });
 
     if (error) {
@@ -173,19 +280,11 @@ class AuthManager {
       return { error: t('auth.identifierRequired') };
     }
 
-    let email = trimmed;
-    if (!trimmed.includes('@')) {
-      const { data: resolvedEmail, error: lookupError } = await this.supabase
-        .rpc('get_email_for_username', { p_username: trimmed });
-      if (lookupError) {
-        console.warn('Username-Lookup fehlgeschlagen:', lookupError.message);
-        return { error: t('auth.invalidCredentials') };
-      }
-      if (!resolvedEmail) {
-        return { error: t('auth.invalidCredentials') };
-      }
-      email = resolvedEmail;
+    const { email: resolvedEmail, error: resolveError } = await this._resolveEmail(trimmed);
+    if (resolveError) {
+      return { error: resolveError };
     }
+    const email = resolvedEmail;
 
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email,
@@ -306,6 +405,9 @@ class AuthManager {
             <span>${t('auth.password')}</span>
             <input type="password" id="auth-password" autocomplete="current-password" required minlength="6">
           </label>
+          <p class="auth-forgot-wrap">
+            <button type="button" class="auth-link-btn" id="auth-forgot-password">${t('auth.forgotPassword')}</button>
+          </p>
           <p class="auth-error" id="auth-error" hidden></p>
           <button type="submit" class="primary-btn auth-submit">${t('auth.loginSubmit')}</button>
         </form>
@@ -349,6 +451,11 @@ class AuthManager {
     });
 
     document.getElementById('btn-auth-cancel')?.addEventListener('click', () => closeOverlayModal(modal));
+
+    document.getElementById('auth-forgot-password')?.addEventListener('click', () => {
+      closeOverlayModal(modal);
+      void this.showForgotPasswordModal();
+    });
 
     loginForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -404,6 +511,133 @@ class AuthManager {
       }
       closeOverlayModal(modal);
       this.updateHeaderUI();
+    });
+  }
+
+  async showForgotPasswordModal() {
+    if (typeof openOverlayModal !== 'function') {
+      if (typeof window.loadGameCore === 'function') {
+        await window.loadGameCore();
+      }
+    }
+    if (typeof openOverlayModal !== 'function') return;
+
+    const modal = openOverlayModal(`
+      <div class="modal-content auth-modal-content">
+        <h2>${t('auth.forgotTitle')}</h2>
+        <p class="auth-modal-intro">${t('auth.forgotIntro')}</p>
+        <form class="auth-form" id="auth-form-forgot">
+          <label class="auth-field">
+            <span>${t('auth.usernameOrEmail')}</span>
+            <input type="text" id="auth-forgot-identifier" autocomplete="username" required>
+          </label>
+          <p class="auth-error" id="auth-forgot-error" hidden></p>
+          <p class="auth-success" id="auth-forgot-success" hidden></p>
+          <button type="submit" class="primary-btn auth-submit">${t('auth.forgotSubmit')}</button>
+        </form>
+        <button type="button" class="secondary-btn auth-cancel" id="btn-forgot-cancel">${t('auth.cancel')}</button>
+      </div>
+    `, { closeOnBackdrop: true });
+
+    const form = document.getElementById('auth-form-forgot');
+    document.getElementById('btn-forgot-cancel')?.addEventListener('click', () => closeOverlayModal(modal));
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('auth-forgot-error');
+      const okEl = document.getElementById('auth-forgot-success');
+      const identifier = document.getElementById('auth-forgot-identifier').value;
+      errEl.hidden = true;
+      okEl.hidden = true;
+
+      const submitBtn = form.querySelector('.auth-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = t('auth.forgotSending');
+
+      const { error } = await this.requestPasswordReset(identifier);
+      submitBtn.disabled = false;
+      submitBtn.textContent = t('auth.forgotSubmit');
+
+      if (error) {
+        errEl.textContent = error;
+        errEl.hidden = false;
+        return;
+      }
+      okEl.textContent = t('auth.forgotSuccess');
+      okEl.hidden = false;
+      form.querySelector('#auth-forgot-identifier').disabled = true;
+      submitBtn.disabled = true;
+    });
+  }
+
+  async showPasswordResetModal() {
+    if (typeof openOverlayModal !== 'function') {
+      if (typeof window.loadGameCore === 'function') {
+        await window.loadGameCore();
+      }
+    }
+    if (typeof openOverlayModal !== 'function') return;
+
+    const modal = openOverlayModal(`
+      <div class="modal-content auth-modal-content">
+        <h2>${t('auth.resetTitle')}</h2>
+        <p class="auth-modal-intro">${t('auth.resetIntro')}</p>
+        <form class="auth-form" id="auth-form-reset">
+          <label class="auth-field">
+            <span>${t('auth.newPassword')}</span>
+            <input type="password" id="auth-new-password" autocomplete="new-password" required minlength="6">
+          </label>
+          <label class="auth-field">
+            <span>${t('auth.confirmPassword')}</span>
+            <input type="password" id="auth-confirm-password" autocomplete="new-password" required minlength="6">
+          </label>
+          <p class="auth-error" id="auth-reset-error" hidden></p>
+          <button type="submit" class="primary-btn auth-submit">${t('auth.resetSubmit')}</button>
+        </form>
+      </div>
+    `, { closeOnBackdrop: false });
+
+    document.getElementById('auth-form-reset')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('auth-reset-error');
+      const password = document.getElementById('auth-new-password').value;
+      const confirm = document.getElementById('auth-confirm-password').value;
+      errEl.hidden = true;
+
+      if (password !== confirm) {
+        errEl.textContent = t('auth.passwordMismatch');
+        errEl.hidden = false;
+        return;
+      }
+
+      const submitBtn = e.target.querySelector('.auth-submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = t('auth.resetSaving');
+
+      const { error } = await this.updatePassword(password);
+      submitBtn.disabled = false;
+      submitBtn.textContent = t('auth.resetSubmit');
+
+      if (error) {
+        errEl.textContent = error;
+        errEl.hidden = false;
+        return;
+      }
+
+      this._cleanAuthHashFromUrl();
+      closeOverlayModal(modal);
+      this.updateHeaderUI();
+
+      if (typeof openOverlayModal === 'function') {
+        const doneModal = openOverlayModal(`
+          <div class="modal-content auth-modal-content">
+            <h2>${t('auth.resetDoneTitle')}</h2>
+            <p class="auth-modal-intro">${t('auth.resetDoneBody')}</p>
+            <button type="button" class="primary-btn auth-submit" id="auth-reset-done-close">${t('auth.close')}</button>
+          </div>
+        `, { closeOnBackdrop: true });
+        doneModal.querySelector('#auth-reset-done-close')?.addEventListener('click', () => closeOverlayModal(doneModal));
+      }
     });
   }
 

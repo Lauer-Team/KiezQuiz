@@ -148,7 +148,7 @@
     "cloudLoggedIn": "Signed in as <strong>{name}</strong>. Your progress syncs automatically.",
     "cloudGuest": "Not signed in — progress stored locally only. Tap \"Sign in\" top-right for cloud sync.",
     "privacyTitle": "🔒 Privacy",
-    "privacyBody": "Without an account, your progress is stored locally in the browser (localStorage). With an optional account, saves are encrypted via TLS and stored with Supabase (EU). Details in the <a href=\"/datenschutz/\">privacy policy</a>.",
+    "privacyBody": "Without an account, your progress is stored locally in the browser (localStorage). With an optional account, data is transmitted via TLS and stored with Supabase (EU); passwords are hashed. Details in the <a href=\"/datenschutz/\">privacy policy</a>.",
     "resetTitle": "🗑️ Reset progress",
     "resetBody": "Deletes all XP, achievements, and progress{cloudSuffix}. Fresh start as Quiddje.",
     "resetCloudSuffix": " (locally and in the cloud)",
@@ -305,6 +305,15 @@
     "noFriendsForLb": "Add friends to compare scores.",
     "loadError": "Could not load leaderboard.",
     "accountIntro": "Signed in as {name}.",
+    "emailTitle": "Email address",
+    "emailCurrent": "Current: {email}",
+    "emailNew": "New email address",
+    "emailChangeHint": "You will receive a confirmation link at the new address. Your old address will be notified by email.",
+    "emailChangeBtn": "Change email",
+    "emailChangePending": "Confirmation email sent — please open the link in your new inbox.",
+    "passwordTitle": "Password",
+    "passwordChangeBtn": "Save password",
+    "passwordChangeSuccess": "Password updated.",
     "accountLegal": "Your account is subject to the <a href=\"/nutzungsbedingungen/\">terms of use</a> and <a href=\"/datenschutz/\">privacy policy</a>. Cloud data includes progress, friends and leaderboard entries.",
     "signOut": "Sign out",
     "deleteTitle": "Delete account",
@@ -352,7 +361,23 @@
     "usernameRequired": "Please enter a username.",
     "identifierRequired": "Please enter username or email.",
     "termsLabel": "I accept the <a href=\"/nutzungsbedingungen/\" target=\"_blank\" rel=\"noopener\">terms of use</a> and have read the <a href=\"/datenschutz/\" target=\"_blank\" rel=\"noopener\">privacy policy</a>.",
-    "termsRequired": "Please confirm the terms and privacy policy."
+    "termsRequired": "Please confirm the terms and privacy policy.",
+    "forgotPassword": "Forgot password?",
+    "forgotTitle": "Reset password",
+    "forgotIntro": "Enter your username or email. We will send you a link to set a new password.",
+    "forgotSubmit": "Send link",
+    "forgotSending": "Sending…",
+    "forgotSuccess": "If an account exists, we sent you an email. Please check your spam folder too.",
+    "resetTitle": "Set new password",
+    "resetIntro": "Choose a new password for your account (at least 6 characters).",
+    "resetSubmit": "Save password",
+    "resetSaving": "Saving…",
+    "resetDoneTitle": "Password saved",
+    "resetDoneBody": "Your password was changed. You can sign in with it right away.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordMismatch": "Passwords do not match.",
+    "close": "Close"
   },
   "sync": {
     "restored": "☁️ Progress restored from the cloud.",
@@ -1240,7 +1265,7 @@
     "citiesTitle": "Cities & wishes",
     "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Düsseldorf and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
     "privacyTitle": "Privacy",
-    "privacyBody": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username and save data are encrypted via TLS and stored with Supabase (EU). Full details in the <a href=\"/datenschutz/\">privacy policy</a>.",
+    "privacyBody": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username and save data are transmitted via TLS and stored with Supabase (EU); passwords are hashed. Full details in the <a href=\"/datenschutz/\">privacy policy</a>.",
     "licensesTitle": "Open source & licences",
     "licensesBody": "KiezQuiz uses open-source libraries and free fonts. A full list with licence names and links is at <a href=\"/lizenzen/\">Open source &amp; licences</a>. The application source code itself is not open source.",
     "ctaPlay": "Play now →",
@@ -1253,142 +1278,164 @@
     "navLabel": "Legal",
     "addressMissing": "Operator note: add a postal address in src/data/legalConfig.js (required under German law § 5 DDG).",
     "impressum": {
-      "title": "Imprint",
+      "title": "Legal Notice",
       "metaDescription": "Imprint and provider information for KiezQuiz under German DDG and MStV.",
       "sections": [
         {
-          "title": "Provider",
+          "title": "Information pursuant to § 5 DDG (German Digital Services Act)",
           "paragraphs": ["{{operator}}"]
         },
         {
           "title": "Contact",
           "paragraphs": [
-            "For questions about KiezQuiz, contact us at the email address above. We usually reply within a few business days."
+            "Email: <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a><br>Phone: <a href=\"tel:+4915129575097\">+49 151 29575097</a>"
           ]
         },
         {
-          "title": "Responsible for content (§ 18 (2) MStV)",
+          "title": "Person Responsible for Editorial Content (§ 18 para. 2 MStV)",
           "paragraphs": [
-            "Jeremiah J. Lauer<br>Address as above."
+            "Jeremiah J. Lauer<br>Schoenaich-Carolath-Str. 1<br>22607 Hamburg<br>Germany"
           ]
         },
         {
-          "title": "EU dispute resolution",
+          "title": "EU Online Dispute Resolution",
           "paragraphs": [
-            "The European Commission provides an ODR platform: <a href=\"https://ec.europa.eu/consumers/odr/\" target=\"_blank\" rel=\"noopener noreferrer\">https://ec.europa.eu/consumers/odr/</a>. We are neither obliged nor willing to participate in consumer arbitration proceedings."
+            "The European Commission provides a platform for online dispute resolution (ODR): <a href=\"https://ec.europa.eu/consumers/odr/\" target=\"_blank\" rel=\"noopener noreferrer\">https://ec.europa.eu/consumers/odr/</a>",
+            "Our email address is: <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>",
+            "We are neither willing nor obliged to participate in dispute resolution proceedings before a consumer arbitration board (§ 36 VSBG)."
           ]
         },
         {
-          "title": "Liability for content",
+          "title": "Liability for Content",
           "paragraphs": [
-            "We are responsible for our own content under general law. We strive for accurate geo and quiz data but do not guarantee completeness or correctness — especially for boundaries, administrative assignments and trivia texts.",
-            "KiezQuiz is for playful orientation and does not replace official maps or authority information."
+            "The contents of this website have been compiled with the utmost care. As a service provider, we are responsible for our own content on these pages pursuant to § 7 para. 1 DDG and applicable law. According to §§ 8–10 DDG, we are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. Obligations to remove or block the use of information under general law remain unaffected. Liability in this regard is, however, only possible from the moment of knowledge of a specific legal violation. Upon notification of such violations, we will remove the content immediately."
           ]
         },
         {
-          "title": "Liability for links",
+          "title": "Liability for Links",
           "paragraphs": [
-            "Our site may contain links to third-party websites. We have no influence over their content and assume no liability. The respective provider is always responsible for linked pages."
+            "Our website contains links to external third-party websites over whose content we have no influence. We therefore cannot accept any liability for this external content. The respective provider or operator of the linked pages is always responsible for their content. At the time of linking, the linked pages were checked for possible legal violations. No illegal content was apparent at the time of linking. Permanent monitoring of the linked pages without specific indications of a legal violation is not reasonable. Upon notification of legal violations, we will remove such links immediately."
           ]
         },
         {
           "title": "Copyright",
           "paragraphs": [
-            "Content and works created by us are subject to German copyright law. Reproduction and distribution beyond copyright limits require our written consent."
-          ]
-        },
-        {
-          "title": "Age recommendation",
-          "paragraphs": [
-            "KiezQuiz is a casual geography learning game without youth-endangering content and suitable for all ages. Optional account registration is aimed at users aged 16+ (see <a href=\"/nutzungsbedingungen/\">terms of use</a>)."
+            "The content and works on this website created by the operator are subject to German copyright law. Reproduction, processing, distribution, and any form of commercial exploitation outside the limits of copyright law require the written consent of the operator. The open-source libraries and typefaces used are listed separately on the Licences page (<a href=\"/lizenzen/\">/lizenzen/</a>)."
           ]
         }
       ]
     },
     "privacy": {
-      "title": "Privacy policy",
+      "title": "Privacy Policy",
       "metaDescription": "Privacy policy for KiezQuiz: local storage, optional account, Supabase (EU), no tracking cookies.",
       "sections": [
         {
           "title": "1. Controller",
-          "paragraphs": ["{{operator}}", "Website: <a href=\"https://kiezquiz.de/\">https://kiezquiz.de</a>"]
-        },
-        {
-          "title": "2. Overview",
           "paragraphs": [
-            "KiezQuiz is a free learning game without ads. We do not use analytics or marketing cookies. By default your progress is stored locally in your browser only. An account is optional and enables cross-device sync and social features (friends, leaderboards)."
+            "The controller responsible for data processing on this website is:",
+            "{{operator}}"
           ]
         },
         {
-          "title": "3. Legal bases",
+          "title": "2. General",
+          "paragraphs": [
+            "KiezQuiz is a free, ad-free map quiz. We process personal data only to the extent technically necessary to operate the website and provide our services, or to fulfil a contract. We do not use tracking, Google Analytics, or advertising cookies."
+          ]
+        },
+        {
+          "title": "3. Playing Without an Account (localStorage)",
+          "paragraphs": [
+            "If you play without an account, your game progress is stored exclusively in your browser's localStorage. This data remains on your device and is not transmitted to us or any third party.",
+            "Legal basis: § 25 para. 2 no. 2 TDDDG (technically necessary local storage, no consent required)."
+          ]
+        },
+        {
+          "title": "4. Optional User Account",
+          "paragraphs": [
+            "If you register, we process the following data:"
+          ],
           "list": [
-            "Art. 6 (1) lit. b GDPR — contract/account (registration, cloud save, friends)",
-            "Art. 6 (1) lit. f GDPR — legitimate interest (technical operation, abuse prevention, local storage for playability)",
-            "Art. 6 (1) lit. a GDPR — consent where you give it explicitly (e.g. registration after accepting the terms)"
+            "Email address (for authentication and password reset)",
+            "Username (publicly visible in leaderboards and friend lists)",
+            "Password (stored as a cryptographic hash only, never in plain text)",
+            "Game progress (JSON format)",
+            "Friend list (usernames)",
+            "City/district requests (text input)"
+          ],
+          "afterList": [
+            "Backend provider: Supabase Inc., 970 Toa Payoh North #07-04, Singapore 318992. Data is stored and processed exclusively on servers in the EU West Europe region (Ireland, AWS eu-west-1) and does not leave the European Union.",
+            "A data processing agreement pursuant to Art. 28 GDPR is in place with Supabase.",
+            "Legal basis: Art. 6 para. 1 lit. b GDPR (performance of a usage contract).",
+            "Deletion: You can delete your account at any time directly within the app. All your personal data will be removed from our systems upon deletion."
           ]
         },
         {
-          "title": "4. Local storage (without account)",
+          "title": "5. Hosting (GitHub Pages)",
           "paragraphs": [
-            "We store progress, settings (language, theme, sound), guest ID for city wishes and technical version markers in your browser’s <strong>localStorage</strong>. This data does not leave your device and is not transmitted to us.",
-            "You can delete it anytime via browser site data or by resetting progress in settings."
-          ]
-        },
-        {
-          "title": "5. Optional account & cloud save",
-          "paragraphs": [
-            "When you register we process email, username and password (hashed — not readable to us) via our processor <strong>Supabase Inc.</strong>, hosted in the <strong>EU (Frankfurt)</strong>. We also sync save data (JSON), friendships, leaderboard entries and city wishes if you use those features.",
-            "Purpose: cross-device sync, friends and public leaderboards. You can delete your account anytime in profile settings; associated cloud data will be removed."
-          ]
-        },
-        {
-          "title": "6. Hosting & technical services",
+            "This website is hosted via GitHub Pages, a service of GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (a subsidiary of Microsoft Corporation).",
+            "When you visit our website, access logs (server logs) are automatically recorded, which may include:"
+          ],
           "list": [
-            "<strong>GitHub Pages</strong> (Microsoft/GitHub, USA) — static site delivery; server logs (IP, time, URL, user agent) may be created. Legal basis: Art. 6 (1) lit. f GDPR (website operation).",
-            "<strong>Supabase Inc.</strong> (EU region Frankfurt) — authentication and database for optional account features. We have a data processing agreement (DPA) with Supabase under Art. 28 GDPR.",
-            "<strong>jsDelivr</strong> (USA/EU CDN) — delivery of the Supabase client library; your IP may be transmitted to the CDN operator when loading.",
-            "<strong>Fonts</strong> — web fonts (Bricolage Grotesque, Hanken Grotesk, Space Mono) are <strong>self-hosted</strong> on kiezquiz.de; no requests to Google Fonts."
+            "IP address of the requesting device",
+            "Date and time of the request",
+            "URL of the page accessed",
+            "Browser type and operating system (User-Agent)",
+            "Referrer URL (previously visited page)"
+          ],
+          "afterList": [
+            "These log data are not merged with other data, not used to identify users, and serve solely for technical security and error analysis. They are automatically deleted after a maximum of 30 days.",
+            "For transfers of data to the USA, the EU Standard Contractual Clauses (SCCs) pursuant to Art. 46 para. 2 lit. c GDPR apply. GitHub has committed to compliance with these clauses (GitHub Data Protection Agreement).",
+            "Legal basis: Art. 6 para. 1 lit. f GDPR (legitimate interest in the secure and stable operation of the website)."
           ]
         },
         {
-          "title": "7. Third-country transfers",
+          "title": "6. Self-hosted libraries",
           "paragraphs": [
-            "Account and game data are processed in the EU (Frankfurt) with Supabase. Website delivery and CDN use may involve processing in the USA (GitHub, jsDelivr). Where required we rely on appropriate safeguards (e.g. EU standard contractual clauses)."
+            "The Supabase JavaScript library (<code>@supabase/supabase-js</code>) and all fonts are served exclusively from kiezquiz.de (<code>/assets/js/</code>, <code>/assets/fonts/</code>). No requests are made to external CDNs (e.g. jsDelivr or Google Fonts)."
           ]
         },
         {
-          "title": "8. Cookies, localStorage & TDDDG",
+          "title": "7. Your Rights as a Data Subject",
           "paragraphs": [
-            "We do <strong>not</strong> use advertising, profiling or analytics cookies. Progress and settings are stored in <strong>localStorage</strong> (technically necessary for core functionality, § 25 (2) no. 2 TDDDG). Supabase may set necessary session cookies while you are logged in.",
-            "The bottom notice explains local storage. “Got it” only stores your acknowledgement locally (<code>kiezquiz_legal_notice_v1</code>). Use “Cookie settings” in the footer to show the notice again.",
-            "When valid <strong>PIMS</strong> signals (Consent Management Ordinance) are received from your browser or device, we may honour them and omit a separate banner."
-          ]
-        },
-        {
-          "title": "9. Retention",
+            "You have the following rights against us:"
+          ],
           "list": [
-            "Local progress: until you delete it or clear browser data",
-            "Account data: until account deletion or on request",
-            "Hosting server logs: per provider defaults (usually days to weeks)"
+            "Right of access (Art. 15 GDPR): information about your stored data.",
+            "Right to rectification (Art. 16 GDPR): correction of inaccurate data.",
+            "Right to erasure (Art. 17 GDPR): deletion of your data. Account deletion is available directly in the app.",
+            "Right to restriction of processing (Art. 18 GDPR).",
+            "Right to data portability (Art. 20 GDPR): receipt of your data in a common, machine-readable format.",
+            "Right to object (Art. 21 GDPR): objection to processing based on legitimate interests."
+          ],
+          "afterList": [
+            "To exercise your rights, contact: <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>"
           ]
         },
         {
-          "title": "10. Your rights",
+          "title": "8. Right to Lodge a Complaint",
           "paragraphs": [
-            "You have the right to access, rectification, erasure, restriction, portability and objection where processing is based on legitimate interests. Email the contact address above to exercise these rights.",
-            "You may lodge a complaint with a supervisory authority in your country of residence."
+            "You have the right to lodge a complaint with a data protection supervisory authority. The competent authority for Hamburg is:",
+            "Der Hamburgische Beauftragte für Datenschutz und Informationsfreiheit (HmbBfDI)<br>Ludwig-Erhard-Str. 22, 20459 Hamburg<br>Email: <a href=\"mailto:mailbox@datenschutz.hamburg.de\">mailbox@datenschutz.hamburg.de</a><br>Web: <a href=\"https://www.datenschutz.hamburg.de\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.datenschutz.hamburg.de</a>"
           ]
         },
         {
-          "title": "11. Children & youth protection",
+          "title": "9. Minimum Age",
           "paragraphs": [
-            "KiezQuiz is aimed at a general audience. Registration requires you to be at least 16 or to have parental consent."
+            "KiezQuiz is not directed at children under the age of 16. Creating a user account requires a minimum age of 16 (Art. 8 GDPR in conjunction with § 1 para. 1 no. 1 DSGVO-AnpUG-EU). We do not knowingly collect personal data from persons under the age of 16. If you become aware that a child under 16 has submitted data to us, please contact info@kiezquiz.de so that we can delete the data without delay."
           ]
         },
         {
-          "title": "12. Changes",
+          "title": "10. Retention Periods",
+          "list": [
+            "Server logs (GitHub Pages): maximum 30 days",
+            "Account data: until account deletion by the user",
+            "localStorage (game progress without account): until manually cleared in the browser by the user"
+          ]
+        },
+        {
+          "title": "11. Consent via PIMS",
           "paragraphs": [
-            "We update this policy when features or law change. The current version is always at <a href=\"/datenschutz/\">/datenschutz/</a>."
+            "Pursuant to § 26 TDDDG in conjunction with the Consent Ordinance (EinwV), you may grant or withdraw consent to data processing via recognised personal information management systems (PIMS). As we currently do not use any consent-requiring services, no PIMS interaction is required at this time. Should we integrate consent-requiring services in the future, we will support PIMS signals accordingly."
           ]
         }
       ]
@@ -1421,10 +1468,10 @@
           ]
         },
         {
-          "title": "4. User content & conduct",
+          "title": "4. Username and Public Content",
           "paragraphs": [
-            "Your username and leaderboard entries may be visible to others. You must not use unlawful, discriminatory or misleading content.",
-            "We may suspend or delete accounts for abuse (e.g. leaderboard manipulation, harassment via friend requests)."
+            "Your username is publicly visible in leaderboards and friend lists. You must not choose a username that infringes third-party rights or is offensive, discriminatory, or otherwise unlawful. We reserve the right to change or suspend usernames without notice if they violate these requirements. You are solely responsible for your choice of username.",
+            "Abusive content can be reported by email to <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>. We may suspend or delete accounts for abuse (e.g. leaderboard manipulation, harassment via friend requests)."
           ]
         },
         {
@@ -1451,31 +1498,33 @@
           ]
         },
         {
-          "title": "8. Withdrawal & paid features",
+          "title": "8. No Right of Withdrawal",
           "paragraphs": [
-            "KiezQuiz is currently <strong>free</strong>. There is no paid contract and therefore no statutory right of withdrawal under distance selling law.",
-            "If we introduce paid features later, we will provide separate information on price, contract conclusion and withdrawal."
+            "As KiezQuiz is a free service provided without charge, there is no statutory right of withdrawal under §§ 355 et seq. BGB. This applies regardless of whether an account is created."
           ]
         },
         {
-          "title": "9. Youth protection",
+          "title": "9. Availability",
           "paragraphs": [
-            "The game contains no youth-endangering content and is suitable for all ages. Account features are aimed at users aged 16+.",
-            "Future extensions (e.g. chat, user-generated media, prizes) will be reviewed under youth media protection rules."
+            "We endeavour to keep KiezQuiz available continuously and without disruption but do not guarantee uninterrupted availability. Maintenance, updates, or technical issues may cause temporary outages. No claims arise from such interruptions."
           ]
         },
         {
-          "title": "10. Changes",
+          "title": "10. Changes to Terms",
           "paragraphs": [
-            "We may update these terms. For material changes we will inform you appropriately (e.g. in the changelog). Continued account use after they take effect constitutes acceptance unless you object by deleting your account."
+            "We reserve the right to amend these Terms of Use and the Privacy Policy at any time with effect for the future. We will notify registered users of material changes by email to the address on file and in the \"What's New\" section of the website. Changes are deemed accepted if you continue using KiezQuiz after receiving the notification and do not object within six weeks. If you object, you may delete your account."
           ]
         },
         {
-          "title": "11. Final provisions",
+          "title": "11. Governing Law and Jurisdiction",
           "paragraphs": [
-            "German law applies. Place of jurisdiction is the operator’s seat where permitted.",
-            "For complaints and questions, contact <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a> (see also <a href=\"/impressum/\">imprint</a>).",
-            "If individual clauses are invalid, the remainder stays effective."
+            "German law applies, excluding the UN Convention on Contracts for the International Sale of Goods. The place of jurisdiction for disputes with merchants, legal entities under public law, or public-law special funds is Hamburg. For consumers, this jurisdiction clause applies only where no mandatory statutory provisions conflict."
+          ]
+        },
+        {
+          "title": "12. Contact for Complaints",
+          "paragraphs": [
+            "For questions, complaints, or claims, contact: <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>"
           ]
         }
       ]
@@ -1495,7 +1544,7 @@
       "tableLicense": "Licence",
       "tableDelivery": "Delivery",
       "components": {
-        "supabase-js": "Optional account: auth, cloud save, friends, leaderboards (loaded via jsDelivr CDN)",
+        "supabase-js": "Supabase JavaScript Client — optional account: auth, cloud save, friends, leaderboards (MIT, copyright Supabase Inc., self-hosted at /assets/js/supabase-2.49.8.min.js)",
         "bricolage": "Display type for headings and brand typography",
         "hanken": "Body text and UI",
         "space-mono": "Monospace for technical labels and codes",
@@ -1505,14 +1554,26 @@
         {
           "title": "Own software",
           "paragraphs": [
-            "Quiz logic, maps, geo data processing, UI and mascot graphics of KiezQuiz are proprietary (© 2026 KiezQuiz / Jeremiah J. Lauer) unless listed as open source above.",
+            "Quiz logic, maps, geo data processing, UI and mascot graphics of KiezQuiz are proprietary copyrighted work of Jeremiah J. Lauer. All rights reserved.",
             "Interface icons are custom inline SVGs. System emojis (Unicode) have no separate licence."
           ]
         },
         {
           "title": "Dependencies of @supabase/supabase-js",
           "paragraphs": [
-            "The Supabase client package includes further npm dependencies (mostly MIT, e.g. auth, realtime and storage modules). Details: <a href=\"https://www.npmjs.com/package/@supabase/supabase-js?activeTab=dependencies\" target=\"_blank\" rel=\"noopener noreferrer\">npm dependency list</a>."
+            "The Supabase client package includes further npm dependencies (mostly MIT, e.g. auth, realtime and storage modules). Details: <a href=\"https://github.com/supabase/supabase-js/blob/master/LICENSE\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub repository &amp; LICENSE</a> and <a href=\"https://www.npmjs.com/package/@supabase/supabase-js?activeTab=dependencies\" target=\"_blank\" rel=\"noopener noreferrer\">npm dependency list</a>."
+          ]
+        },
+        {
+          "title": "Geo data",
+          "paragraphs": [
+            "Administrative boundaries and map layers are based on our own processing of the following sources. Trivia texts are written by us and protected by copyright."
+          ],
+          "list": [
+            "<strong>Hamburg, Berlin, Frankfurt am Main, Düsseldorf</strong> — GeoJSON from <a href=\"https://github.com/codeforgermany/click_that_hood\" target=\"_blank\" rel=\"noopener noreferrer\">Click That Hood</a> (Code for Germany), derived from OpenStreetMap (© OpenStreetMap contributors, <a href=\"https://opendatacommons.org/licenses/odbl/\" target=\"_blank\" rel=\"noopener noreferrer\">ODbL 1.0</a>). Population and area data supplemented from Wikipedia.",
+            "<strong>Munich</strong> — district boundaries from the City of Munich open data portal (© City of Munich, <a href=\"https://www.govdata.de/dl-de/by-2-0\" target=\"_blank\" rel=\"noopener noreferrer\">Data Licence Germany – Attribution – Version 2.0</a>).",
+            "<strong>Europe</strong> — country boundaries from <a href=\"https://www.naturalearthdata.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Natural Earth</a> (ne_50m_admin_0_countries, public domain).",
+            "<strong>Mississippi (counties)</strong> — county boundaries from US Census Bureau TIGER/Line (via Plotly datasets, public domain)."
           ]
         },
         {

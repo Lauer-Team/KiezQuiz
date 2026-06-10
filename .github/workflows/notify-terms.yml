@@ -1,0 +1,69 @@
+name: Notify terms change
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: dry-run or send (send requires owner-approved=true)
+        required: true
+        type: choice
+        options:
+          - dry-run
+          - send
+      owner_approved:
+        description: Set to true only after operator approval
+        required: true
+        type: boolean
+        default: false
+      test_to:
+        description: Optional test email (limits send to one address)
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate send approval
+        if: inputs.mode == 'send' && inputs.owner_approved != true
+        run: |
+          echo "Abbruch: send erfordert owner_approved=true"
+          exit 1
+
+      - name: Dry-run
+        if: inputs.mode == 'dry-run'
+        env:
+          KIEZ_NOTIFY_EDGE_URL: https://iuixaesbzftgmnmelcad.supabase.co/functions/v1/notify-terms-change
+          KIEZ_NOTIFY_TERMS_SECRET: ${{ secrets.NOTIFY_TERMS_SECRET }}
+        run: |
+          python3 scripts/notify_terms_change.py --dry-run
+
+      - name: Send notifications
+        if: inputs.mode == 'send' && inputs.owner_approved == true
+        env:
+          KIEZ_NOTIFY_EDGE_URL: https://iuixaesbzftgmnmelcad.supabase.co/functions/v1/notify-terms-change
+          KIEZ_NOTIFY_TERMS_SECRET: ${{ secrets.NOTIFY_TERMS_SECRET }}
+        run: |
+          ARGS="--send --owner-approved"
+          if [ -n "${{ inputs.test_to }}" ]; then
+            ARGS="$ARGS --test-to ${{ inputs.test_to }}"
+          fi
+          python3 scripts/notify_terms_change.py $ARGS
+
+      - name: Commit notice state after send
+        if: inputs.mode == 'send' && inputs.owner_approved == true && inputs.test_to == ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/legalConfig.js src/data/termsNotice.json
+          if git diff --staged --quiet; then
+            echo "Keine State-Änderungen zum Committen."
+            exit 0
+          fi
+          git commit -m "chore: activate terms change notice after user notification"
+          git push

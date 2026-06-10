@@ -1,0 +1,38 @@
+---
+description: Pflichtprozess bei Änderungen der Nutzungsbedingungen — Version, Freigabe, E-Mail an alle Nutzer
+globs: src/locales/de.json,src/locales/en.json,src/data/legalConfig.js,docs/TERMS-CHANGE-PROCESS.md
+alwaysApply: false
+---
+
+# Nutzungsbedingungen — Änderungs- & Benachrichtigungsprozess
+
+Wenn du **`legalPages.terms`** in `de.json`/`en.json` oder **`terms`** in `legalConfig.js` änderst:
+
+## Pflicht vor Abschluss
+
+1. **Vollständige Anleitung lesen:** `docs/TERMS-CHANGE-PROCESS.md`
+2. **DE + EN** immer gemeinsam anpassen (`legalPages.terms.sections`)
+3. Bei **wesentlichen** Änderungen in `src/data/legalConfig.js`:
+   - `terms.version` bumpen (ISO-Datum)
+   - `terms.effectiveDate` = heute + **30 Tage**
+   - `lastUpdated` aktualisieren
+4. **Nicht** `--send` ausführen ohne explizite Freigabe des Betreibers (*„NB-Änderung freigegeben“* o.ä.)
+5. Nach Textänderungen **immer** vorschlagen/ausführen:
+   ```bash
+   python3 scripts/notify_terms_change.py --dry-run
+   ```
+6. Erst nach Freigabe:
+   ```bash
+   python3 scripts/notify_terms_change.py --send --owner-approved
+   ```
+7. Deploy erst **nach** erfolgreichem E-Mail-Versand (oder nach `--test-to` bei Testläufen)
+
+## Unwesentliche Korrekturen
+
+Tippfehler ohne materielle Rechtsänderung: nur `lastUpdated` — **kein** Version-Bump, **keine** E-Mail.
+
+## Nie tun
+
+- Service-Role-Key oder `terms-notify.config.json` committen
+- NB deployen ohne 30-Tage-`effectiveDate` bei wesentlichen Änderungen
+- `--send` ohne `--owner-approved`

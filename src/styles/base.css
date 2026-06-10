@@ -195,14 +195,16 @@ body.overlay-open {
   margin: 0.35rem 0 0;
 }
 
-.footer-legal-links a {
+.footer-legal-links a,
+.footer-legal-links .footer-legal-btn {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--text-muted);
   text-decoration: none;
 }
 
-.footer-legal-links a:hover {
+.footer-legal-links a:hover,
+.footer-legal-links .footer-legal-btn:hover {
   color: var(--signal);
 }
 
@@ -211,16 +213,7 @@ body.overlay-open {
   background: none;
   padding: 0;
   font: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.footer-legal-btn:hover {
-  color: var(--signal);
 }
 
 .footer-copyright {
@@ -2766,6 +2759,33 @@ a.auth-pill-profile-link:hover {
   margin: 0;
 }
 
+.auth-success {
+  color: var(--color-neutral-glow);
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.auth-forgot-wrap {
+  margin: -0.35rem 0 0;
+  text-align: right;
+}
+
+.auth-link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color: var(--color-neutral-glow);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auth-link-btn:hover {
+  color: #fff;
+}
+
 .auth-submit {
   width: 100%;
   margin-top: 0.25rem;
@@ -2901,5 +2921,23 @@ a.auth-pill-profile-link:hover {
   background: rgba(255, 82, 51, 0.12);
   border-color: rgba(255, 82, 51, 0.35);
   color: var(--signal);
+}
+
+/* WCAG 2.1 AA — sichtbarer Tastaturfokus */
+:focus-visible {
+  outline: 2px solid var(--himmel);
+  outline-offset: 2px;
+}
+
+/* WCAG 2.1 AA — Bewegungsreduzierung */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
