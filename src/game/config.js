@@ -100,6 +100,16 @@ const CITY_LOCALE_CONFIG = {
     detailUnit: 'Capital',
     capitalsBlinkCountry: true,
     hideLocateInCapitals: true
+  },
+  mississippi: {
+    rankKey: 'cityRanksMississippi',
+    trophyNs: 'trophiesMississippi',
+    defaultBezirkTrivia: 'trivia.defaultCountyMississippi',
+    emptyBezirk: 'explorer.emptyCountyMississippi',
+    emptyDetail: 'explorer.emptyCountyMississippi',
+    subdistricts: 'explorer.countiesMississippi',
+    specialIds: ['paradise_explorer', 'meister_alle_bezirke'],
+    detailUnit: 'County'
   }
 };
 
@@ -198,6 +208,7 @@ function getCityDataArray(cityId) {
   if (key === 'MUENCHEN_DATA' && typeof MUENCHEN_DATA !== 'undefined') return MUENCHEN_DATA;
   if (key === 'DUESSELDORF_DATA' && typeof DUESSELDORF_DATA !== 'undefined') return DUESSELDORF_DATA;
   if (key === 'EUROPE_DATA' && typeof EUROPE_DATA !== 'undefined') return EUROPE_DATA;
+  if (key === 'MISSISSIPPI_DATA' && typeof MISSISSIPPI_DATA !== 'undefined') return MISSISSIPPI_DATA;
   if (key === 'EUROPE_ISLAND_EGGS' && typeof EUROPE_ISLAND_EGGS !== 'undefined') return EUROPE_ISLAND_EGGS;
   if (typeof HAMBURG_DATA !== 'undefined') return HAMBURG_DATA;
   return [];
@@ -205,7 +216,10 @@ function getCityDataArray(cityId) {
 
 function getBezirkTrophyTexts(cityId, bezirkName) {
   const city = window.cityRegistry?.getCity(cityId);
-  const unitLabel = t(city?.levels?.[1]?.singularKey || 'cities.hamburg.singular.stadtteil');
+  const unitLabel = t(
+    (city?.levels?.length === 1 ? city.levels[0]?.singularKey : city?.levels?.[1]?.singularKey)
+      || 'cities.hamburg.singular.stadtteil'
+  );
   const cssKey = cityId === 'hamburg'
     ? (HAMBURG_BEZIRK_TROPHY_KEYS[bezirkName] || bezirkToTrophyCssKey(bezirkName))
     : bezirkToTrophyCssKey(bezirkName);

@@ -19,6 +19,7 @@
     'src/data/muenchen_data.js',
     'src/data/duesseldorf_data.js',
     'src/data/europe_data.js',
+    'src/data/mississippi_data.js',
     'src/data/europe_islands.js',
     'src/data/europe_microstates.js',
     'src/ui/cityDashboard.js',

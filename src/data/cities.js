@@ -244,6 +244,23 @@
       totalTrophies: 57,
       paradiseTarget: 'Prag',
       islandEasterEgg: 'europe'
+    },
+    {
+      id: 'mississippi',
+      name: 'Mississippi',
+      greetingKey: 'cities.mississippi.greeting',
+      blurbKey: 'cities.mississippi.blurb',
+      hue: 28,
+      status: 'playable',
+      levels: [
+        { key: 'counties', labelKey: 'cities.mississippi.levels.counties', singularKey: 'cities.mississippi.singular.county', tierKey: 'cities.tier.overview', count: 82 }
+      ],
+      dataGlobal: 'MISSISSIPPI_DATA',
+      mapSvg: 'src/data/mississippi_map.svg',
+      progression: typeof MISSISSIPPI_COUNTIES_PROGRESSION !== 'undefined' ? MISSISSIPPI_COUNTIES_PROGRESSION : [],
+      trophyCatalog: 'mississippi',
+      totalTrophies: 84,
+      paradiseTarget: 'Jackson'
     }
   ];
 

@@ -454,6 +454,21 @@
     "progressHint": "Länder {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Europa-Rang"
   },
+  "cityRanksMississippi": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Delta-Neuling" },
+    "3": { "name": "Magnolia-Kenner" },
+    "4": { "name": "County-Jäger" },
+    "5": { "name": "Mississippi-Profi" },
+    "6": { "name": "Gulf-Coast-Experte" },
+    "7": { "name": "State-Captain" },
+    "8": { "name": "Herr der 82 Countys" },
+    "fallback": "Tourist",
+    "maxReached": "Höchster Mississippi-Rang — alle Countys & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Countys {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Mississippi-Rang"
+  },
   "trophiesEurope": {
     "eu_founding_perfect": {
       "name": "Gründerväter der EU",
@@ -532,6 +547,20 @@
       "unlockTitle": "Europa-Kartograph 🏛️",
       "desc": "Benenne alle 44 europäischen Länder in der Challenge.",
       "unlockDesc": "Alle 44 Länder in der Challenge benannt!"
+    }
+  },
+  "trophiesMississippi": {
+    "paradise_explorer": {
+      "name": "Jackson-Entdecker!",
+      "unlockTitle": "Jackson-Entdecker! 🌴",
+      "desc": "Tippe „Jackson“ zum ersten Mal richtig — in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Jackson zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_bezirke": {
+      "name": "County-Champion",
+      "unlockTitle": "County-Champion 🏛️",
+      "desc": "Benenne alle 82 Countys von Mississippi in der Challenge.",
+      "unlockDesc": "Alle 82 Countys in der Challenge benannt!"
     }
   },
   "trophiesBerlin": {
@@ -672,6 +701,7 @@
     "defaultBezirkMuenchen": "Ein bedeutender Stadtbezirk Münchens.",
     "defaultBezirkDuesseldorf": "Ein bedeutender Stadtbezirk Düsseldorfs.",
     "defaultCountryEurope": "Ein souveräner Staat in Europa.",
+    "defaultCountyMississippi": "Ein County im Bundesstaat Mississippi.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
     "templates": {
       "Altona": [
@@ -962,6 +992,8 @@
     "emptyBezirkMuenchen": "Klicke auf einen Stadtbezirk der Karte, um spannende Metadaten und Münchner Fakten anzuzeigen!",
     "emptyBezirkDuesseldorf": "Klicke auf einen Stadtbezirk der Karte, um spannende Metadaten und Düsseldorfer Fakten anzuzeigen!",
     "emptyCountryEurope": "Klicke auf ein Land der Europakarte, um Bevölkerung, Fläche und Hauptstadt zu entdecken!",
+    "emptyCountyMississippi": "Klicke auf ein County der Mississippi-Karte, um Bevölkerung und Fläche zu entdecken!",
+    "countiesMississippi": "Countys ({count})",
     "emptyCapitalEurope": "Klicke auf ein Land, um die Hauptstadt und Fakten zu sehen!",
     "capitalsEurope": "Hauptstadt",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
@@ -1321,6 +1353,16 @@
       "singular": {
         "country": "Land",
         "capital": "Hauptstadt"
+      }
+    },
+    "mississippi": {
+      "greeting": "Willkommen in Mississippi!",
+      "blurb": "82 Countys",
+      "levels": {
+        "counties": "Countys"
+      },
+      "singular": {
+        "county": "County"
       }
     }
   },

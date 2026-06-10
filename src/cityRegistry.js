@@ -12,7 +12,8 @@
     ortsteile: 'STADTTEILE',
     stadtbezirke: 'BEZIRKE',
     countries: 'BEZIRKE',
-    capitals: 'STADTTEILE'
+    capitals: 'STADTTEILE',
+    counties: 'BEZIRKE'
   };
 
   function isLightTheme() {
@@ -72,6 +73,7 @@
   function segmentToLevelKey(segment, cityId) {
     const city = getCity(cityId || 'hamburg');
     if (!city) return SEGMENT_TO_LEVEL[segment] || 'stadtteile';
+    if (city.levels.length === 1) return city.levels[0].key;
     if (segment === 'BEZIRKE') return city.levels[0]?.key || 'bezirke';
     return city.levels[1]?.key || 'stadtteile';
   }
@@ -101,6 +103,11 @@
     };
   }
 
+  function isSingleLevelCity(cityId) {
+    const city = getCity(cityId);
+    return (city?.levels?.length ?? 0) === 1;
+  }
+
   function isPlayable(id) {
     const city = getCity(id);
     return city?.status === 'playable';
@@ -123,6 +130,7 @@
     getCity,
     getPlayableCities,
     isPlayable,
+    isSingleLevelCity,
     getBezirkeProgression,
     segmentToLevelKey,
     levelKeyToSegment,

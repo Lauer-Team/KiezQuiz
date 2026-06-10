@@ -181,6 +181,7 @@
           ensureCityBranch(parsed, 'muenchen');
           ensureCityBranch(parsed, 'duesseldorf');
           ensureCityBranch(parsed, 'europe');
+          ensureCityBranch(parsed, 'mississippi');
           if (parsed.cities.hamburg) {
             parsed.cities.hamburg.trophies = normalizeTrophyIds(parsed.cities.hamburg.trophies);
           }

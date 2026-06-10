@@ -454,6 +454,21 @@
     "progressHint": "Countries {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "Europe rank"
   },
+  "cityRanksMississippi": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Delta Newcomer" },
+    "3": { "name": "Magnolia Buff" },
+    "4": { "name": "County Hunter" },
+    "5": { "name": "Mississippi Pro" },
+    "6": { "name": "Gulf Coast Expert" },
+    "7": { "name": "State Captain" },
+    "8": { "name": "Lord of 82 Counties" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Mississippi rank — all counties & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Counties {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Mississippi rank"
+  },
   "trophiesEurope": {
     "eu_founding_perfect": {
       "name": "EU Founding Fathers",
@@ -532,6 +547,20 @@
       "unlockTitle": "Europe Cartographer 🏛️",
       "desc": "Name all 44 European countries in the challenge.",
       "unlockDesc": "All 44 countries named in the challenge!"
+    }
+  },
+  "trophiesMississippi": {
+    "paradise_explorer": {
+      "name": "Jackson Explorer!",
+      "unlockTitle": "Jackson Explorer! 🌴",
+      "desc": "Correctly tap \"Jackson\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Jackson for the first time."
+    },
+    "meister_alle_bezirke": {
+      "name": "County Champion",
+      "unlockTitle": "County Champion 🏛️",
+      "desc": "Name all 82 counties of Mississippi in the challenge.",
+      "unlockDesc": "All 82 counties named in the challenge!"
     }
   },
   "trophiesBerlin": {
@@ -672,6 +701,7 @@
     "defaultBezirkMuenchen": "A significant district of Munich.",
     "defaultBezirkDuesseldorf": "A significant district of Düsseldorf.",
     "defaultCountryEurope": "A sovereign state in Europe.",
+    "defaultCountyMississippi": "A county in the state of Mississippi.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
     "templates": {
       "Altona": [
@@ -810,6 +840,8 @@
     "emptyBezirkMuenchen": "Click a district on the map to see fascinating metadata and Munich facts!",
     "emptyBezirkDuesseldorf": "Click a district on the map to see fascinating metadata and Düsseldorf facts!",
     "emptyCountryEurope": "Click a country on the map of Europe to discover population, area and capital!",
+    "emptyCountyMississippi": "Click a county on the Mississippi map to discover population and area!",
+    "countiesMississippi": "Counties ({count})",
     "emptyCapitalEurope": "Click a country to see its capital and facts!",
     "capitalsEurope": "Capital",
     "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
@@ -1169,6 +1201,16 @@
       "singular": {
         "country": "Country",
         "capital": "Capital"
+      }
+    },
+    "mississippi": {
+      "greeting": "Welcome to Mississippi!",
+      "blurb": "82 counties",
+      "levels": {
+        "counties": "Counties"
+      },
+      "singular": {
+        "county": "County"
       }
     }
   },

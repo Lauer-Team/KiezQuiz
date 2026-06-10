@@ -150,6 +150,29 @@ CITIES = {
             ),
         ],
     },
+    "mississippi": {
+        "slug": "mississippi",
+        "name": "Mississippi",
+        "meta_description": (
+            "Lerne alle 82 Countys von Mississippi spielerisch auf der Karte. "
+            "Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline."
+        ),
+        "h1": "Mississippi Countys spielerisch lernen",
+        "faq": [
+            (
+                "Wie viele Countys hat Mississippi?",
+                "Mississippi ist in 82 Countys unterteilt. KiezQuiz deckt alle Countys auf der interaktiven Karte ab.",
+            ),
+            (
+                "Gibt es bei Mississippi Bezirke oder Stadtteile?",
+                "Nein — anders als bei Hamburg oder Berlin gibt es hier nur einen Modus: Countys.",
+            ),
+            (
+                "Ist KiezQuiz kostenlos?",
+                "Ja — KiezQuiz ist komplett kostenlos, ohne Werbung und ohne Pflicht-Registrierung.",
+            ),
+        ],
+    },
 }
 
 

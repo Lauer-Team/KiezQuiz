@@ -230,6 +230,12 @@
 
     selector.classList.add('adaptive');
     selector.dataset.bound = 'false';
+    if (city.levels.length === 1) {
+      selector.hidden = true;
+      selector.innerHTML = '';
+      return;
+    }
+    selector.hidden = false;
     selector.innerHTML = city.levels.map((lv, i) => {
       const segment = window.cityRegistry.levelKeyToSegment(lv.key);
       const active = game.activeSegment === segment ? ' active' : '';

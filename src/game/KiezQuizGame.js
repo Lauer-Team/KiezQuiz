@@ -322,6 +322,9 @@ class KiezQuizGame {
       this.view = 'city';
       window.saveManager.ensureCityBranch(this._save, cityId);
       this._applyCityBranch(this._save.cities[cityId]);
+      if (window.cityRegistry.isSingleLevelCity(cityId)) {
+        this.activeSegment = 'BEZIRKE';
+      }
       if (persistNav) {
         this._save.lastCity = cityId;
         window.saveManager.persistSave(this._save);
@@ -348,6 +351,7 @@ class KiezQuizGame {
   }
 
   switchSegment(segment) {
+    if (window.cityRegistry.isSingleLevelCity(this.activeCityId)) return;
     if (this.activeSegment === segment) return;
     this.playSelectionSound();
     this.activeSegment = segment;
@@ -602,6 +606,9 @@ class KiezQuizGame {
       const savedMode = this._save.lastMode || 'EXPLORER';
       this.currentMode = savedMode === 'BEZIRK_MATCH' ? 'EXPLORER' : savedMode;
       this.activeSegment = window.cityRegistry.levelKeyToSegment(this._save.lastLevelKey || 'stadtteile');
+      if (window.cityRegistry.isSingleLevelCity(this.activeCityId)) {
+        this.activeSegment = 'BEZIRKE';
+      }
       this._applyCityBranch(
         this._save.cities[this.activeCityId] || this._save.cities.hamburg
       );
@@ -878,7 +885,8 @@ class KiezQuizGame {
       } else {
         btnSt.classList.add('active');
         btnBz.classList.remove('active');
-        const hideUnlock = this.activeCityId === 'europe';
+        const hideUnlock = (this.activeCityId === 'europe' && this.activeSegment === 'STADTTEILE')
+          || window.cityRegistry.isSingleLevelCity(this.activeCityId);
         if (lockCard) lockCard.style.display = hideUnlock ? 'none' : 'block';
       }
     }
@@ -2335,7 +2343,7 @@ class KiezQuizGame {
     if (path.classList.contains('locked-path') && !this.nameAllIsActive) {
       this.tooltip.innerHTML = `<div>${t('map.tooltipLocked')}</div><div class="tooltip-bezirk">${t('map.tooltipLockedHint')}</div>`;
     } else if (this.activeSegment === 'BEZIRKE') {
-      const label = this.isEuropeCountriesMode()
+      const label = this.isEuropeCountriesMode() || window.cityRegistry.isSingleLevelCity(this.activeCityId)
         ? bezirk
         : t('map.tooltipBezirk', { bezirk });
       this.tooltip.innerHTML = `<div>${label}</div><div class="tooltip-bezirk">${t('map.tooltipTapLearn')}</div>`;
