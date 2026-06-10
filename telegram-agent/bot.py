@@ -186,7 +186,8 @@ def run_agent(cfg: dict[str, Any], state: dict[str, Any], user_text: str) -> tup
         f"--workspace={repo}",
         build_agent_prompt(user_text),
     ]
-    return run_cmd(args, cwd=repo, timeout=3600)
+    code, out, _ = run_cmd(args, cwd=repo, timeout=3600)
+    return code, out
 
 
 def branch_name_from_task(task: str) -> str:

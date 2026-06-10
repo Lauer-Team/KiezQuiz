@@ -138,3 +138,5 @@ All notable changes to KiezQuiz. The in-app “Was ist neu?” view shows the sa
 - Initial release: interactive Hamburg map (7 boroughs, 104 districts)
 - Game modes: Explorer, Locate, Quiz, Type Name, Name All
 - XP, ranks, streaks, game history, and Web Audio sounds
+
+Test Telegram-Agent (wird nicht deployed).
