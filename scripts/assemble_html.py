@@ -142,7 +142,7 @@ def main():
   color: #fff;
 }
 
-/* Round / Sporcle Active Styles */
+/* Round / Name Sprint active styles */
 .round-progress-bar {
   width: 100%;
   height: 6px;
@@ -437,7 +437,7 @@ def main():
               <span class="mode-icon">⏱️</span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;">Nenne alle Orte</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Sporcle-Challenge gegen die Zeit</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;">Namens-Sprint – Nenne alle Orte gegen die Uhr</span>
               </div>
             </button>
           </div>

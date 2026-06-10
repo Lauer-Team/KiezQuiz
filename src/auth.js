@@ -432,6 +432,10 @@ class AuthManager {
             <input type="checkbox" id="auth-terms-accept" required>
             <span>${t('auth.termsLabel')}</span>
           </label>
+          <label class="auth-terms">
+            <input type="checkbox" id="auth-immediate-service" required>
+            <span>${t('auth.immediateServiceLabel')}</span>
+          </label>
           <p class="auth-error" id="auth-error-reg" hidden></p>
           <button type="submit" class="primary-btn auth-submit">${t('auth.registerSubmit')}</button>
         </form>
@@ -493,6 +497,7 @@ class AuthManager {
       const password = document.getElementById('auth-password-reg').value;
       const termsAccepted = document.getElementById('auth-terms-accept')?.checked;
       const ageConfirmed = document.getElementById('auth-age-confirm')?.checked;
+      const immediateService = document.getElementById('auth-immediate-service')?.checked;
       errEl.hidden = true;
 
       if (!ageConfirmed) {
@@ -503,6 +508,12 @@ class AuthManager {
 
       if (!termsAccepted) {
         errEl.textContent = t('auth.termsRequired');
+        errEl.hidden = false;
+        return;
+      }
+
+      if (!immediateService) {
+        errEl.textContent = t('auth.immediateServiceRequired');
         errEl.hidden = false;
         return;
       }

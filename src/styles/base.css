@@ -1439,7 +1439,7 @@ body.in-round .map-container-wrapper {
   display: none;
 }
 
-/* Sporcle round feedback on map */
+/* Name Sprint round feedback on map */
 .stadtteil-path.round-correct {
   fill: hsla(142, 70%, 42%, 0.55) !important;
   stroke: var(--color-correct) !important;

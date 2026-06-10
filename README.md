@@ -22,7 +22,7 @@ Gamifizierte Web-App zum spielerischen Lernen von **Stadtgliederungen** — star
 | Stadtteil-Detektiv | Gesuchten Ort auf der Karte finden |
 | Karten-Quiz | Blinkenden Stadtteil erkennen |
 | Namen eingeben | Blinkenden Ort eintippen |
-| Nenne alle Orte | Sporcle-Challenge gegen die Zeit |
+| Nenne alle Orte | Namens-Sprint – Nenne alle Orte gegen die Uhr |
 
 Fortschritt (XP, Streak, freigeschaltete Bezirke) wird **lokal** gespeichert. Optional kannst du dich mit E-Mail anmelden, um den Spielstand **geräteübergreifend in der Cloud** zu sichern — siehe [docs/SUPABASE-SETUP.md](docs/SUPABASE-SETUP.md).
 

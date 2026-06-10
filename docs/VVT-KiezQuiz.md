@@ -20,6 +20,7 @@
 | **Drittlandübermittlung** | USA; SCCs / Microsoft DPA |
 | **Speicherdauer** | Server-Logs max. 30 Tage |
 | **TOMs** | HTTPS, 2FA Admin-Zugänge (siehe TOM-Dokument) |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` (10.06.2026) |
 
 ---
 
@@ -33,6 +34,7 @@
 | **Rechtsgrundlage** | § 25 Abs. 2 Nr. 2 TDDDG |
 | **Empfänger** | Keine (nur Browser des Nutzers) |
 | **Speicherdauer** | Bis Löschung durch Nutzer im Browser |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -47,6 +49,7 @@
 | **Empfänger** | Supabase Inc. — EU West Europe (Irland, eu-west-1) |
 | **AVV/DPA** | Supabase DPA akzeptiert (10.06.2026) |
 | **Speicherdauer** | Bis Account-Löschung durch Nutzer |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -59,6 +62,7 @@
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. f DSGVO |
 | **Empfänger** | Supabase Inc., EU (Irland) |
 | **Speicherdauer** | Max. 30 Tage (Supabase-Standard) |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -71,6 +75,7 @@
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. b DSGVO |
 | **Empfänger** | Andere registrierte Nutzer (sichtbar in Bestenlisten) |
 | **Speicherdauer** | Bis Account-Löschung |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -83,6 +88,7 @@
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. f DSGVO |
 | **Empfänger** | Intern (Admin über geschützte RPC) |
 | **Speicherdauer** | Bis Bearbeitung / Löschung |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -95,6 +101,7 @@
 | **Rechtsgrundlage** | — (keine Übermittlung an Dritte) |
 | **Empfänger** | Keine |
 | **Hinweis** | Früher jsDelivr — seit 10.06.2026 self-hosted unter `/assets/js/` |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -108,6 +115,7 @@
 | **Empfänger** | Resend.com (Versand), Supabase Edge Function |
 | **AVV/DPA** | Resend DPA abgeschlossen (10.06.2026) |
 | **Speicherdauer** | Bis Account-Löschung |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -121,6 +129,7 @@
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. f DSGVO |
 | **Empfänger** | Supabase EU |
 | **Speicherdauer** | Bis Account-Löschung |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 
@@ -134,6 +143,7 @@
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. f DSGVO (Betrieb) |
 | **Empfänger** | Telegram FZ-LLC — keine KiezQuiz-Nutzerdaten |
 | **AVV** | Nicht erforderlich solange keine Endnutzer-Daten übermittelt werden |
+| **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 
 ---
 

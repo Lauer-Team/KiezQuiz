@@ -31,7 +31,7 @@ class KiezQuizGame {
     this.stickyHoverBezirk = null;
     this.stickyHoverPath = null;
     
-    // --- SPORCLE ROUND STATES ---
+    // --- NAME SPRINT ROUND STATES ---
     this.inRound = false;
     this.roundTimeLeft = ROUND_TIME_LIMIT;
     this.roundStartedAt = null;
@@ -47,7 +47,7 @@ class KiezQuizGame {
     this.nameAllInputTimer = null;
     this._alertStyleInjected = false;
     
-    // --- NAME_ALL (Sporcle Countdown Challenge) States ---
+    // --- NAME_ALL (Name Sprint countdown) States ---
     this.timerInterval = null;
     this.nameAllTimeLeft = ROUND_TIME_LIMIT;
     this.nameAllFound = new Set();
@@ -2604,7 +2604,7 @@ class KiezQuizGame {
     return Math.abs(hash) % 360;
   }
 
-  // --- CORE GAME MODES & SPORCLE ROUNDS ---
+  // --- CORE GAME MODES & NAME SPRINT ROUNDS ---
   initGameMode(container) {
     const isBz = this.activeSegment === 'BEZIRKE';
     
@@ -2730,7 +2730,7 @@ class KiezQuizGame {
     });
   }
 
-  // --- SPORCLE ROUND CONTROL FUNCTIONS ---
+  // --- NAME SPRINT ROUND CONTROL FUNCTIONS ---
   startRound(districtSelection) {
     if (this.inRound) return;
 
@@ -3486,7 +3486,7 @@ class KiezQuizGame {
   }
 
 
-  // --- MODE: NAME_ALL (SPORCLE COUNTDOWN CHALLENGE) ---
+  // --- MODE: NAME_ALL (NAME SPRINT COUNTDOWN) ---
   initNameAllMode(container) {
     this.nameAllFound.clear();
     this.nameAllIsActive = false;

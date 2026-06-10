@@ -71,7 +71,7 @@
     },
     "nameAll": {
       "label": "Nenne alle Orte",
-      "desc": "Sporcle-Challenge gegen die Zeit"
+      "desc": "Namens-Sprint – Nenne alle Orte gegen die Uhr"
     },
     "EXPLORER": "Entdecker-Modus",
     "LOCATE": "Stadtteil-Detektiv",
@@ -364,6 +364,8 @@
     "usernameRequired": "Bitte einen Benutzernamen eingeben.",
     "identifierRequired": "Bitte Benutzername oder E-Mail eingeben.",
     "termsLabel": "Ich akzeptiere die <a href=\"/nutzungsbedingungen/\" target=\"_blank\" rel=\"noopener\">Nutzungsbedingungen</a> und habe die <a href=\"/datenschutz/\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a> zur Kenntnis genommen.",
+    "immediateServiceLabel": "Ich stimme zu, dass mein Account sofort eingerichtet wird, und nehme zur Kenntnis, dass ein etwaiges Widerrufsrecht gemäß § 356 Abs. 5 BGB damit erlischt.",
+    "immediateServiceRequired": "Bitte bestätige die sofortige Account-Einrichtung und den Verzicht auf das Widerrufsrecht.",
     "termsRequired": "Bitte Nutzungsbedingungen und Datenschutz bestätigen.",
     "forgotPassword": "Passwort vergessen?",
     "forgotTitle": "Passwort zurücksetzen",
@@ -577,7 +579,7 @@
       "name": "Hauptstadt-Meister",
       "unlockTitle": "Hauptstadt-Meister 👑",
       "desc": "Benenne alle europäischen Hauptstädte in „Nenne alle Orte“.",
-      "unlockDesc": "Alle 44 Hauptstädte in der Sporcle-Challenge!"
+      "unlockDesc": "Alle 44 Hauptstädte in der Namens-Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Europa-Kartograph",
@@ -617,7 +619,7 @@
       "name": "König von Berlin",
       "unlockTitle": "König von Berlin 👑",
       "desc": "Benenne alle Ortsteile in „Nenne alle Orte“.",
-      "unlockDesc": "Finde alle Ortsteile in der Sporcle-Challenge!"
+      "unlockDesc": "Finde alle Ortsteile in der Namens-Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Bezirks-Babo",
@@ -637,7 +639,7 @@
       "name": "König von Frankfurt",
       "unlockTitle": "König von Frankfurt 👑",
       "desc": "Benenne alle Stadtteile in „Nenne alle Orte“.",
-      "unlockDesc": "Finde alle Stadtteile in der Sporcle-Challenge!"
+      "unlockDesc": "Finde alle Stadtteile in der Namens-Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Ortsbezirks-Babo",
@@ -657,7 +659,7 @@
       "name": "König von München",
       "unlockTitle": "König von München 👑",
       "desc": "Benenne alle Bezirksteile in „Nenne alle Orte“.",
-      "unlockDesc": "Finde alle Bezirksteile in der Sporcle-Challenge!"
+      "unlockDesc": "Finde alle Bezirksteile in der Namens-Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Stadtbezirks-Babo",
@@ -677,7 +679,7 @@
       "name": "König von Düsseldorf",
       "unlockTitle": "König von Düsseldorf 👑",
       "desc": "Benenne alle Stadtteile in „Nenne alle Orte“.",
-      "unlockDesc": "Finde alle Stadtteile in der Sporcle-Challenge!"
+      "unlockDesc": "Finde alle Stadtteile in der Namens-Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Stadtbezirks-Babo",
@@ -713,7 +715,7 @@
       "name": "König von Hamburg",
       "unlockTitle": "König von Hamburg 👑",
       "desc": "Benenne alle Stadtteile in „Nenne alle Orte“.",
-      "unlockDesc": "Finde alle Stadtteile in der Sporcle-Challenge!"
+      "unlockDesc": "Finde alle Stadtteile in der Namens-Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Bezirks-Kapitän",
@@ -1056,7 +1058,7 @@
   },
   "game": {
     "roundStartTitle": "Durchlauf starten",
-    "roundStartDesc": "Lerne fokussiert in geschlossenen Runden wie bei Sporcle. Richtige/falsche Antworten bleiben markiert!",
+    "roundStartDesc": "Lerne fokussiert in geschlossenen Runden. Richtige/falsche Antworten bleiben markiert!",
     "timeLimit": "Zeitlimit: 10 Minuten.",
     "unlockHint": "Schalte den nächsten Bezirk frei mit ≥75% im zuletzt freigeschalteten Bezirk!",
     "bezirkPicker": "Bezirke einbeziehen:",
@@ -1274,14 +1276,14 @@
     "citiesSectionTitle": "Alle Städte",
     "citiesSectionLead": "Wähle eine Stadt — mit Fortschritt, Pokalen und Leveln wie bisher.",
     "guideTitle": "Spielanleitung",
-    "guideLead": "So spielst du KiezQuiz — von der Stadtwahl über Bezirke und Stadtteile bis zu XP, Serien und der Sporcle-Challenge.",
+    "guideLead": "So spielst du KiezQuiz — von der Stadtwahl über Bezirke und Stadtteile bis zu XP, Serien und der Namens-Sprint.",
     "guideStep1": "Stadt wählen — Hamburg, Berlin, Frankfurt, Düsseldorf oder Europa. Oben „Wähle deine Stadt“ oder unten eine Stadtkarte.",
     "guideStep2": "Überblick vs. Detail — Bezirke (große Einheiten) oder Stadtteile/Ortsteile (fein). Der Regler oben im Spiel wechselt die Ebene.",
     "guideStep3": "Entdecker-Modus — Karte frei erkunden, Orte antippen und Kurzinfos lesen. Ideal zum Kennenlernen ohne Druck.",
     "guideStep4": "Karten-Quiz — Ein Ort blinkt auf der Karte; du wählst die passende Antwort. Treffer geben XP und verlängern deine Serie.",
     "guideStep5": "Stadtteil-Detektiv — Du bekommst einen Namen und musst den richtigen Bereich auf der Karte finden. Karte zoomen und schieben erlaubt.",
     "guideStep6": "Namen eingeben — Wie beim Quiz, aber du tippst den Namen selbst. Tippfehler-Toleranz hilft bei Schreibweisen.",
-    "guideStep7": "Nenne alle Orte — Sporcle-Challenge: so viele Namen wie möglich in der Zeit. Bezirke oder Stadtteile je nach Regler.",
+    "guideStep7": "Nenne alle Orte — Namens-Sprint: so viele Namen wie möglich in der Zeit. Bezirke oder Stadtteile je nach Regler.",
     "guideStep8": "Fortschritt & Bestenliste — XP, Rang und Pokale pro Stadt. Mit Account auf der Profilseite syncen und vergleichen.",
     "mapLoading": "Karte lädt …",
     "scrollToTop": "Zurück auf Anfang",
@@ -1543,7 +1545,9 @@
           "title": "7. Transaktionale E-Mails (Resend.com)",
           "paragraphs": [
             "Für registrierte Nutzer versenden wir gelegentlich transaktionale E-Mails (z. B. Hinweis auf wesentliche Änderungen der Nutzungsbedingungen, Passwort-Reset über Supabase Auth). Der Versand erfolgt über Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
-            "Verarbeitete Daten: E-Mail-Adresse, Betreff und Inhalt der Nachricht. Mit Resend besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. lit. f (Betriebssicherheit). Speicherdauer: beim E-Mail-Dienstleister gemäß deren Richtlinien; bei uns bis Account-Löschung."
+            "Verarbeitete Daten: E-Mail-Adresse, Betreff und Inhalt der Nachricht. Mit Resend besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO.",
+            "Für die Übermittlung von Daten in die USA gelten die EU-Standardvertragsklauseln (SCCs) der Europäischen Kommission gemäß Art. 46 Abs. 2 lit. c DSGVO; Resend Inc. hat sich zu deren Einhaltung verpflichtet. Eine Kopie der SCCs kann auf Anfrage über <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a> angefordert werden. Resend Inc. ist außerdem unter dem EU-US Data Privacy Framework (DPF) zertifiziert.",
+            "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. lit. f (Betriebssicherheit). Speicherdauer: beim E-Mail-Dienstleister gemäß deren Richtlinien; bei uns bis Account-Löschung."
           ]
         },
         {
@@ -1622,6 +1626,14 @@
           "paragraphs": [
             "Gemäß § 26 TDDDG i. V. m. der Einwilligungsverordnung (EinwV) haben Sie die Möglichkeit, Einwilligungen in die Datenverarbeitung über anerkannte Dienste zur datenschutzfreundlichen Voreinstellung (Personal Information Management Systems, PIMS) zu erteilen oder zu widerrufen. Da wir aktuell keine einwilligungspflichtigen Dienste einsetzen, ist kein PIMS-Einsatz derzeit erforderlich. Sollten wir zukünftig einwilligungspflichtige Dienste integrieren, werden wir PIMS-Signale berücksichtigen."
           ]
+        },
+        {
+          "title": "16. App Store (iOS/macOS)",
+          "paragraphs": [
+            "KiezQuiz ist auch als native App über den Apple App Store (iOS/macOS) erhältlich. Apple Inc. fungiert dabei als Vertriebsplattform; KiezQuiz erhebt über den App Store keine zusätzlichen personenbezogenen Daten.",
+            "Apple verarbeitet ggf. eigene Daten im Rahmen des App-Downloads und der Zahlungsabwicklung (bei kostenpflichtigen In-App-Käufen — KiezQuiz selbst ist kostenlos). Informationen zu Apples Datenschutzpraktiken: <a href=\"https://www.apple.com/legal/privacy/\" target=\"_blank\" rel=\"noopener noreferrer\">apple.com/legal/privacy</a>.",
+            "Die in dieser Datenschutzerklärung beschriebenen Verarbeitungen (optionaler Account, Supabase EU, localStorage) gelten für die App in gleicher Weise wie für die Website."
+          ]
         }
       ]
     },
@@ -1683,9 +1695,11 @@
           ]
         },
         {
-          "title": "8. Kein Widerrufsrecht",
+          "title": "8. Widerrufsrecht",
           "paragraphs": [
-            "Da KiezQuiz ein kostenloses Angebot ohne Entgelt ist, besteht kein gesetzliches Widerrufsrecht gemäß §§ 355 ff. BGB. Dies gilt unabhängig davon, ob ein Account erstellt wird oder nicht."
+            "Da KiezQuiz ein kostenloses Angebot ist, bei dem Nutzer keine Geldzahlung leisten, ist das Anwendungsfeld des Widerrufsrechts nach §§ 312c, 355 ff. BGB begrenzt.",
+            "Bei der freiwilligen Account-Erstellung stimmt der Nutzer ausdrücklich zu, dass die Vertragserfüllung (Bereitstellung des Dienstleistungs-Accounts) sofort beginnt, und bestätigt, dass er weiß, dass sein etwaiges Widerrufsrecht nach § 356 Abs. 5 BGB damit erlischt, sobald der Account vollständig eingerichtet ist.",
+            "Eine eigenständige Löschung des Accounts ist jederzeit in den App-Einstellungen möglich (Art. 17 DSGVO)."
           ]
         },
         {
@@ -1755,7 +1769,7 @@
             "Die Verwaltungsgrenzen und Kartenebenen basieren auf eigenen Aufbereitungen der folgenden Quellen. Trivia-Texte sind selbst verfasst und urheberrechtlich geschützt."
           ],
           "list": [
-            "<strong>Hamburg, Berlin, Frankfurt am Main, Düsseldorf</strong> — GeoJSON aus dem Projekt <a href=\"https://github.com/codeforgermany/click_that_hood\" target=\"_blank\" rel=\"noopener noreferrer\">Click That Hood</a> (Code for Germany), abgeleitet von OpenStreetMap (© OpenStreetMap-Mitwirkende, <a href=\"https://opendatacommons.org/licenses/odbl/\" target=\"_blank\" rel=\"noopener noreferrer\">ODbL 1.0</a>). Bevölkerungs- und Flächendaten ergänzt aus Wikipedia.",
+            "<strong>Hamburg, Berlin, Frankfurt am Main, Düsseldorf</strong> — GeoJSON aus dem Projekt <a href=\"https://github.com/codeforgermany/click_that_hood\" target=\"_blank\" rel=\"noopener noreferrer\">Click That Hood</a> (Code for Germany), abgeleitet von OpenStreetMap (© OpenStreetMap-Mitwirkende, <a href=\"https://opendatacommons.org/licenses/odbl/\" target=\"_blank\" rel=\"noopener noreferrer\">ODbL 1.0</a>). Bevölkerungs- und Flächendaten ergänzt aus Wikipedia. Zur rechtlichen Einordnung als „Produced Work“ vs. „Derivative Database“ siehe interne Prüfung (Stand: 10. Juni 2026).",
             "<strong>München</strong> — Bezirksteil-Grenzen der Landeshauptstadt München (Geoportal / Open Data, © Stadt München, <a href=\"https://www.govdata.de/dl-de/by-2-0\" target=\"_blank\" rel=\"noopener noreferrer\">Datenlizenz Deutschland – Namensnennung – Version 2.0</a>).",
             "<strong>Europa</strong> — Ländergrenzen aus <a href=\"https://www.naturalearthdata.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Natural Earth</a> (ne_50m_admin_0_countries, Public Domain).",
             "<strong>Mississippi (Counties)</strong> — County-Grenzen aus US Census Bureau TIGER/Line (über Plotly-Datasets, Public Domain)."
@@ -1806,6 +1820,12 @@
           "paragraphs": [
             "Wenn Sie Barrieren bei der Nutzung von KiezQuiz feststellen oder uns Hinweise geben möchten, schreiben Sie an: <a href=\"mailto:info@kiezquiz.de?subject=Barrierefreiheit%20KiezQuiz\">info@kiezquiz.de</a>. Wir bemühen uns um eine Antwort innerhalb von vier Wochen.",
             "Zuständige Durchsetzungsbehörde in Hamburg: <a href=\"https://www.hamburg.de/bjv\" target=\"_blank\" rel=\"noopener noreferrer\">Behörde für Justiz und Verbraucherschutz Hamburg</a>. Bundesweit steht außerdem die <a href=\"https://www.schlichtungsstelle-bgg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">Schlichtungsstelle nach dem BGG</a> beim Beauftragten der Bundesregierung für die Belange von Menschen mit Behinderungen (BMAS) zur außergerichtlichen Klärung zur Verfügung."
+          ]
+        },
+        {
+          "title": "Kleinstunternehmen-Ausnahme (BFSG)",
+          "paragraphs": [
+            "Als Einzelunternehmen mit weniger als 10 Beschäftigten und einem Jahresumsatz von höchstens 2 Mio. EUR könnte KiezQuiz unter die Ausnahme des § 3 Abs. 2 Nr. 1 BFSG für Kleinstunternehmen fallen. Unabhängig davon veröffentlichen wir diese Erklärung zur Barrierefreiheit freiwillig als Transparenzmaßnahme und arbeiten schrittweise an Verbesserungen."
           ]
         },
         {

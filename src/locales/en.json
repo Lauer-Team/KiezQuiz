@@ -71,7 +71,7 @@
     },
     "nameAll": {
       "label": "Name all places",
-      "desc": "Sporcle-style timed challenge"
+      "desc": "Name Sprint – name all places against the clock"
     },
     "EXPLORER": "Explorer Mode",
     "LOCATE": "District Detective",
@@ -364,6 +364,8 @@
     "usernameRequired": "Please enter a username.",
     "identifierRequired": "Please enter username or email.",
     "termsLabel": "I accept the <a href=\"/nutzungsbedingungen/\" target=\"_blank\" rel=\"noopener\">terms of use</a> and have read the <a href=\"/datenschutz/\" target=\"_blank\" rel=\"noopener\">privacy policy</a>.",
+    "immediateServiceLabel": "I agree that my account will be set up immediately and acknowledge that any right of withdrawal pursuant to § 356(5) BGB is thereby waived.",
+    "immediateServiceRequired": "Please confirm immediate account setup and waiver of the right of withdrawal.",
     "termsRequired": "Please confirm the terms and privacy policy.",
     "forgotPassword": "Forgot password?",
     "forgotTitle": "Reset password",
@@ -577,7 +579,7 @@
       "name": "Capital Master",
       "unlockTitle": "Capital Master 👑",
       "desc": "Name all European capitals in \"Name all places\".",
-      "unlockDesc": "All 44 capitals in the Sporcle challenge!"
+      "unlockDesc": "All 44 capitals in the Name Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Europe Cartographer",
@@ -617,7 +619,7 @@
       "name": "King of Berlin",
       "unlockTitle": "King of Berlin 👑",
       "desc": "Name all neighbourhoods in \"Name all places\".",
-      "unlockDesc": "Find every neighbourhood in the Sporcle challenge!"
+      "unlockDesc": "Find every neighbourhood in the Name Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Borough Boss",
@@ -637,7 +639,7 @@
       "name": "King of Frankfurt",
       "unlockTitle": "King of Frankfurt 👑",
       "desc": "Name all neighbourhoods in \"Name all places\".",
-      "unlockDesc": "Find every neighbourhood in the Sporcle challenge!"
+      "unlockDesc": "Find every neighbourhood in the Name Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "District Boss",
@@ -657,7 +659,7 @@
       "name": "King of Munich",
       "unlockTitle": "King of Munich 👑",
       "desc": "Name all district sections in \"Name all places\".",
-      "unlockDesc": "Find every district section in the Sporcle challenge!"
+      "unlockDesc": "Find every district section in the Name Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "District Boss",
@@ -677,7 +679,7 @@
       "name": "King of Düsseldorf",
       "unlockTitle": "King of Düsseldorf 👑",
       "desc": "Name all neighbourhoods in \"Name all places\".",
-      "unlockDesc": "Find every neighbourhood in the Sporcle challenge!"
+      "unlockDesc": "Find every neighbourhood in the Name Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "District Boss",
@@ -713,7 +715,7 @@
       "name": "King of Hamburg",
       "unlockTitle": "King of Hamburg 👑",
       "desc": "Name all districts in \"Name all places\".",
-      "unlockDesc": "Find every district in the Sporcle challenge!"
+      "unlockDesc": "Find every district in the Name Sprint!"
     },
     "meister_alle_bezirke": {
       "name": "Borough Captain",
@@ -904,7 +906,7 @@
   },
   "game": {
     "roundStartTitle": "Start a run",
-    "roundStartDesc": "Learn focused in closed rounds like Sporcle. Correct/wrong answers stay marked!",
+    "roundStartDesc": "Learn focused in closed rounds. Correct/wrong answers stay marked!",
     "timeLimit": "Time limit: 10 minutes.",
     "unlockHint": "Unlock the next borough with ≥75% in the last unlocked borough!",
     "bezirkPicker": "Include boroughs:",
@@ -1122,14 +1124,14 @@
     "citiesSectionTitle": "All cities",
     "citiesSectionLead": "Pick a city — with progress, trophies and levels as before.",
     "guideTitle": "How to play",
-    "guideLead": "How to play KiezQuiz — from picking a city through districts and neighborhoods to XP, streaks and the Sporcle challenge.",
+    "guideLead": "How to play KiezQuiz — from picking a city through districts and neighborhoods to XP, streaks and the Name Sprint.",
     "guideStep1": "Pick a city — Hamburg, Berlin, Frankfurt, Düsseldorf or Europe. Use “Choose your city” at the top or a city card below.",
     "guideStep2": "Overview vs. detail — districts (large areas) or neighborhoods (fine-grained). The in-game toggle switches the level.",
     "guideStep3": "Explorer mode — freely explore the map, tap places and read short facts. Great for learning without pressure.",
     "guideStep4": "Map quiz — one place blinks on the map; pick the matching answer. Hits earn XP and extend your streak.",
     "guideStep5": "District detective — you get a name and must find the right area on the map. Zoom and pan are allowed.",
     "guideStep6": "Type the name — like the quiz, but you type the answer yourself. Fuzzy matching helps with spelling.",
-    "guideStep7": "Name all places — Sporcle-style: name as many as you can before time runs out. Districts or neighborhoods per toggle.",
+    "guideStep7": "Name all places — Name Sprint: name as many as you can before time runs out. Districts or neighborhoods per toggle.",
     "guideStep8": "Progress & leaderboard — XP, rank and trophies per city. With an account, sync and compare on your profile page.",
     "mapLoading": "Loading map …",
     "scrollToTop": "Back to top",
@@ -1391,7 +1393,9 @@
           "title": "7. Transactional email (Resend.com)",
           "paragraphs": [
             "For registered users we occasionally send transactional emails (e.g. notice of material changes to the terms of use, password reset via Supabase Auth). Delivery is via Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
-            "Data processed: email address, subject and body of the message. A data processing agreement pursuant to Art. 28 GDPR is in place with Resend. Legal basis: Art. 6 para. 1 lit. b GDPR (contract performance) or lit. f (operational security). Retention: at the email provider per their policies; with us until account deletion."
+            "Data processed: email address, subject and body of the message. A data processing agreement pursuant to Art. 28 GDPR is in place with Resend.",
+            "For transfers of data to the USA, the EU Standard Contractual Clauses (SCCs) issued by the European Commission pursuant to Art. 46(2)(c) GDPR apply; Resend Inc. has committed to compliance therewith. A copy of the SCCs can be requested via <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>. Resend Inc. is also certified under the EU-US Data Privacy Framework (DPF).",
+            "Legal basis: Art. 6 para. 1 lit. b GDPR (contract performance) or lit. f (operational security). Retention: at the email provider per their policies; with us until account deletion."
           ]
         },
         {
@@ -1470,6 +1474,14 @@
           "paragraphs": [
             "Pursuant to § 26 TDDDG in conjunction with the Consent Ordinance (EinwV), you may grant or withdraw consent to data processing via recognised personal information management systems (PIMS). As we currently do not use any consent-requiring services, no PIMS interaction is required at this time. Should we integrate consent-requiring services in the future, we will support PIMS signals accordingly."
           ]
+        },
+        {
+          "title": "16. App Store (iOS/macOS)",
+          "paragraphs": [
+            "KiezQuiz is also available as a native app via the Apple App Store (iOS/macOS). Apple Inc. acts as the distribution platform; KiezQuiz does not collect any additional personal data via the App Store.",
+            "Apple may process its own data in connection with app downloads and payment processing (for paid in-app purchases — KiezQuiz itself is free). Information on Apple's privacy practices: <a href=\"https://www.apple.com/legal/privacy/\" target=\"_blank\" rel=\"noopener noreferrer\">apple.com/legal/privacy</a>.",
+            "The processing described in this privacy policy (optional account, Supabase EU, localStorage) applies to the app in the same way as to the website."
+          ]
         }
       ]
     },
@@ -1531,9 +1543,11 @@
           ]
         },
         {
-          "title": "8. No Right of Withdrawal",
+          "title": "8. Right of Withdrawal",
           "paragraphs": [
-            "As KiezQuiz is a free service provided without charge, there is no statutory right of withdrawal under §§ 355 et seq. BGB. This applies regardless of whether an account is created."
+            "As KiezQuiz is a free service for which users do not pay money, the scope of the right of withdrawal under §§ 312c, 355 et seq. BGB is limited.",
+            "When voluntarily creating an account, the user expressly agrees that performance of the contract (provision of the service account) begins immediately and confirms that they are aware that any right of withdrawal pursuant to § 356(5) BGB is thereby waived once the account is fully set up.",
+            "The account can be deleted independently at any time in the app settings (Art. 17 GDPR)."
           ]
         },
         {
@@ -1603,7 +1617,7 @@
             "Administrative boundaries and map layers are based on our own processing of the following sources. Trivia texts are written by us and protected by copyright."
           ],
           "list": [
-            "<strong>Hamburg, Berlin, Frankfurt am Main, Düsseldorf</strong> — GeoJSON from <a href=\"https://github.com/codeforgermany/click_that_hood\" target=\"_blank\" rel=\"noopener noreferrer\">Click That Hood</a> (Code for Germany), derived from OpenStreetMap (© OpenStreetMap contributors, <a href=\"https://opendatacommons.org/licenses/odbl/\" target=\"_blank\" rel=\"noopener noreferrer\">ODbL 1.0</a>). Population and area data supplemented from Wikipedia.",
+            "<strong>Hamburg, Berlin, Frankfurt am Main, Düsseldorf</strong> — GeoJSON from <a href=\"https://github.com/codeforgermany/click_that_hood\" target=\"_blank\" rel=\"noopener noreferrer\">Click That Hood</a> (Code for Germany), derived from OpenStreetMap (© OpenStreetMap contributors, <a href=\"https://opendatacommons.org/licenses/odbl/\" target=\"_blank\" rel=\"noopener noreferrer\">ODbL 1.0</a>). Population and area data supplemented from Wikipedia. For the legal classification as a \"Produced Work\" vs. \"Derivative Database\", see our internal review (as of 10 June 2026).",
             "<strong>Munich</strong> — district boundaries from the City of Munich open data portal (© City of Munich, <a href=\"https://www.govdata.de/dl-de/by-2-0\" target=\"_blank\" rel=\"noopener noreferrer\">Data Licence Germany – Attribution – Version 2.0</a>).",
             "<strong>Europe</strong> — country boundaries from <a href=\"https://www.naturalearthdata.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Natural Earth</a> (ne_50m_admin_0_countries, public domain).",
             "<strong>Mississippi (counties)</strong> — county boundaries from US Census Bureau TIGER/Line (via Plotly datasets, public domain)."
@@ -1654,6 +1668,12 @@
           "paragraphs": [
             "If you encounter barriers using KiezQuiz or wish to send feedback, email: <a href=\"mailto:info@kiezquiz.de?subject=Accessibility%20KiezQuiz\">info@kiezquiz.de</a>. We aim to respond within four weeks.",
             "Enforcement authority in Hamburg: <a href=\"https://www.hamburg.de/bjv\" target=\"_blank\" rel=\"noopener noreferrer\">Authority for Justice and Consumer Protection Hamburg</a>. Nationwide, the <a href=\"https://www.schlichtungsstelle-bgg.de/\" target=\"_blank\" rel=\"noopener noreferrer\">BGG mediation service</a> at the Federal Government Commissioner for Matters relating to Persons with Disabilities (BMAS) is also available for out-of-court resolution."
+          ]
+        },
+        {
+          "title": "Micro-enterprise exception (BFSG)",
+          "paragraphs": [
+            "As a sole proprietorship with fewer than 10 employees and annual turnover of at most EUR 2 million, KiezQuiz may fall under the micro-enterprise exception in Section 3(2)(1) BFSG. Regardless, we publish this accessibility statement voluntarily as a transparency measure and are working on improvements step by step."
           ]
         },
         {

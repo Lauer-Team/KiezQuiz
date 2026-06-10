@@ -8,7 +8,7 @@
         title: 'Erstveröffentlichung Hamburg',
         items: [
           'Interaktive Hamburg-Karte mit allen 7 Bezirken und 104 Stadtteilen',
-          'Fünf Spielmodi: Entdecker, Detektiv, Quiz, Namen tippen und Sporcle-Challenge',
+          'Fünf Spielmodi: Entdecker, Detektiv, Quiz, Namen tippen und Namens-Sprint',
           'XP-System mit Rängen, Streaks und Spielverlauf',
           'Web-Audio-Sounds und Begrüßungsnachricht beim Start'
         ]
@@ -17,7 +17,7 @@
         title: 'Initial Hamburg release',
         items: [
           'Interactive Hamburg map with all 7 boroughs and 104 districts',
-          'Five game modes: Explorer, Locate, Quiz, Type Name, and Sporcle Challenge',
+          'Five game modes: Explorer, Locate, Quiz, Type Name, and Name Sprint',
           'XP system with ranks, streaks, and game history',
           'Web Audio sounds and welcome message on start'
         ]

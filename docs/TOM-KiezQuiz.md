@@ -13,6 +13,7 @@
 | Maßnahme | Umsetzung bei KiezQuiz | Status |
 |----------|------------------------|--------|
 | Transportverschlüsselung | HTTPS/TLS für kiezquiz.de (GitHub Pages erzwingt HTTPS) | ✅ |
+| Content Security Policy (CSP) | Meta-Tag in `index.html` (10.06.2026): `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://iuixaesbzftgmnmelcad.supabase.co wss://iuixaesbzftgmnmelcad.supabase.co; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';` — `unsafe-inline` für Theme-Bootstrap und JSON-LD | ✅ |
 | Passwortspeicherung | Supabase Auth: bcrypt/scrypt, kein Klartext | ✅ |
 | Zugriffskontrolle Datenbank | Row Level Security (RLS) auf allen 9 Tabellen; RPC-only für sensible Tabellen | ✅ |
 | Kein externes CDN für Client-Libs | Supabase-JS self-hosted (`/assets/js/supabase-2.49.8.min.js`) | ✅ |

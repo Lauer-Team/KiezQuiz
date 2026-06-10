@@ -2,6 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <!-- CSP: script-src 'unsafe-inline' required for theme bootstrap + JSON-LD in head -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://iuixaesbzftgmnmelcad.supabase.co wss://iuixaesbzftgmnmelcad.supabase.co; img-src 'self' data: blob:; font-src 'self'; media-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
   <meta name="kiezquiz-build" content="dev">
   <meta name="kiezquiz-design" content="8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -185,7 +187,7 @@
           <a href="/duesseldorf/">Düsseldorf (50 Stadtteile)</a>
         </nav>
         <h2>Hamburg</h2>
-        <p>Hamburg gliedert sich in 7 Bezirke und 104 Stadtteile — vom Hafen bis nach Bergedorf. KiezQuiz zeigt jeden Stadtteil auf einer zoombaren Karte und trainiert dein Orientierungswissen mit Entdecker-Modus, Detektiv, Quiz und Sporcle-Challenge.</p>
+        <p>Hamburg gliedert sich in 7 Bezirke und 104 Stadtteile — vom Hafen bis nach Bergedorf. KiezQuiz zeigt jeden Stadtteil auf einer zoombaren Karte und trainiert dein Orientierungswissen mit Entdecker-Modus, Detektiv, Quiz und Namens-Sprint.</p>
         <h2>Berlin</h2>
         <p>Berlin hat 12 Bezirke und 97 Ortsteile — von Mitte über Kreuzberg bis Marzahn-Hellersdorf. Lerne die Hauptstadt spielerisch: Klicke Ortsteile an, finde sie auf der Karte oder tippe Namen unter Zeitdruck ein.</p>
         <h2>Frankfurt am Main</h2>
@@ -254,7 +256,7 @@
               <span class="mode-icon" data-mode-icon="NAME_ALL"></span>
               <div style="display:flex; flex-direction:column;">
                 <span style="font-weight:700;" data-i18n="modes.nameAll.label">Nenne alle Orte</span>
-                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.nameAll.desc">Sporcle-Challenge gegen die Zeit</span>
+                <span style="font-size:0.75rem; font-weight:400; opacity:0.8;" data-i18n="modes.nameAll.desc">Namens-Sprint – Nenne alle Orte gegen die Uhr</span>
               </div>
             </button>
           </div>
