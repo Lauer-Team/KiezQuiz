@@ -25,7 +25,7 @@ window.KIEZ_LEGAL = {
   /** Wesentliche NB-Änderungen: version bumpen, effectiveDate (+30 Tage), dann notify_terms_change.py */
   terms: {
     version: '2026-06-10',
-    effectiveDate: '2026-07-10',
+    effectiveDate: '2026-07-11',
     lastNotifiedVersion: null,
     pendingNotice: false
   }
