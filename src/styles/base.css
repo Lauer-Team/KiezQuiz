@@ -1417,6 +1417,15 @@ body.in-round .map-container-wrapper {
   stroke-width: 1.2px !important;
 }
 
+/* Detektiv (Stadtteile): einzelner Ortsteil bleibt markiert */
+.stadtteil-path.map-hover-highlight {
+  fill: hsl(var(--map-h, 200) 85% 58% / 0.48) !important;
+  stroke: #fff !important;
+  stroke-width: 1.5px !important;
+  filter: drop-shadow(0 0 6px hsl(var(--map-h, 200) 85% 58% / 0.85)) !important;
+  z-index: 12;
+}
+
 .map-text-label {
   font-family: var(--font-sans);
   font-size: 7px;
@@ -1867,12 +1876,12 @@ body.in-round .map-container-wrapper {
   stroke-width: 2.75px;
 }
 
-#city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+#city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded):not(.map-hover-highlight) {
   stroke-width: 0.25px;
   stroke: rgba(255, 255, 255, 0.12);
 }
 
-#city-view[data-city="frankfurt"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+#city-view[data-city="frankfurt"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded):not(.map-hover-highlight) {
   stroke-width: 0.25px;
   stroke: rgba(255, 255, 255, 0.12);
 }

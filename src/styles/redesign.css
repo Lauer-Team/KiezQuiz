@@ -194,14 +194,14 @@ html[data-theme="light"] .stadtteil-path.unlocked-bezirk {
 }
 
 /* Papier: Ortsteil-Grenzen im Stadtteile-Modus (nicht nur Bezirks-Overlay) */
-html[data-theme="light"] body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded),
-html[data-theme="light"] #city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded),
-html[data-theme="light"] #city-view[data-city="frankfurt"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+html[data-theme="light"] body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded):not(.map-hover-highlight),
+html[data-theme="light"] #city-view[data-city="berlin"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded):not(.map-hover-highlight),
+html[data-theme="light"] #city-view[data-city="frankfurt"].segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded):not(.map-hover-highlight) {
   stroke: rgba(15, 17, 24, 0.34);
   stroke-width: 0.55px;
 }
 
-html[data-theme="light"] body.segment-stadtteile .stadtteil-path:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+html[data-theme="light"] body.segment-stadtteile .stadtteil-path:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded):not(.map-hover-highlight) {
   stroke: color-mix(in srgb, var(--papier, #F1ECE0) 35%, #0F1118);
   stroke-width: 0.5px;
 }

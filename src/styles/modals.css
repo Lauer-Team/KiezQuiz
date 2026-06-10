@@ -334,7 +334,7 @@ html[data-theme="light"] .overlay-modal .text-input-field:focus {
   filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.45)) !important;
 }
 
-body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded) {
+body.segment-stadtteile .stadtteil-path.unlocked-bezirk:not(.round-correct):not(.round-incorrect):not(.selected):not(.blink):not(.bezirk-excluded):not(.map-hover-highlight) {
   stroke-width: 0.45px;
   stroke: rgba(255, 255, 255, 0.14);
 }

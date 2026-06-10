@@ -29,6 +29,7 @@ class KiezQuizGame {
     this.trophies = new Set();
     this.activeSelectPath = null;
     this.stickyHoverBezirk = null;
+    this.stickyHoverPath = null;
     
     // --- SPORCLE ROUND STATES ---
     this.inRound = false;
@@ -2017,7 +2018,15 @@ class KiezQuizGame {
     });
   }
 
+  _clearStickyPathHover() {
+    if (this.stickyHoverPath) {
+      this.stickyHoverPath.classList.remove('map-hover-highlight');
+      this.stickyHoverPath = null;
+    }
+  }
+
   _clearStickyMapHover() {
+    this._clearStickyPathHover();
     if (this.stickyHoverBezirk) {
       this._clearBezirkHoverHighlight(this.stickyHoverBezirk);
       this.stickyHoverBezirk = null;
@@ -2026,6 +2035,10 @@ class KiezQuizGame {
 
   _shouldStickyMapHover() {
     return this.inRound && this.currentMode === 'LOCATE';
+  }
+
+  _shouldStickyPathHover() {
+    return this._shouldStickyMapHover() && this.activeSegment === 'STADTTEILE';
   }
 
   updateMapStates() {
@@ -2064,7 +2077,7 @@ class KiezQuizGame {
   resetMapClasses() {
     this._clearStickyMapHover();
     this._mapPaths().forEach(path => {
-      path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect', 'bezirk-excluded');
+      path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'map-hover-highlight', 'round-correct', 'round-incorrect', 'bezirk-excluded');
       path.style.pointerEvents = '';
     });
     document.getElementById('europe-microstates-bar')?.querySelectorAll('.europe-microstate-chip.active').forEach((c) => {
@@ -2193,12 +2206,19 @@ class KiezQuizGame {
     }, { passive: true });
 
     path.addEventListener('mouseenter', () => {
+      if (path.classList.contains('locked-path') && !this.nameAllIsActive) return;
+
+      if (this._shouldStickyPathHover()) {
+        if (this.stickyHoverPath && this.stickyHoverPath !== path) {
+          this.stickyHoverPath.classList.remove('map-hover-highlight');
+        }
+        path.classList.add('map-hover-highlight');
+        this.stickyHoverPath = path;
+        return;
+      }
+
       const bz = path.getAttribute('data-bezirk');
-      const highlightBezirk = bz && (
-        (this.activeSegment === 'BEZIRKE' && !path.classList.contains('locked-path'))
-        || this._shouldStickyMapHover()
-      );
-      if (!highlightBezirk) return;
+      if (!bz || this.activeSegment !== 'BEZIRKE') return;
 
       if (this.stickyHoverBezirk && this.stickyHoverBezirk !== bz) {
         this._clearBezirkHoverHighlight(this.stickyHoverBezirk);
