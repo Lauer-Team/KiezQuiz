@@ -281,6 +281,45 @@ body.legal-page-body {
   color: var(--bg, #0f1118);
 }
 
+/* Banner sits on <body>, outside .app-shell — needs explicit theme tokens */
+html[data-theme="dark"] .kq-cookie-banner {
+  --surface: #171A24;
+  --surface-2: #252938;
+  --line: #363B4F;
+  --text-1: #FCFBF8;
+  --text-2: #C5C9D4;
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+html[data-theme="light"] .kq-cookie-banner {
+  --surface: #FCFBF8;
+  --surface-2: #F3EEE2;
+  --line: #DCD3C0;
+  --text-1: #0F1118;
+  --text-2: #2b2620;
+  background: color-mix(in srgb, var(--surface) 98%, transparent);
+  box-shadow: 0 16px 40px -20px rgba(60, 50, 30, 0.35);
+}
+
+html[data-theme="dark"] .kq-cookie-banner__btn {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+html[data-theme="light"] .kq-cookie-banner__btn {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+html[data-theme="dark"] .kq-cookie-banner__btn--primary {
+  color: #0F1118;
+}
+
+html[data-theme="light"] .kq-cookie-banner__btn--primary {
+  color: #FCFBF8;
+}
+
 .auth-terms {
   display: flex;
   align-items: flex-start;
