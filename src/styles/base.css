@@ -1412,8 +1412,8 @@ body.in-round .map-container-wrapper {
 }
 
 .stadtteil-path.bezirk-hover-highlight {
-  fill: rgba(0, 162, 255, 0.12) !important;
-  stroke: rgba(0, 200, 255, 0.65) !important;
+  fill: hsl(var(--map-h, 200) 85% 58% / 0.28) !important;
+  stroke: hsl(var(--map-h, 200) 90% 65% / 0.85) !important;
   stroke-width: 1.2px !important;
 }
 
@@ -2380,8 +2380,8 @@ body.in-round .map-container-wrapper {
 
 body.segment-bezirke .stadtteil-path.unlocked-bezirk {
   stroke-width: 0.35px;
-  stroke: rgba(255, 255, 255, 0.08);
-  fill: rgba(255, 255, 255, 0.03);
+  stroke: hsl(var(--map-h, 200) 72% 52% / 0.22);
+  fill: hsl(var(--map-h, 200) 72% 52% / 0.12);
 }
 
 body.segment-bezirke .stadtteil-path[data-bezirk="Altona"].unlocked-bezirk { fill: hsla(295, 80%, 55%, 0.12); }

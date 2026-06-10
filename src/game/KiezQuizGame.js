@@ -28,6 +28,7 @@ class KiezQuizGame {
     this.achievements = new Set();
     this.trophies = new Set();
     this.activeSelectPath = null;
+    this.stickyHoverBezirk = null;
     
     // --- SPORCLE ROUND STATES ---
     this.inRound = false;
@@ -2009,12 +2010,33 @@ class KiezQuizGame {
     this.updateModeVisibility();
     window.kiezCityDashboard?.updateBreadcrumb(this);
   }
+  _clearBezirkHoverHighlight(bezirk) {
+    if (!bezirk) return;
+    this._mapPaths(`[data-bezirk="${CSS.escape(bezirk)}"]`).forEach((p) => {
+      p.classList.remove('bezirk-hover-highlight');
+    });
+  }
+
+  _clearStickyMapHover() {
+    if (this.stickyHoverBezirk) {
+      this._clearBezirkHoverHighlight(this.stickyHoverBezirk);
+      this.stickyHoverBezirk = null;
+    }
+  }
+
+  _shouldStickyMapHover() {
+    return this.inRound && this.currentMode === 'LOCATE';
+  }
+
   updateMapStates() {
     const unlockedBezirke = this.getUnlockedBezirke();
     
     this._mapPaths().forEach(path => {
       const name = path.getAttribute('data-name');
       const bezirk = path.getAttribute('data-bezirk');
+      if (bezirk) {
+        path.style.setProperty('--map-h', String(this.getBezirkHue(bezirk)));
+      }
       path.style.pointerEvents = '';
 
       const isUnlocked = unlockedBezirke.includes(bezirk);
@@ -2040,10 +2062,10 @@ class KiezQuizGame {
   }
 
   resetMapClasses() {
+    this._clearStickyMapHover();
     this._mapPaths().forEach(path => {
       path.classList.remove('selected', 'blink', 'correct-flash', 'incorrect-flash', 'bezirk-hover-highlight', 'round-correct', 'round-incorrect', 'bezirk-excluded');
       path.style.pointerEvents = '';
-      path.style.removeProperty('--map-h');
     });
     document.getElementById('europe-microstates-bar')?.querySelectorAll('.europe-microstate-chip.active').forEach((c) => {
       c.classList.remove('active');
@@ -2171,20 +2193,30 @@ class KiezQuizGame {
     }, { passive: true });
 
     path.addEventListener('mouseenter', () => {
-      if (this.activeSegment === 'BEZIRKE' && !path.classList.contains('locked-path')) {
-        const bz = path.getAttribute('data-bezirk');
-        this._mapPaths(`[data-bezirk="${bz}"]`).forEach((p) => {
+      const bz = path.getAttribute('data-bezirk');
+      const highlightBezirk = bz && (
+        (this.activeSegment === 'BEZIRKE' && !path.classList.contains('locked-path'))
+        || this._shouldStickyMapHover()
+      );
+      if (!highlightBezirk) return;
+
+      if (this.stickyHoverBezirk && this.stickyHoverBezirk !== bz) {
+        this._clearBezirkHoverHighlight(this.stickyHoverBezirk);
+      }
+      this._mapPaths(`[data-bezirk="${CSS.escape(bz)}"]`).forEach((p) => {
+        if (!p.classList.contains('locked-path') || this.nameAllIsActive) {
           p.classList.add('bezirk-hover-highlight');
-        });
+        }
+      });
+      if (this._shouldStickyMapHover()) {
+        this.stickyHoverBezirk = bz;
       }
     });
 
     path.addEventListener('mouseleave', () => {
+      if (this._shouldStickyMapHover()) return;
       if (this.activeSegment === 'BEZIRKE') {
-        const bz = path.getAttribute('data-bezirk');
-        this._mapPaths(`[data-bezirk="${bz}"]`).forEach((p) => {
-          p.classList.remove('bezirk-hover-highlight');
-        });
+        this._clearBezirkHoverHighlight(path.getAttribute('data-bezirk'));
       }
     });
 
@@ -2723,6 +2755,7 @@ class KiezQuizGame {
 
   nextRoundQuestion() {
     this.activeSelectPath = null;
+    this._clearStickyMapHover();
     
     // Remove blink state
     this._mapPaths().forEach(p => p.classList.remove('blink', 'selected'));
