@@ -175,17 +175,23 @@ async function sendResend(
   const key = Deno.env.get("RESEND_API_KEY");
   if (!key) throw new Error("RESEND_API_KEY fehlt in Supabase Secrets");
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ from: mail.from, to: [to], subject: mail.subject, text: mail.text, html: mail.html }),
-  });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ from: mail.from, to: [to], subject: mail.subject, text: mail.text, html: mail.html }),
+    });
 
-  if (!res.ok) {
+    if (res.ok) return;
+
     const body = await res.text();
+    if (res.status === 429 && attempt < 2) {
+      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+      continue;
+    }
     throw new Error(`Resend ${res.status}: ${body}`);
   }
 }
@@ -235,6 +241,7 @@ Deno.serve(async (req: Request) => {
   for (const email of recipients) {
     try {
       await sendResend(email, mail);
+      await new Promise((r) => setTimeout(r, 250));
     } catch (err) {
       result.errors.push(`${email}: ${err instanceof Error ? err.message : String(err)}`);
     }

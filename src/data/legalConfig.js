@@ -26,7 +26,7 @@ window.KIEZ_LEGAL = {
   terms: {
     version: '2026-06-10',
     effectiveDate: '2026-07-11',
-    lastNotifiedVersion: null,
-    pendingNotice: false
+    lastNotifiedVersion: '2026-06-10',
+    pendingNotice: true
   }
 };
