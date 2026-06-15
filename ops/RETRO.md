@@ -18,4 +18,12 @@ Kurze Learnings nach größeren Durchläufen (Datum · Kontext · Lehre).
 
 **Lehre:** Backup-Archiv gehört Kalle (Skript + Supplement-Ordner), nicht menschliche Copy-Paste-Routine.
 
+## 2026-06-15 — Masterauftrag v2 abgeschlossen
+
+**Kontext:** Phase 2 Finance + Support, Phase 3 Legal-Koordination.
+
+**Lehre:** Free-Tier-Services explizit inventarisieren — sonst überrascht Resend/Supabase bei Wachstum.
+
+**Lehre:** Legal = Koordination in Cursor, Formulierung in Legora — getrennte Rollen klar halten.
+
 ---

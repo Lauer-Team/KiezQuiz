@@ -10,7 +10,9 @@
 | [ZUGAENGE.md](ZUGAENGE.md) | Zugangs-Matrix |
 | [ORGANIGRAMM.md](ORGANIGRAMM.md) | Agenten-Struktur (Mermaid) |
 | [AUTOMATIONS.md](AUTOMATIONS.md) | Cursor-Automations (Cron + Prompts) |
-| [PHASE2.md](PHASE2.md) | Backlog Phase 2 |
+| [PHASE2.md](PHASE2.md) | Masterauftrag-Status (Phase 0–3 done) |
+| [finance/](finance/) | Service-Inventar, Kosten, Free-Tier-Risiken |
+| [legal/](legal/) | Legal-Koordination, Trigger, Backlog |
 | [RETRO.md](RETRO.md) | Learnings |
 | [reports/](reports/) | Berichte der Fach-Agenten |
 

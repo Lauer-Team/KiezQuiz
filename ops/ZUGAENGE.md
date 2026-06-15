@@ -22,8 +22,9 @@
 | Supabase-Backup (CI) | 🟢 | monatlich via GitHub Actions | optional: Kopie offline archivieren |
 | Telegram-Bot | ⏸️ | Anleitung im Repo | **Pausiert** bis auf Weiteres |
 | United Domains | 🟡 | — | DNS/Mail nur bei Bedarf manuell |
-| Legora | 🟡 | Legal-Arbeitsaufträge | Rechtstexte dort prüfen |
-| Cursor Automations | 🟢 | 4 Routinen live (s. LEITSTAND) | — |
+| Legora | 🟡 | Legal-Arbeitsauftrag, Koordination | Rechtstexte dort prüfen · `ops/legal/` |
+| Finance-Tracking | 🟢 | `ops/finance/SERVICES.md`, COSTS.md | Domain-Verlängerungsdatum eintragen |
+| Cursor Automations | 🟢 | 4 Routinen live (s. LEITSTAND) | optional §4–5 Finance/Support |
 | GSC API (OAuth) | 🔴 | — | Erst wenn SEO-Automation soll |
 | Analytics | ⚪ | — | bewusst nicht genutzt |
 
@@ -56,14 +57,13 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 ---
 
-## 🔜 Phase 2 (noch offen)
+## 🔜 Optional (Masterauftrag erledigt)
 
 | Thema | Wann |
 |---|---|
-| Cursor Automations (SEO, Uptime, Security) | Kalle liefert Config → du legst auf cursor.com an |
-| GSC Search Console API (OAuth) | Wenn wöchentliches SEO-Briefing automatisch soll |
-| Finance-Abteilung | Phase 2 laut Playbook |
-| Support/Analytics | Phase 2 (ohne Tracking-Cookies) |
+| GSC Search Console API (OAuth) | Wenn SEO-Briefing vollautomatisch soll |
+| Finance/Support-Automation | Vorlagen in `ops/AUTOMATIONS.md` §4–5 |
+| Monetarisierung | Legora + Finance — wenn geplant |
 
 ---
 
@@ -97,4 +97,4 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 ## Nächster Schritt
 
-**Phase 1 abgeschlossen** (2026-06-15). Phase 2: `ops/PHASE2.md` · Automations optional in `ops/AUTOMATIONS.md`.
+**Phase 1 + Masterauftrag v2 abgeschlossen** (2026-06-15). Optional: `ops/AUTOMATIONS.md` §4–5 · GSC OAuth.

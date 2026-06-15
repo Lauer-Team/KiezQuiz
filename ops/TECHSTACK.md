@@ -81,7 +81,9 @@
 |---|---|
 | `ops/PLAYBOOK.md` | Leitagent-Regelwerk |
 | `ops/ZUGAENGE.md` | Zugangs-Matrix (was Kalle hat / was fehlt) |
-| `ops/LEITSTAND.md` | Status & Aufgaben (ab Phase 1) |
+| `ops/LEITSTAND.md` | Status & Aufgaben |
+| `ops/finance/SERVICES.md` | Free-Tier-Inventar |
+| `ops/legal/COORDINATION.md` | Legal-Koordination (Legora) |
 | `ops/ORGANIGRAMM.md` | Agenten-Struktur (Mermaid) |
 | `ops/RETRO.md` | Learnings nach Durchläufen |
 | `ops/reports/` | Berichte der Fach-Agenten |

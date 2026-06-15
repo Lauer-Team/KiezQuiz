@@ -1,6 +1,6 @@
 # Organigramm — KiezQuiz Agenten-Struktur
 
-> Mermaid rendert auf GitHub als Diagramm. Stand: 2026-06-15
+> Mermaid rendert auf GitHub als Diagramm. Stand: **2026-06-15** (Masterauftrag v2 abgeschlossen)
 
 ```mermaid
 flowchart TB
@@ -13,56 +13,49 @@ flowchart TB
     end
 
     subgraph fach["Fach-Abteilungen (Cursor Rules + Automations)"]
-        SEO["10-seo<br/>Technisches SEO · GSC-Briefings"]
-        DEV["20-devops-monitoring<br/>Uptime · Smoke-Tests · Deploy-Health"]
-        SEC["30-security<br/>Dependabot · Secret-Scan · Patches als PR"]
-        FIN["40-finance<br/>Phase 2 · nur Vorbereitung"]
-        SUP["50-support-analytics<br/>Phase 2 · ohne Tracking-Cookies"]
+        SEO["10-seo<br/>Technisches SEO · GSC"]
+        DEV["20-devops<br/>Uptime · Smoke · Deploy"]
+        SEC["30-security<br/>Dependabot · RLS · Patches"]
+        FIN["40-finance<br/>Kosten · Free-Tier-Risiko"]
+        SUP["50-support<br/>Stadt-Wünsche · kein GA"]
+        LEGC["60-legal-coordination<br/>Trigger · Backlog · Legora-Aufträge"]
     end
 
     subgraph external["Extern (nicht Cursor)"]
-        LEG["Legora<br/>Legal & Compliance"]
+        LEG["Legora<br/>Rechtstexte & Compliance"]
         TG["Telegram-Bot<br/>⏸️ pausiert"]
     end
 
-    subgraph auto["Cursor Automations (geplant)"]
-        A1["SEO-Wochenbriefing"]
-        A2["Uptime-Check"]
-        A3["Security-Scan"]
+    subgraph auto["Cursor Automations 🟢 live"]
+        A0["Backup Archiv Sync"]
+        A1["Uptime Smoke Check"]
+        A2["Security Weekly"]
+        A3["SEO Weekly"]
     end
 
     subgraph shared["Gemeinsame Dateien"]
         LS["ops/LEITSTAND.md"]
         RP["ops/reports/"]
         RT["ops/RETRO.md"]
-        TS["ops/TECHSTACK.md"]
+        FINS["ops/finance/"]
+        LEGF["ops/legal/"]
     end
 
     mensch -->|"Anweisungen"| K
-    K -->|"koordiniert"| SEO
-    K -->|"koordiniert"| DEV
-    K -->|"koordiniert"| SEC
-    K -->|"koordiniert"| FIN
-    K -->|"koordiniert"| SUP
+    K --> SEO & DEV & SEC & FIN & SUP & LEGC
     K -->|"Legal-Arbeitsauftrag"| LEG
     LEG -->|"geprüfte Texte"| K
     mensch -.->|"⏸️"| TG
 
-    SEO --> RP
-    DEV --> RP
-    SEC --> RP
-    A1 --> SEO
-    A2 --> DEV
-    A3 --> SEC
+    A0 --> DEV
+    A1 --> DEV
+    A2 --> SEC
+    A3 --> SEO
 
-    K --> LS
-    K --> RT
-    SEO --> LS
-    DEV --> LS
-    SEC --> LS
-
-    OK -.->|"Gate"| mensch
-    K -->|"PR + Erklärung"| OK
+    SEO & DEV & SEC & FIN & SUP --> RP
+    LEGC --> LEGF
+    FIN --> FINS
+    K --> LS & RT
 ```
 
 ## Freigabe-Gates (nur du)
@@ -80,4 +73,5 @@ flowchart TB
 
 | Datum | Änderung |
 |---|---|
-| 2026-06-15 | Erstversion: Kalle, SEO, DevOps, Security; Telegram pausiert; Finance/Support Phase 2 |
+| 2026-06-15 | Erstversion: Kalle, SEO, DevOps, Security |
+| 2026-06-15 | 4 Automations live; Finance, Support, Legal-Koordination; Masterauftrag v2 done |
