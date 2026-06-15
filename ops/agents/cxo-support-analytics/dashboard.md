@@ -1,23 +1,27 @@
 # Dashboard — Xenia (CXO)
 
 **Status:** 🟢  
-**Kurz:** Stadt-Wünsche · Support Monthly live · kein GA
+**Lage:** Frühe Traktion: 6 Nutzer, 33 Spiele, 76 % Trefferquote, 21 Stadt-Wünsche. Top-Wünsche: Stuttgart, München, Köln.  
+**Rolle:** Wertet Support-Anfragen und Nutzerwünsche aus (z. B. Stadt-Wünsche) — datensparsam, ohne Google Analytics.
 
-## Todos
+## KPIs
 
-- Am 1.: Support Monthly (#6)
-- Trends und Top-Wünsche dokumentieren
+| Kennzahl | Wert | Ziel | Status | Verlauf | Quelle |
+|---|---|---|---|---|---|
+| Registrierte Nutzer | 6 | 100 | 🟡 | 0,0,0,5,6,6 | live |
+| Gespielte Runden | 33 | — | 🟢 | 0,0,0,26,33,33 | live |
+| Trefferquote | 76% | 70% | 🟢 |  | live |
+| Stadt-Wünsche | 21 | — | 🟢 | 0,0,0,14,21,21 | live |
+
+## Projekte
+
+| Projekt | Status | Fortschritt | Termin |
+|---|---|---|---|
+| Top-Wünsche → neue Städte (Stuttgart, München, Köln) | läuft | 30% | Q3 2026 |
+| Onboarding verbessern (Trefferquote ↑) | Idee | 0% | offen |
 
 ## Automations
 
 | # | Name | Cron | Aufgabe |
 |---|---|---|---|
 | 6 | Support Monthly | `0 10 1 * *` | Stadt-Wünsche, Trends |
-
-## Berichte (Kurz)
-
-- Monatliche Berichte: `reports/*support-monthly*`
-
-## Heute
-
-Frühphase — wenige Wünsche, System stabil. Nächster Lauf: 1. des Monats.

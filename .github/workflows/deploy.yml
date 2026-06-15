@@ -50,6 +50,10 @@ jobs:
           python3 scripts/generate_seo_pages.py
           python3 scripts/generate_sitemap.py
           python3 scripts/generate_legal_static.py
+
+      - name: Build AI dashboard data from agent files
+        run: |
+          python3 scripts/build_ai_dashboard_data.py
           python3 scripts/generate_dashboard.py
 
       - name: Upload AI dashboard to Supabase (admin-only)

@@ -1,12 +1,24 @@
 # Dashboard — Oskar (COO)
 
 **Status:** 🟢  
-**Kurz:** Uptime-Automation live · Backup CI + Archiv · Deploy healthy
+**Lage:** Betrieb stabil — Seite werktags erreichbar, Backups laufen, letzter Deploy erfolgreich.  
+**Rolle:** Überwacht den Betrieb: Ist die Seite erreichbar, laufen Backups, klappen die Deploys.
 
-## Todos
+## KPIs
 
-- Werktags Smoke Check kiezquiz.de
-- Nächster Archiv-Sync: 2. des Monats
+| Kennzahl | Wert | Ziel | Status | Verlauf | Quelle |
+|---|---|---|---|---|---|
+| Erreichbarkeit | erreichbar | 100% | 🟢 |  | live |
+| Letztes Backup | OK | monatlich | 🟢 |  | live |
+| Letzter Deploy | erfolgreich | grün | 🟢 |  | live (GitHub) |
+| Smoke-Check | werktäglich | werktags | 🟢 |  | live |
+
+## Projekte
+
+| Projekt | Status | Fortschritt | Termin |
+|---|---|---|---|
+| Uptime-Prozent automatisch messen | Idee | 0% | Q3 2026 |
+| Telegram-Alerts reaktivieren | pausiert | 0% | offen |
 
 ## Automations
 
@@ -14,12 +26,3 @@
 |---|---|---|---|
 | 0 | Backup Archiv Sync | `0 10 2 * *` | Artifact → Supplement |
 | 1 | Uptime Smoke Check | `0 8 * * 1-5` | Live-Erreichbarkeit |
-
-## Berichte (Kurz)
-
-- `reports/2026-06-15-devops-smoke-check.md` — 🟢
-- `reports/2026-06-15-backup-archiv.md` — 🟢
-
-## Heute
-
-Live-Site erreichbar. Supabase-Backup CI am 1. des Monats.
