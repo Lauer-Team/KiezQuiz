@@ -125,10 +125,20 @@ Leitstand aktualisieren.
 
 ## Empfohlene Reihenfolge zum Anlegen
 
-1. **Uptime Smoke Check** (höchster Nutzen, geringster Aufwand)
-2. **Security Weekly**
-3. **SEO Weekly** (später GSC-API ergänzen)
+1. **Uptime Smoke Check** — `0 8 * * 1-5`
+2. **Security Weekly** — `0 7 * * 1`
+3. **Backup Archiv Sync** — `0 10 2 * *`
+4. **SEO Weekly** — `0 9 * * 1`
+
+## Checkliste (optional — ein Häkchen pro Automation)
+
+- [ ] 0 — Backup Archiv Sync
+- [ ] 1 — Uptime Smoke Check
+- [ ] 2 — Security Weekly
+- [ ] 3 — SEO Weekly
+
+Nach dem Speichern auf cursor.com: Häkchen setzen oder Kalle Bescheid geben.
 
 ## Freigabe
 
-Automations **aktivierst du** — ich liefere nur die Texte. Nach dem Anlegen: kurz „Automation 1 live" schreiben.
+Automations laufen in der Sandbox (Berichte/PRs). Aktivierung ist deine Entscheidung — **Phase 1 funktioniert auch ohne sie** (Kalle in Chat-Sessions).
