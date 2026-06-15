@@ -1,6 +1,7 @@
 # Service-Inventar — KiezQuiz
 
-> **Pflege:** Finance-Abteilung / Kalle · Stand: **2026-06-15**  
+> **Primäre Akte:** [`../agents/cfo-finanzen/leitstand.md`](../agents/cfo-finanzen/leitstand.md)  
+> **Pflege:** CFO / Kalle · Stand: **2026-06-15**  
 > Alle Dienste — auch kostenlose. Risiko = wie schnell KiezQuiz ohne Upgrade in Probleme gerät.
 
 **Legende Risiko:** 🟢 weit entfernt · 🟡 mittelfristig beobachten · 🔴 bald prüfen/upgraden

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Finance-Abteilung (KiezQuiz)
 
-Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/LEITSTAND.md` + `ops/finance/COSTS.md`.
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/agents/cfo-finanzen/dashboard.md`, `leitstand.md` + `ops/finance/COSTS.md`.
 
 ## Auftrag
 

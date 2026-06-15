@@ -1,25 +1,47 @@
 # ops — Leitagent KiezQuiz
 
-> **Start hier:** [`LEITSTAND.md`](LEITSTAND.md) — aktueller Status (Kalle liest das zu Session-Beginn).
-> **Auf einen Blick:** [`dashboard.html`](dashboard.html) im Browser öffnen (One-Stop-Shop) · Gesamtüberblick: [`ORGANIGRAMM.md`](ORGANIGRAMM.md).
+> **Start hier:** [`agents/ceo-kalle/leitstand.md`](agents/ceo-kalle/leitstand.md) — CEO-Status (Kalle liest das zu Session-Beginn).  
+> **Pointer:** [`LEITSTAND.md`](LEITSTAND.md) · **Dashboard (Admin):** Profil → Admin → AI-Management
+
+---
+
+## Agenten-Betriebssystem (v2)
+
+| Was | Wo |
+|---|---|
+| **CEO Kalle** | [`agents/ceo-kalle/`](agents/ceo-kalle/) |
+| **Register (8 Agenten)** | [`agents/registry.json`](agents/registry.json) |
+| **Reporting-Protokoll** | [`agents/PROTOKOLL.md`](agents/PROTOKOLL.md) |
+| **Dashboard-Daten (JSON)** | [`dashboard-data.json`](dashboard-data.json) — `scripts/build_ai_dashboard_data.py` |
+
+Jeder Agent hat **8 Dateien:** `leitstand.md`, `backlog.md`, `todos.md`, `memories.md`, `routinen.md`, `anweisungen.md`, `dashboard.md`, `reports.md`.
+
+| Agent | Ordner | Rolle |
+|---|---|---|
+| 🕊️ Kalle | `ceo-kalle/` | CEO / Leitagent |
+| 🛠️ CTO | `cto-ingenieur/` | Engineering |
+| 💰 CFO | `cfo-finanzen/` | Finance |
+| ⚖️ CLO | `clo-legal/` | Legal |
+| 📈 CMO | `cmo-seo-growth/` | SEO & Growth |
+| ⚙️ COO | `coo-operations/` | Ops & DevOps |
+| 🔒 CSO | `cso-security/` | Security |
+| 💬 CXO | `cxo-support-analytics/` | Support & Analytics |
+
+---
+
+## Querschnitt
 
 | Datei | Inhalt |
 |---|---|
-| [dashboard.html](dashboard.html) | **One-Stop-Shop** — Status, Termine, nächste Routinen (Agent baut es auf Zuruf) |
-| [ORGANIGRAMM.md](ORGANIGRAMM.md) | **Gesamtüberblick** — Agenten, MCPs, Automationen, Datei-Landkarte, Umzugs-Checkliste |
-| [LEITSTAND.md](LEITSTAND.md) | Status, Entscheidungen, Glossar |
+| [ORGANIGRAMM.md](ORGANIGRAMM.md) | Gesamtüberblick — Agenten, MCPs, Automationen, Audit |
 | [PLAYBOOK.md](PLAYBOOK.md) | Regelwerk für Kalle |
-| [TECHSTACK.md](TECHSTACK.md) | Tech-Stack (Suchbegriff: `TechStack`) |
+| [AUTOMATIONS.md](AUTOMATIONS.md) | Cursor-Automations (Cron + Prompts + Agenten-Dateien) |
+| [DEADLINES.md](DEADLINES.md) | Fälligkeiten & Erinnerungen |
+| [ROADMAP.md](ROADMAP.md) | Aufgeschobene Themen |
+| [TECHSTACK.md](TECHSTACK.md) | Tech-Stack |
 | [ZUGAENGE.md](ZUGAENGE.md) | Zugangs-Matrix |
-| [AUTOMATIONS.md](AUTOMATIONS.md) | Cursor-Automations (Cron + Prompts) |
-| [PHASE2.md](PHASE2.md) | Masterauftrag-Status (Phase 0–3 done) |
-| [finance/](finance/) | Service-Inventar, Kosten, Free-Tier-Risiken |
-| [legal/](legal/) | Legal-Koordination, Trigger, Backlog |
-| [DEADLINES.md](DEADLINES.md) | Fälligkeiten & Erinnerungen (Domain, NB, …) |
-| [ROADMAP.md](ROADMAP.md) | Aufgeschobene Themen ohne festes Datum |
-| [plans/MONETIZATION.md](plans/MONETIZATION.md) | Monetarisierungs-Referenzplan (wenn du Umsatz willst) |
-| [../docs/GSC-MANUAL-CHECK.md](../docs/GSC-MANUAL-CHECK.md) | GSC ohne Google Cloud (~5 Min) |
-| [RETRO.md](RETRO.md) | Learnings |
+| [finance/](finance/) | Service-Inventar, Kosten (CFO-Referenz) |
+| [legal/](legal/) | Legal-Trigger, Koordination (CLO-Referenz) |
 | [reports/](reports/) | Berichte der Fach-Agenten |
 
-**Pflege:** Kalle aktualisiert den Leitstand bei jeder Statusänderung — ohne dass du danach fragen musst.
+**Pflege:** Jeder Agent aktualisiert seine Akte bei Statusänderung — Kalle hält CEO-Akte + Pointer synchron.

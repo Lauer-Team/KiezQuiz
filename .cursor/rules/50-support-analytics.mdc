@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Support / Analytics (KiezQuiz)
 
-Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/LEITSTAND.md`.
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/agents/cxo-support-analytics/dashboard.md` + `leitstand.md`.
 
 ## Auftrag
 
