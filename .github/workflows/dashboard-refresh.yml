@@ -1,0 +1,45 @@
+name: Refresh AI Dashboard
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dashboard-refresh
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Generate dashboard
+        run: python3 scripts/generate_dashboard.py
+
+      - name: Upload to Supabase Storage (admin-only)
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          export SUPABASE_URL="${VITE_SUPABASE_URL:-$SUPABASE_URL}"
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::error::GitHub Secret SUPABASE_SERVICE_ROLE_KEY fehlt (Dashboard bleibt alt)."
+            exit 1
+          fi
+          python3 scripts/upload_ai_dashboard.py
+
+      - name: Commit snapshot to repo (optional backup)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ops/dashboard.html
+          if git diff --staged --quiet; then
+            echo "Dashboard unchanged — kein Commit nötig."
+            exit 0
+          fi
+          git commit -m "chore(ops): refresh AI dashboard"
+          git push

@@ -130,7 +130,7 @@ Leitstand aktualisieren.
 3. **Backup Archiv Sync** — `0 10 2 * *`
 4. **SEO Weekly** — `0 9 * * 1`
 
-## Checkliste (alle live 2026-06-15)
+## Checkliste
 
 - [x] 0 — Backup Archiv Sync
 - [x] 1 — Uptime Smoke Check
@@ -139,6 +139,7 @@ Leitstand aktualisieren.
 - [x] 4 — Finance Monthly
 - [x] 5 — Support Monthly
 - [x] 6 — Ops Weekly Review
+- [x] 7 — **Leit-Routine / Orchestrator**
 
 ---
 
@@ -219,7 +220,46 @@ Kein Merge auf main nötig wenn nur Bericht + DEADLINES-Status. PR optional.
 Ab 2026-07-12: wenn D4 fällig → scripts/deactivate_terms_notice.py --apply (siehe DEADLINES.md).
 ```
 
+## 7. Leit-Routine / Orchestrator (wöchentlich — koordiniert alles)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — Leit-Routine (Orchestrator) |
+| **Cron** | `0 6 * * 1` (Montags 06:00 UTC — **vor** allen anderen) |
+| **Modell** | Composer |
+| **MCPs** | *(keine Pflicht)* |
+
+**Zweck:** Der „Dirigent". Einmal pro Woche prüft diese Automation **alle anderen Automationen** —
+welche diese Woche fällig sind, ob Berichte fehlen, ob etwas überfällig/veraltet ist — und baut das **Dashboard** neu.
+So hast du einen einzigen Ort, der den Gesamtüberblick herstellt.
+
+**Anweisung:**
+
+```
+Du bist Kalle (Leitagent) in der Rolle Orchestrator (Leit-Routine).
+
+1. Lies ops/LEITSTAND.md (§1 Abteilungen, §2 Automationen) und ops/DEADLINES.md.
+2. Bestimme, welche Automationen in den nächsten 7 Tagen laufen (anhand der Cron-Spalte).
+3. Prüfe ops/reports/: Fehlt für eine fällige Automation der letzte erwartete Bericht?
+   -> notiere "überfällig/zu prüfen".
+4. Baue das Dashboard neu:  python3 scripts/generate_dashboard.py
+   (erzeugt ops/dashboard.html aus dem aktuellen Leitstand + berechneten Terminen).
+5. Schreibe Bericht ops/reports/YYYY-MM-DD-orchestrator.md:
+   - Tabelle: Automation | nächster Lauf (DE) | fällig diese Woche? | Bericht vorhanden?
+   - Was braucht der Mensch diese Woche (nummeriert, laienverständlich)?
+   - Auffälligkeiten (überfällig, rote Deadlines, Quota-Warnungen).
+6. Leitstand §1: Zeile "Leitagent (Kalle)" kurz aktualisieren (Dashboard-Stand/Datum).
+
+Kein Merge auf main nötig (nur Bericht + dashboard.html). PR optional.
+Ab 2026-07-12: bei fälligem D4 an scripts/deactivate_terms_notice.py erinnern.
+```
+
+**Warum 06:00 Montags?** Läuft vor Ops Weekly Review (07:00), Security (07:00) und SEO (09:00),
+damit das Dashboard die frische Wochenplanung schon zeigt.
+
+---
+
 ## Checkliste optional
 
-_(alle Pflicht-Automations live — siehe Checkliste oben)_
-- [ ] 6 — Ops Weekly Review
+_(Pflicht-Automations 0–7 live — siehe Checkliste oben)_
+- [x] 7 — Leit-Routine / Orchestrator

@@ -19,10 +19,16 @@
     settings: 'profilePage.navSettings',
     'admin-city-wishes': 'adminPage.navCityWishes',
     'admin-player-activity': 'adminPage.navPlayerActivity',
-    'admin-changelog': 'header.adminChangelog'
+    'admin-changelog': 'header.adminChangelog',
+    'admin-ai-dashboard': 'adminPage.navAiDashboard'
   };
 
-  const ADMIN_SECTIONS = new Set(['admin-city-wishes', 'admin-player-activity', 'admin-changelog']);
+  const ADMIN_SECTIONS = new Set([
+    'admin-city-wishes',
+    'admin-player-activity',
+    'admin-changelog',
+    'admin-ai-dashboard'
+  ]);
 
   function parseInitialSection() {
     try {
@@ -895,6 +901,7 @@
       ? `<span class="profile-admin-badge">${adminWishCount}</span>`
       : '';
     const items = [
+      { section: 'admin-ai-dashboard', labelKey: 'adminPage.navAiDashboard', badge: '' },
       { section: 'admin-city-wishes', labelKey: 'adminPage.navCityWishes', badge },
       { section: 'admin-player-activity', labelKey: 'adminPage.navPlayerActivity', badge: '' },
       { section: 'admin-changelog', labelKey: 'header.adminChangelog', badge: '' }
@@ -939,6 +946,9 @@
         return window.kiezAdminSections?.renderPlayerActivitySection?.() || '';
       }
       if (activeSection === 'admin-changelog') return renderAdminChangelogSection();
+      if (activeSection === 'admin-ai-dashboard') {
+        return window.kiezAdminAiDashboard?.renderAiDashboardSection?.() || '';
+      }
     }
     switch (activeSection) {
       case 'dashboard': return renderDashboardSection();
@@ -1201,6 +1211,9 @@
     }
     if (activeSection === 'admin-player-activity' && isAdmin) {
       window.kiezAdminSections?.bindActivitySectionEvents?.(main, () => renderDashboard());
+    }
+    if (activeSection === 'admin-ai-dashboard' && isAdmin) {
+      window.kiezAdminAiDashboard?.bindAiDashboardSectionEvents?.(main);
     }
 
     if (main.dataset.profileCityTilesBound !== 'true') {
@@ -1566,6 +1579,7 @@
           || document.getElementById('profile-section-admin-city-wishes')
           || document.getElementById('profile-section-admin-player-activity')
           || document.getElementById('profile-section-admin-changelog')
+          || document.getElementById('profile-section-admin-ai-dashboard')
           || document.getElementById('profile-section-settings')) {
           renderDashboard();
         }

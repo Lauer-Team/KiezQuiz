@@ -1,14 +1,16 @@
 # ops — Leitagent KiezQuiz
 
 > **Start hier:** [`LEITSTAND.md`](LEITSTAND.md) — aktueller Status (Kalle liest das zu Session-Beginn).
+> **Auf einen Blick:** [`dashboard.html`](dashboard.html) im Browser öffnen (One-Stop-Shop) · Gesamtüberblick: [`ORGANIGRAMM.md`](ORGANIGRAMM.md).
 
 | Datei | Inhalt |
 |---|---|
+| [dashboard.html](dashboard.html) | **One-Stop-Shop** — Status, Termine, nächste Routinen (Agent baut es auf Zuruf) |
+| [ORGANIGRAMM.md](ORGANIGRAMM.md) | **Gesamtüberblick** — Agenten, MCPs, Automationen, Datei-Landkarte, Umzugs-Checkliste |
 | [LEITSTAND.md](LEITSTAND.md) | Status, Entscheidungen, Glossar |
 | [PLAYBOOK.md](PLAYBOOK.md) | Regelwerk für Kalle |
 | [TECHSTACK.md](TECHSTACK.md) | Tech-Stack (Suchbegriff: `TechStack`) |
 | [ZUGAENGE.md](ZUGAENGE.md) | Zugangs-Matrix |
-| [ORGANIGRAMM.md](ORGANIGRAMM.md) | Agenten-Struktur (Mermaid) |
 | [AUTOMATIONS.md](AUTOMATIONS.md) | Cursor-Automations (Cron + Prompts) |
 | [PHASE2.md](PHASE2.md) | Masterauftrag-Status (Phase 0–3 done) |
 | [finance/](finance/) | Service-Inventar, Kosten, Free-Tier-Risiken |

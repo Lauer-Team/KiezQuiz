@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KiezQuiz — AI-Management Dashboard</title>
+<style>
+  :root { --bg:#f6f8fa; --fg:#1f2328; --muted:#57606a; --line:#d0d7de; --card:#fff; --accent:#0969da; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--fg); background:var(--bg); }
+  header { background:linear-gradient(135deg,#0969da,#1a7f37); color:#fff; padding:28px 24px; }
+  header h1 { margin:0 0 4px; font-size:24px; }
+  header p { margin:0; opacity:.92; }
+  main { max-width:1100px; margin:0 auto; padding:24px; }
+  section { margin-bottom:32px; }
+  h2 { font-size:18px; border-bottom:2px solid var(--line); padding-bottom:6px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; }
+  .card h3 { margin:8px 0 4px; font-size:15px; }
+  .card p { margin:0; color:var(--muted); font-size:13px; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:600; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .panel h2 { margin-top:0; border:0; }
+  ul { margin:0; padding-left:18px; }
+  li { margin:5px 0; }
+  table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  th, td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; font-size:14px; }
+  th { background:#f0f3f6; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  td.num, td.center { text-align:center; }
+  code { background:#eef1f4; padding:1px 6px; border-radius:5px; font-size:13px; }
+  .muted { color:var(--muted); }
+  .linkchip { display:inline-block; margin:4px 6px 0 0; padding:7px 12px; background:var(--card); border:1px solid var(--line); border-radius:8px; color:var(--accent); text-decoration:none; font-size:13px; }
+  .linkchip:hover { border-color:var(--accent); }
+  .mermaid { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; overflow:auto; }
+  footer { text-align:center; color:var(--muted); font-size:12px; padding:24px; }
+  body.is-embed header, body.is-embed footer { display:none; }
+  body.is-embed main { max-width:none; padding:12px; }
+  @media (max-width:760px) { .two { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>🕊️ KiezQuiz — AI-Management Dashboard</h1>
+  <p>Dein One-Stop-Shop · erstellt am Monday, 15.06.2026 · 18:10 Uhr · Quelle: ops/LEITSTAND.md</p>
+</header>
+<main>
+
+  <section class="two">
+    <div class="panel">
+      <h2>📅 Was diese Woche ansteht</h2>
+      <ul><li><strong>Uptime Smoke Check</strong> — Dienstag, 16.06.2026 · 10:00 <span class='muted'>(1 Tg.)</span></li>
+<li><strong>Leit-Routine / Orchestrator</strong> — Montag, 22.06.2026 · 08:00 <span class='muted'>(7 Tg.)</span></li>
+<li><strong>Security Weekly</strong> — Montag, 22.06.2026 · 09:00 <span class='muted'>(7 Tg.)</span></li>
+<li><strong>Ops Weekly Review</strong> — Montag, 22.06.2026 · 09:00 <span class='muted'>(7 Tg.)</span></li>
+<li><strong>SEO Weekly</strong> — Montag, 22.06.2026 · 11:00 <span class='muted'>(7 Tg.)</span></li></ul>
+    </div>
+    <div class="panel">
+      <h2>⏳ Wartet auf dich / Fälligkeiten</h2>
+      <ul><li><span class="badge" style="color:#9a6700;background:#fff8e1">🟡 Beobachten</span> <strong>NB werden wirksam (Version 2026-06-10)</strong> — fällig 2026-07-11 <span class='muted'>(Kalle)</span></li>
+<li><span class="badge" style="color:#9a6700;background:#fff8e1">🟡 Beobachten</span> <strong>Cursor Downgrade Pro+ → Pro (~20 USD)</strong> — fällig 2026-07-01 <span class='muted'>(Kalle)</span></li>
+<li><span class="badge" style="color:#9a6700;background:#fff8e1">🟡 Beobachten</span> <strong>NB-Gäste-Banner abschalten (pendingNotice: false)</strong> — fällig 2026-07-12 <span class='muted'>(Kalle)</span></li></ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>🚦 Status je Abteilung</h2>
+    <div class="grid"><div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>Leitagent (Kalle)</h3>
+          <p>8 Automations live · Dashboard admin-only (Supabase Storage)</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>SEO</h3>
+          <p>GSC manuell · Automation „SEO Weekly&quot; (technisch) · kein Google Cloud nötig</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>DevOps / Monitoring</h3>
+          <p>Uptime-Automation live · Backup CI + Archiv</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>Security</h3>
+          <p>Automation „Security Weekly&quot; live · 0 Dependabot-Alerts</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>Supabase-Backup</h3>
+          <p>CI am 1. · Archiv-Sync-Automation live</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>Finance</h3>
+          <p>Service-Tracking · Automation „Finance Monthly&quot; live</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>Support / Analytics</h3>
+          <p>Stadt-Wünsche · Automation „Support Monthly&quot; live</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></div>
+          <h3>Legal (Legora + Kalle)</h3>
+          <p>NB-E-Mails erledigt (10.06.) · Banner bis 11.07. · Koordination live</p>
+        </div>
+<div class="card">
+          <div class="card-head"><span class="badge" style="color:#57606a;background:#eef1f4">⏸️ Pausiert</span></div>
+          <h3>Telegram-Agent</h3>
+          <p>Pausiert</p>
+        </div></div>
+  </section>
+
+  <section>
+    <h2>⏰ Automationen & nächste Routine-Termine</h2>
+    <table>
+      <thead><tr><th>#</th><th>Automation</th><th>Cron (UTC)</th><th>Nächster Lauf (DE)</th><th>in Tagen</th></tr></thead>
+      <tbody><tr>
+          <td class="num">1</td>
+          <td><strong>Uptime Smoke Check</strong><br><span class="muted">kiezquiz.de erreichbar?</span></td>
+          <td><code>0 8 * * 1-5</code></td>
+          <td>Dienstag, 16.06.2026 · 10:00</td>
+          <td class="center">1</td>
+        </tr>
+<tr>
+          <td class="num">7</td>
+          <td><strong>Leit-Routine / Orchestrator</strong><br><span class="muted">Koordiniert alle, prüft Fälligkeit, baut Dashboard</span></td>
+          <td><code>0 6 * * 1</code></td>
+          <td>Montag, 22.06.2026 · 08:00</td>
+          <td class="center">7</td>
+        </tr>
+<tr>
+          <td class="num">2</td>
+          <td><strong>Security Weekly</strong><br><span class="muted">Dependabot + Supabase Advisors</span></td>
+          <td><code>0 7 * * 1</code></td>
+          <td>Montag, 22.06.2026 · 09:00</td>
+          <td class="center">7</td>
+        </tr>
+<tr>
+          <td class="num">4</td>
+          <td><strong>Ops Weekly Review</strong><br><span class="muted">Fälligkeiten · ops/DEADLINES.md</span></td>
+          <td><code>0 7 * * 1</code></td>
+          <td>Montag, 22.06.2026 · 09:00</td>
+          <td class="center">7</td>
+        </tr>
+<tr>
+          <td class="num">3</td>
+          <td><strong>SEO Weekly</strong><br><span class="muted">Sitemap, SEO-Tests, Leitstand</span></td>
+          <td><code>0 9 * * 1</code></td>
+          <td>Montag, 22.06.2026 · 11:00</td>
+          <td class="center">7</td>
+        </tr>
+<tr>
+          <td class="num">5</td>
+          <td><strong>Finance Monthly</strong><br><span class="muted">Kosten, Free-Tier, SERVICES.md</span></td>
+          <td><code>0 8 1 * *</code></td>
+          <td>Mittwoch, 01.07.2026 · 10:00</td>
+          <td class="center">16</td>
+        </tr>
+<tr>
+          <td class="num">6</td>
+          <td><strong>Support Monthly</strong><br><span class="muted">Stadt-Wünsche, Trends</span></td>
+          <td><code>0 10 1 * *</code></td>
+          <td>Mittwoch, 01.07.2026 · 12:00</td>
+          <td class="center">16</td>
+        </tr>
+<tr>
+          <td class="num">0</td>
+          <td><strong>Backup Archiv Sync</strong><br><span class="muted">Artifact → Supplement-Ordner</span></td>
+          <td><code>0 10 2 * *</code></td>
+          <td>Donnerstag, 02.07.2026 · 12:00</td>
+          <td class="center">17</td>
+        </tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>📌 Termine & Fälligkeiten</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Status</th><th>Was</th><th>Fällig</th><th>Wer</th><th>Notiz</th></tr></thead>
+      <tbody><tr>
+          <td>D1</td>
+          <td><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span></td>
+          <td><strong>Domain kiezquiz.de verlängern (United Domains)</strong></td>
+          <td>2027-05-30</td>
+          <td>Du</td>
+          <td class="muted">Laufzeit 31.05.2026–30.05.2027 · ~12–15 €/Jahr</td>
+        </tr>
+<tr>
+          <td>D2</td>
+          <td><span class="badge" style="color:#9a6700;background:#fff8e1">🟡 Beobachten</span></td>
+          <td><strong>NB werden wirksam (Version 2026-06-10)</strong></td>
+          <td>2026-07-11</td>
+          <td>Kalle</td>
+          <td class="muted">E-Mails bereits am 10.06. versendet · Gäste-Banner läuft bis D4</td>
+        </tr>
+<tr>
+          <td>D3</td>
+          <td><span class="badge" style="color:#9a6700;background:#fff8e1">🟡 Beobachten</span></td>
+          <td><strong>Cursor Downgrade Pro+ → Pro (~20 USD)</strong></td>
+          <td>2026-07-01</td>
+          <td>Kalle</td>
+          <td class="muted">Rechnung Juli prüfen → ops/finance/COSTS.md</td>
+        </tr>
+<tr>
+          <td>D4</td>
+          <td><span class="badge" style="color:#9a6700;background:#fff8e1">🟡 Beobachten</span></td>
+          <td><strong>NB-Gäste-Banner abschalten (pendingNotice: false)</strong></td>
+          <td>2026-07-12</td>
+          <td>Kalle</td>
+          <td class="muted">python3 scripts/deactivate_terms_notice.py --apply → PR</td>
+        </tr></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>🗺️ Organigramm</h2>
+    <pre class="mermaid">flowchart TB
+    subgraph mensch[&quot;👤 Du (Jeremiah) — Eigentümer &amp; Freigabe&quot;]
+        OK[&quot;Freigabe-Gates&lt;br/&gt;Deploy · Geld · Recht · DNS · E-Mails&quot;]
+    end
+
+    subgraph leit[&quot;🕊️ Kalle — Leitagent (einziger Ansprechpartner)&quot;]
+        K[&quot;Orchestrator&lt;br/&gt;ops/LEITSTAND.md · ops/PLAYBOOK.md&lt;br/&gt;.cursor/rules/00-leitagent.mdc&quot;]
+    end
+
+    subgraph fach[&quot;Fach-Agenten · .cursor/rules/&quot;]
+        SEO[&quot;10-seo&lt;br/&gt;Technisches SEO · GSC&quot;]
+        DEV[&quot;20-devops&lt;br/&gt;Uptime · Smoke · Deploy&quot;]
+        SEC[&quot;30-security&lt;br/&gt;Dependabot · RLS · Patches&quot;]
+        FIN[&quot;40-finance&lt;br/&gt;Kosten · Free-Tier-Risiko&quot;]
+        SUP[&quot;50-support&lt;br/&gt;Stadt-Wünsche · kein GA&quot;]
+        LEGC[&quot;60-legal-koordination&lt;br/&gt;Trigger · Backlog · Legora-Aufträge&quot;]
+        TNR[&quot;terms-change-notify&lt;br/&gt;NB-Versand-Regeln&quot;]
+        DPL[&quot;deploy-and-cache-busting&lt;br/&gt;Live-Gang · Versionierung&quot;]
+        LAY[&quot;Layout&lt;br/&gt;Geräte-Layouts&quot;]
+    end
+
+    subgraph mcp[&quot;🔌 MCPs &amp; Connections (Kalles Werkzeuge)&quot;]
+        M1[&quot;Supabase&quot;]
+        M2[&quot;Cloudflare (Docs/Bindings/Builds/Observability)&quot;]
+        M3[&quot;Notion&quot;]
+        M4[&quot;Cursor App-Control / IDE-Browser&quot;]
+        M5[&quot;GitHub (gh CLI)&quot;]
+    end
+
+    subgraph auto[&quot;⏰ Cursor Automations 🟢 live&quot;]
+        A0[&quot;Backup Archiv Sync&quot;]
+        A1[&quot;Uptime Smoke Check&quot;]
+        A2[&quot;Security Weekly&quot;]
+        A3[&quot;SEO Weekly&quot;]
+        A4[&quot;Ops Weekly Review&quot;]
+        A5[&quot;Finance Monthly&quot;]
+        A6[&quot;Support Monthly&quot;]
+        A7[&quot;Leit-Routine / Orchestrator&lt;br/&gt;(koordiniert alle, baut Dashboard)&quot;]
+    end
+
+    subgraph gha[&quot;⚙️ GitHub Actions (im Code-Repo)&quot;]
+        G1[&quot;deploy.yml — Live-Deploy&quot;]
+        G2[&quot;supabase-backup.yml — DB-Backup 1./Monat&quot;]
+        G3[&quot;backup-reminder.yml — Erinnerungs-Mail&quot;]
+        G4[&quot;notify-terms.yml — NB-Mail&quot;]
+    end
+
+    subgraph hooks[&quot;🪝 Hooks (.cursor/hooks)&quot;]
+        H1[&quot;after-terms-edit.sh&lt;br/&gt;nach NB-/Legal-Änderung&quot;]
+    end
+
+    subgraph external[&quot;🌐 Extern (nicht Cursor)&quot;]
+        LEG[&quot;Legora — Rechtstexte &amp; Compliance&quot;]
+        TG[&quot;Telegram-Bot — ⏸️ pausiert&quot;]
+        GSC[&quot;Google Search Console&quot;]
+        RES[&quot;Resend — E-Mail&quot;]
+    end
+
+    subgraph shared[&quot;📁 Gemeinsame Dateien (Quelle der Wahrheit)&quot;]
+        LS[&quot;ops/LEITSTAND.md&quot;]
+        DL[&quot;ops/DEADLINES.md&quot;]
+        RP[&quot;ops/reports/&quot;]
+        RT[&quot;ops/RETRO.md&quot;]
+        RD[&quot;ops/ROADMAP.md&quot;]
+        FINS[&quot;ops/finance/&quot;]
+        LEGF[&quot;ops/legal/&quot;]
+        DASH[&quot;ops/dashboard.html&quot;]
+    end
+
+    mensch --&gt;|&quot;Anweisungen / Freigaben&quot;| K
+    K --&gt; SEO &amp; DEV &amp; SEC &amp; FIN &amp; SUP &amp; LEGC
+    K --- M1 &amp; M2 &amp; M3 &amp; M4 &amp; M5
+    K --&gt;|&quot;Legal-Arbeitsauftrag&quot;| LEG
+    LEG --&gt;|&quot;geprüfte Texte&quot;| K
+    mensch -.-&gt;|&quot;⏸️&quot;| TG
+
+    A0 --&gt; DEV
+    A1 --&gt; DEV
+    A2 --&gt; SEC
+    A3 --&gt; SEO
+    A4 --&gt; K
+    A5 --&gt; FIN
+    A6 --&gt; SUP
+    A7 ==&gt; A0 &amp; A1 &amp; A2 &amp; A3 &amp; A4 &amp; A5 &amp; A6
+    A7 ==&gt; DASH
+
+    SEO -.-&gt; GSC
+    SEC --- M1
+    FIN --- M1
+    SUP --- M1
+    G4 --- RES
+    H1 -.-&gt; TNR
+
+    SEO &amp; DEV &amp; SEC &amp; FIN &amp; SUP --&gt; RP
+    LEGC --&gt; LEGF
+    FIN --&gt; FINS
+    K --&gt; LS &amp; DL &amp; RT &amp; RD</pre>
+  </section>
+
+  <section>
+    <h2>🔗 Alles öffnen</h2>
+    <a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/LEITSTAND.md" target="_blank" rel="noopener">Leitstand (Status)</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/ORGANIGRAMM.md" target="_blank" rel="noopener">Organigramm (Gesamtüberblick)</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/DEADLINES.md" target="_blank" rel="noopener">Fälligkeiten</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/ROADMAP.md" target="_blank" rel="noopener">Roadmap</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/AUTOMATIONS.md" target="_blank" rel="noopener">Automations-Konfig</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/ZUGAENGE.md" target="_blank" rel="noopener">Zugänge</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/TECHSTACK.md" target="_blank" rel="noopener">Tech-Stack</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/finance/SERVICES.md" target="_blank" rel="noopener">Finance</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/legal/BACKLOG.md" target="_blank" rel="noopener">Legal-Backlog</a>
+<a class="linkchip" href="https://github.com/logic3/KiezQuiz/blob/main/ops/reports/" target="_blank" rel="noopener">Berichte</a>
+  </section>
+
+</main>
+<footer>
+  Automatisch erzeugt von <code>scripts/generate_dashboard.py</code> ·
+  Status pflegt Kalle in <code>ops/LEITSTAND.md</code> ·
+  zum Aktualisieren: „Erstelle das Dashboard" sagen.
+</footer>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+<script>
+  if (new URLSearchParams(location.search).get("embed") === "1") {
+    document.body.classList.add("is-embed");
+  }
+</script>
+</body>
+</html>
