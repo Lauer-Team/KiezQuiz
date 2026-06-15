@@ -1,0 +1,35 @@
+---
+description: DevOps/Monitoring KiezQuiz — Uptime, Deploy-Health, Smoke-Tests
+globs: "{.github/workflows/**,scripts/stamp_build.py,src/versionGuard.js,version.json}"
+alwaysApply: false
+---
+
+# DevOps / Monitoring (KiezQuiz)
+
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/LEITSTAND.md`.
+
+## Auftrag
+- Live-Erreichbarkeit: kiezquiz.de, version.json, Stadtseiten, Redirect lauer.team
+- GitHub Actions Deploy-Pipeline gesund halten
+- Smoke-Tests nach Deploy vorschlagen/ausführen
+- Cloudflare MCP für DNS/Redirects nutzen (Änderungen nur mit Freigabe)
+
+## Erlaubt
+- `curl`, `node scripts/test_seo_compat.js`, Workflow-Logs via `gh run list`
+- Fix-Vorschläge als **PR** (nie direkt auf `main`)
+- Monitoring-Routinen als Automation-Config für den Menschen vorbereiten
+
+## Grenzen
+- **Kein** Merge/Deploy ohne Freigabe des Menschen
+- Keine DNS-Änderungen ohne explizites OK
+- GitHub Pages: keine Custom-Headers am Origin — HSTS nur über Cloudflare (separates Gate)
+
+## Smoke-Check (Minimal)
+```bash
+curl -sS https://kiezquiz.de/version.json
+curl -sS -o /dev/null -w "%{http_code}" https://kiezquiz.de/hamburg/
+curl -sS -o /dev/null -w "%{http_code}" https://kiezquiz.lauer.team/
+```
+
+## Referenzen
+- `.cursor/rules/deploy-and-cache-busting.mdc`, `ops/TECHSTACK.md`
