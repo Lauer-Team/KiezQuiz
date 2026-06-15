@@ -19,6 +19,8 @@ python3 scripts/setup_supabase_backup.py
 3. **Connection string** → Tab **URI** → **Direct connection** kopieren
 4. In `scripts/backup-supabase.config.json` das Feld `databaseUrl` eintragen
 
+**GitHub Actions (IPv4):** Der Workflow setzt automatisch `KIEZ_SUPABASE_USE_POOLER=true` — dieselbe Direct-URI reicht im Secret; das Skript nutzt dann den **Session pooler** (`aws-0-REGION.pooler.supabase.com`), weil GitHub-Runner kein IPv6 haben.
+
 ### pg_dump installieren (macOS)
 
 ```bash
