@@ -9,7 +9,7 @@
 | Abteilung | Status | Kurz |
 |---|---|---|
 | **Leitagent (Kalle)** | 🟢 | 7 Cursor-Automations aktiv · DEADLINES + ROADMAP live |
-| **SEO** | 🟢 | GSC OK · Automation „SEO Weekly" live · GSC-API-Skript bereit |
+| **SEO** | 🟢 | GSC manuell · Automation „SEO Weekly" (technisch) · kein Google Cloud nötig |
 | **DevOps / Monitoring** | 🟢 | Uptime-Automation live · Backup CI + Archiv |
 | **Security** | 🟢 | Automation „Security Weekly" live · 0 Dependabot-Alerts |
 | **Supabase-Backup** | 🟢 | CI am 1. · Archiv-Sync-Automation live |
@@ -52,8 +52,8 @@ Vorlagen: `ops/AUTOMATIONS.md`
 | Wer | Aufgabe |
 |---|---|
 | **Kalle** | Leitstand, Berichte, Free-Tier-Warnung, Legal-Trigger, PRs, NB-Banner abschalten ab 12.07. |
-| **Du** | Legora-Aufträge (wenn Monetarisierung/iOS), Merge-Freigaben, **Domain verlängern** (D1), GSC OAuth (optional) |
-| **Du (optional, 2 Min)** | HaveIBeenPwned in Supabase Auth · Dependabot-PRs mergen |
+| **Du** | Legora-Aufträge (wenn Monetarisierung/iOS), Merge-Freigaben, **Domain verlängern** (D1), GSC manuell (~5 Min/Monat, optional) |
+| **Du (optional)** | Bing Webmaster · www-Redirect · Dependabot-PRs prüfen |
 
 **Anstehend (Termine):** `ops/DEADLINES.md` — Ops Weekly Review prüft automatisch
 
@@ -61,7 +61,7 @@ Vorlagen: `ops/AUTOMATIONS.md`
 
 ## 5. Wartet auf deine Freigabe
 
-Merge auf `main` (Spiel-Code) · Rechtstexte live · DNS · Supabase RLS-Hardening (optional) · Dependabot Actions-PRs
+Merge auf `main` (Spiel-Code) · Rechtstexte live · DNS · Supabase Pro / kostenpflichtige Upgrades
 
 ---
 
@@ -69,8 +69,9 @@ Merge auf `main` (Spiel-Code) · Rechtstexte live · DNS · Supabase RLS-Hardeni
 
 | Thema | Nutzen | Aufwand | Priorität |
 |---|---|---|---|
-| GSC API OAuth | SEO-Daten automatisch | mittel | siehe `ops/ROADMAP.md` R4 |
+| GSC manuell (5 Min/Monat) | SEO-Überblick ohne API | gering | Standard → `docs/GSC-MANUAL-CHECK.md` |
 | Monetarisierung | Umsatz | hoch | aufgeschoben → `ops/plans/MONETIZATION.md` |
+| HaveIBeenPwned (Supabase) | Passwort-Leaks blocken | — | **erst mit Supabase Pro** · wenn Umsatz |
 | Telegram-Agent reaktivieren | Fern-PRs | hoch | pausiert · ROADMAP R7 |
 | Community-Launch | Reichweite | mittel | ROADMAP R2 |
 
@@ -87,6 +88,9 @@ Merge auf `main` (Spiel-Code) · Rechtstexte live · DNS · Supabase RLS-Hardeni
 | 2026-06-15 | **Masterauftrag v2 abgeschlossen** — Finance, Support, Legal-Koordination |
 | 2026-06-15 | **Ops Weekly Review** live (Automation #4) · `ops/DEADLINES.md` |
 | 2026-06-15 | Finance + Support Monthly live (#5–6) · NB-Backlog korrigiert · ROADMAP + Monetarisierungsplan |
+| 2026-06-15 | **PR #47** gemerged — Actions-Bumps, GSC-Skript optional |
+| 2026-06-15 | **HaveIBeenPwned** bewusst offen — nur Supabase Pro; erst bei Umsatz |
+| 2026-06-15 | **GSC:** manueller Check Standard; Google Cloud/API nicht nötig |
 
 Berichte: `ops/reports/`
 

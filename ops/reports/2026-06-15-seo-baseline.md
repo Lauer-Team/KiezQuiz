@@ -11,4 +11,4 @@
 
 ## Offen (Roadmap)
 
-- GSC Search Console API (OAuth) — Skript bereit: `scripts/gsc_weekly_brief.py` · `docs/GSC-API-SETUP.md`
+- GSC: manuell ~5 Min/Monat → `docs/GSC-MANUAL-CHECK.md` (kein Google Cloud nötig)

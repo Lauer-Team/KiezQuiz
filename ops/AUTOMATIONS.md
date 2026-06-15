@@ -101,7 +101,7 @@ Kritische Fixes: Branch+PR vorschlagen, nicht mergen.
 | **Modell** | Composer |
 | **MCPs** | *(optional Notion für Notizen)* |
 
-**Hinweis:** GSC-Daten automatisch via `scripts/gsc_weekly_brief.py` — nach OAuth (`docs/GSC-API-SETUP.md`). Bis dahin: technisches SEO im Code + Live-URLs.
+**Hinweis:** GSC-Zahlen **manuell** in der Search Console (Standard) → `docs/GSC-MANUAL-CHECK.md`. API/Skript nur optional.
 
 **Anweisung:**
 
@@ -112,11 +112,10 @@ Prüfe:
 - curl https://kiezquiz.de/sitemap.xml und robots.txt
 - node scripts/test_seo_compat.js (falls vorhanden)
 - Stadtseiten /hamburg/ /berlin/ /frankfurt/ erreichbar
-- Falls GSC OAuth eingerichtet: python3 scripts/gsc_weekly_brief.py --days 28 --out ops/reports/YYYY-MM-DD-seo-gsc.md
 
 Bericht ops/reports/YYYY-MM-DD-seo-weekly.md mit:
 - Technischer Status (grün/gelb/rot)
-- GSC-Kennzahlen (wenn Skript läuft) oder Hinweis: OAuth fehlt → docs/GSC-API-SETUP.md
+- Hinweis: GSC Performance/Indexierung manuell prüfen (docs/GSC-MANUAL-CHECK.md, ~5 Min) — kein Google Cloud nötig
 - Verbesserungsvorschläge als PR, nicht mergen
 
 Leitstand aktualisieren.

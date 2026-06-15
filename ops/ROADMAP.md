@@ -21,12 +21,12 @@
 
 | ID | Thema | Nächster Schritt | Wer |
 |---|---|---|---|
-| R4 | **GSC API (OAuth)** | OAuth einrichten → Skript testen | Du (OAuth) + Kalle | [`docs/GSC-API-SETUP.md`](../docs/GSC-API-SETUP.md) |
-| R5 | **Dependabot Actions** | PR mergen nach CI-Grün | Kalle (PR) · Merge: du |
-| R6 | **HaveIBeenPwned (Supabase Auth)** | Dashboard → Auth → Password Security aktivieren | Du (2 Min) |
-| R7 | **Telegram-Agent** | Reaktivieren wenn alter Mac wieder läuft | Du | `telegram-agent/ANLEITUNG.md` |
-| R8 | **Bing Webmaster** | Site + Sitemap einreichen (optional) | Du | `docs/SEO-SETUP.md` |
-| R9 | **www.kiezquiz.de Redirect** | 301 auf Apex falls www existiert | Du (DNS) | `docs/SEO-SETUP.md` |
+| R4 | **GSC manuell** | ~5 Min/Monat in Search Console | Du · [`docs/GSC-MANUAL-CHECK.md`](../docs/GSC-MANUAL-CHECK.md) |
+| R4b | **GSC API (optional)** | Nur bei Bedarf an Vollautomatik | Google Cloud + OAuth · [`docs/GSC-API-SETUP.md`](../docs/GSC-API-SETUP.md) |
+| R6 | **HaveIBeenPwned** | Erst wenn **Supabase Pro** + Umsatz | Supabase Auth · siehe [`plans/MONETIZATION.md`](plans/MONETIZATION.md) |
+| R7 | **Telegram-Agent** | Reaktivieren wenn alter Mac wieder läuft | Du · `telegram-agent/ANLEITUNG.md` |
+| R8 | **Bing Webmaster** | Site + Sitemap einreichen (optional) | Du · `docs/SEO-SETUP.md` |
+| R9 | **www.kiezquiz.de Redirect** | 301 auf Apex falls www existiert | Du (DNS) · `docs/SEO-SETUP.md` |
 
 ---
 
@@ -46,3 +46,4 @@
 | — | Finance Monthly Automation | 2026-06-15 (du angelegt) |
 | — | Support Monthly Automation | 2026-06-15 (du angelegt) |
 | — | NB-E-Mail-Versand | 2026-06-10 (`lastNotifiedVersion: 2026-06-10`) |
+| R5 | Dependabot Actions-Bumps | 2026-06-15 (PR #47) |
