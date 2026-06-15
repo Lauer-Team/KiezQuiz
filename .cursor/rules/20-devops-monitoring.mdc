@@ -31,5 +31,10 @@ curl -sS -o /dev/null -w "%{http_code}" https://kiezquiz.de/hamburg/
 curl -sS -o /dev/null -w "%{http_code}" https://kiezquiz.lauer.team/
 ```
 
+## Backup-Archiv (monatlich)
+
+Nach GitHub-Backup (1. des Monats): `python3 scripts/sync_supabase_backup_artifact.py`  
+Ziel: Supplement-Ordner in `backup-supabase.config.json` → `archiveDir` (gitignored).
+
 ## Referenzen
 - `.cursor/rules/deploy-and-cache-busting.mdc`, `ops/TECHSTACK.md`

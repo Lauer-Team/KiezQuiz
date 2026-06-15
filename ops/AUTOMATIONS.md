@@ -14,6 +14,31 @@
 
 ---
 
+## 0. Backup ins Supplement-Archiv (Kalle — monatlich)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — Backup Archiv Sync |
+| **Cron** | `0 10 2 * *` (am 2. jeden Monats, 10:00 UTC — nach GitHub-Backup am 1.) |
+| **Modell** | Composer |
+| **MCPs** | *(gh CLI im Repo)* |
+
+**Anweisung:**
+
+```
+Du bist Kalle (Leitagent). Nach dem monatlichen GitHub-Backup:
+
+1. python3 scripts/sync_supabase_backup_artifact.py
+   (kopiert neuestes Actions-Artifact nach archiveDir in backup-supabase.config.json)
+2. Kurz in ops/reports/YYYY-MM-DD-backup-archiv.md notieren: Dateiname, Größe, Run-ID.
+3. ops/LEITSTAND.md — Supabase-Backup auf grün, falls OK.
+
+Bei Fehler: Ursache in Bericht, Mensch nur wenn gh auth fehlt.
+Kein Merge auf main nötig (nur lokales Archiv + Bericht als PR optional).
+```
+
+---
+
 ## 1. Uptime & Smoke-Check (DevOps)
 
 | | |

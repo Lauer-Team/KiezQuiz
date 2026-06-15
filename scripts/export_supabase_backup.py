@@ -75,6 +75,33 @@ def resolve_output_dir(cfg: dict) -> Path:
     return path
 
 
+def resolve_archive_dir(cfg: dict) -> Path | None:
+    raw = (cfg.get("archiveDir") or "").strip()
+    if not raw:
+        return None
+    path = Path(raw).expanduser()
+    if not path.is_absolute():
+        path = ROOT / path
+    return path
+
+
+def copy_to_archive(archive: Path, cfg: dict, retain: int) -> Path | None:
+    archive_dir = resolve_archive_dir(cfg)
+    if not archive_dir:
+        return None
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    target = archive_dir / archive.name
+    shutil.copy2(archive, target)
+    archives = sorted(
+        archive_dir.glob("kiezquiz-*.sql.gz"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    for old in archives[retain:]:
+        old.unlink(missing_ok=True)
+    return target
+
+
 def find_pg_dump() -> str:
     for candidate in (
         Path("/usr/lib/postgresql/17/bin/pg_dump"),
@@ -200,13 +227,14 @@ def main() -> None:
     archive = write_backup(out_dir, sql_bytes)
     update_manifest(out_dir, archive, schemas)
     removed = prune_old_backups(out_dir, retain)
+    archived = copy_to_archive(archive, cfg, retain)
 
     size_mb = archive.stat().st_size / (1024 * 1024)
     print(f"✓ Backup: {archive} ({size_mb:.2f} MiB)")
+    if archived:
+        print(f"✓ Archiv: {archived}")
     if removed:
         print(f"✓ Aufgeräumt ({retain} behalten): {', '.join(removed)}")
-    print()
-    print("Archivieren: Kopie nach iCloud/externe Festplatte/Ordner „Rechtsdokumente“.")
 
 
 if __name__ == "__main__":
