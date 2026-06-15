@@ -1,0 +1,109 @@
+# Cursor Automations — KiezQuiz
+
+> Fertige Config-Blöcke zum Einfügen auf [cursor.com/automations](https://cursor.com/automations).  
+> **Wichtig:** Jede Automation legt nur **Berichte/PRs** vor — nie direkt auf `main` mergen.
+
+## So legst du eine Automation an
+
+1. [cursor.com/automations](https://cursor.com/automations) → **New Automation**
+2. Trigger: **Schedule** → Cron eintragen (siehe unten)
+3. Repository: **Lauer-Team/KiezQuiz** · Branch: `main`
+4. Anweisung (Prompt) einfügen
+5. MCPs + Modell wählen → **Save**
+6. Mir Bescheid sagen: „Automation X angelegt"
+
+---
+
+## 1. Uptime & Smoke-Check (DevOps)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — Uptime Smoke Check |
+| **Cron** | `0 8 * * 1-5` (werktags 08:00 UTC ≈ 09:00/10:00 DE) |
+| **Modell** | Composer oder Auto |
+| **MCPs** | *(keine Pflicht)* |
+
+**Anweisung:**
+
+```
+Du bist die DevOps-Abteilung für KiezQuiz. Halte dich an .cursor/rules/20-devops-monitoring.mdc.
+
+Prüfe live:
+- https://kiezquiz.de/version.json (JSON mit build + design)
+- https://kiezquiz.de/ , /hamburg/ , /robots.txt , /sitemap.xml (HTTP 200)
+- https://kiezquiz.lauer.team/ (301 auf kiezquiz.de)
+
+Schreibe Bericht nach ops/reports/YYYY-MM-DD-devops-smoke-check.md:
+Status grün/gelb/rot, gemessene HTTP-Codes, version.json build-SHA.
+Aktualisiere ops/LEITSTAND.md (Abteilung DevOps) — nur diese Datei, kein Deploy.
+
+Bei rot: konkreten Fix-Vorschlag als Branch+PR, nicht mergen.
+```
+
+---
+
+## 2. Security-Scan (wöchentlich)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — Security Weekly |
+| **Cron** | `0 7 * * 1` (Montags 07:00 UTC) |
+| **Modell** | Composer |
+| **MCPs** | Supabase (Advisors + Logs kurz prüfen) |
+
+**Anweisung:**
+
+```
+Du bist die Security-Abteilung für KiezQuiz. Halte dich an .cursor/rules/30-security.mdc.
+
+1. Prüfe offene Dependabot-Alerts (gh api oder GitHub UI Hinweise im Bericht).
+2. Supabase MCP: get_advisors für Projekt KiezQuiz Backend — Security-Hinweise zusammenfassen.
+3. Keine Secrets in Dateien committen (.gitignore prüfen).
+
+Bericht: ops/reports/YYYY-MM-DD-security-weekly.md
+Leitstand: ops/LEITSTAND.md Security-Status aktualisieren.
+Kritische Fixes: Branch+PR vorschlagen, nicht mergen.
+```
+
+---
+
+## 3. SEO-Wochenbriefing (manuell + Leitstand)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — SEO Weekly Brief |
+| **Cron** | `0 9 * * 1` (Montags 09:00 UTC) |
+| **Modell** | Composer |
+| **MCPs** | *(optional Notion für Notizen)* |
+
+**Hinweis:** GSC-Daten brauchen noch **Search Console API (OAuth)** für Vollautomatik. Bis dahin: Automation prüft technisches SEO im Code + Live-URLs.
+
+**Anweisung:**
+
+```
+Du bist die SEO-Abteilung für KiezQuiz. Halte dich an .cursor/rules/10-seo.mdc.
+
+Prüfe:
+- curl https://kiezquiz.de/sitemap.xml und robots.txt
+- node scripts/test_seo_compat.js (falls vorhanden)
+- Stadtseiten /hamburg/ /berlin/ /frankfurt/ erreichbar
+
+Bericht ops/reports/YYYY-MM-DD-seo-weekly.md mit:
+- Technischer Status (grün/gelb/rot)
+- Hinweis an Mensch: GSC Performance/Coverage manuell prüfen (Property kiezquiz.de)
+- Verbesserungsvorschläge als PR, nicht mergen
+
+Leitstand aktualisieren.
+```
+
+---
+
+## Empfohlene Reihenfolge zum Anlegen
+
+1. **Uptime Smoke Check** (höchster Nutzen, geringster Aufwand)
+2. **Security Weekly**
+3. **SEO Weekly** (später GSC-API ergänzen)
+
+## Freigabe
+
+Automations **aktivierst du** — ich liefere nur die Texte. Nach dem Anlegen: kurz „Automation 1 live" schreiben.

@@ -1,0 +1,101 @@
+# Zugangs-Matrix — KiezQuiz
+
+> **Zweck:** Was Kalle (Leitagent) schon nutzen kann, was noch fehlt, und wie du es einrichtest.  
+> Stand: 2026-06-15 · **Zugangs-Setup abgeschlossen** (Backup pausiert, Telegram pausiert)
+
+**Legende:** 🟢 fertig · 🟡 teilweise · 🔴 fehlt · ⏸️ pausiert · ⚪ bewusst nicht
+
+---
+
+## Übersicht
+
+| Dienst | Status | Kalle kann | Deine Aufgabe |
+|---|---|---|---|
+| GitHub (logic3/KiezQuiz) | 🟢 | PRs, Secrets, Actions | — |
+| Supabase MCP | 🟢 | DB, Logs, Edge Functions | — |
+| Live-Site kiezquiz.de | 🟢 | curl, Smoke-Checks | — |
+| Lokale Supabase-Config | 🟢 | lokal testen | — |
+| Resend + NB-Mail | 🟢 | Skripte + Edge-Secrets | — (verified) |
+| Google Search Console | 🟢 | Briefings (manuell/API später) | — (GSC OK) |
+| Cloudflare MCP | 🟢 | DNS, Workers, Observability | — |
+| Notion MCP | 🟢 | Projekt „JJL - TBD - KiezQuiz" | — |
+| Supabase-Backup (CI) | 🟢 | monatlich via GitHub Actions | optional: Kopie offline archivieren |
+| Telegram-Bot | ⏸️ | Anleitung im Repo | **Pausiert** bis auf Weiteres |
+| United Domains | 🟡 | — | DNS/Mail nur bei Bedarf manuell |
+| Legora | 🟡 | Legal-Arbeitsaufträge | Rechtstexte dort prüfen |
+| Cursor Automations | 🔴 | Config-Blöcke vorschlagen | Phase 2 — auf cursor.com anlegen |
+| GSC API (OAuth) | 🔴 | — | Erst wenn SEO-Automation soll |
+| Analytics | ⚪ | — | bewusst nicht genutzt |
+
+---
+
+## ✅ Erledigt (2026-06-15)
+
+- Edge-Secrets in Supabase (`NOTIFY_TERMS_SECRET`, `RESEND_API_KEY`)
+- Cloudflare MCP (alle)
+- **GSC OK** — Property + Sitemap
+- **Resend verified** — kiezquiz.de
+- **Notion MCP** — [JJL - TBD - KiezQuiz](https://app.notion.com/p/36f2a5a91f4c8058ba40cc83785b8dbc)
+
+---
+
+## ⏸️ Pausiert / Entscheidungen
+
+### Supabase-Backup ✅ aktiv (2026-06-15)
+
+- **Kosten:** 0 € (Free Tier + `pg_dump`, kein Supabase Pro)
+- **Lokal:** `python3 scripts/export_supabase_backup.py`
+- **Automatisch:** GitHub Actions am **1. jeden Monats** (03:00 UTC) — Secret `KIEZ_SUPABASE_DB_URL` gesetzt
+- **Erinnerung:** E-Mail am **2. jeden Monats** (09:00 UTC) an **info@kiezquiz.de** — Backup offline kopieren (`backup-reminder.yml`)
+- **Manuell testen:** Actions → „Supabase monthly backup“ → Run workflow
+- **Tipp:** Backup-Kopie regelmäßig offline sichern (`backups/` ist gitignored)
+
+### Telegram-Bot (@kalle_kieztaube_bot)
+
+Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
+
+---
+
+## 🔜 Phase 2 (noch offen)
+
+| Thema | Wann |
+|---|---|
+| Cursor Automations (SEO, Uptime, Security) | Kalle liefert Config → du legst auf cursor.com an |
+| GSC Search Console API (OAuth) | Wenn wöchentliches SEO-Briefing automatisch soll |
+| Finance-Abteilung | Phase 2 laut Playbook |
+| Support/Analytics | Phase 2 (ohne Tracking-Cookies) |
+
+---
+
+## Archiv: Original-Aufgaben 1–7
+
+<details>
+<summary>Aufgaben 1–5 (größtenteils erledigt)</summary>
+
+- ✅ Aufgabe 1 — Edge-Secrets  
+- ⏸️ Aufgabe 2 — Backup (pausiert)  
+- ✅ Aufgabe 3 — Cloudflare MCP  
+- ✅ Aufgabe 4 — GSC  
+- ✅ Aufgabe 5 — Resend  
+- ⏸️ Aufgabe 6 — Telegram  
+- 🟡 Aufgabe 7 — Legora (laufend)
+
+</details>
+
+---
+
+## Was Kalle nie ohne dein OK tut
+
+- Merge auf `main` / Live-Deploy
+- E-Mails an Nutzer senden
+- Rechtstexte final veröffentlichen
+- DNS/Domain-Änderungen mit Außenwirkung
+- Secrets in Git committen
+- Supabase Pro / kostenpflichtige Upgrades
+
+---
+
+## Nächster Schritt
+
+**Phase 1 gestartet:** `ops/LEITSTAND.md`, `ops/ORGANIGRAMM.md`, Regeln `10-seo`, `20-devops-monitoring`, `30-security`.  
+**Phase 2:** Automations + Finance + GSC-API — wenn du soweit bist.
