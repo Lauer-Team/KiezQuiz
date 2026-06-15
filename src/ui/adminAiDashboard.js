@@ -153,6 +153,24 @@
       </li>`).join('')}</ul>`;
   }
 
+  function renderAgentAutomations(agent) {
+    const autos = agent?.automations || [];
+    if (!autos.length) {
+      return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoAutomations'))}</p>`;
+    }
+    return `<ul class="ai-dash-auto-list">${autos.map((a) => {
+      const daysHint = a.daysUntil != null
+        ? ` <span class="ai-dash-muted">(${escapeHtml(t('adminPage.aiDashInDays', { n: a.daysUntil }))})</span>`
+        : '';
+      return `
+        <li>
+          <span class="ai-dash-auto-name">${a.num ? `#${escapeHtml(a.num)} · ` : ''}${escapeHtml(a.name)}</span>
+          ${a.task ? `<span class="ai-dash-muted">${escapeHtml(a.task)}</span>` : ''}
+          ${a.nextRun ? `<span class="ai-dash-auto-next">${escapeHtml(t('adminPage.aiDashNextRun'))}: ${escapeHtml(a.nextRun)}${daysHint}</span>` : ''}
+        </li>`;
+    }).join('')}</ul>`;
+  }
+
   function renderMember(agent, isCeo) {
     if (!agent) return '';
     const sc = statusClass(agent.status);
@@ -171,6 +189,10 @@
         <section class="ai-dash-block">
           <h4>${escapeHtml(t('adminPage.aiDashProjects'))}</h4>
           ${renderProjects(agent.projects)}
+        </section>
+        <section class="ai-dash-block">
+          <h4>${escapeHtml(t('adminPage.aiDashAutomations'))}</h4>
+          ${renderAgentAutomations(agent)}
         </section>
       </article>`;
   }
@@ -209,73 +231,41 @@
       </section>`;
   }
 
-  function renderTimeline(deadlines) {
-    if (!deadlines?.length) {
-      return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoDeadlines'))}</p>`;
-    }
-    return `<ul class="ai-dash-timeline">${deadlines.map((d) => `
-      <li class="ai-dash-timeline-item ai-dash-status--${statusClass(d.status)}">
-        <span class="ai-dash-badge ai-dash-badge--${statusClass(d.status)}">${escapeHtml(d.status)}</span>
-        <span class="ai-dash-tl-date">${escapeHtml(d.due || '—')}</span>
-        <span class="ai-dash-tl-what"><strong>${escapeHtml(d.what)}</strong> <span class="ai-dash-muted">· ${escapeHtml(d.who)}</span></span>
-        ${d.note ? `<span class="ai-dash-muted ai-dash-tl-note">${escapeHtml(d.note)}</span>` : ''}
-      </li>`).join('')}</ul>`;
-  }
-
-  function renderAutomationSchedule(list) {
-    if (!list?.length) {
-      return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoAutomations'))}</p>`;
-    }
+  function renderOrgAgentNode(agent) {
+    const sc = statusClass(agent.status);
     return `
-      <div class="ai-dash-table-wrap">
-        <table class="ai-dash-table">
-          <thead>
-            <tr>
-              <th>${escapeHtml(t('adminPage.aiDashColName'))}</th>
-              <th>${escapeHtml(t('adminPage.aiDashColOwner'))}</th>
-              <th>${escapeHtml(t('adminPage.aiDashColNext'))}</th>
-              <th>${escapeHtml(t('adminPage.aiDashColDays'))}</th>
-            </tr>
-          </thead>
-          <tbody>${list.map((a) => `
-            <tr>
-              <td><strong>${escapeHtml(a.name)}</strong><br><span class="ai-dash-muted">${escapeHtml(a.task || '')}</span></td>
-              <td class="ai-dash-owner">${escapeHtml(a.ownerEmoji || '')} ${escapeHtml(a.ownerName || '')}</td>
-              <td>${escapeHtml(a.nextRun || '—')}</td>
-              <td class="ai-dash-num">${a.daysUntil != null ? escapeHtml(String(a.daysUntil)) : '—'}</td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
+      <div class="ai-dash-org-agent ai-dash-status--${sc}" title="${escapeHtml(agent.roleExplain || agent.role || '')}">
+        <span class="ai-dash-emoji" aria-hidden="true">${escapeHtml(agent.emoji || '🤖')}</span>
+        <div class="ai-dash-org-agent-text">
+          <strong>${escapeHtml(agent.name)}</strong>
+          <span class="ai-dash-muted">${escapeHtml(agent.role || '')}</span>
+          ${agent.roleExplain ? `<span class="ai-dash-org-role-desc">${escapeHtml(agent.roleExplain)}</span>` : ''}
+        </div>
+        <span class="ai-dash-badge ai-dash-badge--${sc}">${escapeHtml(agent.status)} ${escapeHtml(agent.statusLabel || '')}</span>
       </div>`;
   }
 
   function renderOrgChart(data) {
     const ceo = data.ceo;
     const agents = data.agents || [];
-    const all = (ceo ? [ceo] : []).concat(agents);
-    const rolesHtml = all.map((a) => `
-      <div class="ai-dash-org-role ai-dash-status--${statusClass(a.status)}">
-        <span class="ai-dash-emoji" aria-hidden="true">${escapeHtml(a.emoji || '🤖')}</span>
-        <div class="ai-dash-org-role-text">
-          <strong>${escapeHtml(a.name)}</strong> <span class="ai-dash-muted">· ${escapeHtml(a.role || '')}</span>
-          ${a.roleExplain ? `<span class="ai-dash-org-role-desc">${escapeHtml(a.roleExplain)}</span>` : ''}
-        </div>
-      </div>`).join('');
 
     return `
       <section class="ai-dash-section ai-dash-org-section">
         <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashOrgTitle'))}</h2>
         <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashOrgHint'))}</p>
-        <div class="ai-dash-org-lane">
-          <span class="ai-dash-org-node ai-dash-org-node--owner">${escapeHtml(data.orgChart?.owner?.emoji || '👤')} ${escapeHtml(t('adminPage.aiDashOwner'))}</span>
-          <span class="ai-dash-org-arrow" aria-hidden="true">→</span>
-          <span class="ai-dash-org-node ai-dash-org-node--ceo">${escapeHtml(ceo?.emoji || '🕊️')} ${escapeHtml(ceo?.name || 'Kalle')}</span>
-          <span class="ai-dash-org-arrow" aria-hidden="true">→</span>
-          <span class="ai-dash-org-node ai-dash-org-node--team">${escapeHtml(t('adminPage.aiDashTeamNodes', { n: agents.length }))}</span>
+        <div class="ai-dash-org-tree">
+          <div class="ai-dash-org-tier">
+            <span class="ai-dash-org-node ai-dash-org-node--owner">${escapeHtml(data.orgChart?.owner?.emoji || '👤')} ${escapeHtml(t('adminPage.aiDashOwner'))}</span>
+          </div>
+          <div class="ai-dash-org-vline" aria-hidden="true"></div>
+          <div class="ai-dash-org-tier">
+            <span class="ai-dash-org-node ai-dash-org-node--ceo">${escapeHtml(ceo?.emoji || '🕊️')} ${escapeHtml(ceo?.name || 'Kalle')}</span>
+            ${ceo?.roleExplain ? `<p class="ai-dash-org-ceo-desc">${escapeHtml(ceo.roleExplain)}</p>` : ''}
+          </div>
+          <div class="ai-dash-org-vline" aria-hidden="true"></div>
+          <p class="ai-dash-org-branch-label">${escapeHtml(t('adminPage.aiDashTeamNodes', { n: agents.length }))}</p>
+          <div class="ai-dash-org-grid">${agents.map((a) => renderOrgAgentNode(a)).join('')}</div>
         </div>
-        <div class="ai-dash-org-roles">${rolesHtml}</div>
-        <h3 class="ai-dash-h3">${escapeHtml(t('adminPage.aiDashGlobalAutomations'))}</h3>
-        ${renderAutomationSchedule(data.automationsGlobal)}
       </section>`;
   }
 
@@ -304,10 +294,6 @@
             ${renderMember(ceo, true)}
             ${agents.map((a) => renderMember(a, false)).join('')}
           </div>
-        </section>
-        <section class="ai-dash-section">
-          <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashTimelineTitle'))}</h2>
-          ${renderTimeline(data.deadlines)}
         </section>
         ${renderOrgChart(data)}
       </div>`;
