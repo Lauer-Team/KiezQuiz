@@ -85,9 +85,9 @@ flowchart TB
     subgraph shared["📁 Gemeinsame Dateien (Quelle der Wahrheit)"]
         LS["ops/agents/ceo-kalle/"]
         REG["ops/agents/registry.json"]
-        DL["ops/DEADLINES.md"]
-        RP["ops/reports/"]
-        DASH["ops/dashboard-data.json"]
+        DL["ops/agents/ceo-kalle/todos.md"]
+        RP["reports/"]
+        DASH["ops/_generated/dashboard-data.json"]
     end
 
     mensch -->|"Anweisungen / Freigaben"| K
@@ -163,11 +163,11 @@ Details & Zugangsstatus: **`ops/ZUGAENGE.md`** · Anbieterliste: **`ops/TECHSTAC
 ## 4. Cursor Automations (zeitgesteuerte Agenten)
 
 > Laufen auf **cursor.com/automations** (Cloud) in einer isolierten Sandbox. Jede legt nur **Berichte/PRs** vor — nie direkt live.
-> Die **Konfig-Texte** (zum Wiederherstellen) stehen in **`ops/AUTOMATIONS.md`**. Die laufenden Automationen selbst leben in deinem Cursor-Account.
+> Die **Konfig-Texte** (zum Wiederherstellen) stehen in **`ops/agents/ceo-kalle/routinen.md`**. Die laufenden Automationen selbst leben in deinem Cursor-Account.
 
 | # | Name | Cron (UTC) | Im Klartext | Aufgabe | Bericht nach |
 |---|---|---|---|---|---|
-| 0 | Backup Archiv Sync | `0 10 2 * *` | am 2. jeden Monats, 10:00 | Backup-Artifact ins Supplement-Archiv | `ops/reports/…-backup-archiv.md` |
+| 0 | Backup Archiv Sync | `0 10 2 * *` | am 2. jeden Monats, 10:00 | Backup-Artifact ins Supplement-Archiv | `reports/…-backup-archiv.md` |
 | 1 | Uptime Smoke Check | `0 8 * * 1-5` | werktags 08:00 | kiezquiz.de erreichbar? | `…-devops-smoke-check.md` |
 | 2 | Security Weekly | `0 7 * * 1` | montags 07:00 | Dependabot + Supabase Advisors | `…-security-weekly.md` |
 | 3 | SEO Weekly | `0 9 * * 1` | montags 09:00 | Sitemap, SEO-Tests, GSC-Hinweis | `…-seo-weekly.md` |
@@ -176,7 +176,7 @@ Details & Zugangsstatus: **`ops/ZUGAENGE.md`** · Anbieterliste: **`ops/TECHSTAC
 | 6 | Support Monthly | `0 10 1 * *` | am 1., 10:00 | Stadt-Wünsche, Trends | `…-support-monthly.md` |
 | 7 | **Leit-Routine / Orchestrator** | `0 6 * * 1` | montags 06:00 | **Koordiniert alle Automationen, prüft was fällig ist, baut Dashboard neu** | `…-orchestrator.md` |
 
-**Wie du eine neue anlegst / wiederherstellst:** Schritt-für-Schritt in `ops/AUTOMATIONS.md`.
+**Wie du eine neue anlegst / wiederherstellst:** Schritt-für-Schritt in `ops/agents/ceo-kalle/routinen.md`.
 
 ---
 
@@ -224,7 +224,7 @@ Details & Zugangsstatus: **`ops/ZUGAENGE.md`** · Anbieterliste: **`ops/TECHSTAC
 
 | Bereich | Skripte (Auswahl) |
 |---|---|
-| **Dashboard** | `scripts/build_ai_dashboard_data.py` (baut `ops/dashboard-data.json`) |
+| **Dashboard** | `scripts/build_ai_dashboard_data.py` (baut `ops/_generated/dashboard-data.json`) |
 | **Deploy/Build** | `stamp_build.py`, `assemble_html.py`, `build_device_layouts.py` |
 | **SEO** | `generate_seo_pages.py`, `generate_sitemap.py`, `test_seo_compat.js`, `gsc_weekly_brief.py` |
 | **Assets** | `generate_assets.py`, `generate_*_assets.py` (Städte), `generate_og_image.*` |
@@ -245,19 +245,19 @@ Vollständige Liste: Ordner `scripts/` öffnen.
 |---|---|---|---|---|
 | **Status (Quelle der Wahrheit)** | `ops/agents/ceo-kalle/leitstand.md` | 🟩 | Kalle | bei jeder Statusänderung |
 | **Agenten-Akten** | `ops/agents/*/` (8 Dateien je Agent) | 🟩 | Fach-Agenten/Kalle | bei Reports |
-| **Pointer Leitstand** | `ops/LEITSTAND.md` | 🟩 | Kalle | bei Statusänderung |
-| **Termine** | `ops/DEADLINES.md` | 🟩 | Kalle + du | bei neuen Fristen / Ops Weekly |
-| **Aufgeschobenes** | `ops/ROADMAP.md` | 🟩 | Kalle | bei Bedarf |
-| **Regelwerk** | `ops/PLAYBOOK.md` | 🟩 | du (Auftrag) / Kalle | selten |
-| **Organigramm (dieses Dok.)** | `ops/ORGANIGRAMM.md` | 🟩 | Kalle | bei Strukturänderung |
-| **Dashboard** | `ops/dashboard-data.json` (+ Legacy `dashboard.html`) | 🟩 | `build_ai_dashboard_data.py` | auf Abruf + Orchestrator |
+| **Pointer Leitstand** | `ops/agents/ceo-kalle/leitstand.md` | 🟩 | Kalle | bei Statusänderung |
+| **Termine** | `ops/agents/ceo-kalle/todos.md` | 🟩 | Kalle + du | bei neuen Fristen / Ops Weekly |
+| **Aufgeschobenes** | `ops/agents/ceo-kalle/backlog.md` | 🟩 | Kalle | bei Bedarf |
+| **Regelwerk** | `ops/agents/ceo-kalle/anweisungen.md` | 🟩 | du (Auftrag) / Kalle | selten |
+| **Organigramm (dieses Dok.)** | `ops/agents/ORGANIGRAMM.md` | 🟩 | Kalle | bei Strukturänderung |
+| **Dashboard** | `ops/_generated/dashboard-data.json` (+ Legacy `dashboard.html`) | 🟩 | `build_ai_dashboard_data.py` | auf Abruf + Orchestrator |
 | **Tech-Stack** | `ops/TECHSTACK.md` | 🟩 | Kalle | bei neuem Dienst |
 | **Zugänge** | `ops/ZUGAENGE.md` | 🟩 | Kalle | bei neuem Zugang |
-| **Automations-Konfig** | `ops/AUTOMATIONS.md` | 🟩 | Kalle | bei neuer Automation |
-| **Berichte** | `ops/reports/` | 🟩 | Automationen / Agenten | bei jedem Lauf |
+| **Automations-Konfig** | `ops/agents/ceo-kalle/routinen.md` | 🟩 | Kalle | bei neuer Automation |
+| **Berichte** | `reports/` | 🟩 | Automationen / Agenten | bei jedem Lauf |
 | **Learnings** | `ops/RETRO.md` | 🟩 | Kalle | nach größeren Läufen |
-| **Finance** | `ops/finance/SERVICES.md`, `COSTS.md` | 🟩 | Finance/Kalle | monatlich |
-| **Legal** | `ops/legal/*` | 🟩 | Legal-Koordination | quartalsweise / bei Trigger |
+| **Finance** | `leitstand.md (SERVICES)`, `COSTS.md` | 🟩 | Finance/Kalle | monatlich |
+| **Legal** | `ops/agents/clo-legal/*` | 🟩 | Legal-Koordination | quartalsweise / bei Trigger |
 | **Agenten-Regeln** | `.cursor/rules/*.mdc` | 🟩 | Kalle | bei Learnings |
 | **Hooks** | `.cursor/hooks/*`, `.cursor/hooks.json` | 🟩 | Kalle | selten |
 | **Actions** | `.github/workflows/*` | 🟩 | Kalle | bei Bedarf |
@@ -281,8 +281,8 @@ Vollständige Liste: Ordner `scripts/` öffnen.
 
 | Todo-Art | Datei | Wofür | Wie du es abrufst |
 |---|---|---|---|
-| **Termine mit Datum** | `ops/DEADLINES.md` | Verlängerungen, Fristen, Erinnerungen | Automation **Ops Weekly Review** (Mo) prüft & meldet |
-| **Aufgeschobenes (ohne Datum)** | `ops/ROADMAP.md` | „bewusst später" | bei Planung lesen |
+| **Termine mit Datum** | `ops/agents/ceo-kalle/todos.md` | Verlängerungen, Fristen, Erinnerungen | Automation **Ops Weekly Review** (Mo) prüft & meldet |
+| **Aufgeschobenes (ohne Datum)** | `ops/agents/ceo-kalle/backlog.md` | „bewusst später" | bei Planung lesen |
 | **Was *du* tun musst** | `ops/agents/ceo-kalle/todos.md` | menschliche Aufgaben | Admin-Dashboard |
 | **Wartet auf deine Freigabe** | `ops/agents/ceo-kalle/todos.md` § Freigabe | Merge, Recht, DNS | Dashboard CEO-Karte |
 | **Optimierungs-Ideen** | `ops/agents/ceo-kalle/backlog.md` | Nutzen/Aufwand | bei Planung |
@@ -319,7 +319,7 @@ Diese Dateien sind per `.gitignore` **bewusst nicht** auf GitHub (enthalten Gehe
 ### C) Cloud-Dienste — Konto-gebunden, nicht im Repo
 | Dienst | Was mitnehmen / neu verbinden |
 |---|---|
-| **Cursor Automations** | 8 Automationen neu anlegen — Konfig steht in `ops/AUTOMATIONS.md` |
+| **Cursor Automations** | 8 Automationen neu anlegen — Konfig steht in `ops/agents/ceo-kalle/routinen.md` |
 | **MCP-Zugänge** | Supabase, Cloudflare, Notion im neuen Cursor-Account neu verbinden (`ops/ZUGAENGE.md`) |
 | **GitHub Secrets** | `KIEZ_SUPABASE_DB_URL`, Resend etc. neu setzen |
 | **Supabase** | Projekt bleibt; Zugang/Keys übertragen |

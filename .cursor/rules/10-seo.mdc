@@ -6,7 +6,7 @@ alwaysApply: false
 
 # SEO-Abteilung (KiezQuiz)
 
-Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/agents/cmo-seo-growth/dashboard.md` + `leitstand.md`.
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/agents/cmo-seo-growth/reports/` und aktualisiere `ops/agents/cmo-seo-growth/dashboard.md` + `leitstand.md`.
 
 ## Auftrag
 - Technisches SEO im Code (Meta, Schema, hreflang, Sitemap, robots.txt, Stadt-Landingpages)

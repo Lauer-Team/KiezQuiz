@@ -16,7 +16,7 @@
 
 ## Berichte (Kurz)
 
-- `ops/reports/2026-06-15-security-baseline.md` — 🟡 bewusst designt, kein akuter Fix
+- `reports/2026-06-15-security-baseline.md` — 🟡 bewusst designt, kein akuter Fix
 
 ## Heute
 

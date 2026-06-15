@@ -9,7 +9,7 @@
 | Cursor | ~60 USD | ~20 USD (Downgrade) |
 | Alle anderen Stack-Dienste | 0 € | 0 € (Free Tier) |
 
-Details: `ops/finance/COSTS.md`
+Details: `leitstand.md (COSTS)`
 
 ## Free-Tier-Risiko (Kurz)
 
@@ -20,13 +20,13 @@ Details: `ops/finance/COSTS.md`
 | GitHub | 🟢 | Public Repo — unbegrenzte Actions |
 | Cloudflare | 🟢 | Nicht im kritischen Pfad |
 
-Details: `ops/finance/SERVICES.md`
+Details: `leitstand.md (SERVICES)`
 
 ## Offen
 
-- [x] Domain kiezquiz.de bis 30.05.2027 — siehe `ops/DEADLINES.md` D1
+- [x] Domain kiezquiz.de bis 30.05.2027 — siehe `ops/agents/ceo-kalle/todos.md` D1
 - [ ] Ab Juli: Cursor-Rechnung in COSTS.md bestätigen
 
 ## Nächster Schritt
 
-Optional: Automation „Finance Monthly" anlegen (`ops/AUTOMATIONS.md` §4).
+Optional: Automation „Finance Monthly" anlegen (`ops/agents/ceo-kalle/routinen.md` §4).

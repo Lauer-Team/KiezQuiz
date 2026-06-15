@@ -16,7 +16,7 @@
 
 ## Berichte (Kurz)
 
-- `ops/reports/2026-06-15-finance-baseline.md` — Baseline etabliert
+- `reports/2026-06-15-finance-baseline.md` — Baseline etabliert
 
 ## Heute
 

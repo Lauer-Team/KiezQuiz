@@ -6,4 +6,4 @@
 
 Rechtstexte laufen über **Legora** — Kalle koordiniert, schreibt keine Texte selbst.
 
-Detail-Backlog: `ops/legal/BACKLOG.md` (Referenz, Inhalt in `backlog.md` dieser Akte)
+Detail-Backlog: `backlog.md` (Referenz, Inhalt in `backlog.md` dieser Akte)

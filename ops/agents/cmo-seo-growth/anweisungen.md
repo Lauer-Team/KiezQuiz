@@ -5,7 +5,7 @@
 ## Definition of Done
 
 - `dashboard.md` Status + technischer Check
-- Bericht `ops/reports/*seo*`
+- Bericht `reports/*`
 - Verbesserungen als PR, nicht mergen
 
 ## Grenzen

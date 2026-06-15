@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """KiezQuiz — Dashboard-Daten aus Agenten-Akten (JSON).
 
-Liest ops/agents/*/dashboard.md, registry.json, ops/DEADLINES.md
-und schreibt ops/dashboard-data.json für Admin-UI + Supabase Upload.
+Liest ops/agents/*/dashboard.md, registry.json, Fristen in ceo-kalle/todos.md
+und schreibt ops/_generated/dashboard-data.json für Admin-UI + Supabase Upload.
 
 Aufruf:  python3 scripts/build_ai_dashboard_data.py
 """
@@ -25,7 +25,8 @@ ROOT = Path(__file__).resolve().parent.parent
 OPS = ROOT / "ops"
 AGENTS = OPS / "agents"
 REGISTRY = AGENTS / "registry.json"
-OUT = OPS / "dashboard-data.json"
+GENERATED = OPS / "_generated"
+OUT = GENERATED / "dashboard-data.json"
 
 WD = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"]
 
@@ -186,7 +187,10 @@ def parse_dashboard_md(text: str) -> dict:
 
 
 def parse_deadlines() -> list[dict]:
-    text = read(OPS / "DEADLINES.md")
+    text = read(AGENTS / "ceo-kalle" / "todos.md")
+    m = re.search(r"## Fristen & Termine.*?\n(.*?)(?:\n## |\Z)", text, re.DOTALL | re.IGNORECASE)
+    if m:
+        text = m.group(1)
     items = []
     for row in find_table(text, "Fällig am"):
         if len(row) >= 7:
@@ -338,12 +342,13 @@ def build() -> dict:
         "sources": [
             "ops/agents/*/dashboard.md",
             "ops/agents/registry.json",
-            "ops/DEADLINES.md",
+            "ops/agents/ceo-kalle/todos.md (Fristen)",
         ],
     }
 
 
 def main() -> None:
+    GENERATED.mkdir(parents=True, exist_ok=True)
     data = build()
     OUT.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"✓ Dashboard-Daten: {OUT}")

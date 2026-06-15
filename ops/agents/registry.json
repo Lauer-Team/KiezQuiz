@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "ceoId": "ceo-kalle",
   "agents": [
     {
@@ -9,7 +9,7 @@
       "emoji": "🕊️",
       "ruleFile": ".cursor/rules/00-leitagent.mdc",
       "folder": "ops/agents/ceo-kalle",
-      "reportsGlob": "ops/reports/*orchestrator*"
+      "reportsGlob": "ops/agents/ceo-kalle/reports/*"
     },
     {
       "id": "cto-ingenieur",
@@ -18,7 +18,7 @@
       "emoji": "🛠️",
       "ruleFile": ".cursor/rules/deploy-and-cache-busting.mdc",
       "folder": "ops/agents/cto-ingenieur",
-      "reportsGlob": null
+      "reportsGlob": "ops/agents/cto-ingenieur/reports/*"
     },
     {
       "id": "cfo-finanzen",
@@ -27,7 +27,7 @@
       "emoji": "💰",
       "ruleFile": ".cursor/rules/40-finance.mdc",
       "folder": "ops/agents/cfo-finanzen",
-      "reportsGlob": "ops/reports/*finance*"
+      "reportsGlob": "ops/agents/cfo-finanzen/reports/*"
     },
     {
       "id": "clo-legal",
@@ -36,7 +36,7 @@
       "emoji": "⚖️",
       "ruleFile": ".cursor/rules/60-legal-coordination.mdc",
       "folder": "ops/agents/clo-legal",
-      "reportsGlob": null
+      "reportsGlob": "ops/agents/clo-legal/reports/*"
     },
     {
       "id": "cmo-seo-growth",
@@ -45,7 +45,7 @@
       "emoji": "📈",
       "ruleFile": ".cursor/rules/10-seo.mdc",
       "folder": "ops/agents/cmo-seo-growth",
-      "reportsGlob": "ops/reports/*seo*"
+      "reportsGlob": "ops/agents/cmo-seo-growth/reports/*"
     },
     {
       "id": "coo-operations",
@@ -54,7 +54,7 @@
       "emoji": "⚙️",
       "ruleFile": ".cursor/rules/20-devops-monitoring.mdc",
       "folder": "ops/agents/coo-operations",
-      "reportsGlob": "ops/reports/*devops*"
+      "reportsGlob": "ops/agents/coo-operations/reports/*"
     },
     {
       "id": "cso-security",
@@ -63,7 +63,7 @@
       "emoji": "🔒",
       "ruleFile": ".cursor/rules/30-security.mdc",
       "folder": "ops/agents/cso-security",
-      "reportsGlob": "ops/reports/*security*"
+      "reportsGlob": "ops/agents/cso-security/reports/*"
     },
     {
       "id": "cxo-support-analytics",
@@ -72,7 +72,7 @@
       "emoji": "💬",
       "ruleFile": ".cursor/rules/50-support-analytics.mdc",
       "folder": "ops/agents/cxo-support-analytics",
-      "reportsGlob": "ops/reports/*support*"
+      "reportsGlob": "ops/agents/cxo-support-analytics/reports/*"
     }
   ]
 }

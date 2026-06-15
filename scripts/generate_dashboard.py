@@ -263,11 +263,9 @@ def dept_short_name(name: str) -> str:
 def collect():
     now = datetime.now(timezone.utc)
     leit = read(OPS / "agents" / "ceo-kalle" / "leitstand.md")
-    if not find_table(leit, "Abteilung"):
-        leit = read(OPS / "LEITSTAND.md")
     routinen = read(OPS / "agents" / "ceo-kalle" / "routinen.md")
-    deadlines = read(OPS / "DEADLINES.md")
-    roadmap = read(OPS / "ROADMAP.md")
+    deadlines = read(OPS / "agents" / "ceo-kalle" / "todos.md")
+    roadmap = read(OPS / "agents" / "ceo-kalle" / "backlog.md")
 
     departments = []
     for row in find_table(leit, "Abteilung"):
@@ -385,7 +383,7 @@ def render_simple_org(departments: list[dict], automations: list[dict]) -> str:
         <div class="org-pills org-pills--wrap">{auto_pills}</div>
       </div>
       {paused_note}
-      <p class="org-foot muted">Vollständiges Audit-Diagramm: <code>ops/ORGANIGRAMM.md</code></p>
+      <p class="org-foot muted">Vollständiges Audit-Diagramm: <code>ops/agents/ORGANIGRAMM.md</code></p>
     </div>"""
 
 
@@ -638,7 +636,8 @@ def render(now, departments, automations, dls, role_tasks, approval_gates, backl
 def main() -> None:
     data = collect()
     out = render(*data)
-    target = OPS / "dashboard.html"
+    target = OPS / "_generated" / "dashboard.html"
+    target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(out, encoding="utf-8")
     _, departments, automations, dls, _, _, _, roadmap_items = data
     print(f"✓ Dashboard erstellt: {target}")

@@ -17,8 +17,8 @@
 
 ## Berichte (Kurz)
 
-- `ops/reports/2026-06-15-devops-smoke-check.md` — 🟢
-- `ops/reports/2026-06-15-backup-archiv.md` — 🟢
+- `reports/2026-06-15-devops-smoke-check.md` — 🟢
+- `reports/2026-06-15-backup-archiv.md` — 🟢
 
 ## Heute
 

@@ -24,8 +24,8 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DASHBOARD_JSON = ROOT / "ops" / "dashboard-data.json"
-DASHBOARD_HTML = ROOT / "ops" / "dashboard.html"
+DASHBOARD_JSON = ROOT / "ops" / "_generated" / "dashboard-data.json"
+DASHBOARD_HTML = ROOT / "ops" / "_generated" / "dashboard.html"
 BUCKET = "ops-dashboard"
 OBJECT_JSON = "dashboard-data.json"
 OBJECT_HTML = "dashboard.html"
@@ -118,7 +118,7 @@ def main() -> None:
 
     if not DASHBOARD_JSON.exists():
         print(
-            "Fehler: ops/dashboard-data.json fehlt — zuerst build_ai_dashboard_data.py",
+            "Fehler: ops/_generated/dashboard-data.json fehlt — zuerst build_ai_dashboard_data.py",
             file=sys.stderr,
         )
         sys.exit(1)

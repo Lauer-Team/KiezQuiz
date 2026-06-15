@@ -5,7 +5,7 @@
 ## Definition of Done
 
 - Smoke-Check dokumentiert (HTTP-Codes, version.json SHA)
-- `dashboard.md` + Bericht in `ops/reports/`
+- `dashboard.md` + Bericht in `reports/`
 - Bei rot: Fix-PR vorschlagen, nicht mergen
 
 ## Grenzen

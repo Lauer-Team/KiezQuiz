@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-15T17:03:43.298938+00:00",
-  "generatedAtDe": "Monday, 15.06.2026 · 19:03 Uhr",
-  "version": 1,
+  "generatedAt": "2026-06-15T19:50:27.547270+00:00",
+  "generatedAtDe": "Monday, 15.06.2026 · 21:50 Uhr",
+  "version": 2,
   "ceo": {
     "id": "ceo-kalle",
     "name": "Kalle die Kieztaube",
@@ -34,7 +34,7 @@
         "nextRun": "Montag, 22.06.2026 · 08:00"
       }
     ],
-    "reportsSummary": "- Orchestrator-Berichte: ops/reports/*orchestrator* - Letzter Stand: Phase 1 + Masterauftrag v2 abgeschlossen (2026-06-15)",
+    "reportsSummary": "- Orchestrator-Berichte: reports/*orchestrator* - Letzter Stand: Phase 1 + Masterauftrag v2 abgeschlossen (2026-06-15)",
     "heute": "Kalle hält das Big Picture: alle 7 Fach-Agenten 🟢, Telegram ⏸️. Nächste Fristen: NB wirksam 11.07., Banner aus 12.07., Cursor-Downgrade 01.07.",
     "humanTodos": [
       "Domain kiezquiz.de verlängern (Erinnerung ab 04/2027 — D1)",
@@ -99,7 +99,7 @@
           "nextRun": "Mittwoch, 01.07.2026 · 10:00"
         }
       ],
-      "reportsSummary": "- ops/reports/2026-06-15-finance-baseline.md — Baseline etabliert",
+      "reportsSummary": "- reports/2026-06-15-finance-baseline.md — Baseline etabliert",
       "heute": "Keine akute Kostenwarnung. Nächster Lauf: 1. des Monats."
     },
     {
@@ -117,7 +117,7 @@
         "Banner abschalten ab 12.07. (D4)"
       ],
       "automations": [],
-      "reportsSummary": "- Legal-Arbeitsaufträge: ops/reports/ bei Bedarf",
+      "reportsSummary": "- Legal-Arbeitsaufträge: reports/ bei Bedarf",
       "heute": "L1 erledigt. L2 läuft — nichts Neues für Legora bis Monetarisierung/iOS."
     },
     {
@@ -143,7 +143,7 @@
           "nextRun": "Montag, 22.06.2026 · 11:00"
         }
       ],
-      "reportsSummary": "- ops/reports/2026-06-15-seo-baseline.md — Technisch 🟢",
+      "reportsSummary": "- reports/2026-06-15-seo-baseline.md — Technisch 🟢",
       "heute": "Keine Crawl-Fehler bekannt. Nächster Weekly-Lauf: Montag 09:00 UTC."
     },
     {
@@ -176,7 +176,7 @@
           "nextRun": "Dienstag, 16.06.2026 · 10:00"
         }
       ],
-      "reportsSummary": "- ops/reports/2026-06-15-devops-smoke-check.md — 🟢 - ops/reports/2026-06-15-backup-archiv.md — 🟢",
+      "reportsSummary": "- reports/2026-06-15-devops-smoke-check.md — 🟢 - reports/2026-06-15-backup-archiv.md — 🟢",
       "heute": "Live-Site erreichbar. Supabase-Backup CI am 1. des Monats."
     },
     {
@@ -202,7 +202,7 @@
           "nextRun": "Montag, 22.06.2026 · 09:00"
         }
       ],
-      "reportsSummary": "- ops/reports/2026-06-15-security-baseline.md — 🟡 bewusst designt, kein akuter Fix",
+      "reportsSummary": "- reports/2026-06-15-security-baseline.md — 🟡 bewusst designt, kein akuter Fix",
       "heute": "Keine offenen Dependabot-Alerts. HaveIBeenPwned bewusst offen bis Umsatz."
     },
     {
@@ -228,7 +228,7 @@
           "nextRun": "Mittwoch, 01.07.2026 · 12:00"
         }
       ],
-      "reportsSummary": "- Monatliche Berichte: ops/reports/*support-monthly*",
+      "reportsSummary": "- Monatliche Berichte: reports/*support-monthly*",
       "heute": "Frühphase — wenige Wünsche, System stabil. Nächster Lauf: 1. des Monats."
     }
   ],
@@ -261,7 +261,7 @@
       "who": "Kalle",
       "status": "🟡",
       "statusLabel": "Anstehend",
-      "note": "Rechnung Juli prüfen → ops/finance/COSTS.md"
+      "note": "Rechnung Juli prüfen → leitstand.md (COSTS)"
     },
     {
       "id": "D4",
@@ -293,7 +293,7 @@
       "who": "Kalle",
       "status": "🟡",
       "statusLabel": "Anstehend",
-      "note": "Rechnung Juli prüfen → ops/finance/COSTS.md"
+      "note": "Rechnung Juli prüfen → leitstand.md (COSTS)"
     },
     {
       "id": "D4",
@@ -306,72 +306,7 @@
       "note": "python3 scripts/deactivate_terms_notice.py --apply → PR"
     }
   ],
-  "automationsGlobal": [
-    {
-      "num": "1",
-      "name": "Uptime Smoke Check",
-      "cron": "0 8 * * 1-5",
-      "task": "kiezquiz.de erreichbar?",
-      "nextRun": "Dienstag, 16.06.2026 · 10:00",
-      "daysUntil": 1
-    },
-    {
-      "num": "2",
-      "name": "Security Weekly",
-      "cron": "0 7 * * 1",
-      "task": "Dependabot + Supabase Advisors",
-      "nextRun": "Montag, 22.06.2026 · 09:00",
-      "daysUntil": 7
-    },
-    {
-      "num": "3",
-      "name": "SEO Weekly",
-      "cron": "0 9 * * 1",
-      "task": "Sitemap, SEO-Tests",
-      "nextRun": "Montag, 22.06.2026 · 11:00",
-      "daysUntil": 7
-    },
-    {
-      "num": "4",
-      "name": "Ops Weekly Review",
-      "cron": "0 7 * * 1",
-      "task": "Fälligkeiten · ops/DEADLINES.md",
-      "nextRun": "Montag, 22.06.2026 · 09:00",
-      "daysUntil": 7
-    },
-    {
-      "num": "7",
-      "name": "Leit-Routine / Orchestrator",
-      "cron": "0 6 * * 1",
-      "task": "Koordiniert alle, baut Dashboard-JSON",
-      "nextRun": "Montag, 22.06.2026 · 08:00",
-      "daysUntil": 7
-    },
-    {
-      "num": "5",
-      "name": "Finance Monthly",
-      "cron": "0 8 1 * *",
-      "task": "Kosten, Free-Tier",
-      "nextRun": "Mittwoch, 01.07.2026 · 10:00",
-      "daysUntil": 16
-    },
-    {
-      "num": "6",
-      "name": "Support Monthly",
-      "cron": "0 10 1 * *",
-      "task": "Stadt-Wünsche, Trends",
-      "nextRun": "Mittwoch, 01.07.2026 · 12:00",
-      "daysUntil": 16
-    },
-    {
-      "num": "0",
-      "name": "Backup Archiv Sync",
-      "cron": "0 10 2 * *",
-      "task": "Artifact → Supplement-Ordner",
-      "nextRun": "Donnerstag, 02.07.2026 · 12:00",
-      "daysUntil": 17
-    }
-  ],
+  "automationsGlobal": [],
   "orgChart": {
     "owner": {
       "label": "Du (Jeremiah)",
@@ -428,7 +363,7 @@
     ]
   },
   "stats": {
-    "automationsLive": 8,
+    "automationsLive": 0,
     "agentsOk": 8,
     "agentsTotal": 8,
     "openDeadlines": 3
@@ -436,6 +371,6 @@
   "sources": [
     "ops/agents/*/dashboard.md",
     "ops/agents/registry.json",
-    "ops/DEADLINES.md"
+    "ops/agents/ceo-kalle/todos.md (Fristen)"
   ]
 }

@@ -39,7 +39,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ops/dashboard-data.json ops/dashboard.html
+          git add ops/_generated/dashboard-data.json ops/_generated/dashboard.html
           if git diff --staged --quiet; then
             echo "Dashboard unchanged — kein Commit nötig."
             exit 0

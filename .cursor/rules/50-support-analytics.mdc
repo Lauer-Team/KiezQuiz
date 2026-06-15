@@ -1,12 +1,12 @@
 ---
 description: Support/Analytics KiezQuiz — Stadt-Wünsche, Feedback, ohne Tracking-Cookies
-globs: "{src/admin/**,docs/SUPABASE-SETUP.md,docs/sql/**,ops/reports/*support*}"
+globs: "{src/admin/**,docs/SUPABASE-SETUP.md,docs/sql/**,ops/agents/cxo-support-analytics/reports/**}"
 alwaysApply: false
 ---
 
 # Support / Analytics (KiezQuiz)
 
-Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/agents/cxo-support-analytics/dashboard.md` + `leitstand.md`.
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/agents/cxo-support-analytics/reports/` und aktualisiere `ops/agents/cxo-support-analytics/dashboard.md` + `leitstand.md`.
 
 ## Auftrag
 
@@ -18,7 +18,7 @@ Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und akt
 ## Erlaubt
 
 - Supabase MCP: Read-only Queries auf `city_wish_requests`, `profiles` (aggregiert)
-- Berichte in `ops/reports/YYYY-MM-DD-support-monthly.md`
+- Berichte in `ops/agents/cxo-support-analytics/reports/YYYY-MM-DD-support-monthly.md`
 - Admin-Analytics im Code verbessern (Branch + PR)
 
 ## Grenzen
