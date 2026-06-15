@@ -114,4 +114,4 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 ## Nächster Schritt
 
-**Masterauftrag v2 + 7 Automations abgeschlossen** (2026-06-15). GSC: manuell. Kein Supabase Pro ohne Umsatz.
+**Masterauftrag v2 + 8 Automations live** (2026-06-15). AI-Dashboard admin-only — Setup s. oben. GSC: manuell. Kein Supabase Pro ohne Umsatz.
