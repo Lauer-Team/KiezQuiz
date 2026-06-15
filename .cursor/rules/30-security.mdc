@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Security-Abteilung (KiezQuiz)
 
-Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/LEITSTAND.md`.
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/agents/cso-security/dashboard.md` + `leitstand.md`.
 
 ## Auftrag
 - Dependency-/Schwachstellen-Scans (npm audit, Dependabot)

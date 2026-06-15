@@ -1,5 +1,8 @@
 # Legal-Backlog — KiezQuiz
 
+> **Hinweis:** Primäre Akte: [`../agents/clo-legal/backlog.md`](../agents/clo-legal/backlog.md)  
+> Diese Datei bleibt als Referenz/Spiegel für Legora-Workflow.
+
 > Offene und geplante Legal-Themen. Kalle pflegt proaktiv — du arbeitest in **Legora**.
 
 | ID | Thema | Priorität | Status | Nächster Schritt | Legora? |

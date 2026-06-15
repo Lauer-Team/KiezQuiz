@@ -2,7 +2,7 @@
 
 > **Zweck:** Ein Ort, an dem du **das komplette KI-Management auf einen Blick** verstehst und prüfen kannst — wie ein Wirtschaftsprüfer.
 > Wer macht was, wo liegt jede Datei, wer hält sie aktuell, was läuft automatisch, und was müsstest du bei einem Umzug mitnehmen.
-> **Pflege:** Kalle (Leitagent) — aktualisiert bei jeder Strukturänderung im selben Arbeitsschritt. Stand: **2026-06-15**
+> **Pflege:** Kalle (Leitagent) — aktualisiert bei jeder Strukturänderung im selben Arbeitsschritt. Stand: **2026-06-15** (v2 Agenten-Akten)
 
 **So liest du dieses Dokument**
 - **Kapitel 1** = das Bild (Organigramm als Diagramm).
@@ -23,7 +23,7 @@
 
 ## 1. Das Organigramm (Diagramm)
 
-> Mermaid rendert auf GitHub automatisch als Bild. Im Dashboard (`ops/dashboard.html`) siehst du dasselbe interaktiv.
+> Mermaid rendert auf GitHub automatisch als Bild. Im Admin-Dashboard (Profil → AI-Management) siehst du Kalle + Fach-Agenten als Karten.
 
 ```mermaid
 flowchart TB
@@ -31,20 +31,18 @@ flowchart TB
         OK["Freigabe-Gates<br/>Deploy · Geld · Recht · DNS · E-Mails"]
     end
 
-    subgraph leit["🕊️ Kalle — Leitagent (einziger Ansprechpartner)"]
-        K["Orchestrator<br/>ops/LEITSTAND.md · ops/PLAYBOOK.md<br/>.cursor/rules/00-leitagent.mdc"]
+    subgraph leit["🕊️ Kalle — CEO / Leitagent"]
+        K["ops/agents/ceo-kalle/<br/>Orchestrator · PROTOKOLL.md"]
     end
 
-    subgraph fach["Fach-Agenten · .cursor/rules/"]
-        SEO["10-seo<br/>Technisches SEO · GSC"]
-        DEV["20-devops<br/>Uptime · Smoke · Deploy"]
-        SEC["30-security<br/>Dependabot · RLS · Patches"]
-        FIN["40-finance<br/>Kosten · Free-Tier-Risiko"]
-        SUP["50-support<br/>Stadt-Wünsche · kein GA"]
-        LEGC["60-legal-koordination<br/>Trigger · Backlog · Legora-Aufträge"]
-        TNR["terms-change-notify<br/>NB-Versand-Regeln"]
-        DPL["deploy-and-cache-busting<br/>Live-Gang · Versionierung"]
-        LAY["Layout<br/>Geräte-Layouts"]
+    subgraph fach["Fach-Agenten · ops/agents/"]
+        CTO["cto-ingenieur<br/>Engineering"]
+        CFO["cfo-finanzen<br/>Finance"]
+        CLO["clo-legal<br/>Legal · Legora"]
+        CMO["cmo-seo-growth<br/>SEO"]
+        COO["coo-operations<br/>DevOps"]
+        CSO["cso-security<br/>Security"]
+        CXO["cxo-support-analytics<br/>Support"]
     end
 
     subgraph mcp["🔌 MCPs & Connections (Kalles Werkzeuge)"]
@@ -85,67 +83,63 @@ flowchart TB
     end
 
     subgraph shared["📁 Gemeinsame Dateien (Quelle der Wahrheit)"]
-        LS["ops/LEITSTAND.md"]
+        LS["ops/agents/ceo-kalle/"]
+        REG["ops/agents/registry.json"]
         DL["ops/DEADLINES.md"]
         RP["ops/reports/"]
-        RT["ops/RETRO.md"]
-        RD["ops/ROADMAP.md"]
-        FINS["ops/finance/"]
-        LEGF["ops/legal/"]
-        DASH["ops/dashboard.html"]
+        DASH["ops/dashboard-data.json"]
     end
 
     mensch -->|"Anweisungen / Freigaben"| K
-    K --> SEO & DEV & SEC & FIN & SUP & LEGC
+    K --> CTO & CFO & CLO & CMO & COO & CSO & CXO
     K --- M1 & M2 & M3 & M4 & M5
     K -->|"Legal-Arbeitsauftrag"| LEG
     LEG -->|"geprüfte Texte"| K
     mensch -.->|"⏸️"| TG
 
-    A0 --> DEV
-    A1 --> DEV
-    A2 --> SEC
-    A3 --> SEO
+    A0 --> COO
+    A1 --> COO
+    A2 --> CSO
+    A3 --> CMO
     A4 --> K
-    A5 --> FIN
-    A6 --> SUP
+    A5 --> CFO
+    A6 --> CXO
     A7 ==> A0 & A1 & A2 & A3 & A4 & A5 & A6
     A7 ==> DASH
 
-    SEO -.-> GSC
-    SEC --- M1
-    FIN --- M1
-    SUP --- M1
+    CMO -.-> GSC
+    CSO --- M1
+    CFO --- M1
+    CXO --- M1
     G4 --- RES
-    H1 -.-> TNR
+    H1 -.-> CLO
 
-    SEO & DEV & SEC & FIN & SUP --> RP
-    LEGC --> LEGF
-    FIN --> FINS
-    K --> LS & DL & RT & RD
+    CMO & COO & CSO & CFO & CXO --> RP
+    CLO --> LEGF
+    CFO --> FINS
+    K --> LS & REG & DL
 ```
 
 ---
 
-## 2. AI-Agenten (Regel-Dateien)
+## 2. AI-Agenten (C-Level + Regel-Dateien)
 
-> Jeder „Agent" ist eine Regel-Datei. Sie sagt einer KI: *Wer bist du, was darfst du, wo sind die Grenzen.*
-> **Alle liegen unter `.cursor/rules/`** (in Git, also auch auf GitHub gesichert).
+> Jeder Agent hat eine **Akte** unter `ops/agents/<id>/` (8 Markdown-Dateien) und eine **Cursor-Regel** unter `.cursor/rules/`.
 
-| Agent / Rolle | Datei | Auftrag (kurz) | Aktiv wann |
+| Agent | Akte | Regel-Datei | Auftrag (kurz) |
 |---|---|---|---|
-| 🕊️ **Kalle — Leitagent** | `.cursor/rules/00-leitagent.mdc` | Orchestriert alles, einziger Ansprechpartner | immer |
-| **SEO** | `.cursor/rules/10-seo.mdc` | Technisches SEO, Sitemap, GSC-Briefings | bei SEO-Arbeit + Automation #3 |
-| **DevOps / Monitoring** | `.cursor/rules/20-devops-monitoring.mdc` | Uptime, Smoke-Tests, Deploy, Fix-PRs | Automation #0/#1 |
-| **Security** | `.cursor/rules/30-security.mdc` | Dependabot, RLS, Secret-Schutz, Patches | Automation #2 |
-| **Finance** | `.cursor/rules/40-finance.mdc` | Kosten, Free-Tier-Risiko, Buchhaltungs-Vorbereitung | Automation #5 |
-| **Support / Analytics** | `.cursor/rules/50-support-analytics.mdc` | Stadt-Wünsche, Trends (kein Google Analytics) | Automation #6 |
-| **Legal-Koordination** | `.cursor/rules/60-legal-coordination.mdc` | Trigger erkennen, Legora-Aufträge, Integration | bei Legal-Themen |
-| **NB-Benachrichtigung** | `.cursor/rules/terms-change-notify.mdc` | Regeln für NB-/Rechtstext-Mails | bei NB-Änderung |
-| **Deploy & Cache-Busting** | `.cursor/rules/deploy-and-cache-busting.mdc` | Live-Gang, Versionierung, Stadtseiten | bei Deploy/HTML |
-| **Layout** | `.cursor/rules/Layout.mdc` | Geräte-Layouts (`src/styles/device/`) | bei Layout-Arbeit |
+| 🕊️ **Kalle — CEO** | `ops/agents/ceo-kalle/` | `00-leitagent.mdc` | Orchestriert alles |
+| 🛠️ **CTO Engineering** | `ops/agents/cto-ingenieur/` | `deploy-and-cache-busting.mdc` | Code, Deploy, Layout |
+| 💰 **CFO Finance** | `ops/agents/cfo-finanzen/` | `40-finance.mdc` | Kosten, Free-Tier |
+| ⚖️ **CLO Legal** | `ops/agents/clo-legal/` | `60-legal-coordination.mdc` | Legora-Koordination |
+| 📈 **CMO SEO** | `ops/agents/cmo-seo-growth/` | `10-seo.mdc` | Technisches SEO |
+| ⚙️ **COO Ops** | `ops/agents/coo-operations/` | `20-devops-monitoring.mdc` | Uptime, Backup |
+| 🔒 **CSO Security** | `ops/agents/cso-security/` | `30-security.mdc` | Dependabot, RLS |
+| 💬 **CXO Support** | `ops/agents/cxo-support-analytics/` | `50-support-analytics.mdc` | Stadt-Wünsche |
 
-**Wer hält sie aktuell?** Kalle — bei dauerhaften Learnings (siehe `ops/RETRO.md`), Kleines direkt, Größeres mit deinem OK.
+Register: `ops/agents/registry.json` · Protokoll: `ops/agents/PROTOKOLL.md`
+
+**Weitere Regeln (kein eigener C-Level-Ordner):** `terms-change-notify.mdc`, `Layout.mdc`
 
 ---
 
@@ -230,7 +224,7 @@ Details & Zugangsstatus: **`ops/ZUGAENGE.md`** · Anbieterliste: **`ops/TECHSTAC
 
 | Bereich | Skripte (Auswahl) |
 |---|---|
-| **Dashboard** | `generate_dashboard.py` (baut `ops/dashboard.html`) |
+| **Dashboard** | `scripts/build_ai_dashboard_data.py` (baut `ops/dashboard-data.json`) |
 | **Deploy/Build** | `stamp_build.py`, `assemble_html.py`, `build_device_layouts.py` |
 | **SEO** | `generate_seo_pages.py`, `generate_sitemap.py`, `test_seo_compat.js`, `gsc_weekly_brief.py` |
 | **Assets** | `generate_assets.py`, `generate_*_assets.py` (Städte), `generate_og_image.*` |
@@ -249,12 +243,14 @@ Vollständige Liste: Ordner `scripts/` öffnen.
 
 | Bereich | Datei / Ort | Ort | Wer pflegt | Wie oft |
 |---|---|---|---|---|
-| **Status (Quelle der Wahrheit)** | `ops/LEITSTAND.md` | 🟩 | Kalle | bei jeder Statusänderung |
+| **Status (Quelle der Wahrheit)** | `ops/agents/ceo-kalle/leitstand.md` | 🟩 | Kalle | bei jeder Statusänderung |
+| **Agenten-Akten** | `ops/agents/*/` (8 Dateien je Agent) | 🟩 | Fach-Agenten/Kalle | bei Reports |
+| **Pointer Leitstand** | `ops/LEITSTAND.md` | 🟩 | Kalle | bei Statusänderung |
 | **Termine** | `ops/DEADLINES.md` | 🟩 | Kalle + du | bei neuen Fristen / Ops Weekly |
 | **Aufgeschobenes** | `ops/ROADMAP.md` | 🟩 | Kalle | bei Bedarf |
 | **Regelwerk** | `ops/PLAYBOOK.md` | 🟩 | du (Auftrag) / Kalle | selten |
 | **Organigramm (dieses Dok.)** | `ops/ORGANIGRAMM.md` | 🟩 | Kalle | bei Strukturänderung |
-| **Dashboard** | `ops/dashboard.html` | 🟩 | `generate_dashboard.py` | auf Abruf + Orchestrator (wöchentl.) |
+| **Dashboard** | `ops/dashboard-data.json` (+ Legacy `dashboard.html`) | 🟩 | `build_ai_dashboard_data.py` | auf Abruf + Orchestrator |
 | **Tech-Stack** | `ops/TECHSTACK.md` | 🟩 | Kalle | bei neuem Dienst |
 | **Zugänge** | `ops/ZUGAENGE.md` | 🟩 | Kalle | bei neuem Zugang |
 | **Automations-Konfig** | `ops/AUTOMATIONS.md` | 🟩 | Kalle | bei neuer Automation |
@@ -287,13 +283,13 @@ Vollständige Liste: Ordner `scripts/` öffnen.
 |---|---|---|---|
 | **Termine mit Datum** | `ops/DEADLINES.md` | Verlängerungen, Fristen, Erinnerungen | Automation **Ops Weekly Review** (Mo) prüft & meldet |
 | **Aufgeschobenes (ohne Datum)** | `ops/ROADMAP.md` | „bewusst später" | bei Planung lesen |
-| **Was *du* tun musst** | `ops/LEITSTAND.md` §4 | menschliche Aufgaben vs. Kalle | Dashboard zeigt es oben |
-| **Wartet auf deine Freigabe** | `ops/LEITSTAND.md` §5 | Merge, Recht, DNS, Geld | Dashboard-Block „Freigaben" |
-| **Optimierungs-Ideen** | `ops/LEITSTAND.md` §6 | Nutzen/Aufwand | bei Planung |
-| **Legal-Todos** | `ops/legal/BACKLOG.md` | Rechtsthemen für Legora | Legal-Koordination |
+| **Was *du* tun musst** | `ops/agents/ceo-kalle/todos.md` | menschliche Aufgaben | Admin-Dashboard |
+| **Wartet auf deine Freigabe** | `ops/agents/ceo-kalle/todos.md` § Freigabe | Merge, Recht, DNS | Dashboard CEO-Karte |
+| **Optimierungs-Ideen** | `ops/agents/ceo-kalle/backlog.md` | Nutzen/Aufwand | bei Planung |
+| **Legal-Todos** | `ops/agents/clo-legal/backlog.md` | Rechtsthemen | CLO-Akte |
 | **Produkt-Ideen** | Notion „JJL - TBD - KiezQuiz" | Feature-Backlog | Notion |
 
-**Deine Routine (einfach):** Öffne **`ops/dashboard.html`** → oben siehst du *„Was diese Woche ansteht"* und *„Wartet auf dich"*. Das genügt für 95 %. Für Details klickst du in die jeweilige Datei.
+**Deine Routine (einfach):** Profil → Admin → **AI-Management** — Kalle-Karte oben, Fach-Agenten darunter, Fälligkeiten + Automationen.
 
 ---
 
@@ -349,11 +345,12 @@ Diese Dateien sind per `.gitignore` **bewusst nicht** auf GitHub (enthalten Gehe
 
 ## 13. Dashboard (One-Stop-Shop — **nur Admin**)
 
-> **Zugang:** [https://kiezquiz.de/profile/?section=admin-ai-dashboard](https://kiezquiz.de/profile/?section=admin-ai-dashboard) (nur mit Admin-Login)  
-> **Technik:** Dashboard liegt in **privatem Supabase Storage** — Edge Function `get-ai-dashboard` prüft `is_city_wish_admin`.  
-> **Nicht öffentlich:** Der Ordner `ops/` wird **nicht** auf kiezquiz.de deployed.
+> **Zugang:** [Profil → Admin → AI-Management](https://kiezquiz.de/profile/?section=admin-ai-dashboard) (nur Admin-Login)  
+> **Technik:** JSON `dashboard-data.json` in **privatem Supabase Storage** — Edge Function `get-ai-dashboard` liefert `{ ok, data }`.  
+> **Legacy:** `?format=html` für altes `dashboard.html`.  
+> **Nicht öffentlich:** `ops/` wird **nicht** auf kiezquiz.de deployed.
 
-**Aktualisieren:** Button im Profil → Edge Function `refresh-ai-dashboard` → GitHub Action `dashboard-refresh.yml` → Upload nach Storage.
+**Aktualisieren:** Button → `refresh-ai-dashboard` → GitHub Action `dashboard-refresh.yml` → `build_ai_dashboard_data.py` → Upload.
 
 **Voraussetzungen (einmalig):** GitHub Secret `SUPABASE_SERVICE_ROLE_KEY` · Supabase Edge Secrets `GITHUB_PAT` · Functions deployen (s. `ops/ZUGAENGE.md`).
 
@@ -366,4 +363,4 @@ Diese Dateien sind per `.gitignore` **bewusst nicht** auf GitHub (enthalten Gehe
 | 2026-06-15 | Erstversion: Kalle, SEO, DevOps, Security |
 | 2026-06-15 | 4 Automations live; Finance, Support, Legal-Koordination |
 | 2026-06-15 | 7 Automations live; ROADMAP + Monetarisierungsplan |
-| 2026-06-15 | **Audit-Ausbau:** MCPs, Actions, Hooks, Skills, Skripte, Datei-Landkarte, Todo-Karte, Umzugs-Checkliste; Dashboard + Leit-Routine (Orchestrator, #7) ergänzt |
+| 2026-06-15 | **Agenten-Betriebssystem v2:** `ops/agents/*` · JSON-Dashboard · Frontend-UI |

@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "ceoId": "ceo-kalle",
+  "agents": [
+    {
+      "id": "ceo-kalle",
+      "displayName": "Kalle die Kieztaube",
+      "role": "CEO / Leitagent",
+      "emoji": "🕊️",
+      "ruleFile": ".cursor/rules/00-leitagent.mdc",
+      "folder": "ops/agents/ceo-kalle",
+      "reportsGlob": "ops/reports/*orchestrator*"
+    },
+    {
+      "id": "cto-ingenieur",
+      "displayName": "CTO Engineering",
+      "role": "CTO / Produkt & Code",
+      "emoji": "🛠️",
+      "ruleFile": ".cursor/rules/deploy-and-cache-busting.mdc",
+      "folder": "ops/agents/cto-ingenieur",
+      "reportsGlob": null
+    },
+    {
+      "id": "cfo-finanzen",
+      "displayName": "CFO Finanzen",
+      "role": "CFO / Finance",
+      "emoji": "💰",
+      "ruleFile": ".cursor/rules/40-finance.mdc",
+      "folder": "ops/agents/cfo-finanzen",
+      "reportsGlob": "ops/reports/*finance*"
+    },
+    {
+      "id": "clo-legal",
+      "displayName": "CLO Legal",
+      "role": "CLO / Legal-Koordination",
+      "emoji": "⚖️",
+      "ruleFile": ".cursor/rules/60-legal-coordination.mdc",
+      "folder": "ops/agents/clo-legal",
+      "reportsGlob": null
+    },
+    {
+      "id": "cmo-seo-growth",
+      "displayName": "CMO SEO & Growth",
+      "role": "CMO / SEO & Growth",
+      "emoji": "📈",
+      "ruleFile": ".cursor/rules/10-seo.mdc",
+      "folder": "ops/agents/cmo-seo-growth",
+      "reportsGlob": "ops/reports/*seo*"
+    },
+    {
+      "id": "coo-operations",
+      "displayName": "COO Operations",
+      "role": "COO / Ops & DevOps",
+      "emoji": "⚙️",
+      "ruleFile": ".cursor/rules/20-devops-monitoring.mdc",
+      "folder": "ops/agents/coo-operations",
+      "reportsGlob": "ops/reports/*devops*"
+    },
+    {
+      "id": "cso-security",
+      "displayName": "CSO Security",
+      "role": "CSO / Security",
+      "emoji": "🔒",
+      "ruleFile": ".cursor/rules/30-security.mdc",
+      "folder": "ops/agents/cso-security",
+      "reportsGlob": "ops/reports/*security*"
+    },
+    {
+      "id": "cxo-support-analytics",
+      "displayName": "CXO Support & Analytics",
+      "role": "CXO / Support & Analytics",
+      "emoji": "💬",
+      "ruleFile": ".cursor/rules/50-support-analytics.mdc",
+      "folder": "ops/agents/cxo-support-analytics",
+      "reportsGlob": "ops/reports/*support*"
+    }
+  ]
+}
