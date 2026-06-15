@@ -20,10 +20,10 @@
 | **GitHub Pages** | Free (public) | 0 | Hosting | 🟢 |
 | **Notion** | Free/Personal | 0 | Doku | 🟢 |
 | **Legora** | (dein Plan) | ? | Recht | 🟢 |
-| **United Domains** | Domain .de | ~1–2* | kiezquiz.de | 🟡 |
+| **United Domains** | Domain .de | ~1–2* | kiezquiz.de | 🟢 | **bis 30.05.2027** (D1) |
 | **Telegram** | Free | 0 | ⏸️ pausiert | 🟢 |
 
-\* Domain meist **jährlich** (~12–15 €/Jahr ≈ ~1 €/Monat). Bitte Verlängerungsdatum in United Domains prüfen.
+\* Domain meist **jährlich** (~12–15 €/Jahr ≈ ~1 €/Monat). **kiezquiz.de:** 31.05.2026–30.05.2027.
 
 **Aktuell zahlst du laut dir nur Cursor** (~60 USD/Monat bis Juni, ab Juli ~20 USD/Monat).
 

@@ -42,7 +42,7 @@ Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und akt
 - Supabase Dashboard: DB-Größe, MAU, Bandwidth, Edge-Invocations
 - Resend: Monats-Quota (NB-Mails!)
 - GitHub Actions: Minuten (bei public Repos meist irrelevant)
-- Domain-Verlängerung United Domains (jährlich)
+- Domain-Verlängerung United Domains → `ops/DEADLINES.md`
 
 ## Referenzen
 

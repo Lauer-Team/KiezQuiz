@@ -184,3 +184,41 @@ Du bist Support/Analytics. Halte dich an .cursor/rules/50-support-analytics.mdc.
 3. Top-3 Feature-Wünsche für Kalle
 Kein Google Analytics. Keine E-Mails an Nutzer.
 ```
+
+---
+
+## 6. Ops Weekly Review (empfohlen — Fälligkeiten)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — Ops Weekly Review |
+| **Cron** | `0 7 * * 1` (Montags 07:00 UTC — vor Security Weekly) |
+| **Modell** | Composer |
+| **MCPs** | *(keine Pflicht)* |
+
+**Zweck:** Fälligkeiten prüfen — **nicht** den Leitstand mit Todos vollstopfen.
+
+**Anweisung:**
+
+```
+Du bist Kalle (Leitagent).
+
+1. Lies ops/DEADLINES.md — jede Zeile wo heute >= Erinnern ab und Status nicht 🟢:
+   - ≤14 Tage bis Fälligkeit → 🔴 dringend
+   - sonst → 🟡 anstehend
+   - Status-Spalte in DEADLINES.md aktualisieren
+2. Lies ops/LEITSTAND.md + ops/legal/BACKLOG.md (nur Kurzüberblick)
+3. Bericht ops/reports/YYYY-MM-DD-ops-weekly.md:
+   - Was ist fällig / bald fällig?
+   - Was braucht der Mensch diese Woche? (nummeriert, laienverständlich)
+4. Leitstand §4: eine Zeile „Anstehend:" mit Verweis auf Bericht — kein Todo-Dump
+5. Neue fristgebundene Punkte aus Berichten anderer Agenten → Zeile in DEADLINES.md
+
+Kein Merge auf main nötig wenn nur Bericht + DEADLINES-Status. PR optional.
+```
+
+## Checkliste optional
+
+- [ ] 4 — Finance Monthly
+- [ ] 5 — Support Monthly
+- [ ] 6 — Ops Weekly Review
