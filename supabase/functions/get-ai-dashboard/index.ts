@@ -4,12 +4,13 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Expose-Headers": "X-Dashboard-Updated",
+    "authorization, x-client-info, apikey, content-type, accept",
+  "Access-Control-Expose-Headers": "X-Dashboard-Updated, X-Dashboard-Format",
 };
 
 const BUCKET = "ops-dashboard";
-const OBJECT = "dashboard.html";
+const OBJECT_JSON = "dashboard-data.json";
+const OBJECT_HTML = "dashboard.html";
 
 async function requireAdmin(authHeader: string | null) {
   if (!authHeader?.startsWith("Bearer ")) {
@@ -32,6 +33,27 @@ async function requireAdmin(authHeader: string | null) {
   }
 
   return { ok: true as const };
+}
+
+function wantsHtml(req: Request): boolean {
+  const url = new URL(req.url);
+  if (url.searchParams.get("format") === "html") return true;
+  const accept = req.headers.get("Accept") ?? "";
+  return accept.includes("text/html") && !accept.includes("application/json");
+}
+
+async function getUpdatedAt(
+  serviceClient: ReturnType<typeof createClient>,
+  objectName: string,
+): Promise<string> {
+  const { data: listing } = await serviceClient.storage.from(BUCKET).list("", {
+    search: objectName,
+    limit: 1,
+  });
+  if (listing?.[0]?.updated_at) {
+    return listing[0].updated_at;
+  }
+  return new Date().toISOString();
 }
 
 Deno.serve(async (req) => {
@@ -64,16 +86,40 @@ Deno.serve(async (req) => {
   }
 
   const serviceClient = createClient(supabaseUrl, serviceRoleKey);
+  const legacyHtml = wantsHtml(req);
+  const objectName = legacyHtml ? OBJECT_HTML : OBJECT_JSON;
+
   const { data: file, error: downloadError } = await serviceClient.storage
     .from(BUCKET)
-    .download(OBJECT);
+    .download(objectName);
 
   if (downloadError || !file) {
+    if (!legacyHtml) {
+      const { data: htmlFallback } = await serviceClient.storage
+        .from(BUCKET)
+        .download(OBJECT_HTML);
+      if (htmlFallback) {
+        const updatedAt = await getUpdatedAt(serviceClient, OBJECT_HTML);
+        const html = await htmlFallback.text();
+        return new Response(html, {
+          status: 200,
+          headers: {
+            ...cors,
+            "Content-Type": "text/html; charset=utf-8",
+            "Cache-Control": "no-store",
+            "X-Dashboard-Updated": updatedAt,
+            "X-Dashboard-Format": "html-legacy-fallback",
+          },
+        });
+      }
+    }
+
     return new Response(
       JSON.stringify({
         ok: false,
         error: "dashboard_missing",
-        message: "Dashboard noch nicht hochgeladen. GitHub Action oder upload_ai_dashboard.py ausführen.",
+        message:
+          "Dashboard noch nicht hochgeladen. GitHub Action oder upload_ai_dashboard.py ausführen.",
       }),
       {
         status: 404,
@@ -82,23 +128,44 @@ Deno.serve(async (req) => {
     );
   }
 
-  let updatedAt = new Date().toISOString();
-  const { data: listing } = await serviceClient.storage.from(BUCKET).list("", {
-    search: OBJECT,
-    limit: 1,
-  });
-  if (listing?.[0]?.updated_at) {
-    updatedAt = listing[0].updated_at;
+  const updatedAt = await getUpdatedAt(serviceClient, objectName);
+
+  if (legacyHtml) {
+    const html = await file.text();
+    return new Response(html, {
+      status: 200,
+      headers: {
+        ...cors,
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store",
+        "X-Dashboard-Updated": updatedAt,
+        "X-Dashboard-Format": "html",
+      },
+    });
   }
 
-  const html = await file.text();
-  return new Response(html, {
+  const text = await file.text();
+  let payload: unknown;
+  try {
+    payload = JSON.parse(text);
+  } catch {
+    return new Response(
+      JSON.stringify({ ok: false, error: "invalid_json", message: "dashboard-data.json ungültig" }),
+      {
+        status: 500,
+        headers: { ...cors, "Content-Type": "application/json" },
+      },
+    );
+  }
+
+  return new Response(JSON.stringify({ ok: true, data: payload }), {
     status: 200,
     headers: {
       ...cors,
-      "Content-Type": "text/html; charset=utf-8",
+      "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
       "X-Dashboard-Updated": updatedAt,
+      "X-Dashboard-Format": "json",
     },
   });
 });
