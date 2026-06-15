@@ -41,6 +41,32 @@ def load_config() -> dict:
     return cfg
 
 
+def maybe_use_pooler_url(database_url: str, cfg: dict) -> str:
+    """GitHub Actions has no IPv6 — Session pooler uses IPv4 (free tier)."""
+    flag = os.environ.get("KIEZ_SUPABASE_USE_POOLER", "").strip().lower()
+    if flag not in ("1", "true", "yes"):
+        return database_url
+
+    ref = (cfg.get("projectRef") or "").strip()
+    region = (cfg.get("region") or "").strip()
+    m = re.match(
+        r"postgresql://postgres:([^@]+)@db\.([^.]+)\.supabase\.co:\d+/(\w+)",
+        database_url,
+    )
+    if not m:
+        return database_url
+
+    password, url_ref, dbname = m.group(1), m.group(2), m.group(3)
+    ref = url_ref or ref
+    if not ref or not region:
+        return database_url
+
+    return (
+        f"postgresql://postgres.{ref}:{password}"
+        f"@aws-0-{region}.pooler.supabase.com:5432/{dbname}"
+    )
+
+
 def resolve_output_dir(cfg: dict) -> Path:
     raw = cfg.get("outputDir") or "backups/supabase"
     path = Path(raw)
@@ -144,7 +170,7 @@ def main() -> None:
     args = parser.parse_args()
 
     cfg = load_config()
-    database_url = (cfg.get("databaseUrl") or "").strip()
+    database_url = maybe_use_pooler_url((cfg.get("databaseUrl") or "").strip(), cfg)
     if not database_url or "DEIN_DB_PASSWORT" in database_url:
         print("Fehler: Keine gültige databaseUrl.", file=sys.stderr)
         print(f"Setup: python3 scripts/setup_supabase_backup.py", file=sys.stderr)
