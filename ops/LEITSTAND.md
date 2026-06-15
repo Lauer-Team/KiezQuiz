@@ -8,7 +8,7 @@
 
 | Abteilung | Status | Kurz |
 |---|---|---|
-| **Leitagent (Kalle)** | 🟢 | 7 Cursor-Automations aktiv · DEADLINES + ROADMAP live |
+| **Leitagent (Kalle)** | 🟢 | 8 Automations live · Dashboard admin-only (Supabase Storage) |
 | **SEO** | 🟢 | GSC manuell · Automation „SEO Weekly" (technisch) · kein Google Cloud nötig |
 | **DevOps / Monitoring** | 🟢 | Uptime-Automation live · Backup CI + Archiv |
 | **Security** | 🟢 | Automation „Security Weekly" live · 0 Dependabot-Alerts |
@@ -20,7 +20,7 @@
 
 ---
 
-## 2. Cursor-Automations (🟢 7 live)
+## 2. Cursor-Automations (🟢 8 live)
 
 | # | Name | Cron | Aufgabe |
 |---|---|---|---|
@@ -31,8 +31,9 @@
 | 4 | Ops Weekly Review | `0 7 * * 1` | Fälligkeiten · `ops/DEADLINES.md` |
 | 5 | Finance Monthly | `0 8 1 * *` | Kosten, Free-Tier, SERVICES.md |
 | 6 | Support Monthly | `0 10 1 * *` | Stadt-Wünsche, Trends |
+| 7 | Leit-Routine / Orchestrator | `0 6 * * 1` | Koordiniert alle, prüft Fälligkeit, baut Dashboard |
 
-Vorlagen: `ops/AUTOMATIONS.md`
+Vorlagen: `ops/AUTOMATIONS.md` · Gesamtüberblick: `ops/ORGANIGRAMM.md` · **Dashboard (Admin):** Profil → Admin → AI-Management
 
 ---
 
@@ -91,6 +92,8 @@ Merge auf `main` (Spiel-Code) · Rechtstexte live · DNS · Supabase Pro / koste
 | 2026-06-15 | **PR #47** gemerged — Actions-Bumps, GSC-Skript optional |
 | 2026-06-15 | **HaveIBeenPwned** bewusst offen — nur Supabase Pro; erst bei Umsatz |
 | 2026-06-15 | **GSC:** manueller Check Standard; Google Cloud/API nicht nötig |
+| 2026-06-15 | **AI-Management-Cockpit:** Organigramm · Dashboard-Generator · Leit-Routine (#7) |
+| 2026-06-15 | **Dashboard admin-only:** kein Public-Deploy von `ops/` · Supabase Storage + Edge Functions `get-ai-dashboard` / `refresh-ai-dashboard` |
 
 Berichte: `ops/reports/`
 
@@ -107,3 +110,7 @@ Berichte: `ops/reports/`
 | **Legal-Arbeitsauftrag** | Briefing von Kalle für dich in Legora — Kalle schreibt keine Rechtstexte. |
 | **ROADMAP** | Aufgeschobene Themen ohne festes Datum — `ops/ROADMAP.md`. |
 | **pendingNotice** | Schalter für den gelben Gäste-Hinweis bei NB-Änderungen — absichtlich true bis Inkrafttreten. |
+| **Organigramm** | `ops/ORGANIGRAMM.md` — Gesamtüberblick über alle Agenten, MCPs, Automationen, Dateien (Audit-Sicht). |
+| **Dashboard** | Profil → Admin → AI-Management — **nur Admin**, via Supabase Edge Function (nicht öffentlich auf kiezquiz.de). |
+| **Orchestrator** | Automation #7 (Leit-Routine) — koordiniert montags alle Automationen und baut das Dashboard neu. |
+| **MCP** | „Steckdose" zu echten Diensten (Supabase, Notion …); an deinen Cursor-Account gebunden, nicht im Repo. |

@@ -50,6 +50,20 @@ jobs:
           python3 scripts/generate_seo_pages.py
           python3 scripts/generate_sitemap.py
           python3 scripts/generate_legal_static.py
+          python3 scripts/generate_dashboard.py
+
+      - name: Upload AI dashboard to Supabase (admin-only)
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          export SUPABASE_URL="${VITE_SUPABASE_URL:-$SUPABASE_URL}"
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "::warning::SUPABASE_SERVICE_ROLE_KEY fehlt — Dashboard-Upload übersprungen."
+            exit 0
+          fi
+          python3 scripts/upload_ai_dashboard.py
 
       - name: Prepare static site
         run: |
@@ -59,6 +73,7 @@ jobs:
             --exclude .github \
             --exclude node_modules \
             --exclude _site \
+            --exclude ops \
             . _site/
           python3 scripts/stamp_build.py "${{ github.sha }}" _site
 

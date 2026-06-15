@@ -205,6 +205,69 @@ body.kq.profile-page-body {
   max-width: 32rem;
 }
 
+.admin-ai-dashboard-head {
+  align-items: flex-start;
+}
+
+.admin-ai-dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.admin-ai-dashboard-hint {
+  margin-top: 0;
+}
+
+.admin-ai-dashboard-status {
+  margin: 0.75rem 0 0;
+}
+
+.admin-ai-dashboard-frame-wrap.is-loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.admin-ai-dashboard-frame-wrap.is-loading::after {
+  content: "…";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  color: var(--muted, #8b93a7);
+}
+
+.admin-ai-dashboard-frame-wrap {
+  margin-top: 1rem;
+  border: 1px solid var(--line, #363b4f);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f6f8fa;
+  min-height: 420px;
+  position: relative;
+}
+
+.admin-ai-dashboard-frame {
+  display: block;
+  width: 100%;
+  min-height: 70vh;
+  border: 0;
+  background: #fff;
+}
+
+@media (max-width: 720px) {
+  .admin-ai-dashboard-head {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .admin-ai-dashboard-frame {
+    min-height: 60vh;
+  }
+}
+
 .profile-main-column {
   display: flex;
   flex-direction: column;

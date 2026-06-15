@@ -24,7 +24,8 @@
 | United Domains | 🟡 | — | DNS/Mail nur bei Bedarf manuell |
 | Legora | 🟡 | Legal-Arbeitsauftrag, Koordination | Rechtstexte dort prüfen · `ops/legal/` |
 | Finance-Tracking | 🟢 | `ops/finance/SERVICES.md`, COSTS.md | Domain-Verlängerungsdatum eintragen |
-| Cursor Automations | 🟢 | **7 Routinen live** (s. LEITSTAND) | — |
+| Cursor Automations | 🟢 | **8 Routinen live** (#0–#7) | — |
+| AI-Dashboard (admin-only) | 🟡 | Profil → Admin → AI-Management | s. Setup unten |
 | GSC (Search Console Web) | 🟢 | Manueller Check · Automation technisch | ~5 Min/Monat · `docs/GSC-MANUAL-CHECK.md` |
 | GSC API (Google Cloud) | ⚪ | Skript vorhanden, **bewusst nicht** Standard | Nur bei Vollautomatik · `docs/GSC-API-SETUP.md` |
 | Analytics | ⚪ | — | bewusst nicht genutzt |
@@ -55,6 +56,20 @@
 ### Telegram-Bot (@kalle_kieztaube_bot)
 
 Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
+
+---
+
+## 🔜 Einmal-Setup: AI-Dashboard (admin-only)
+
+| Schritt | Wo | Was |
+|---|---|---|
+| 1 | **GitHub** → Repo Secrets | `SUPABASE_SERVICE_ROLE_KEY` (= Service-Role aus Supabase Dashboard → Settings → API) |
+| 2 | **Supabase** → Edge Functions → Secrets | `GITHUB_PAT` (Fine-grained Token: `actions:write` + `contents:write` für `logic3/KiezQuiz`) |
+| 3 | Terminal (einmalig) | `supabase functions deploy get-ai-dashboard --project-ref iuixaesbzftgmnmelcad` |
+| 4 | Terminal (einmalig) | `supabase functions deploy refresh-ai-dashboard --project-ref iuixaesbzftgmnmelcad` |
+| 5 | Nach Merge auf `main` | Deploy lädt Dashboard in privaten Bucket `ops-dashboard` hoch |
+
+**Test:** Als Admin einloggen → `/profile/?section=admin-ai-dashboard` → Dashboard sichtbar. Ausloggen / Nicht-Admin → kein Zugriff (403).
 
 ---
 
