@@ -25,7 +25,8 @@
 | Legora | 🟡 | Legal-Arbeitsauftrag, Koordination | Rechtstexte dort prüfen · `ops/legal/` |
 | Finance-Tracking | 🟢 | `ops/finance/SERVICES.md`, COSTS.md | Domain-Verlängerungsdatum eintragen |
 | Cursor Automations | 🟢 | **7 Routinen live** (s. LEITSTAND) | — |
-| GSC API (OAuth) | 🟡 | Skript + Doku bereit | OAuth einmalig (`docs/GSC-API-SETUP.md`) |
+| GSC (Search Console Web) | 🟢 | Manueller Check · Automation technisch | ~5 Min/Monat · `docs/GSC-MANUAL-CHECK.md` |
+| GSC API (Google Cloud) | ⚪ | Skript vorhanden, **bewusst nicht** Standard | Nur bei Vollautomatik · `docs/GSC-API-SETUP.md` |
 | Analytics | ⚪ | — | bewusst nicht genutzt |
 
 ---
@@ -61,9 +62,10 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 | Thema | Wann |
 |---|---|
-| GSC OAuth | `docs/GSC-API-SETUP.md` · ROADMAP R4 |
+| GSC manuell | `docs/GSC-MANUAL-CHECK.md` · ROADMAP R4 |
+| GSC API / Google Cloud | Nur optional · ROADMAP R4b |
 | Monetarisierung | `ops/plans/MONETIZATION.md` · wenn du Umsatz willst |
-| HaveIBeenPwned | Supabase Auth · ROADMAP R6 · 2 Min |
+| HaveIBeenPwned | Erst mit **Supabase Pro** + Umsatz · ROADMAP R6 |
 
 ---
 
@@ -97,4 +99,4 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 ## Nächster Schritt
 
-**Masterauftrag v2 + 7 Automations abgeschlossen** (2026-06-15). Optional: ROADMAP · GSC OAuth.
+**Masterauftrag v2 + 7 Automations abgeschlossen** (2026-06-15). GSC: manuell. Kein Supabase Pro ohne Umsatz.

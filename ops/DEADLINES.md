@@ -23,8 +23,8 @@ Alles Bewusst-später — Details und IDs in **[`ROADMAP.md`](ROADMAP.md)**:
 | Bereich | Beispiele |
 |---|---|
 | Umsatz | Monetarisierung (Plan in [`plans/MONETIZATION.md`](plans/MONETIZATION.md)) |
-| SEO | GSC API OAuth, Bing Webmaster |
-| Security | HaveIBeenPwned in Supabase Auth |
+| SEO | GSC manuell (~5 Min/Monat), Bing Webmaster |
+| Security | HaveIBeenPwned — erst mit Supabase Pro + Umsatz |
 | Ops | Telegram reaktivieren, Dependabot-PRs mergen |
 
 ---

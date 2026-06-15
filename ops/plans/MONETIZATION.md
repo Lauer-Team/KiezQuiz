@@ -84,6 +84,14 @@ Technisch (Web):
 
 **Kosten neu:** Stripe 0 € Fix + Transaktionsgebühr; ggf. Supabase Pro erst bei Wachstum.
 
+### Erst mit Umsatz freischalten (bewusst Free Tier)
+
+| Feature | Anbieter | Warum warten |
+|---|---|---|
+| **HaveIBeenPwned** | Supabase Auth | Nur **Pro** — ROADMAP R6 |
+| **Supabase Pro** | Supabase | Quotas/Backups — erst bei Wachstum oder Umsatz |
+| **GSC API** | Google Cloud | 0 €, aber Setup — Standard ist manueller GSC-Check |
+
 ### Phase 3 — MVP Paid Feature (Branch + PR)
 
 **Minimal viable:** Ein **Premium-Stadt-Pack** (z. B. München) oder **„Alle Städte"-Bundle**.

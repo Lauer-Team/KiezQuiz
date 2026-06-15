@@ -13,9 +13,9 @@
 
 ## Aufgeschoben (Roadmap)
 
-- GSC API OAuth (Skript + Doku bereit — OAuth durch dich)
-- Monetarisierung (Plan liegt in `ops/plans/MONETIZATION.md`)
-- Community-Launch, Telegram, Bing — siehe `ops/ROADMAP.md`
+- GSC: **manuell** (Standard) · API optional
+- HaveIBeenPwned: erst mit Supabase Pro + Umsatz
+- Monetarisierung (Plan in `ops/plans/MONETIZATION.md`)
 
 ## Verwandte Dateien
 

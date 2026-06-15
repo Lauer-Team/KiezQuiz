@@ -16,6 +16,7 @@
 | [DEADLINES.md](DEADLINES.md) | Fälligkeiten & Erinnerungen (Domain, NB, …) |
 | [ROADMAP.md](ROADMAP.md) | Aufgeschobene Themen ohne festes Datum |
 | [plans/MONETIZATION.md](plans/MONETIZATION.md) | Monetarisierungs-Referenzplan (wenn du Umsatz willst) |
+| [../docs/GSC-MANUAL-CHECK.md](../docs/GSC-MANUAL-CHECK.md) | GSC ohne Google Cloud (~5 Min) |
 | [RETRO.md](RETRO.md) | Learnings |
 | [reports/](reports/) | Berichte der Fach-Agenten |
 

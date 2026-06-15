@@ -13,9 +13,9 @@
 |---|---|---|
 | INFO | RLS ohne Policy (Rate-Limit-/Intern-Tabellen) | Erwartet — kein Client-Zugriff |
 | WARN | SECURITY DEFINER RPCs für anon/authenticated | **Absicht** (Leaderboard, Login, Stadt-Wünsche) |
-| WARN | Leaked-Password-Protection aus | Optional in Auth Settings aktivieren |
+| WARN | Leaked-Password-Protection aus | **Supabase Pro** — bewusst offen bis Umsatz (ROADMAP R6) |
 
-**Kein sofortiger PR** — RPCs sind App-Design. Optional später: HaveIBeenPwned in Supabase Auth aktivieren.
+**Kein sofortiger PR** — RPCs sind App-Design. HaveIBeenPwned: erst mit Supabase Pro wenn KiezQuiz Umsatz macht.
 
 ## Secrets
 
