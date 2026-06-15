@@ -24,8 +24,8 @@
 | United Domains | 🟡 | — | DNS/Mail nur bei Bedarf manuell |
 | Legora | 🟡 | Legal-Arbeitsauftrag, Koordination | Rechtstexte dort prüfen · `ops/legal/` |
 | Finance-Tracking | 🟢 | `ops/finance/SERVICES.md`, COSTS.md | Domain-Verlängerungsdatum eintragen |
-| Cursor Automations | 🟢 | 4 Routinen live (s. LEITSTAND) | optional §4–5 Finance/Support |
-| GSC API (OAuth) | 🔴 | — | Erst wenn SEO-Automation soll |
+| Cursor Automations | 🟢 | **7 Routinen live** (s. LEITSTAND) | — |
+| GSC API (OAuth) | 🟡 | Skript + Doku bereit | OAuth einmalig (`docs/GSC-API-SETUP.md`) |
 | Analytics | ⚪ | — | bewusst nicht genutzt |
 
 ---
@@ -57,13 +57,13 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 ---
 
-## 🔜 Optional (Masterauftrag erledigt)
+## 🔜 Optional (Roadmap)
 
 | Thema | Wann |
 |---|---|
-| GSC Search Console API (OAuth) | Wenn SEO-Briefing vollautomatisch soll |
-| Finance/Support-Automation | Vorlagen in `ops/AUTOMATIONS.md` §4–5 |
-| Monetarisierung | Legora + Finance — wenn geplant |
+| GSC OAuth | `docs/GSC-API-SETUP.md` · ROADMAP R4 |
+| Monetarisierung | `ops/plans/MONETIZATION.md` · wenn du Umsatz willst |
+| HaveIBeenPwned | Supabase Auth · ROADMAP R6 · 2 Min |
 
 ---
 
@@ -97,4 +97,4 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 ## Nächster Schritt
 
-**Phase 1 + Masterauftrag v2 abgeschlossen** (2026-06-15). Optional: `ops/AUTOMATIONS.md` §4–5 · GSC OAuth.
+**Masterauftrag v2 + 7 Automations abgeschlossen** (2026-06-15). Optional: ROADMAP · GSC OAuth.

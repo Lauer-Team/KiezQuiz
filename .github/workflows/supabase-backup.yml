@@ -13,7 +13,7 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install PostgreSQL client 17
         run: |
@@ -45,7 +45,7 @@ jobs:
           python3 scripts/export_supabase_backup.py --retain 3
 
       - name: Upload backup artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: supabase-backup-${{ github.run_number }}
           path: |

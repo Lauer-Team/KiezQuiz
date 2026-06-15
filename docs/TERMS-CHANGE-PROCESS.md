@@ -103,7 +103,14 @@ Nach `--send`:
 
 Solange `terms.pendingNotice === true`, zeigt `src/ui/cookieConsent.js` einen gelben Hinweis-Banner mit Link zu `/nutzungsbedingungen/` und dem Datum `effectiveDate`.
 
-Nach Inkrafttreten: `pendingNotice: false` setzen (manuell oder beim nächsten Deploy).
+Nach Inkrafttreten (`effectiveDate` erreicht):
+
+```bash
+python3 scripts/deactivate_terms_notice.py --dry-run
+python3 scripts/deactivate_terms_notice.py --apply   # → Commit + PR
+```
+
+Oder manuell: `pendingNotice: false` in `legalConfig.js` und `active: false` in `termsNotice.json`.
 
 ---
 

@@ -14,6 +14,8 @@
 | [finance/](finance/) | Service-Inventar, Kosten, Free-Tier-Risiken |
 | [legal/](legal/) | Legal-Koordination, Trigger, Backlog |
 | [DEADLINES.md](DEADLINES.md) | Fälligkeiten & Erinnerungen (Domain, NB, …) |
+| [ROADMAP.md](ROADMAP.md) | Aufgeschobene Themen ohne festes Datum |
+| [plans/MONETIZATION.md](plans/MONETIZATION.md) | Monetarisierungs-Referenzplan (wenn du Umsatz willst) |
 | [RETRO.md](RETRO.md) | Learnings |
 | [reports/](reports/) | Berichte der Fach-Agenten |
 
