@@ -14,11 +14,11 @@
 | **Cloudflare** | 0 € | 0 € | Free Tier |
 | **Resend** | 0 € | 0 € | Free Tier |
 | **GSC / Pages / Notion** | 0 € | 0 € | Free |
-| **Domain kiezquiz.de** | ~1 €/Monat* | ~1 €/Monat* | United Domains, jährlich |
+| **Domain kiezquiz.de** | ~1 €/Monat | ~1 €/Monat | United Domains · **läuft bis 30.05.2027** |
 | **Legora** | (dein Plan) | — | Recht — nicht in Cursor |
 | **Summe (ohne Legora/Domain)** | **~55 €** | **~18 €** | nur Cursor |
 
-\* Domain: ~12–15 €/Jahr — **Verlängerungsdatum bitte eintragen**, wenn bekannt.
+**Domain kiezquiz.de:** Registrierung 31.05.2026–30.05.2027 (United Domains). Erinnerung ab 01.04.2027 → `ops/DEADLINES.md` D1.
 
 ---
 

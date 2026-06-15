@@ -24,7 +24,7 @@ Details: `ops/finance/SERVICES.md`
 
 ## Offen
 
-- [ ] Domain-Verlängerungsdatum United Domains vom Betreiber eintragen
+- [x] Domain kiezquiz.de bis 30.05.2027 — siehe `ops/DEADLINES.md` D1
 - [ ] Ab Juli: Cursor-Rechnung in COSTS.md bestätigen
 
 ## Nächster Schritt

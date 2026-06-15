@@ -49,8 +49,10 @@ Optional (Phase 2): Finance Monthly, Support Monthly — siehe `ops/AUTOMATIONS.
 | Wer | Aufgabe |
 |---|---|
 | **Kalle** | Leitstand, Berichte, Free-Tier-Warnung, Legal-Trigger, PRs |
-| **Du** | Legora-Aufträge, Merge-Freigaben, NB `--send`, Domain-Datum eintragen |
+| **Du** | Legora-Aufträge, Merge-Freigaben, NB `--send`, **Domain verlängern** (D1) |
 | **Du (optional)** | GSC OAuth · Dependabot-PRs mergen |
+
+**Anstehend (Termine):** `ops/DEADLINES.md` — wöchentlich via Ops Review Automation
 
 ---
 
@@ -66,6 +68,7 @@ Merge auf `main` (Spiel-Code) · E-Mails an Nutzer · Rechtstexte live · DNS ·
 |---|---|---|---|
 | GSC API OAuth | SEO-Daten automatisch | mittel | niedrig |
 | Finance/Support-Automation anlegen | Monatsberichte ohne Chat | gering | niedrig |
+| **Ops Weekly Review** Automation | Fälligkeiten aus DEADLINES.md | gering | **empfohlen** |
 | Dependabot-PRs mergen | Security aktuell | gering | niedrig |
 | Monetarisierung + Legal | Umsatz | hoch | wenn du willst |
 | Telegram-Agent reaktivieren | Fern-PRs | hoch | pausiert |
