@@ -216,55 +216,47 @@ body.kq.profile-page-body {
   flex-shrink: 0;
 }
 
-.admin-ai-dashboard-hint {
-  margin-top: 0;
-}
-
 .admin-ai-dashboard-status {
   margin: 0.75rem 0 0;
 }
 
-.admin-ai-dashboard-frame-wrap.is-loading {
-  opacity: 0.55;
-  pointer-events: none;
+.admin-ai-dashboard {
+  max-width: none;
 }
 
-.admin-ai-dashboard-frame-wrap.is-loading::after {
+.profile-main:has(.admin-ai-dashboard) {
+  overflow: visible;
+}
+
+.admin-ai-dashboard-mount-wrap.is-loading {
+  opacity: 0.55;
+  pointer-events: none;
+  min-height: 8rem;
+}
+
+.admin-ai-dashboard-mount-wrap.is-loading::after {
   content: "…";
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
+  display: block;
+  text-align: center;
+  padding: 3rem 0;
   font-size: 2rem;
   color: var(--muted, #8b93a7);
 }
 
-.admin-ai-dashboard-frame-wrap {
+.admin-ai-dashboard-mount-wrap {
   margin-top: 1rem;
-  border: 1px solid var(--line, #363b4f);
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f6f8fa;
-  min-height: 420px;
   position: relative;
 }
 
-.admin-ai-dashboard-frame {
+.admin-ai-dashboard-mount {
   display: block;
   width: 100%;
-  min-height: 70vh;
-  border: 0;
-  background: #fff;
 }
 
 @media (max-width: 720px) {
   .admin-ai-dashboard-head {
     flex-direction: column;
     gap: 0.75rem;
-  }
-
-  .admin-ai-dashboard-frame {
-    min-height: 60vh;
   }
 }
 

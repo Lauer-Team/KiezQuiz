@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 """KiezQuiz — Dashboard-Generator (One-Stop-Shop).
 
-Liest die "Quelle der Wahrheit" (ops/LEITSTAND.md, ops/DEADLINES.md, ops/ORGANIGRAMM.md),
-berechnet aus den Cron-Plaenen die naechsten Routine-Termine und baut eine
-in sich geschlossene HTML-Seite: ops/dashboard.html.
+Liest ops/LEITSTAND.md, ops/DEADLINES.md, ops/ROADMAP.md,
+berechnet Cron-Termine und baut ops/dashboard.html.
 
 Aufruf:  python3 scripts/generate_dashboard.py
-Danach:  ops/dashboard.html im Browser oeffnen.
-
-Bewusst ohne Fremd-Pakete (nur Standardbibliothek), damit es ueberall laeuft.
 """
 
 from __future__ import annotations
@@ -18,12 +14,12 @@ import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-try:  # echte Zeitzone, wenn verfuegbar (Python 3.9+)
+try:
     from zoneinfo import ZoneInfo
 
     BERLIN = ZoneInfo("Europe/Berlin")
-except Exception:  # pragma: no cover - Fallback
-    BERLIN = timezone(timedelta(hours=2))  # CEST-Naeherung
+except Exception:
+    BERLIN = timezone(timedelta(hours=2))
 
 ROOT = Path(__file__).resolve().parent.parent
 OPS = ROOT / "ops"
@@ -32,27 +28,22 @@ WD = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Son
 
 STATUS_COLOR = {
     "🟢": ("#1a7f37", "#e6f4ea", "OK"),
-    "🟡": ("#9a6700", "#fff8e1", "Beobachten"),
+    "🟡": ("#9a6700", "#fff8e1", "Anstehend"),
     "🔴": ("#cf222e", "#ffebe9", "Dringend"),
     "⏸️": ("#57606a", "#eef1f4", "Pausiert"),
-    "⚪": ("#57606a", "#eef1f4", "Bewusst aus"),
+    "⚪": ("#57606a", "#eef1f4", "Aus"),
 }
 
 
-# --------------------------------------------------------------------------- #
-# Markdown-Helfer
-# --------------------------------------------------------------------------- #
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8") if path.exists() else ""
 
 
 def split_row(line: str) -> list[str]:
-    cells = [c.strip() for c in line.strip().strip("|").split("|")]
-    return cells
+    return [c.strip() for c in line.strip().strip("|").split("|")]
 
 
 def find_table(text: str, header_contains: str) -> list[list[str]]:
-    """Findet die erste Markdown-Tabelle, deren Kopfzeile header_contains enthaelt."""
     lines = text.splitlines()
     rows: list[list[str]] = []
     in_table = False
@@ -65,7 +56,7 @@ def find_table(text: str, header_contains: str) -> list[list[str]]:
         if not is_row:
             break
         cells = split_row(line)
-        if all(set(c) <= {"-", ":", " "} for c in cells):  # Trennzeile
+        if all(set(c) <= {"-", ":", " "} for c in cells):
             continue
         rows.append(cells)
     return rows
@@ -85,9 +76,6 @@ def clean(cell: str) -> str:
     return cell.strip()
 
 
-# --------------------------------------------------------------------------- #
-# Cron -> naechster Lauf
-# --------------------------------------------------------------------------- #
 def parse_field(field: str, lo: int, hi: int) -> set[int]:
     allowed: set[int] = set()
     for part in field.split(","):
@@ -122,7 +110,7 @@ def next_run(cron: str, now_utc: datetime) -> datetime | None:
 
     t = now_utc.replace(second=0, microsecond=0) + timedelta(minutes=1)
     for _ in range(366 * 24 * 60):
-        cron_dow = t.isoweekday() % 7  # Mon=1..Sat=6, Sun=0
+        cron_dow = t.isoweekday() % 7
         if t.month in months and t.hour in hours and t.minute in mins:
             if dom_restricted and dow_restricted:
                 day_ok = (t.day in doms) or (cron_dow in dows)
@@ -147,16 +135,124 @@ def days_until(dt: datetime, now: datetime) -> int:
     return (dt.astimezone(BERLIN).date() - now.astimezone(BERLIN).date()).days
 
 
-# --------------------------------------------------------------------------- #
-# Daten einsammeln
-# --------------------------------------------------------------------------- #
+def parse_section_paragraph(text: str, heading: str) -> str:
+    pattern = rf"## {re.escape(heading)}\n\n(.+?)\n\n---"
+    m = re.search(pattern, text, re.DOTALL)
+    return m.group(1).strip() if m else ""
+
+
+def split_task_bullets(text: str) -> list[str]:
+    """Kommagetrennte Aufgaben — Kommas in Klammern bleiben dran."""
+    items: list[str] = []
+    current: list[str] = []
+    depth = 0
+    for ch in text:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth = max(0, depth - 1)
+        if ch == "," and depth == 0:
+            piece = "".join(current).strip()
+            if piece:
+                items.append(piece)
+            current = []
+        else:
+            current.append(ch)
+    tail = "".join(current).strip()
+    if tail:
+        items.append(tail)
+    return items or [text]
+
+
+def expand_role_tasks(role_tasks: dict[str, list[str]]) -> dict[str, list[str]]:
+    out: dict[str, list[str]] = {}
+    for key, tasks in role_tasks.items():
+        expanded: list[str] = []
+        for task in tasks:
+            expanded.extend(split_task_bullets(task))
+        out[key] = expanded
+    return out
+
+
+def parse_role_tasks(leit: str) -> dict[str, list[str]]:
+    out: dict[str, list[str]] = {"du": [], "kalle": [], "du_optional": []}
+    for row in find_table(leit, "Wer"):
+        if len(row) < 2:
+            continue
+        who, task = clean(row[0]), clean(row[1])
+        if who.startswith("**Du (optional)**") or who == "Du (optional)":
+            out["du_optional"].append(task)
+        elif "Du" in who:
+            out["du"].append(task)
+        elif "Kalle" in who:
+            out["kalle"].append(task)
+    return out
+
+
+def parse_approval_gates(leit: str) -> list[str]:
+    block = parse_section_paragraph(leit, "5. Wartet auf deine Freigabe")
+    if not block:
+        return []
+    return [x.strip() for x in block.split("·") if x.strip()]
+
+
+def parse_backlog(leit: str) -> list[dict]:
+    items = []
+    for row in find_table(leit, "Priorität"):
+        if len(row) >= 4:
+            items.append(
+                {
+                    "topic": clean(row[0]),
+                    "benefit": clean(row[1]),
+                    "effort": clean(row[2]),
+                    "priority": clean(row[3]),
+                }
+            )
+    return items
+
+
+def parse_roadmap(text: str) -> list[dict]:
+    items = []
+    in_done = False
+    for line in text.splitlines():
+        if line.startswith("## Erledigt"):
+            in_done = True
+            continue
+        if line.startswith("## ") and "Erledigt" not in line:
+            in_done = False
+        if not line.strip().startswith("|") or line.strip().startswith("|--"):
+            continue
+        cells = split_row(line)
+        if len(cells) < 3:
+            continue
+        rid = clean(cells[0])
+        if not re.match(r"R\d+[a-z]?", rid):
+            continue
+        if in_done:
+            continue
+        items.append(
+            {
+                "id": rid,
+                "topic": clean(cells[1]),
+                "next": clean(cells[2]),
+                "ref": clean(cells[3]) if len(cells) > 3 else "",
+            }
+        )
+    return items
+
+
+def dept_short_name(name: str) -> str:
+    name = re.sub(r"\(.*?\)", "", name).strip()
+    name = name.replace("Leitagent (Kalle)", "Leitagent")
+    return name.split("/")[0].strip()
+
+
 def collect():
     now = datetime.now(timezone.utc)
     leit = read(OPS / "LEITSTAND.md")
     deadlines = read(OPS / "DEADLINES.md")
-    organ = read(OPS / "ORGANIGRAMM.md")
+    roadmap = read(OPS / "ROADMAP.md")
 
-    # Abteilungen (§1: Spalten Abteilung | Status | Kurz)
     departments = []
     for row in find_table(leit, "Abteilung"):
         if len(row) >= 3:
@@ -164,7 +260,6 @@ def collect():
                 {"name": clean(row[0]), "status": first_status(row[1]), "note": clean(row[2])}
             )
 
-    # Automationen (§2: # | Name | Cron | Aufgabe)
     automations = []
     for row in find_table(leit, "Cron"):
         if len(row) >= 4 and row[0].strip("# ").isdigit():
@@ -183,7 +278,6 @@ def collect():
             )
     automations.sort(key=lambda a: (a["next"] or now + timedelta(days=999)))
 
-    # Deadlines (Spalte "Fällig am")
     dls = []
     for row in find_table(deadlines, "Fällig am"):
         if len(row) >= 7:
@@ -199,102 +293,189 @@ def collect():
                 }
             )
 
-    # Mermaid-Block aus dem Organigramm
-    m = re.search(r"```mermaid\n(.*?)```", organ, re.DOTALL)
-    mermaid = m.group(1).strip() if m else ""
+    role_tasks = expand_role_tasks(parse_role_tasks(leit))
+    approval_gates = parse_approval_gates(leit)
+    backlog = parse_backlog(leit)
+    roadmap_items = parse_roadmap(roadmap)
 
-    return now, departments, automations, dls, mermaid
+    return now, departments, automations, dls, role_tasks, approval_gates, backlog, roadmap_items
 
 
-# --------------------------------------------------------------------------- #
-# HTML rendern
-# --------------------------------------------------------------------------- #
 def esc(s: str) -> str:
     return html.escape(s, quote=True)
 
 
-def render(now, departments, automations, dls, mermaid) -> str:
+def status_badge(emoji: str) -> str:
+    fg, bg, label = STATUS_COLOR.get(emoji, STATUS_COLOR["⚪"])
+    return f'<span class="badge" style="color:{fg};background:{bg}">{emoji} {label}</span>'
+
+
+def render_todo_list(items: list[str], empty: str) -> str:
+    if not items:
+        return f'<p class="muted empty">{esc(empty)}</p>'
+    return "<ul>" + "".join(f"<li>{esc(i)}</li>" for i in items) + "</ul>"
+
+
+def render_simple_org(departments: list[dict], automations: list[dict]) -> str:
+    fach = [d for d in departments if "Leitagent" not in d["name"] and d["status"] != "⏸️"]
+    paused = [d for d in departments if d["status"] == "⏸️"]
+    team_pills = "".join(
+        f'<span class="org-pill" title="{esc(d["note"])}">{status_badge(d["status"])} {esc(dept_short_name(d["name"]))}</span>'
+        for d in fach
+    )
+    auto_pills = "".join(
+        f'<span class="org-pill org-pill--auto">{esc(a["name"])}</span>' for a in automations[:8]
+    )
+    paused_note = ""
+    if paused:
+        paused_note = (
+            '<p class="org-foot muted">Pausiert: '
+            + ", ".join(esc(dept_short_name(d["name"])) for d in paused)
+            + "</p>"
+        )
+
+    return f"""
+    <div class="org-simple">
+      <div class="org-step">
+        <div class="org-box org-box--you">
+          <strong>👤 Du</strong>
+          <span>Entscheidungen & Freigaben (Deploy, Geld, Recht, DNS)</span>
+        </div>
+      </div>
+      <div class="org-connector" aria-hidden="true">↓</div>
+      <div class="org-step">
+        <div class="org-box org-box--kalle">
+          <strong>🕊️ Kalle</strong>
+          <span>Leitagent — dein einziger Ansprechpartner, koordiniert alles</span>
+        </div>
+      </div>
+      <div class="org-connector" aria-hidden="true">↓ koordiniert</div>
+      <div class="org-step">
+        <p class="org-label">Fach-Teams (spezialisierte KI-Rollen)</p>
+        <div class="org-pills">{team_pills}</div>
+      </div>
+      <div class="org-step">
+        <p class="org-label">8 Automations — laufen von allein nach Plan</p>
+        <div class="org-pills org-pills--wrap">{auto_pills}</div>
+      </div>
+      {paused_note}
+      <p class="org-foot muted">Vollständiges Audit-Diagramm: <code>ops/ORGANIGRAMM.md</code></p>
+    </div>"""
+
+
+def render(now, departments, automations, dls, role_tasks, approval_gates, backlog, roadmap_items) -> str:
     gen = now.astimezone(BERLIN).strftime("%A, %d.%m.%Y · %H:%M Uhr")
 
-    # Diese Woche faellige Automationen (<=7 Tage)
-    week = [a for a in automations if a["days"] is not None and a["days"] <= 7]
-    soon_deadlines = [d for d in dls if d["status"] in ("🔴", "🟡")]
+    open_dls = [d for d in dls if d["status"] in ("🔴", "🟡")]
+    open_dls.sort(key=lambda d: d["due"])
+    ok_depts = sum(1 for d in departments if d["status"] == "🟢")
 
-    def status_badge(emoji: str) -> str:
-        fg, bg, label = STATUS_COLOR.get(emoji, STATUS_COLOR["⚪"])
-        return f'<span class="badge" style="color:{fg};background:{bg}">{emoji} {label}</span>'
+    du_deadlines = [d for d in open_dls if "Du" in d["who"]]
+    kalle_deadlines = [d for d in open_dls if "Kalle" in d["who"]]
 
-    dept_cards = "\n".join(
-        f"""<div class="card">
-          <div class="card-head">{status_badge(d['status'])}</div>
-          <h3>{esc(d['name'])}</h3>
-          <p>{esc(d['note'])}</p>
+    def deadline_li(d: dict) -> str:
+        days_txt = ""
+        try:
+            due_dt = datetime.strptime(d["due"], "%Y-%m-%d").replace(tzinfo=BERLIN)
+            delta = (due_dt.date() - now.astimezone(BERLIN).date()).days
+            days_txt = f" <span class='muted'>(in {delta} Tg.)</span>"
+        except ValueError:
+            pass
+        return (
+            f"<li>{status_badge(d['status'])} <strong>{esc(d['what'])}</strong> "
+            f"— {esc(d['due'])}{days_txt}"
+            f"<br><span class='muted'>{esc(d['note'])}</span></li>"
+        )
+
+    scheduled_items = []
+    for a in automations:
+        scheduled_items.append(
+            f"<li><span class='badge' style='color:#0969da;background:#ddf4ff'>⏰ Auto</span> "
+            f"<strong>{esc(a['name'])}</strong> — {esc(a['next_str'])} "
+            f"<span class='muted'>({a['days']} Tg.)</span></li>"
+        )
+    for d in open_dls:
+        scheduled_items.append(deadline_li(d))
+
+    scheduled_html = (
+        "".join(scheduled_items)
+        if scheduled_items
+        else "<li class='muted'>Nichts Dringendes in den nächsten 7 Tagen.</li>"
+    )
+
+    du_todos = list(role_tasks["du"])
+    du_todos.extend(f"Freigabe: {g}" for g in approval_gates)
+    for d in du_deadlines:
+        du_todos.append(f"{d['what']} (fällig {d['due']})")
+
+    kalle_todos = list(role_tasks["kalle"])
+    for d in kalle_deadlines:
+        kalle_todos.append(f"{d['what']} (fällig {d['due']})")
+
+    optional_html = render_todo_list(
+        role_tasks["du_optional"],
+        "Keine optionalen Aufgaben.",
+    )
+
+    roadmap_html = (
+        "".join(
+            f"<li><strong>{esc(r['id'])}</strong> {esc(r['topic'])} — "
+            f"<span class='muted'>{esc(r['next'])}</span></li>"
+            for r in roadmap_items
+        )
+        if roadmap_items
+        else "<li class='muted'>Roadmap leer.</li>"
+    )
+
+    backlog_html = (
+        "".join(
+            f"<li><strong>{esc(b['topic'])}</strong> "
+            f"<span class='muted'>({esc(b['priority'])})</span></li>"
+            for b in backlog
+            if "aufgeschoben" in b["priority"].lower() or "pausiert" in b["priority"].lower()
+        )
+        or ""
+    )
+
+    dept_compact = "".join(
+        f"""<div class="status-chip" title="{esc(d['note'])}">
+          {status_badge(d['status'])} <strong>{esc(dept_short_name(d['name']))}</strong>
         </div>"""
         for d in departments
     )
 
-    week_items = (
-        "\n".join(
-            f"<li><strong>{esc(a['name'])}</strong> — {esc(a['next_str'])} "
-            f"<span class='muted'>({a['days']} Tg.)</span></li>"
-            for a in week
-        )
-        or "<li class='muted'>Diese Woche keine geplante Automation.</li>"
-    )
-
-    deadline_items = (
-        "\n".join(
-            f"<li>{status_badge(d['status'])} <strong>{esc(d['what'])}</strong> — "
-            f"fällig {esc(d['due'])} <span class='muted'>({esc(d['who'])})</span></li>"
-            for d in soon_deadlines
-        )
-        or "<li class='muted'>Keine offenen Fälligkeiten.</li>"
-    )
-
-    auto_rows = "\n".join(
+    auto_rows = "".join(
         f"""<tr>
-          <td class="num">{esc(a['num'])}</td>
           <td><strong>{esc(a['name'])}</strong><br><span class="muted">{esc(a['task'])}</span></td>
-          <td><code>{esc(a['cron'])}</code></td>
           <td>{esc(a['next_str'])}</td>
           <td class="center">{a['days'] if a['days'] is not None else '—'}</td>
         </tr>"""
         for a in automations
     )
 
-    dl_rows = "\n".join(
-        f"""<tr>
-          <td>{esc(d['id'])}</td>
-          <td>{status_badge(d['status'])}</td>
-          <td><strong>{esc(d['what'])}</strong></td>
-          <td>{esc(d['due'])}</td>
-          <td>{esc(d['who'])}</td>
-          <td class="muted">{esc(d['note'])}</td>
-        </tr>"""
-        for d in dls
-    )
-
     repo_base = "https://github.com/logic3/KiezQuiz/blob/main/ops"
     links = [
-        ("Leitstand (Status)", f"{repo_base}/LEITSTAND.md"),
-        ("Organigramm (Gesamtüberblick)", f"{repo_base}/ORGANIGRAMM.md"),
+        ("Leitstand", f"{repo_base}/LEITSTAND.md"),
+        ("Organigramm (Audit)", f"{repo_base}/ORGANIGRAMM.md"),
         ("Fälligkeiten", f"{repo_base}/DEADLINES.md"),
         ("Roadmap", f"{repo_base}/ROADMAP.md"),
-        ("Automations-Konfig", f"{repo_base}/AUTOMATIONS.md"),
-        ("Zugänge", f"{repo_base}/ZUGAENGE.md"),
-        ("Tech-Stack", f"{repo_base}/TECHSTACK.md"),
-        ("Finance", f"{repo_base}/finance/SERVICES.md"),
-        ("Legal-Backlog", f"{repo_base}/legal/BACKLOG.md"),
+        ("Automations", f"{repo_base}/AUTOMATIONS.md"),
         ("Berichte", f"{repo_base}/reports/"),
     ]
-    link_items = "\n".join(
+    link_items = "".join(
         f'<a class="linkchip" href="{esc(href)}" target="_blank" rel="noopener">{esc(label)}</a>'
         for label, href in links
     )
 
-    mermaid_block = (
-        f'<pre class="mermaid">{esc(mermaid)}</pre>' if mermaid else "<p class='muted'>Kein Diagramm gefunden.</p>"
-    )
+    org_html = render_simple_org(departments, automations)
+
+    stats = f"""
+    <div class="stats">
+      <div class="stat"><span class="stat-num">{len(automations)}</span><span class="stat-label">Automations live</span></div>
+      <div class="stat"><span class="stat-num">{ok_depts}/{len(departments)}</span><span class="stat-label">Teams OK</span></div>
+      <div class="stat"><span class="stat-num">{len(open_dls)}</span><span class="stat-label">Termine offen</span></div>
+      <div class="stat"><span class="stat-num">{len(roadmap_items)}</span><span class="stat-label">Später geplant</span></div>
+    </div>"""
 
     return f"""<!DOCTYPE html>
 <html lang="de">
@@ -305,97 +486,119 @@ def render(now, departments, automations, dls, mermaid) -> str:
 <style>
   :root {{ --bg:#f6f8fa; --fg:#1f2328; --muted:#57606a; --line:#d0d7de; --card:#fff; --accent:#0969da; }}
   * {{ box-sizing:border-box; }}
-  body {{ margin:0; font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--fg); background:var(--bg); }}
-  header {{ background:linear-gradient(135deg,#0969da,#1a7f37); color:#fff; padding:28px 24px; }}
-  header h1 {{ margin:0 0 4px; font-size:24px; }}
-  header p {{ margin:0; opacity:.92; }}
-  main {{ max-width:1100px; margin:0 auto; padding:24px; }}
-  section {{ margin-bottom:32px; }}
-  h2 {{ font-size:18px; border-bottom:2px solid var(--line); padding-bottom:6px; }}
-  .grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px; }}
-  .card {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; }}
-  .card h3 {{ margin:8px 0 4px; font-size:15px; }}
-  .card p {{ margin:0; color:var(--muted); font-size:13px; }}
-  .badge {{ display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:600; }}
-  .two {{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }}
-  .panel {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }}
-  .panel h2 {{ margin-top:0; border:0; }}
-  ul {{ margin:0; padding-left:18px; }}
-  li {{ margin:5px 0; }}
+  body {{ margin:0; font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--fg); background:var(--bg); }}
+  header {{ background:linear-gradient(135deg,#0969da,#1a7f37); color:#fff; padding:22px 24px; }}
+  header h1 {{ margin:0 0 4px; font-size:22px; }}
+  header p {{ margin:0; opacity:.92; font-size:14px; }}
+  main {{ max-width:1100px; margin:0 auto; padding:20px 24px 32px; }}
+  section {{ margin-bottom:28px; }}
+  h2 {{ font-size:17px; margin:0 0 12px; border-bottom:2px solid var(--line); padding-bottom:6px; }}
+  h3 {{ font-size:14px; margin:0 0 8px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }}
+  .stats {{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }}
+  .stat {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; text-align:center; }}
+  .stat-num {{ display:block; font-size:22px; font-weight:700; color:var(--accent); }}
+  .stat-label {{ font-size:12px; color:var(--muted); }}
+  .three {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
+  .panel {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; height:100%; }}
+  .panel h2 {{ font-size:15px; border:0; padding:0; margin:0 0 10px; text-transform:none; letter-spacing:0; color:var(--fg); }}
+  .panel ul {{ margin:0; padding-left:18px; }}
+  .panel li {{ margin:6px 0; font-size:14px; }}
+  .panel .empty {{ margin:0; font-size:14px; }}
+  .badge {{ display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; white-space:nowrap; }}
+  .status-row {{ display:flex; flex-wrap:wrap; gap:8px; }}
+  .status-chip {{ display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-size:13px; }}
   table {{ width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }}
   th, td {{ text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; font-size:14px; }}
-  th {{ background:#f0f3f6; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }}
-  td.num, td.center {{ text-align:center; }}
-  code {{ background:#eef1f4; padding:1px 6px; border-radius:5px; font-size:13px; }}
+  th {{ background:#f0f3f6; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }}
+  td.center {{ text-align:center; }}
   .muted {{ color:var(--muted); }}
-  .linkchip {{ display:inline-block; margin:4px 6px 0 0; padding:7px 12px; background:var(--card); border:1px solid var(--line); border-radius:8px; color:var(--accent); text-decoration:none; font-size:13px; }}
+  code {{ background:#eef1f4; padding:1px 6px; border-radius:5px; font-size:12px; }}
+  .linkchip {{ display:inline-block; margin:4px 6px 0 0; padding:6px 11px; background:var(--card); border:1px solid var(--line); border-radius:8px; color:var(--accent); text-decoration:none; font-size:13px; }}
   .linkchip:hover {{ border-color:var(--accent); }}
-  .mermaid {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; overflow:auto; }}
-  footer {{ text-align:center; color:var(--muted); font-size:12px; padding:24px; }}
+  .org-simple {{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px; text-align:center; }}
+  .org-step {{ margin:8px 0; }}
+  .org-box {{ display:inline-block; text-align:left; border-radius:10px; padding:12px 18px; max-width:420px; border:2px solid var(--line); }}
+  .org-box strong {{ display:block; font-size:16px; margin-bottom:4px; }}
+  .org-box span {{ font-size:13px; color:var(--muted); }}
+  .org-box--you {{ border-color:#8250df; background:#fbefff; }}
+  .org-box--kalle {{ border-color:#0969da; background:#ddf4ff; }}
+  .org-connector {{ color:var(--muted); font-size:18px; line-height:1.2; }}
+  .org-label {{ margin:0 0 8px; font-size:13px; color:var(--muted); }}
+  .org-pills {{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }}
+  .org-pill {{ display:inline-flex; align-items:center; gap:4px; background:#f6f8fa; border:1px solid var(--line); border-radius:999px; padding:5px 11px; font-size:12px; }}
+  .org-pill--auto {{ background:#fff; }}
+  .org-foot {{ margin:12px 0 0; font-size:12px; }}
+  footer {{ text-align:center; color:var(--muted); font-size:12px; padding:20px; }}
   body.is-embed header, body.is-embed footer {{ display:none; }}
-  body.is-embed main {{ max-width:none; padding:12px; }}
-  @media (max-width:760px) {{ .two {{ grid-template-columns:1fr; }} }}
+  body.is-embed main {{ max-width:none; padding:0; }}
+  body.is-embed .stats {{ grid-template-columns:repeat(2,1fr); }}
+  @media (max-width:900px) {{ .three, .stats {{ grid-template-columns:1fr; }} }}
 </style>
 </head>
 <body>
 <header>
-  <h1>🕊️ KiezQuiz — AI-Management Dashboard</h1>
-  <p>Dein One-Stop-Shop · erstellt am {esc(gen)} · Quelle: ops/LEITSTAND.md</p>
+  <h1>🕊️ KiezQuiz — AI-Management</h1>
+  <p>Stand: {esc(gen)} · Quellen: LEITSTAND · DEADLINES · ROADMAP</p>
 </header>
 <main>
 
-  <section class="two">
-    <div class="panel">
-      <h2>📅 Was diese Woche ansteht</h2>
-      <ul>{week_items}</ul>
-    </div>
-    <div class="panel">
-      <h2>⏳ Wartet auf dich / Fälligkeiten</h2>
-      <ul>{deadline_items}</ul>
+  {stats}
+
+  <section>
+    <h2>📋 Dein Überblick — Todos & Termine</h2>
+    <div class="three">
+      <div class="panel">
+        <h2>👤 Deine Aufgaben</h2>
+        {render_todo_list(du_todos, "Alles erledigt — nichts Offenes für dich.")}
+        <h3>Optional</h3>
+        {optional_html}
+      </div>
+      <div class="panel">
+        <h2>📅 Geplant (Termine & Automationen)</h2>
+        <ul>{scheduled_html}</ul>
+      </div>
+      <div class="panel">
+        <h2>📦 Später / aufgeschoben</h2>
+        <ul>{roadmap_html}</ul>
+        {"<h3>Backlog</h3><ul>" + backlog_html + "</ul>" if backlog_html else ""}
+      </div>
     </div>
   </section>
 
   <section>
-    <h2>🚦 Status je Abteilung</h2>
-    <div class="grid">{dept_cards}</div>
+    <h2>🕊️ Kalles laufende Aufgaben</h2>
+    <div class="panel" style="max-width:720px">
+      {render_todo_list(kalle_todos, "Kalle hat keine offenen Termine.")}
+    </div>
   </section>
 
   <section>
-    <h2>⏰ Automationen & nächste Routine-Termine</h2>
+    <h2>🚦 Status — alle Teams auf einen Blick</h2>
+    <div class="status-row">{dept_compact}</div>
+  </section>
+
+  <section>
+    <h2>🗺️ Wer macht was? (vereinfacht)</h2>
+    {org_html}
+  </section>
+
+  <section>
+    <h2>⏰ Automations — wann läuft was?</h2>
     <table>
-      <thead><tr><th>#</th><th>Automation</th><th>Cron (UTC)</th><th>Nächster Lauf (DE)</th><th>in Tagen</th></tr></thead>
+      <thead><tr><th>Was passiert</th><th>Nächster Lauf</th><th>in Tagen</th></tr></thead>
       <tbody>{auto_rows}</tbody>
     </table>
   </section>
 
   <section>
-    <h2>📌 Termine & Fälligkeiten</h2>
-    <table>
-      <thead><tr><th>ID</th><th>Status</th><th>Was</th><th>Fällig</th><th>Wer</th><th>Notiz</th></tr></thead>
-      <tbody>{dl_rows}</tbody>
-    </table>
-  </section>
-
-  <section>
-    <h2>🗺️ Organigramm</h2>
-    {mermaid_block}
-  </section>
-
-  <section>
-    <h2>🔗 Alles öffnen</h2>
+    <h2>🔗 Quellen öffnen</h2>
     {link_items}
   </section>
 
 </main>
 <footer>
-  Automatisch erzeugt von <code>scripts/generate_dashboard.py</code> ·
-  Status pflegt Kalle in <code>ops/LEITSTAND.md</code> ·
-  zum Aktualisieren: „Erstelle das Dashboard" sagen.
+  Erzeugt von <code>scripts/generate_dashboard.py</code> · Aktualisieren: Profil → Admin → „Dashboard aktualisieren"
 </footer>
-<script type="module">
-  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-  mermaid.initialize({{ startOnLoad: true, theme: "neutral" }});
-</script>
 <script>
   if (new URLSearchParams(location.search).get("embed") === "1") {{
     document.body.classList.add("is-embed");
@@ -407,13 +610,16 @@ def render(now, departments, automations, dls, mermaid) -> str:
 
 
 def main() -> None:
-    now, departments, automations, dls, mermaid = collect()
-    out = render(now, departments, automations, dls, mermaid)
+    data = collect()
+    out = render(*data)
     target = OPS / "dashboard.html"
     target.write_text(out, encoding="utf-8")
+    _, departments, automations, dls, _, _, _, roadmap_items = data
     print(f"✓ Dashboard erstellt: {target}")
-    print(f"  Abteilungen: {len(departments)} · Automationen: {len(automations)} · Termine: {len(dls)}")
-    print(f"  Im Browser öffnen: open '{target}'")
+    print(
+        f"  Teams: {len(departments)} · Automations: {len(automations)} · "
+        f"Termine: {len(dls)} · Roadmap: {len(roadmap_items)}"
+    )
 
 
 if __name__ == "__main__":
