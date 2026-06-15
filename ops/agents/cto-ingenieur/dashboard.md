@@ -1,21 +1,28 @@
 # Dashboard — Theo (CTO)
 
 **Status:** 🟢  
-**Kurz:** Branch+PR · Deploy-Pipeline healthy · Admin-Dashboard JSON-UI
+**Lage:** Technik stabil — keine offenen Bugs, Deploy grün, Seite lädt sauber.  
+**Rolle:** Kümmert sich um den Code, die Deploys und dass kiezquiz.de technisch sauber läuft.
 
-## Todos
+## KPIs
 
-- Agenten-Betriebssystem v2 im Frontend (adminAiDashboard.js)
-- Cache-Busting bei Releases beachten
+| Kennzahl | Wert | Ziel | Status | Verlauf | Quelle |
+|---|---|---|---|---|---|
+| Offene Bugs | 0 | 0 | 🟢 |  | manuell |
+| Deploy-Status | grün | grün | 🟢 |  | live (GitHub) |
+| Offene PRs | 0 | 0 | 🟢 |  | manuell |
+| Ladezeit (LCP) | — | <2.5s | ⚪ |  | ausstehend |
+
+## Projekte
+
+| Projekt | Status | Fortschritt | Termin |
+|---|---|---|---|
+| Executive-Dashboard v3 | läuft | 80% | Jun 2026 |
+| Performance-Audit (Ladezeit messen) | geplant | 0% | Q3 2026 |
+| iOS-App (technische Basis) | Idee | 0% | Q4 2026 |
 
 ## Automations
 
-*(Keine eigene Cursor-Automation — Deploy via GitHub Actions)*
-
-## Berichte (Kurz)
-
-- Code-Änderungen via PR-Beschreibungen
-
-## Heute
-
-Produktions-Deploy läuft über GitHub Pages. Neues JSON-Dashboard im Admin-Profil.
+| # | Name | Cron | Aufgabe |
+|---|---|---|---|
+| — | Deploy (GitHub Actions) | bei Push auf main | Live-Deploy + Cache-Busting |

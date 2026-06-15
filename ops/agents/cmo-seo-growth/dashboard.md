@@ -1,23 +1,28 @@
 # Dashboard — Maja (CMO)
 
-**Status:** 🟢  
-**Kurz:** GSC manuell · SEO Weekly live · Sitemap/Stadtseiten OK
+**Status:** 🟡  
+**Lage:** SEO technisch grün, aber Reichweite noch klein und letzte Woche 0 Spiele. Marketing-Start steht aus, Traffic-Quelle (GSC) noch nicht angebunden.  
+**Rolle:** Sorgt dafür, dass KiezQuiz bei Google gut gefunden wird (SEO) und wächst.
 
-## Todos
+## KPIs
 
-- Montags SEO Weekly (Automation #3)
-- GSC Performance manuell prüfen (~5 Min)
+| Kennzahl | Wert | Ziel | Status | Verlauf | Quelle |
+|---|---|---|---|---|---|
+| Live-Städte | 4 | 10 | 🟡 |  | live |
+| Spiele / Woche | 0 | 20 | 🔴 | 0,0,0,26,7,0 | live |
+| Aktive Spieler (gesamt) | 4 | 50 | 🟡 |  | live |
+| Google-Impressionen | — | — | ⚪ |  | ausstehend |
+
+## Projekte
+
+| Projekt | Status | Fortschritt | Termin |
+|---|---|---|---|
+| Marketing-Plan aufsetzen | geplant | 10% | Q3 2026 |
+| Google Search Console anbinden | offen | 0% | Q3 2026 |
+| Social-Media-Launch | Idee | 0% | offen |
 
 ## Automations
 
 | # | Name | Cron | Aufgabe |
 |---|---|---|---|
 | 3 | SEO Weekly | `0 9 * * 1` | Sitemap, SEO-Tests, GSC-Hinweis |
-
-## Berichte (Kurz)
-
-- `reports/2026-06-15-seo-baseline.md` — Technisch 🟢
-
-## Heute
-
-Keine Crawl-Fehler bekannt. Nächster Weekly-Lauf: Montag 09:00 UTC.

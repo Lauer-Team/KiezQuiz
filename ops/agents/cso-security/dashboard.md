@@ -1,23 +1,27 @@
 # Dashboard — Samira (CSO)
 
 **Status:** 🟢  
-**Kurz:** 0 Dependabot-Alerts · RLS WARNs bewusst · Weekly live
+**Lage:** Keine kritischen Lücken. Advisor-Hinweise sind bewusst akzeptiert (öffentliche RPCs by design). Leaked-Passwort-Schutz erst mit Umsatz.  
+**Rolle:** Passt auf Sicherheit auf: Schwachstellen, veraltete Abhängigkeiten und Zugriffsrechte.
 
-## Todos
+## KPIs
 
-- Montags Security Weekly (#2)
-- Supabase Advisors prüfen
+| Kennzahl | Wert | Ziel | Status | Verlauf | Quelle |
+|---|---|---|---|---|---|
+| Dependabot-Alerts | 0 | 0 | 🟢 |  | live (GitHub) |
+| Supabase-Advisor-Warnungen | 30 | 0 | 🟡 |  | live |
+| RLS-Hinweise (Info) | 6 | 0 | 🟡 |  | live |
+| Leaked-Passwort-Schutz | aus | an | ⚪ |  | live |
+
+## Projekte
+
+| Projekt | Status | Fortschritt | Termin |
+|---|---|---|---|
+| Öffentliche RPCs prüfen/härten | Backlog | 0% | offen |
+| Leaked-Passwort-Schutz aktivieren | wartet (Umsatz) | 0% | offen |
 
 ## Automations
 
 | # | Name | Cron | Aufgabe |
 |---|---|---|---|
 | 2 | Security Weekly | `0 7 * * 1` | Dependabot + Supabase Advisors |
-
-## Berichte (Kurz)
-
-- `reports/2026-06-15-security-baseline.md` — 🟡 bewusst designt, kein akuter Fix
-
-## Heute
-
-Keine offenen Dependabot-Alerts. HaveIBeenPwned bewusst offen bis Umsatz.

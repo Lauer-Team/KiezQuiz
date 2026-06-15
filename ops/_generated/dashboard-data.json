@@ -1,6 +1,7 @@
 {
-  "generatedAt": "2026-06-15T20:12:04.511366+00:00",
-  "generatedAtDe": "Monday, 15.06.2026 · 22:12 Uhr",
+  "schema": 4,
+  "generatedAt": "2026-06-15T20:55:22.829598+00:00",
+  "generatedAtDe": "Monday, 15.06.2026 · 22:55 Uhr",
   "version": 2,
   "ceo": {
     "id": "ceo-kalle",
@@ -11,31 +12,102 @@
     "folder": "ops/agents/ceo-kalle",
     "status": "🟢",
     "statusLabel": "OK",
-    "statusMessage": "8 Automations live · Agenten-Betriebssystem v2 · JSON-Dashboard admin-only",
-    "todos": [
-      "NB-Gäste-Banner abschalten ab 12.07.2026",
-      "Agenten-Akten synchron halten",
-      "Orchestrator: Dashboard-JSON wöchentlich neu bauen",
-      "Cursor-Downgrade Juli mit CFO abstimmen"
+    "lage": "Alle Abteilungen grün. Frühe Traktion (6 Nutzer, 33 Spiele). Nächster Fokus: erste Vermarktung + Monetarisierung vorbereiten.",
+    "roleExplain": "Behält das große Ganze im Blick, koordiniert alle anderen Agenten und meldet dir, was du selbst entscheiden musst.",
+    "kpis": [
+      {
+        "label": "Registrierte Nutzer",
+        "value": "6",
+        "target": "100",
+        "status": "🟡",
+        "statusLabel": "Anstehend",
+        "spark": [
+          0.0,
+          0.0,
+          0.0,
+          5.0,
+          6.0,
+          6.0
+        ],
+        "source": "live",
+        "sourceLabel": "live"
+      },
+      {
+        "label": "Gespielte Runden",
+        "value": "33",
+        "target": "",
+        "status": "🟢",
+        "statusLabel": "OK",
+        "spark": [
+          0.0,
+          0.0,
+          0.0,
+          26.0,
+          33.0,
+          33.0
+        ],
+        "source": "live",
+        "sourceLabel": "live"
+      },
+      {
+        "label": "Abteilungen grün",
+        "value": "8",
+        "target": "8",
+        "status": "🟢",
+        "statusLabel": "OK",
+        "spark": [],
+        "source": "live",
+        "sourceLabel": "live"
+      },
+      {
+        "label": "Offene Fristen",
+        "value": "3",
+        "target": "0",
+        "status": "🟡",
+        "statusLabel": "Anstehend",
+        "spark": [],
+        "source": "live",
+        "sourceLabel": "live"
+      }
+    ],
+    "projects": [
+      {
+        "title": "Erste Vermarktung starten",
+        "status": "geplant",
+        "progress": 10,
+        "due": "Q3 2026"
+      },
+      {
+        "title": "Monetarisierung vorbereiten",
+        "status": "Konzept",
+        "progress": 15,
+        "due": "offen"
+      },
+      {
+        "title": "iOS-App",
+        "status": "Idee",
+        "progress": 0,
+        "due": "Q4 2026"
+      }
     ],
     "automations": [
       {
         "num": "4",
         "name": "Ops Weekly Review",
         "cron": "0 7 * * 1",
-        "task": "Fälligkeiten aus DEADLINES.md",
-        "nextRun": "Montag, 22.06.2026 · 09:00"
+        "task": "Fälligkeiten prüfen",
+        "nextRun": "Montag, 22.06.2026 · 09:00",
+        "daysUntil": 7
       },
       {
         "num": "7",
         "name": "Leit-Routine / Orchestrator",
         "cron": "0 6 * * 1",
-        "task": "Koordiniert alle · baut dashboard-data.json",
-        "nextRun": "Montag, 22.06.2026 · 08:00"
+        "task": "Koordiniert alle · baut Dashboard-Daten",
+        "nextRun": "Montag, 22.06.2026 · 08:00",
+        "daysUntil": 7
       }
     ],
-    "reportsSummary": "- Orchestrator-Berichte: reports/*orchestrator* - Letzter Stand: Phase 1 + Masterauftrag v2 abgeschlossen (2026-06-15)",
-    "heute": "Kalle hält das Big Picture: alle 7 Fach-Agenten 🟢, Telegram ⏸️. Nächste Fristen: NB wirksam 11.07., Banner aus 12.07., Cursor-Downgrade 01.07.",
     "humanTodos": [
       "Domain kiezquiz.de verlängern (Erinnerung ab 04/2027 — D1)",
       "Merge-Freigaben bei offenen PRs",
@@ -67,14 +139,80 @@
       "folder": "ops/agents/cto-ingenieur",
       "status": "🟢",
       "statusLabel": "OK",
-      "statusMessage": "Branch+PR · Deploy-Pipeline healthy · Admin-Dashboard JSON-UI",
-      "todos": [
-        "Agenten-Betriebssystem v2 im Frontend (adminAiDashboard.js)",
-        "Cache-Busting bei Releases beachten"
+      "lage": "Technik stabil — keine offenen Bugs, Deploy grün, Seite lädt sauber.",
+      "roleExplain": "Kümmert sich um den Code, die Deploys und dass kiezquiz.de technisch sauber läuft.",
+      "kpis": [
+        {
+          "label": "Offene Bugs",
+          "value": "0",
+          "target": "0",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        },
+        {
+          "label": "Deploy-Status",
+          "value": "grün",
+          "target": "grün",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live (GitHub)"
+        },
+        {
+          "label": "Offene PRs",
+          "value": "0",
+          "target": "0",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        },
+        {
+          "label": "Ladezeit (LCP)",
+          "value": "—",
+          "target": "<2.5s",
+          "status": "⚪",
+          "statusLabel": "Aus",
+          "spark": [],
+          "source": "ausstehend",
+          "sourceLabel": "ausstehend"
+        }
       ],
-      "automations": [],
-      "reportsSummary": "- Code-Änderungen via PR-Beschreibungen",
-      "heute": "Produktions-Deploy läuft über GitHub Pages. Neues JSON-Dashboard im Admin-Profil."
+      "projects": [
+        {
+          "title": "Executive-Dashboard v3",
+          "status": "läuft",
+          "progress": 80,
+          "due": "Jun 2026"
+        },
+        {
+          "title": "Performance-Audit (Ladezeit messen)",
+          "status": "geplant",
+          "progress": 0,
+          "due": "Q3 2026"
+        },
+        {
+          "title": "iOS-App (technische Basis)",
+          "status": "Idee",
+          "progress": 0,
+          "due": "Q4 2026"
+        }
+      ],
+      "automations": [
+        {
+          "num": "—",
+          "name": "Deploy (GitHub Actions)",
+          "cron": "bei Push auf main",
+          "task": "Live-Deploy + Cache-Busting",
+          "nextRun": null,
+          "daysUntil": null
+        }
+      ]
     },
     {
       "id": "cfo-finanzen",
@@ -85,10 +223,68 @@
       "folder": "ops/agents/cfo-finanzen",
       "status": "🟢",
       "statusLabel": "OK",
-      "statusMessage": "Service-Tracking · Cursor ~55→18 €/Jul · Supabase/Resend 🟡 beobachten",
-      "todos": [
-        "Juli-Rechnung Cursor prüfen (Downgrade D3)",
-        "Monatliche Quota-Checks Supabase + Resend"
+      "lage": "4 Services im Einsatz, ~55 €/Monat. Sinkt ab Juli auf ~18 € (Cursor-Downgrade). Keine Free-Tier-Grenze in Gefahr.",
+      "roleExplain": "Überwacht Kosten und Abos, damit nichts unbemerkt teuer wird oder Free-Tier-Grenzen reißt.",
+      "kpis": [
+        {
+          "label": "Kosten / Monat",
+          "value": "55 €",
+          "target": "18 €",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [
+            55.0,
+            55.0,
+            55.0,
+            18.0
+          ],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        },
+        {
+          "label": "Genutzte Services",
+          "value": "4",
+          "target": "",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        },
+        {
+          "label": "Supabase-Auslastung",
+          "value": "Free-Tier",
+          "target": "<80%",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live (grob)"
+        },
+        {
+          "label": "Resend (E-Mail)",
+          "value": "Free-Tier",
+          "target": "<80%",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        }
+      ],
+      "projects": [
+        {
+          "title": "Cursor-Downgrade Pro+ → Pro",
+          "status": "geplant",
+          "progress": 0,
+          "due": "2026-07-01"
+        },
+        {
+          "title": "Monetarisierung (Kostenplan)",
+          "status": "Konzept",
+          "progress": 10,
+          "due": "offen"
+        }
       ],
       "automations": [
         {
@@ -96,11 +292,10 @@
           "name": "Finance Monthly",
           "cron": "0 8 1 * *",
           "task": "Kosten, Free-Tier, SERVICES.md",
-          "nextRun": "Mittwoch, 01.07.2026 · 10:00"
+          "nextRun": "Mittwoch, 01.07.2026 · 10:00",
+          "daysUntil": 16
         }
-      ],
-      "reportsSummary": "- reports/2026-06-15-finance-baseline.md — Baseline etabliert",
-      "heute": "Keine akute Kostenwarnung. Nächster Lauf: 1. des Monats."
+      ]
     },
     {
       "id": "clo-legal",
@@ -111,14 +306,74 @@
       "folder": "ops/agents/clo-legal",
       "status": "🟢",
       "statusLabel": "OK",
-      "statusMessage": "NB-E-Mails erledigt · Banner bis 11.07. · Legora-Koordination live",
-      "todos": [
-        "NB wirksam 11.07. — Gäste-Banner (L2)",
-        "Banner abschalten ab 12.07. (D4)"
+      "lage": "Rechtstexte aktuell, Benachrichtigungen versendet. NB werden am 11.07. wirksam, Gäste-Banner läuft bis dahin.",
+      "roleExplain": "Achtet auf Rechtstexte (AGB, Datenschutz, Nutzungsbedingungen) und hält rechtliche Fristen ein.",
+      "kpis": [
+        {
+          "label": "Offene Rechtsthemen",
+          "value": "0",
+          "target": "0",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        },
+        {
+          "label": "NB-Version",
+          "value": "2026-06-10",
+          "target": "aktuell",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        },
+        {
+          "label": "NB wirksam ab",
+          "value": "11.07.2026",
+          "target": "",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [],
+          "source": "manuell",
+          "sourceLabel": "manuell"
+        },
+        {
+          "label": "Gäste-Banner",
+          "value": "aktiv",
+          "target": "aus ab 12.07.",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        }
       ],
-      "automations": [],
-      "reportsSummary": "- Legal-Arbeitsaufträge: reports/ bei Bedarf",
-      "heute": "L1 erledigt. L2 läuft — nichts Neues für Legora bis Monetarisierung/iOS."
+      "projects": [
+        {
+          "title": "NB-Banner-Phase begleiten",
+          "status": "läuft",
+          "progress": 60,
+          "due": "2026-07-12"
+        },
+        {
+          "title": "Legora-Themen für Monetarisierung",
+          "status": "wartet",
+          "progress": 0,
+          "due": "offen"
+        }
+      ],
+      "automations": [
+        {
+          "num": "—",
+          "name": "Trigger bei PRs an Rechtstexten",
+          "cron": "bei Bedarf",
+          "task": "Review + Ops Weekly Review",
+          "nextRun": null,
+          "daysUntil": null
+        }
+      ]
     },
     {
       "id": "cmo-seo-growth",
@@ -127,12 +382,78 @@
       "emoji": "📈",
       "ruleFile": ".cursor/rules/10-seo.mdc",
       "folder": "ops/agents/cmo-seo-growth",
-      "status": "🟢",
-      "statusLabel": "OK",
-      "statusMessage": "GSC manuell · SEO Weekly live · Sitemap/Stadtseiten OK",
-      "todos": [
-        "Montags SEO Weekly (Automation #3)",
-        "GSC Performance manuell prüfen (~5 Min)"
+      "status": "🟡",
+      "statusLabel": "Anstehend",
+      "lage": "SEO technisch grün, aber Reichweite noch klein und letzte Woche 0 Spiele. Marketing-Start steht aus, Traffic-Quelle (GSC) noch nicht angebunden.",
+      "roleExplain": "Sorgt dafür, dass KiezQuiz bei Google gut gefunden wird (SEO) und wächst.",
+      "kpis": [
+        {
+          "label": "Live-Städte",
+          "value": "4",
+          "target": "10",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Spiele / Woche",
+          "value": "0",
+          "target": "20",
+          "status": "🔴",
+          "statusLabel": "Dringend",
+          "spark": [
+            0.0,
+            0.0,
+            0.0,
+            26.0,
+            7.0,
+            0.0
+          ],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Aktive Spieler (gesamt)",
+          "value": "4",
+          "target": "50",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Google-Impressionen",
+          "value": "—",
+          "target": "",
+          "status": "⚪",
+          "statusLabel": "Aus",
+          "spark": [],
+          "source": "ausstehend",
+          "sourceLabel": "ausstehend"
+        }
+      ],
+      "projects": [
+        {
+          "title": "Marketing-Plan aufsetzen",
+          "status": "geplant",
+          "progress": 10,
+          "due": "Q3 2026"
+        },
+        {
+          "title": "Google Search Console anbinden",
+          "status": "offen",
+          "progress": 0,
+          "due": "Q3 2026"
+        },
+        {
+          "title": "Social-Media-Launch",
+          "status": "Idee",
+          "progress": 0,
+          "due": "offen"
+        }
       ],
       "automations": [
         {
@@ -140,11 +461,10 @@
           "name": "SEO Weekly",
           "cron": "0 9 * * 1",
           "task": "Sitemap, SEO-Tests, GSC-Hinweis",
-          "nextRun": "Montag, 22.06.2026 · 11:00"
+          "nextRun": "Montag, 22.06.2026 · 11:00",
+          "daysUntil": 7
         }
-      ],
-      "reportsSummary": "- reports/2026-06-15-seo-baseline.md — Technisch 🟢",
-      "heute": "Keine Crawl-Fehler bekannt. Nächster Weekly-Lauf: Montag 09:00 UTC."
+      ]
     },
     {
       "id": "coo-operations",
@@ -155,10 +475,63 @@
       "folder": "ops/agents/coo-operations",
       "status": "🟢",
       "statusLabel": "OK",
-      "statusMessage": "Uptime-Automation live · Backup CI + Archiv · Deploy healthy",
-      "todos": [
-        "Werktags Smoke Check kiezquiz.de",
-        "Nächster Archiv-Sync: 2. des Monats"
+      "lage": "Betrieb stabil — Seite werktags erreichbar, Backups laufen, letzter Deploy erfolgreich.",
+      "roleExplain": "Überwacht den Betrieb: Ist die Seite erreichbar, laufen Backups, klappen die Deploys.",
+      "kpis": [
+        {
+          "label": "Erreichbarkeit",
+          "value": "erreichbar",
+          "target": "100%",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Letztes Backup",
+          "value": "OK",
+          "target": "monatlich",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Letzter Deploy",
+          "value": "erfolgreich",
+          "target": "grün",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live (GitHub)"
+        },
+        {
+          "label": "Smoke-Check",
+          "value": "werktäglich",
+          "target": "werktags",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        }
+      ],
+      "projects": [
+        {
+          "title": "Uptime-Prozent automatisch messen",
+          "status": "Idee",
+          "progress": 0,
+          "due": "Q3 2026"
+        },
+        {
+          "title": "Telegram-Alerts reaktivieren",
+          "status": "pausiert",
+          "progress": 0,
+          "due": "offen"
+        }
       ],
       "automations": [
         {
@@ -166,18 +539,18 @@
           "name": "Backup Archiv Sync",
           "cron": "0 10 2 * *",
           "task": "Artifact → Supplement",
-          "nextRun": "Donnerstag, 02.07.2026 · 12:00"
+          "nextRun": "Donnerstag, 02.07.2026 · 12:00",
+          "daysUntil": 17
         },
         {
           "num": "1",
           "name": "Uptime Smoke Check",
           "cron": "0 8 * * 1-5",
           "task": "Live-Erreichbarkeit",
-          "nextRun": "Dienstag, 16.06.2026 · 10:00"
+          "nextRun": "Dienstag, 16.06.2026 · 10:00",
+          "daysUntil": 1
         }
-      ],
-      "reportsSummary": "- reports/2026-06-15-devops-smoke-check.md — 🟢 - reports/2026-06-15-backup-archiv.md — 🟢",
-      "heute": "Live-Site erreichbar. Supabase-Backup CI am 1. des Monats."
+      ]
     },
     {
       "id": "cso-security",
@@ -188,10 +561,63 @@
       "folder": "ops/agents/cso-security",
       "status": "🟢",
       "statusLabel": "OK",
-      "statusMessage": "0 Dependabot-Alerts · RLS WARNs bewusst · Weekly live",
-      "todos": [
-        "Montags Security Weekly (#2)",
-        "Supabase Advisors prüfen"
+      "lage": "Keine kritischen Lücken. Advisor-Hinweise sind bewusst akzeptiert (öffentliche RPCs by design). Leaked-Passwort-Schutz erst mit Umsatz.",
+      "roleExplain": "Passt auf Sicherheit auf: Schwachstellen, veraltete Abhängigkeiten und Zugriffsrechte.",
+      "kpis": [
+        {
+          "label": "Dependabot-Alerts",
+          "value": "0",
+          "target": "0",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live (GitHub)"
+        },
+        {
+          "label": "Supabase-Advisor-Warnungen",
+          "value": "30",
+          "target": "0",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "RLS-Hinweise (Info)",
+          "value": "6",
+          "target": "0",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Leaked-Passwort-Schutz",
+          "value": "aus",
+          "target": "an",
+          "status": "⚪",
+          "statusLabel": "Aus",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        }
+      ],
+      "projects": [
+        {
+          "title": "Öffentliche RPCs prüfen/härten",
+          "status": "Backlog",
+          "progress": 0,
+          "due": "offen"
+        },
+        {
+          "title": "Leaked-Passwort-Schutz aktivieren",
+          "status": "wartet (Umsatz)",
+          "progress": 0,
+          "due": "offen"
+        }
       ],
       "automations": [
         {
@@ -199,11 +625,10 @@
           "name": "Security Weekly",
           "cron": "0 7 * * 1",
           "task": "Dependabot + Supabase Advisors",
-          "nextRun": "Montag, 22.06.2026 · 09:00"
+          "nextRun": "Montag, 22.06.2026 · 09:00",
+          "daysUntil": 7
         }
-      ],
-      "reportsSummary": "- reports/2026-06-15-security-baseline.md — 🟡 bewusst designt, kein akuter Fix",
-      "heute": "Keine offenen Dependabot-Alerts. HaveIBeenPwned bewusst offen bis Umsatz."
+      ]
     },
     {
       "id": "cxo-support-analytics",
@@ -214,10 +639,84 @@
       "folder": "ops/agents/cxo-support-analytics",
       "status": "🟢",
       "statusLabel": "OK",
-      "statusMessage": "Stadt-Wünsche · Support Monthly live · kein GA",
-      "todos": [
-        "Am 1.: Support Monthly (#6)",
-        "Trends und Top-Wünsche dokumentieren"
+      "lage": "Frühe Traktion: 6 Nutzer, 33 Spiele, 76 % Trefferquote, 21 Stadt-Wünsche. Top-Wünsche: Stuttgart, München, Köln.",
+      "roleExplain": "Wertet Support-Anfragen und Nutzerwünsche aus (z. B. Stadt-Wünsche) — datensparsam, ohne Google Analytics.",
+      "kpis": [
+        {
+          "label": "Registrierte Nutzer",
+          "value": "6",
+          "target": "100",
+          "status": "🟡",
+          "statusLabel": "Anstehend",
+          "spark": [
+            0.0,
+            0.0,
+            0.0,
+            5.0,
+            6.0,
+            6.0
+          ],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Gespielte Runden",
+          "value": "33",
+          "target": "",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [
+            0.0,
+            0.0,
+            0.0,
+            26.0,
+            33.0,
+            33.0
+          ],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Trefferquote",
+          "value": "76%",
+          "target": "70%",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [],
+          "source": "live",
+          "sourceLabel": "live"
+        },
+        {
+          "label": "Stadt-Wünsche",
+          "value": "21",
+          "target": "",
+          "status": "🟢",
+          "statusLabel": "OK",
+          "spark": [
+            0.0,
+            0.0,
+            0.0,
+            14.0,
+            21.0,
+            21.0
+          ],
+          "source": "live",
+          "sourceLabel": "live"
+        }
+      ],
+      "projects": [
+        {
+          "title": "Top-Wünsche → neue Städte (Stuttgart, München, Köln)",
+          "status": "läuft",
+          "progress": 30,
+          "due": "Q3 2026"
+        },
+        {
+          "title": "Onboarding verbessern (Trefferquote ↑)",
+          "status": "Idee",
+          "progress": 0,
+          "due": "offen"
+        }
       ],
       "automations": [
         {
@@ -225,70 +724,69 @@
           "name": "Support Monthly",
           "cron": "0 10 1 * *",
           "task": "Stadt-Wünsche, Trends",
-          "nextRun": "Mittwoch, 01.07.2026 · 12:00"
+          "nextRun": "Mittwoch, 01.07.2026 · 12:00",
+          "daysUntil": 16
         }
-      ],
-      "reportsSummary": "- Monatliche Berichte: reports/*support-monthly*",
-      "heute": "Frühphase — wenige Wünsche, System stabil. Nächster Lauf: 1. des Monats."
+      ]
     }
   ],
   "deadlines": [
     {
+      "id": "D3",
+      "what": "Cursor Downgrade Pro+ → Pro (~20 USD)",
+      "due": "01. Jul 2026",
+      "dueIso": "2026-07-01",
+      "daysUntil": 16,
+      "remind": "2026-06-25",
+      "who": "Kalle",
+      "status": "🟡",
+      "statusLabel": "Anstehend",
+      "note": "Rechnung Juli prüfen → leitstand.md (COSTS)"
+    },
+    {
+      "id": "D2",
+      "what": "NB werden wirksam (Version 2026-06-10)",
+      "due": "11. Jul 2026",
+      "dueIso": "2026-07-11",
+      "daysUntil": 26,
+      "remind": "2026-06-20",
+      "who": "Kalle",
+      "status": "🟡",
+      "statusLabel": "Anstehend",
+      "note": "E-Mails bereits am 10.06. versendet · Gäste-Banner läuft bis D4"
+    },
+    {
+      "id": "D4",
+      "what": "NB-Gäste-Banner abschalten (pendingNotice: false)",
+      "due": "12. Jul 2026",
+      "dueIso": "2026-07-12",
+      "daysUntil": 27,
+      "remind": "2026-07-11",
+      "who": "Kalle",
+      "status": "🟡",
+      "statusLabel": "Anstehend",
+      "note": "python3 scripts/deactivate_terms_notice.py --apply → PR"
+    },
+    {
       "id": "D1",
       "what": "Domain kiezquiz.de verlängern (United Domains)",
-      "due": "2027-05-30",
+      "due": "30. Mai 2027",
+      "dueIso": "2027-05-30",
+      "daysUntil": 349,
       "remind": "2027-04-01",
       "who": "Du",
       "status": "🟢",
       "statusLabel": "OK",
       "note": "Laufzeit 31.05.2026–30.05.2027 · ~12–15 €/Jahr"
-    },
-    {
-      "id": "D2",
-      "what": "NB werden wirksam (Version 2026-06-10)",
-      "due": "2026-07-11",
-      "remind": "2026-06-20",
-      "who": "Kalle",
-      "status": "🟡",
-      "statusLabel": "Anstehend",
-      "note": "E-Mails bereits am 10.06. versendet · Gäste-Banner läuft bis D4"
-    },
-    {
-      "id": "D3",
-      "what": "Cursor Downgrade Pro+ → Pro (~20 USD)",
-      "due": "2026-07-01",
-      "remind": "2026-06-25",
-      "who": "Kalle",
-      "status": "🟡",
-      "statusLabel": "Anstehend",
-      "note": "Rechnung Juli prüfen → leitstand.md (COSTS)"
-    },
-    {
-      "id": "D4",
-      "what": "NB-Gäste-Banner abschalten (pendingNotice: false)",
-      "due": "2026-07-12",
-      "remind": "2026-07-11",
-      "who": "Kalle",
-      "status": "🟡",
-      "statusLabel": "Anstehend",
-      "note": "python3 scripts/deactivate_terms_notice.py --apply → PR"
     }
   ],
   "openDeadlines": [
     {
-      "id": "D2",
-      "what": "NB werden wirksam (Version 2026-06-10)",
-      "due": "2026-07-11",
-      "remind": "2026-06-20",
-      "who": "Kalle",
-      "status": "🟡",
-      "statusLabel": "Anstehend",
-      "note": "E-Mails bereits am 10.06. versendet · Gäste-Banner läuft bis D4"
-    },
-    {
       "id": "D3",
       "what": "Cursor Downgrade Pro+ → Pro (~20 USD)",
-      "due": "2026-07-01",
+      "due": "01. Jul 2026",
+      "dueIso": "2026-07-01",
+      "daysUntil": 16,
       "remind": "2026-06-25",
       "who": "Kalle",
       "status": "🟡",
@@ -296,9 +794,23 @@
       "note": "Rechnung Juli prüfen → leitstand.md (COSTS)"
     },
     {
+      "id": "D2",
+      "what": "NB werden wirksam (Version 2026-06-10)",
+      "due": "11. Jul 2026",
+      "dueIso": "2026-07-11",
+      "daysUntil": 26,
+      "remind": "2026-06-20",
+      "who": "Kalle",
+      "status": "🟡",
+      "statusLabel": "Anstehend",
+      "note": "E-Mails bereits am 10.06. versendet · Gäste-Banner läuft bis D4"
+    },
+    {
       "id": "D4",
       "what": "NB-Gäste-Banner abschalten (pendingNotice: false)",
-      "due": "2026-07-12",
+      "due": "12. Jul 2026",
+      "dueIso": "2026-07-12",
+      "daysUntil": 27,
       "remind": "2026-07-11",
       "who": "Kalle",
       "status": "🟡",
@@ -306,7 +818,96 @@
       "note": "python3 scripts/deactivate_terms_notice.py --apply → PR"
     }
   ],
-  "automationsGlobal": [],
+  "automationsGlobal": [
+    {
+      "num": "1",
+      "name": "Uptime Smoke Check",
+      "cron": "0 8 * * 1-5",
+      "task": "Live-Erreichbarkeit",
+      "nextRun": "Dienstag, 16.06.2026 · 10:00",
+      "daysUntil": 1,
+      "ownerId": "coo-operations",
+      "ownerName": "Oskar (COO)",
+      "ownerEmoji": "⚙️"
+    },
+    {
+      "num": "4",
+      "name": "Ops Weekly Review",
+      "cron": "0 7 * * 1",
+      "task": "Fälligkeiten prüfen",
+      "nextRun": "Montag, 22.06.2026 · 09:00",
+      "daysUntil": 7,
+      "ownerId": "ceo-kalle",
+      "ownerName": "Kalle die Kieztaube",
+      "ownerEmoji": "🕊️"
+    },
+    {
+      "num": "7",
+      "name": "Leit-Routine / Orchestrator",
+      "cron": "0 6 * * 1",
+      "task": "Koordiniert alle · baut Dashboard-Daten",
+      "nextRun": "Montag, 22.06.2026 · 08:00",
+      "daysUntil": 7,
+      "ownerId": "ceo-kalle",
+      "ownerName": "Kalle die Kieztaube",
+      "ownerEmoji": "🕊️"
+    },
+    {
+      "num": "3",
+      "name": "SEO Weekly",
+      "cron": "0 9 * * 1",
+      "task": "Sitemap, SEO-Tests, GSC-Hinweis",
+      "nextRun": "Montag, 22.06.2026 · 11:00",
+      "daysUntil": 7,
+      "ownerId": "cmo-seo-growth",
+      "ownerName": "Maja (CMO)",
+      "ownerEmoji": "📈"
+    },
+    {
+      "num": "2",
+      "name": "Security Weekly",
+      "cron": "0 7 * * 1",
+      "task": "Dependabot + Supabase Advisors",
+      "nextRun": "Montag, 22.06.2026 · 09:00",
+      "daysUntil": 7,
+      "ownerId": "cso-security",
+      "ownerName": "Samira (CSO)",
+      "ownerEmoji": "🔒"
+    },
+    {
+      "num": "5",
+      "name": "Finance Monthly",
+      "cron": "0 8 1 * *",
+      "task": "Kosten, Free-Tier, SERVICES.md",
+      "nextRun": "Mittwoch, 01.07.2026 · 10:00",
+      "daysUntil": 16,
+      "ownerId": "cfo-finanzen",
+      "ownerName": "Frida (CFO)",
+      "ownerEmoji": "💰"
+    },
+    {
+      "num": "6",
+      "name": "Support Monthly",
+      "cron": "0 10 1 * *",
+      "task": "Stadt-Wünsche, Trends",
+      "nextRun": "Mittwoch, 01.07.2026 · 12:00",
+      "daysUntil": 16,
+      "ownerId": "cxo-support-analytics",
+      "ownerName": "Xenia (CXO)",
+      "ownerEmoji": "💬"
+    },
+    {
+      "num": "0",
+      "name": "Backup Archiv Sync",
+      "cron": "0 10 2 * *",
+      "task": "Artifact → Supplement",
+      "nextRun": "Donnerstag, 02.07.2026 · 12:00",
+      "daysUntil": 17,
+      "ownerId": "coo-operations",
+      "ownerName": "Oskar (COO)",
+      "ownerEmoji": "⚙️"
+    }
+  ],
   "orgChart": {
     "owner": {
       "label": "Du (Jeremiah)",
@@ -363,14 +964,15 @@
     ]
   },
   "stats": {
-    "automationsLive": 0,
-    "agentsOk": 8,
+    "automationsLive": 8,
+    "agentsOk": 7,
     "agentsTotal": 8,
-    "openDeadlines": 3
+    "openDeadlines": 3,
+    "yourTasks": 7
   },
   "sources": [
     "ops/agents/*/dashboard.md",
     "ops/agents/registry.json",
-    "ops/agents/ceo-kalle/todos.md (Fristen)"
+    "ops/agents/ceo-kalle/todos.md (Fristen + Mensch-Aufgaben)"
   ]
 }
