@@ -33,6 +33,7 @@
 | 2026-06-15 | **AI-Management-Cockpit:** Organigramm · Dashboard · Leit-Routine (#7) |
 | 2026-06-15 | **Dashboard admin-only:** Supabase Storage + Edge Functions |
 | 2026-06-15 | **Agenten-Betriebssystem v2:** `ops/agents/*` Akten + JSON-Dashboard |
+| 2026-06-15 | **Dashboard UX:** Zeitleiste dedupliziert · Organigramm-Baum · Automationen pro Agent |
 
 Berichte: `reports/` · Fach-Akten: `ops/agents/*/`
 
