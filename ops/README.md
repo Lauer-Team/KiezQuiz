@@ -1,47 +1,53 @@
-# ops — Leitagent KiezQuiz
+# ops — KI-Management KiezQuiz
 
-> **Start hier:** [`agents/ceo-kalle/leitstand.md`](agents/ceo-kalle/leitstand.md) — CEO-Status (Kalle liest das zu Session-Beginn).  
-> **Pointer:** [`LEITSTAND.md`](LEITSTAND.md) · **Dashboard (Admin):** Profil → Admin → AI-Management
+> **Alles liegt unter den Agenten.** Dieser Ordner hat nur noch den Einstieg und generierte Dateien.
 
----
+## Start hier
 
-## Agenten-Betriebssystem (v2)
+```
+ops/
+  README.md          ← du bist hier
+  agents/            ← alle Agenten-Akten (CEO + 7 Fach-Agenten)
+  _generated/        ← Dashboard-Snapshots (nicht manuell pflegen)
+```
 
-| Was | Wo |
-|---|---|
-| **CEO Kalle** | [`agents/ceo-kalle/`](agents/ceo-kalle/) |
-| **Register (8 Agenten)** | [`agents/registry.json`](agents/registry.json) |
-| **Reporting-Protokoll** | [`agents/PROTOKOLL.md`](agents/PROTOKOLL.md) |
-| **Dashboard-Daten (JSON)** | [`dashboard-data.json`](dashboard-data.json) — `scripts/build_ai_dashboard_data.py` |
+**CEO / dein Ansprechpartner:** [`agents/ceo-kalle/leitstand.md`](agents/ceo-kalle/leitstand.md)
 
-Jeder Agent hat **8 Dateien:** `leitstand.md`, `backlog.md`, `todos.md`, `memories.md`, `routinen.md`, `anweisungen.md`, `dashboard.md`, `reports.md`.
+**Organigramm:** [`agents/ORGANIGRAMM.md`](agents/ORGANIGRAMM.md)
 
-| Agent | Ordner | Rolle |
-|---|---|---|
-| 🕊️ Kalle | `ceo-kalle/` | CEO / Leitagent |
-| 🛠️ CTO | `cto-ingenieur/` | Engineering |
-| 💰 CFO | `cfo-finanzen/` | Finance |
-| ⚖️ CLO | `clo-legal/` | Legal |
-| 📈 CMO | `cmo-seo-growth/` | SEO & Growth |
-| ⚙️ COO | `coo-operations/` | Ops & DevOps |
-| 🔒 CSO | `cso-security/` | Security |
-| 💬 CXO | `cxo-support-analytics/` | Support & Analytics |
+**Admin-Dashboard (Live):** Profil → Admin → AI-Management
 
 ---
 
-## Querschnitt
+## Jeder Agent hat dieselbe Aktenstruktur
 
 | Datei | Inhalt |
 |---|---|
-| [ORGANIGRAMM.md](ORGANIGRAMM.md) | Gesamtüberblick — Agenten, MCPs, Automationen, Audit |
-| [PLAYBOOK.md](PLAYBOOK.md) | Regelwerk für Kalle |
-| [AUTOMATIONS.md](AUTOMATIONS.md) | Cursor-Automations (Cron + Prompts + Agenten-Dateien) |
-| [DEADLINES.md](DEADLINES.md) | Fälligkeiten & Erinnerungen |
-| [ROADMAP.md](ROADMAP.md) | Aufgeschobene Themen |
-| [TECHSTACK.md](TECHSTACK.md) | Tech-Stack |
-| [ZUGAENGE.md](ZUGAENGE.md) | Zugangs-Matrix |
-| [finance/](finance/) | Service-Inventar, Kosten (CFO-Referenz) |
-| [legal/](legal/) | Legal-Trigger, Koordination (CLO-Referenz) |
-| [reports/](reports/) | Berichte der Fach-Agenten |
+| `leitstand.md` | Status & Kurzüberblick |
+| `backlog.md` | Ideen, Roadmap, später |
+| `todos.md` | Offene Aufgaben (+ CEO: Fristen) |
+| `memories.md` | Learnings, Retro |
+| `routinen.md` | Automationen, Rhythmen |
+| `anweisungen.md` | Auftrag, Grenzen, Playbook |
+| `dashboard.md` | Was die Admin-UI zeigt |
+| `reports.md` | Index der Berichte |
+| `reports/*.md` | Einzelberichte (optional) |
 
-**Pflege:** Jeder Agent aktualisiert seine Akte bei Statusänderung — Kalle hält CEO-Akte + Pointer synchron.
+Register aller Agenten: [`agents/registry.json`](agents/registry.json)
+
+Reporting-Regeln: [`agents/PROTOKOLL.md`](agents/PROTOKOLL.md)
+
+---
+
+## Agenten
+
+| Emoji | Agent | Ordner |
+|---|---|---|
+| 🕊️ | Kalle (CEO) | [`ceo-kalle/`](agents/ceo-kalle/) |
+| 🛠️ | CTO Engineering | [`cto-ingenieur/`](agents/cto-ingenieur/) |
+| 💰 | CFO Finanzen | [`cfo-finanzen/`](agents/cfo-finanzen/) |
+| ⚖️ | CLO Legal | [`clo-legal/`](agents/clo-legal/) |
+| 📈 | CMO SEO & Growth | [`cmo-seo-growth/`](agents/cmo-seo-growth/) |
+| ⚙️ | COO Operations | [`coo-operations/`](agents/coo-operations/) |
+| 🔒 | CSO Security | [`cso-security/`](agents/cso-security/) |
+| 💬 | CXO Support | [`cxo-support-analytics/`](agents/cxo-support-analytics/) |

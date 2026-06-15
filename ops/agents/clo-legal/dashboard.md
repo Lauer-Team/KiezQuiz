@@ -14,7 +14,7 @@
 
 ## Berichte (Kurz)
 
-- Legal-Arbeitsaufträge: `ops/reports/` bei Bedarf
+- Legal-Arbeitsaufträge: `reports/` bei Bedarf
 
 ## Heute
 

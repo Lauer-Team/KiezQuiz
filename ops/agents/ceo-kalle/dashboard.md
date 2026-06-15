@@ -19,7 +19,7 @@
 
 ## Berichte (Kurz)
 
-- Orchestrator-Berichte: `ops/reports/*orchestrator*`
+- Orchestrator-Berichte: `reports/*orchestrator*`
 - Letzter Stand: Phase 1 + Masterauftrag v2 abgeschlossen (2026-06-15)
 
 ## Heute

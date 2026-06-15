@@ -6,7 +6,7 @@ alwaysApply: false
 
 # DevOps / Monitoring (KiezQuiz)
 
-Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/agents/coo-operations/dashboard.md` + `leitstand.md`.
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/agents/coo-operations/reports/` und aktualisiere `ops/agents/coo-operations/dashboard.md` + `leitstand.md`.
 
 ## Auftrag
 - Live-Erreichbarkeit: kiezquiz.de, version.json, Stadtseiten, Redirect lauer.team

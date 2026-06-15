@@ -16,7 +16,7 @@
 
 ## Berichte (Kurz)
 
-- Monatliche Berichte: `ops/reports/*support-monthly*`
+- Monatliche Berichte: `reports/*support-monthly*`
 
 ## Heute
 

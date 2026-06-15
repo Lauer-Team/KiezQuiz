@@ -1,5 +1,5 @@
 # Reports — CLO Legal
 
-Legal-Arbeitsaufträge und Koordinations-Notizen in `ops/reports/` bei Bedarf.
+Legal-Arbeitsaufträge und Koordinations-Notizen in `reports/` bei Bedarf.
 
-Referenz-Doku: `ops/legal/COORDINATION.md`, `docs/TOM-KiezQuiz.md`
+Referenz-Doku: `anweisungen.md`, `docs/TOM-KiezQuiz.md`

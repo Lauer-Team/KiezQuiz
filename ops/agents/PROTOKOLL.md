@@ -18,7 +18,7 @@ Jeder Agent unter `ops/agents/<id>/` pflegt **dieselben 8 Dateien**:
 | `routinen.md` | Cron-Routinen, die dieser Agent betreut | Bei neuen/geänderten Automationen |
 | `anweisungen.md` | Definition of Done, Grenzen, Reporting-Pflicht | Bei Regeländerungen |
 | `dashboard.md` | **„Heute“-Sicht** — Status, Top-Todos, Automations (für UI) | Bei jedem Report-Lauf |
-| `reports.md` | Index + Kurzfassung der jüngsten Berichte | Nach jedem Bericht in `ops/reports/` |
+| `reports.md` | Index + Kurzfassung der jüngsten Berichte | Nach jedem Bericht in `reports/` |
 
 **Quelle der Wahrheit für das Admin-Dashboard:** `dashboard.md` (+ Konsolidierung via `scripts/build_ai_dashboard_data.py`).
 
@@ -42,7 +42,7 @@ Jeder Agent unter `ops/agents/<id>/` pflegt **dieselben 8 Dateien**:
 
 ---
 
-## 3. Report-Pflichtfelder (jeder Bericht in `ops/reports/`)
+## 3. Report-Pflichtfelder (jeder Bericht in `reports/`)
 
 Jeder Bericht beginnt mit:
 
@@ -65,19 +65,19 @@ Danach: betroffene Agenten-Akten aktualisieren (`dashboard.md`, `leitstand.md`, 
 
 ## 4. Wie Kalle Reports empfängt und verdichtet
 
-1. **Session-Start:** `ops/agents/ceo-kalle/leitstand.md` + jüngste `ops/reports/` lesen.
-2. **Nach Automation-Lauf:** Fach-Agent schreibt Bericht → aktualisiert eigene Akte → Kalle aktualisiert CEO-Akte + ggf. `ops/DEADLINES.md`.
+1. **Session-Start:** `ops/agents/ceo-kalle/leitstand.md` + jüngste `reports/` lesen.
+2. **Nach Automation-Lauf:** Fach-Agent schreibt Bericht → aktualisiert eigene Akte → Kalle aktualisiert CEO-Akte + ggf. `ops/agents/ceo-kalle/todos.md`.
 3. **Wöchentlich (Orchestrator #7):** Alle Agenten-`dashboard.md` konsolidieren, `build_ai_dashboard_data.py` ausführen, Upload.
-4. **Leitstand-Pointer:** `ops/LEITSTAND.md` verweist auf CEO-Akte — kein paralleles Todo-Dump.
+4. **Leitstand-Pointer:** `ops/agents/ceo-kalle/leitstand.md` verweist auf CEO-Akte — kein paralleles Todo-Dump.
 
 ---
 
 ## 5. Automations → Agenten-Dateien
 
-Siehe `ops/AUTOMATIONS.md` — jede Automation listet exakt, welche Dateien sie schreibt.
+Siehe `ops/agents/ceo-kalle/routinen.md` — jede Automation listet exakt, welche Dateien sie schreibt.
 
 ---
 
 ## 6. Freigabe-Gates (nur Mensch)
 
-Deploy · Geld · Recht · DNS · E-Mails · Daten löschen — siehe `ops/ORGANIGRAMM.md` §12.
+Deploy · Geld · Recht · DNS · E-Mails · Daten löschen — siehe `ops/agents/ORGANIGRAMM.md` §12.

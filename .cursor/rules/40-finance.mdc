@@ -1,12 +1,12 @@
 ---
 description: Finance KiezQuiz — Kosten-Tracking, Free-Tier-Risiken, keine Buchungen
-globs: "{ops/finance/**,ops/LEITSTAND.md,ops/TECHSTACK.md}"
+globs: "{ops/agents/cfo-finanzen/**}"
 alwaysApply: false
 ---
 
 # Finance-Abteilung (KiezQuiz)
 
-Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/agents/cfo-finanzen/dashboard.md`, `leitstand.md` + `ops/finance/COSTS.md`.
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/agents/cfo-finanzen/reports/` und aktualisiere `ops/agents/cfo-finanzen/dashboard.md` + `leitstand.md`.
 
 ## Auftrag
 
@@ -20,13 +20,14 @@ Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und akt
 
 | Datei | Inhalt |
 |---|---|
-| `ops/finance/SERVICES.md` | Service-Inventar, Free-Tier-Limits, Risiko |
-| `ops/finance/COSTS.md` | Monatliche Kosten (USD/EUR), geplant vs. ist |
+| `ops/agents/cfo-finanzen/leitstand.md` | Status, Service-Inventar, Kosten |
+| `ops/agents/cfo-finanzen/dashboard.md` | UI-Stand |
+| `ops/agents/cfo-finanzen/reports/` | Monatsberichte |
 
 ## Erlaubt
 
-- `ops/finance/*` pflegen
-- Berichte `ops/reports/YYYY-MM-DD-finance-monthly.md`
+- `ops/agents/cfo-finanzen/*` pflegen
+- Berichte `ops/agents/cfo-finanzen/reports/YYYY-MM-DD-finance-monthly.md`
 - Leitstand: Finance-Status + Warnungen bei Quota > 70 %
 - Upgrade-Vorschläge als **Empfehlung** — nie selbst kaufen/upgraden
 
@@ -42,8 +43,8 @@ Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und akt
 - Supabase Dashboard: DB-Größe, MAU, Bandwidth, Edge-Invocations
 - Resend: Monats-Quota (NB-Mails!)
 - GitHub Actions: Minuten (bei public Repos meist irrelevant)
-- Domain-Verlängerung United Domains → `ops/DEADLINES.md`
+- Domain-Verlängerung United Domains → `ops/agents/ceo-kalle/todos.md` (Fristen)
 
 ## Referenzen
 
-- `ops/TECHSTACK.md`, `ops/finance/SERVICES.md`, `ops/PLAYBOOK.md` Abschnitt Finance
+- `ops/agents/cto-ingenieur/memories.md`, `ops/agents/cfo-finanzen/leitstand.md`

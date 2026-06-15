@@ -34,7 +34,7 @@
 | 2026-06-15 | **Dashboard admin-only:** Supabase Storage + Edge Functions |
 | 2026-06-15 | **Agenten-Betriebssystem v2:** `ops/agents/*` Akten + JSON-Dashboard |
 
-Berichte: `ops/reports/` · Fach-Akten: `ops/agents/*/`
+Berichte: `reports/` · Fach-Akten: `ops/agents/*/`
 
 ---
 
@@ -52,4 +52,4 @@ Merge auf `main` (Spiel-Code) · Rechtstexte live · DNS · Supabase Pro / koste
 | **Du** | Legora-Aufträge (wenn Monetarisierung/iOS), Merge-Freigaben, **Domain verlängern** (D1), GSC manuell (~5 Min/Monat, optional) |
 | **Du (optional)** | Bing Webmaster · www-Redirect · Dependabot-PRs prüfen |
 
-**Anstehend (Termine):** `ops/DEADLINES.md`
+**Anstehend (Termine):** `ops/agents/ceo-kalle/todos.md`

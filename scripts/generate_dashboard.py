@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """KiezQuiz — Dashboard-Generator (One-Stop-Shop).
 
-Liest ops/LEITSTAND.md, ops/DEADLINES.md, ops/ROADMAP.md,
-berechnet Cron-Termine und baut ops/dashboard.html.
+Liest ops/agents/ceo-kalle/leitstand.md, ops/DEADLINES.md, ops/ROADMAP.md,
+berechnet Cron-Termine und baut ops/dashboard.html (Legacy-Backup).
 
 Aufruf:  python3 scripts/generate_dashboard.py
 """
@@ -174,9 +174,9 @@ def expand_role_tasks(role_tasks: dict[str, list[str]]) -> dict[str, list[str]]:
     return out
 
 
-def parse_role_tasks(leit: str) -> dict[str, list[str]]:
+def parse_role_tasks(todos_md: str) -> dict[str, list[str]]:
     out: dict[str, list[str]] = {"du": [], "kalle": [], "du_optional": []}
-    for row in find_table(leit, "Wer"):
+    for row in find_table(todos_md, "Wer"):
         if len(row) < 2:
             continue
         who, task = clean(row[0]), clean(row[1])
@@ -186,6 +186,19 @@ def parse_role_tasks(leit: str) -> dict[str, list[str]]:
             out["du"].append(task)
         elif "Kalle" in who:
             out["kalle"].append(task)
+    section = None
+    for line in todos_md.splitlines():
+        if line.startswith("## Offen (Kalle)"):
+            section = "kalle"
+            continue
+        if line.startswith("## Offen (Mensch)"):
+            section = "human"
+            continue
+        if line.startswith("## "):
+            section = None
+        if section and line.strip().startswith("- [ ]"):
+            item = clean(line.strip()[6:])
+            (out["du"] if section == "human" else out["kalle"]).append(item)
     return out
 
 
@@ -249,9 +262,10 @@ def dept_short_name(name: str) -> str:
 
 def collect():
     now = datetime.now(timezone.utc)
-    leit = read(OPS / "LEITSTAND.md")
-    deadlines = read(OPS / "DEADLINES.md")
-    roadmap = read(OPS / "ROADMAP.md")
+    leit = read(OPS / "agents" / "ceo-kalle" / "leitstand.md")
+    routinen = read(OPS / "agents" / "ceo-kalle" / "routinen.md")
+    deadlines = read(OPS / "agents" / "ceo-kalle" / "todos.md")
+    roadmap = read(OPS / "agents" / "ceo-kalle" / "backlog.md")
 
     departments = []
     for row in find_table(leit, "Abteilung"):
@@ -261,7 +275,8 @@ def collect():
             )
 
     automations = []
-    for row in find_table(leit, "Cron"):
+    auto_source = routinen if find_table(routinen, "Cron") else leit
+    for row in find_table(auto_source, "Cron"):
         if len(row) >= 4 and row[0].strip("# ").isdigit():
             cron = clean(row[2])
             nr = next_run(cron, now)
@@ -293,9 +308,18 @@ def collect():
                 }
             )
 
-    role_tasks = expand_role_tasks(parse_role_tasks(leit))
-    approval_gates = parse_approval_gates(leit)
-    backlog = parse_backlog(leit)
+    role_tasks = expand_role_tasks(parse_role_tasks(read(OPS / "agents" / "ceo-kalle" / "todos.md")))
+    approval_block = read(OPS / "agents" / "ceo-kalle" / "todos.md")
+    approval_gates = []
+    m = re.search(r"## Wartet auf Freigabe\s*\n\n(.+?)(?:\n\n|\Z)", approval_block, re.DOTALL)
+    if m:
+        block = re.sub(r"^-\s*", "", m.group(1).strip())
+        approval_gates = [x.strip() for x in block.split("·") if x.strip()]
+    if not approval_gates:
+        approval_gates = parse_approval_gates(leit)
+    backlog = parse_backlog(read(OPS / "agents" / "ceo-kalle" / "backlog.md"))
+    if not backlog:
+        backlog = parse_backlog(leit)
     roadmap_items = parse_roadmap(roadmap)
 
     return now, departments, automations, dls, role_tasks, approval_gates, backlog, roadmap_items
@@ -359,7 +383,7 @@ def render_simple_org(departments: list[dict], automations: list[dict]) -> str:
         <div class="org-pills org-pills--wrap">{auto_pills}</div>
       </div>
       {paused_note}
-      <p class="org-foot muted">Vollständiges Audit-Diagramm: <code>ops/ORGANIGRAMM.md</code></p>
+      <p class="org-foot muted">Vollständiges Audit-Diagramm: <code>ops/agents/ORGANIGRAMM.md</code></p>
     </div>"""
 
 
@@ -612,7 +636,8 @@ def render(now, departments, automations, dls, role_tasks, approval_gates, backl
 def main() -> None:
     data = collect()
     out = render(*data)
-    target = OPS / "dashboard.html"
+    target = OPS / "_generated" / "dashboard.html"
+    target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(out, encoding="utf-8")
     _, departments, automations, dls, _, _, _, roadmap_items = data
     print(f"✓ Dashboard erstellt: {target}")

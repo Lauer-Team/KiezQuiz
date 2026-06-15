@@ -2,6 +2,6 @@
 
 | Datum | Datei | Status |
 |---|---|---|
-| 2026-06-15 | `ops/reports/2026-06-15-finance-baseline.md` | 🟢 Baseline |
+| 2026-06-15 | `reports/2026-06-15-finance-baseline.md` | 🟢 Baseline |
 
-Monatliche Berichte: `ops/reports/*finance-monthly*`
+Monatliche Berichte: `reports/*finance-monthly*`

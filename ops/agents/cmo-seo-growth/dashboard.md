@@ -16,7 +16,7 @@
 
 ## Berichte (Kurz)
 
-- `ops/reports/2026-06-15-seo-baseline.md` — Technisch 🟢
+- `reports/2026-06-15-seo-baseline.md` — Technisch 🟢
 
 ## Heute
 
