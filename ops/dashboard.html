@@ -59,14 +59,14 @@
 <body>
 <header>
   <h1>🕊️ KiezQuiz — AI-Management</h1>
-  <p>Stand: Monday, 15.06.2026 · 18:37 Uhr · Quellen: LEITSTAND · DEADLINES · ROADMAP</p>
+  <p>Stand: Monday, 15.06.2026 · 19:03 Uhr · Quellen: LEITSTAND · DEADLINES · ROADMAP</p>
 </header>
 <main>
 
   
     <div class="stats">
       <div class="stat"><span class="stat-num">8</span><span class="stat-label">Automations live</span></div>
-      <div class="stat"><span class="stat-num">8/9</span><span class="stat-label">Teams OK</span></div>
+      <div class="stat"><span class="stat-num">9/10</span><span class="stat-label">Teams OK</span></div>
       <div class="stat"><span class="stat-num">3</span><span class="stat-label">Termine offen</span></div>
       <div class="stat"><span class="stat-num">11</span><span class="stat-label">Später geplant</span></div>
     </div>
@@ -76,9 +76,9 @@
     <div class="three">
       <div class="panel">
         <h2>👤 Deine Aufgaben</h2>
-        <ul><li>Legora-Aufträge (wenn Monetarisierung/iOS)</li><li>Merge-Freigaben</li><li>Domain verlängern (D1)</li><li>GSC manuell (~5 Min/Monat, optional)</li><li>Freigabe: Merge auf `main` (Spiel-Code)</li><li>Freigabe: Rechtstexte live</li><li>Freigabe: DNS</li><li>Freigabe: Supabase Pro / kostenpflichtige Upgrades</li></ul>
+        <ul><li>Domain kiezquiz.de verlängern (Erinnerung ab 04/2027 — D1)</li><li>Merge-Freigaben bei offenen PRs</li><li>GSC manuell (~5 Min/Monat, optional)</li><li>Freigabe: Merge auf `main`</li><li>Freigabe: Rechtstexte live</li><li>Freigabe: DNS</li><li>Freigabe: kostenpflichtige Upgrades</li></ul>
         <h3>Optional</h3>
-        <ul><li>Bing Webmaster · www-Redirect · Dependabot-PRs prüfen</li></ul>
+        <p class="muted empty">Keine optionalen Aufgaben.</p>
       </div>
       <div class="panel">
         <h2>📅 Geplant (Termine & Automationen)</h2>
@@ -95,15 +95,15 @@
   <section>
     <h2>🕊️ Kalles laufende Aufgaben</h2>
     <div class="panel" style="max-width:720px">
-      <ul><li>Leitstand</li><li>Berichte</li><li>Free-Tier-Warnung</li><li>Legal-Trigger</li><li>PRs</li><li>NB-Banner abschalten ab 12.07.</li><li>Cursor Downgrade Pro+ → Pro (~20 USD) (fällig 2026-07-01)</li><li>NB werden wirksam (Version 2026-06-10) (fällig 2026-07-11)</li><li>NB-Gäste-Banner abschalten (pendingNotice: false) (fällig 2026-07-12)</li></ul>
+      <ul><li>NB-Gäste-Banner abschalten ab 12.07.2026 (deactivate_terms_notice.py)</li><li>Cursor-Downgrade Juli prüfen → CFO-Akte + ops/finance/COSTS.md</li><li>Agenten-Akten bei Statusänderungen synchron halten</li><li>build_ai_dashboard_data.py nach Orchestrator-Lauf ausführen</li><li>Cursor Downgrade Pro+ → Pro (~20 USD) (fällig 2026-07-01)</li><li>NB werden wirksam (Version 2026-06-10) (fällig 2026-07-11)</li><li>NB-Gäste-Banner abschalten (pendingNotice: false) (fällig 2026-07-12)</li></ul>
     </div>
   </section>
 
   <section>
     <h2>🚦 Status — alle Teams auf einen Blick</h2>
-    <div class="status-row"><div class="status-chip" title="8 Automations live · Dashboard admin-only (Supabase Storage)">
+    <div class="status-row"><div class="status-chip" title="8 Automations live · Dashboard admin-only (JSON via Supabase)">
           <span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> <strong>Leitagent</strong>
-        </div><div class="status-chip" title="GSC manuell · Automation „SEO Weekly&quot; (technisch) · kein Google Cloud nötig">
+        </div><div class="status-chip" title="GSC manuell · Automation „SEO Weekly&quot; · kein Google Cloud nötig">
           <span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> <strong>SEO</strong>
         </div><div class="status-chip" title="Uptime-Automation live · Backup CI + Archiv">
           <span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> <strong>DevOps</strong>
@@ -117,6 +117,8 @@
           <span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> <strong>Support</strong>
         </div><div class="status-chip" title="NB-E-Mails erledigt (10.06.) · Banner bis 11.07. · Koordination live">
           <span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> <strong>Legal</strong>
+        </div><div class="status-chip" title="Branch+PR · Deploy via GitHub Actions">
+          <span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> <strong>Engineering</strong>
         </div><div class="status-chip" title="Pausiert">
           <span class="badge" style="color:#57606a;background:#eef1f4">⏸️ Pausiert</span> <strong>Telegram-Agent</strong>
         </div></div>
@@ -142,7 +144,7 @@
       <div class="org-connector" aria-hidden="true">↓ koordiniert</div>
       <div class="org-step">
         <p class="org-label">Fach-Teams (spezialisierte KI-Rollen)</p>
-        <div class="org-pills"><span class="org-pill" title="GSC manuell · Automation „SEO Weekly&quot; (technisch) · kein Google Cloud nötig"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> SEO</span><span class="org-pill" title="Uptime-Automation live · Backup CI + Archiv"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> DevOps</span><span class="org-pill" title="Automation „Security Weekly&quot; live · 0 Dependabot-Alerts"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Security</span><span class="org-pill" title="CI am 1. · Archiv-Sync-Automation live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Supabase-Backup</span><span class="org-pill" title="Service-Tracking · Automation „Finance Monthly&quot; live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Finance</span><span class="org-pill" title="Stadt-Wünsche · Automation „Support Monthly&quot; live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Support</span><span class="org-pill" title="NB-E-Mails erledigt (10.06.) · Banner bis 11.07. · Koordination live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Legal</span></div>
+        <div class="org-pills"><span class="org-pill" title="GSC manuell · Automation „SEO Weekly&quot; · kein Google Cloud nötig"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> SEO</span><span class="org-pill" title="Uptime-Automation live · Backup CI + Archiv"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> DevOps</span><span class="org-pill" title="Automation „Security Weekly&quot; live · 0 Dependabot-Alerts"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Security</span><span class="org-pill" title="CI am 1. · Archiv-Sync-Automation live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Supabase-Backup</span><span class="org-pill" title="Service-Tracking · Automation „Finance Monthly&quot; live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Finance</span><span class="org-pill" title="Stadt-Wünsche · Automation „Support Monthly&quot; live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Support</span><span class="org-pill" title="NB-E-Mails erledigt (10.06.) · Banner bis 11.07. · Koordination live"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Legal</span><span class="org-pill" title="Branch+PR · Deploy via GitHub Actions"><span class="badge" style="color:#1a7f37;background:#e6f4ea">🟢 OK</span> Engineering</span></div>
       </div>
       <div class="org-step">
         <p class="org-label">8 Automations — laufen von allein nach Plan</p>
@@ -162,7 +164,7 @@
           <td>Dienstag, 16.06.2026 · 10:00</td>
           <td class="center">1</td>
         </tr><tr>
-          <td><strong>Leit-Routine / Orchestrator</strong><br><span class="muted">Koordiniert alle, prüft Fälligkeit, baut Dashboard</span></td>
+          <td><strong>Leit-Routine / Orchestrator</strong><br><span class="muted">Koordiniert alle, baut Dashboard-JSON</span></td>
           <td>Montag, 22.06.2026 · 08:00</td>
           <td class="center">7</td>
         </tr><tr>
@@ -174,11 +176,11 @@
           <td>Montag, 22.06.2026 · 09:00</td>
           <td class="center">7</td>
         </tr><tr>
-          <td><strong>SEO Weekly</strong><br><span class="muted">Sitemap, SEO-Tests, Leitstand</span></td>
+          <td><strong>SEO Weekly</strong><br><span class="muted">Sitemap, SEO-Tests</span></td>
           <td>Montag, 22.06.2026 · 11:00</td>
           <td class="center">7</td>
         </tr><tr>
-          <td><strong>Finance Monthly</strong><br><span class="muted">Kosten, Free-Tier, SERVICES.md</span></td>
+          <td><strong>Finance Monthly</strong><br><span class="muted">Kosten, Free-Tier</span></td>
           <td>Mittwoch, 01.07.2026 · 10:00</td>
           <td class="center">16</td>
         </tr><tr>
