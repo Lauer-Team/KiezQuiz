@@ -119,13 +119,35 @@
   }
 
   function showDashboard(root, html) {
-    const iframe = root.querySelector('#admin-ai-dashboard-frame');
-    if (!iframe) return;
-    iframe.srcdoc = html;
+    const mount = root.querySelector('#admin-ai-dashboard-mount');
+    if (!mount) return;
+
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const styleText = doc.querySelector('style')?.textContent || '';
+    const header = doc.querySelector('header');
+    const main = doc.querySelector('main');
+    if (!main) return;
+
+    let shadow = mount.shadowRoot;
+    if (!shadow) {
+      shadow = mount.attachShadow({ mode: 'open' });
+    }
+
+    const embedCss = `
+      :host { display: block; color: #1f2328; font: 15px/1.55 system-ui, sans-serif; }
+      main { max-width: none; padding: 0; }
+      @media (max-width: 900px) { .three, .stats { grid-template-columns: 1fr; } }
+      @media (min-width: 720px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+    `;
+
+    shadow.innerHTML = `
+      <style>${styleText}\n${embedCss}</style>
+      ${main.outerHTML}
+    `;
   }
 
   async function loadDashboardIntoFrame(root) {
-    const wrap = root.querySelector('.admin-ai-dashboard-frame-wrap');
+    const wrap = root.querySelector('.admin-ai-dashboard-mount-wrap');
     wrap?.classList.add('is-loading');
     setStatus(root, t('adminPage.loading'), false);
 
@@ -164,16 +186,9 @@
             </button>
           </div>
         </div>
-        <p class="admin-ai-dashboard-hint profile-panel-intro">${escapeHtml(t('adminPage.aiDashboardHint'))}</p>
         <p class="profile-feedback admin-ai-dashboard-status" id="admin-ai-dashboard-status" hidden></p>
-        <div class="admin-ai-dashboard-frame-wrap">
-          <iframe
-            id="admin-ai-dashboard-frame"
-            class="admin-ai-dashboard-frame"
-            title="${escapeHtml(t('adminPage.navAiDashboard'))}"
-            sandbox="allow-scripts allow-same-origin"
-            loading="lazy"
-          ></iframe>
+        <div class="admin-ai-dashboard-mount-wrap" id="admin-ai-dashboard-mount-wrap">
+          <div id="admin-ai-dashboard-mount" class="admin-ai-dashboard-mount" role="region" aria-label="${escapeHtml(t('adminPage.navAiDashboard'))}"></div>
         </div>
       </section>`;
   }
