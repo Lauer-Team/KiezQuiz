@@ -17,28 +17,31 @@
 | **Support / Analytics** | ⚪ | Kein Tracking (bewusst); Phase 2 |
 | **Legal (Legora)** | 🟡 | Laufend über Legora |
 | **Telegram-Agent** | ⏸️ | Pausiert |
-| **Supabase-Backup** | 🟡 | Lokal OK; CI PATH-Fix in PR |
+| **Supabase-Backup** | 🟢 | CI + Supplement-Archiv (Kalle) | — |
 
 ---
 
 ## 2. Offene Aufgaben
 
 ### Kalle erledigt selbst
-- [x] Phase 1: Leitstand, Organigramm, Abteilungs-Regeln, AUTOMATIONS.md (PR)
-- [ ] Backup-Workflow PATH-Fix mergen lassen
+- [x] Phase 1 ops + PR #40
+- [x] Backup CI grün; Archiv-Skripte + erste Kopien im Supplement-Ordner
+- [ ] PR backup-archiv mergen (Skripte + Docs)
 
 ### Aufgabe für dich (Mensch)
 
-#### 🔔 Monatlich: Backup offline sichern
-
-| Wann | Was |
-|---|---|
-| **1. des Monats** | GitHub Backup (Artifact) |
-| **2. des Monats** | E-Mail an info@kiezquiz.de |
-
-- [ ] **Einmalig:** Erstes Backup (15.06.2026) offline archiviert
 - [ ] **Cursor Automations** anlegen — siehe `ops/AUTOMATIONS.md` (Start: Uptime Smoke Check)
 - [ ] GSC API (OAuth) — optional, für automatisches SEO-Briefing
+
+#### Backup-Archiv (erledigt durch Kalle)
+
+| Wann | Wer | Was |
+|---|---|---|
+| **1. des Monats** | GitHub Actions | Backup + Artifact |
+| **danach** | **Kalle** | `sync_supabase_backup_artifact.py` → Supplement-Ordner |
+| **2. des Monats** | E-Mail | Info an info@kiezquiz.de (kein manuelles Kopieren nötig) |
+
+Archiv: `KiezQuiz (supplement)/Backups/Supabase` · CI-Backup 🟢 (Run 27550083985)
 
 ---
 
@@ -58,7 +61,8 @@
 | 2026-06-15 | Leitagent „Kalle" + ops-Struktur | Master-Auftrag v2 |
 | 2026-06-15 | Zugänge: Supabase, Cloudflare, Notion, GSC, Resend | Agent-Management |
 | 2026-06-15 | PR #38 + #39 — Backup CI | Free Tier pg_dump |
-| 2026-06-15 | Phase 1 abgeschlossen (PR ops/leitagent-phase1) | Fundament für Fach-Agenten |
+| 2026-06-15 | **PR #40 merged** — Phase 1 ops live | Leitstand, Regeln, Automations-Vorlagen |
+| 2026-06-15 | **Backup-Archiv** — Kalle → Supplement-Ordner | Kein manuelles Kopieren mehr |
 | 2026-06-15 | Telegram pausiert | Später |
 
 ---

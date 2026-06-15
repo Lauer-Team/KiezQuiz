@@ -55,14 +55,20 @@ Artifacts werden von GitHub **90 Tage** aufbewahrt.
 
 Manuell auslösen: **Actions** → **Supabase monthly backup** → **Run workflow**.
 
-## Archivierung (Pflicht)
+## Archivierung
 
-GitHub Artifacts allein reichen nicht langfristig. Nach jedem Export:
+**Kalle** kopiert jedes Backup automatisch nach:
 
-1. Backup-Datei herunterladen (lokal oder aus GitHub Artifact)
-2. Kopie ablegen in z. B.:
-   - Ordner „Rechtsdokumente / KiezQuiz Backups“
-   - iCloud Drive / externe Festplatte (verschlüsselt)
+`KiezQuiz (supplement)/Backups/Supabase` (Pfad in `scripts/backup-supabase.config.json` → `archiveDir`)
+
+| Auslöser | Wie |
+|---|---|
+| Lokaler Export | `export_supabase_backup.py` kopiert nach `archiveDir` |
+| GitHub Actions (1. des Monats) | Kalle: `python3 scripts/sync_supabase_backup_artifact.py` (lädt neuestes Artifact) |
+
+`archiveDir` und `backup-supabase.config.json` sind **gitignored** — nur auf deinem Mac.
+
+Nach jedem Export optional: älteste Dateien werden auf `retainCount` (12) begrenzt.
 
 ## Wiederherstellung (Notfall)
 

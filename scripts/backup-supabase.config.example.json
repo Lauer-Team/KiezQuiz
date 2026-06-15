@@ -3,6 +3,7 @@
   "region": "eu-west-1",
   "databaseUrl": "postgresql://postgres:DEIN_DB_PASSWORT@db.iuixaesbzftgmnmelcad.supabase.co:5432/postgres",
   "outputDir": "backups/supabase",
+  "archiveDir": "/ABSOLUTER/PFAD/KiezQuiz (supplement)/Backups/Supabase",
   "retainCount": 12,
   "schemas": ["public"],
   "_comment": "Passwort: Supabase Dashboard → Project Settings → Database → Database password. Niemals committen — nur lokal oder als GitHub Secret KIEZ_SUPABASE_DB_URL."
