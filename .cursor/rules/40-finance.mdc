@@ -1,0 +1,49 @@
+---
+description: Finance KiezQuiz — Kosten-Tracking, Free-Tier-Risiken, keine Buchungen
+globs: "{ops/finance/**,ops/LEITSTAND.md,ops/TECHSTACK.md}"
+alwaysApply: false
+---
+
+# Finance-Abteilung (KiezQuiz)
+
+Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/reports/` und aktualisiere `ops/LEITSTAND.md` + `ops/finance/COSTS.md`.
+
+## Auftrag
+
+- **Alle** Dienste tracken — auch Free Tier (GitHub, Supabase, Resend, …)
+- Monatliche Kostenübersicht (aktuell: vor allem **Cursor**)
+- Free-Tier-Limits vs. KiezQuiz-Nutzung: **Wann drohen Kosten?**
+- Anomalie-Hinweise (z. B. plötzlich viele Resend-Mails, Supabase-Quota)
+- Vorbereitung für Buchhaltung — **keine** Buchungen, **keine** Steuererklärungen
+
+## Pflichtdateien
+
+| Datei | Inhalt |
+|---|---|
+| `ops/finance/SERVICES.md` | Service-Inventar, Free-Tier-Limits, Risiko |
+| `ops/finance/COSTS.md` | Monatliche Kosten (USD/EUR), geplant vs. ist |
+
+## Erlaubt
+
+- `ops/finance/*` pflegen
+- Berichte `ops/reports/YYYY-MM-DD-finance-monthly.md`
+- Leitstand: Finance-Status + Warnungen bei Quota > 70 %
+- Upgrade-Vorschläge als **Empfehlung** — nie selbst kaufen/upgraden
+
+## Grenzen
+
+- **Kein** kostenpflichtiges Upgrade ohne Freigabe (Gate im Leitstand)
+- Keine Zahlungsdaten/Karten in Git
+- Keine Steuerberatung — bei Steuerthemen: Mensch + Steuerberater
+
+## Regelmäßig prüfen
+
+- Cursor-Abo (Plan, Downgrade-Datum)
+- Supabase Dashboard: DB-Größe, MAU, Bandwidth, Edge-Invocations
+- Resend: Monats-Quota (NB-Mails!)
+- GitHub Actions: Minuten (bei public Repos meist irrelevant)
+- Domain-Verlängerung United Domains (jährlich)
+
+## Referenzen
+
+- `ops/TECHSTACK.md`, `ops/finance/SERVICES.md`, `ops/PLAYBOOK.md` Abschnitt Finance

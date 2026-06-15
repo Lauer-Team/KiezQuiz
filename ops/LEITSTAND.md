@@ -8,14 +8,14 @@
 
 | Abteilung | Status | Kurz |
 |---|---|---|
-| **Leitagent (Kalle)** | 🟢 | Ops live, 4 Cursor-Automations aktiv |
+| **Leitagent (Kalle)** | 🟢 | Masterauftrag v2 abgeschlossen |
 | **SEO** | 🟢 | GSC OK · Automation „SEO Weekly" live |
 | **DevOps / Monitoring** | 🟢 | Uptime-Automation live · Backup CI + Archiv |
 | **Security** | 🟢 | Automation „Security Weekly" live · 0 Dependabot |
 | **Supabase-Backup** | 🟢 | CI am 1. · Archiv-Sync-Automation live |
-| **Finance** | ⚪ | Phase 2 — `ops/PHASE2.md` |
-| **Support / Analytics** | ⚪ | Phase 2 |
-| **Legal (Legora)** | 🟡 | Laufend |
+| **Finance** | 🟢 | Service-Tracking + Kosten · nur Cursor (~60→20 USD) |
+| **Support / Analytics** | 🟢 | Stadt-Wünsche · kein GA · Regel live |
+| **Legal (Legora + Kalle)** | 🟡 | Koordination live · NB-Benachrichtigung offen (L1) |
 | **Telegram-Agent** | ⏸️ | Pausiert |
 
 ---
@@ -29,7 +29,7 @@
 | 2 | Security Weekly | `0 7 * * 1` | Dependabot + Supabase Advisors |
 | 3 | SEO Weekly | `0 9 * * 1` | Sitemap, SEO-Tests, Leitstand |
 
-Details: `ops/AUTOMATIONS.md`
+Optional (Phase 2): Finance Monthly, Support Monthly — siehe `ops/AUTOMATIONS.md`
 
 ---
 
@@ -44,38 +44,54 @@ Details: `ops/AUTOMATIONS.md`
 
 ---
 
-## 4. Optional — du
+## 4. Aufgaben — Kalle vs. du
 
-| Aufgabe | Priorität |
+| Wer | Aufgabe |
 |---|---|
-| GSC API OAuth | niedrig — auto SEO-Daten aus GSC |
-| Dependabot-PRs mergen | niedrig |
+| **Kalle** | Leitstand, Berichte, Free-Tier-Warnung, Legal-Trigger, PRs |
+| **Du** | Legora-Aufträge, Merge-Freigaben, NB `--send`, Domain-Datum eintragen |
+| **Du (optional)** | GSC OAuth · Dependabot-PRs mergen |
 
 ---
 
 ## 5. Wartet auf deine Freigabe
 
-Merge auf `main` (Spiel-Code) · E-Mails an Nutzer · Rechtstexte live · DNS · Supabase RLS-Hardening
+Merge auf `main` (Spiel-Code) · E-Mails an Nutzer · Rechtstexte live · DNS · Supabase RLS-Hardening · **NB-Benachrichtigung** (L1, siehe `ops/legal/BACKLOG.md`)
 
 ---
 
-## 6. Entscheidungs-Logbuch
+## 6. Optimierungs-Backlog (Nutzen / Aufwand)
+
+| Thema | Nutzen | Aufwand | Priorität |
+|---|---|---|---|
+| GSC API OAuth | SEO-Daten automatisch | mittel | niedrig |
+| Finance/Support-Automation anlegen | Monatsberichte ohne Chat | gering | niedrig |
+| Dependabot-PRs mergen | Security aktuell | gering | niedrig |
+| Monetarisierung + Legal | Umsatz | hoch | wenn du willst |
+| Telegram-Agent reaktivieren | Fern-PRs | hoch | pausiert |
+
+---
+
+## 7. Entscheidungs-Logbuch
 
 | Datum | Entscheidung |
 |---|---|
 | 2026-06-15 | Leitagent Kalle + ops-Struktur (PR #40) |
 | 2026-06-15 | Zugänge + Backup CI (PR #38–#41) |
 | 2026-06-15 | Phase 1 abgeschlossen (PR #42) |
-| 2026-06-15 | **4 Cursor-Automations live** (0–3) |
+| 2026-06-15 | 4 Cursor-Automations live (0–3) |
+| 2026-06-15 | **Masterauftrag v2 abgeschlossen** — Finance, Support, Legal-Koordination |
 
 Berichte: `ops/reports/`
 
 ---
 
-## 7. Glossar
+## 8. Glossar
 
 | Begriff | In einem Satz |
 |---|---|
 | **Leitstand** | Diese Datei — Kalle pflegt sie bei jeder Statusänderung automatisch. |
 | **Kalle** | Dein Leitagent — ein Ansprechpartner. |
 | **Automation** | Zeitgesteuerter Agent auf cursor.com — schreibt Berichte ins Repo. |
+| **Free Tier** | Kostenloser Tarif eines Anbieters — oft mit Limits (siehe `ops/finance/SERVICES.md`). |
+| **Legal-Arbeitsauftrag** | Briefing von Kalle für dich in Legora — Kalle schreibt keine Rechtstexte. |

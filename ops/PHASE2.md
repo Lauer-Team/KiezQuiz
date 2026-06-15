@@ -1,26 +1,23 @@
-# Phase 2 — Backlog (noch nicht gestartet)
+# Masterauftrag v2 — Status
 
-> Phase 1 (Fundament) ist **abgeschlossen** (2026-06-15). Diese Liste ist für später.
+> **Phase 0–3 abgeschlossen** (2026-06-15). Optionaler Feinschliff siehe Leitstand §6.
 
-## Finance (40-finance)
+## Erledigt
 
-- Kosten-Monitoring (Supabase, Resend, Domains) — nur **Vorbereitung**, keine Buchungen
-- Gate: Mensch + Steuerberater für alles mit Geld
+| Phase | Inhalt | Nachweis |
+|---|---|---|
+| **0** | Bestandsaufnahme | `ops/TECHSTACK.md`, `ops/ZUGAENGE.md` |
+| **1** | Leitstand, Playbook, SEO, DevOps, Security, 4 Automations | PR #40–#43 |
+| **2** | Finance (40), Support (50), Service-Tracking | `ops/finance/`, `.cursor/rules/40-finance.mdc` |
+| **3** | Legal-Koordination über Legora | `ops/legal/`, `.cursor/rules/60-legal-coordination.mdc` |
 
-## Support / Analytics (50-support)
+## Optional (kein Blocker)
 
-- Bewusst **kein** Google Analytics
-- In-App Feedback / Stadt-Wünsche auswerten (Supabase)
+- GSC API OAuth
+- Finance/Support-Automation auf cursor.com (Vorlagen in `ops/AUTOMATIONS.md`)
+- Monetarisierung + Legora AGB-Paket (wenn du Umsatz willst)
 
-## Automatisierung
+## Verwandte Dateien
 
-- [ ] Cursor Automations auf [cursor.com/automations](https://cursor.com/automations) — Vorlagen in `ops/AUTOMATIONS.md`
-- [ ] GSC API OAuth → SEO-Briefing vollautomatisch
-
-## Legal
-
-- Laufend über **Legora** — Kalle nur Integration nach Freigabe
-
-## Telegram
-
-- ⏸️ Pausiert
+- `ops/PLAYBOOK.md` — vollständiges Regelwerk (Masterauftrag-Text)
+- `ops/LEITSTAND.md` — aktueller Betriebsstatus

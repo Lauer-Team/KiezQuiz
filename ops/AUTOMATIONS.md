@@ -138,3 +138,49 @@ Leitstand aktualisieren.
 - [x] 3 — SEO Weekly (live 2026-06-15)
 
 Kalle trägt den Status in `ops/LEITSTAND.md` ein — du musst nichts melden.
+
+---
+
+## 4. Finance Monthly (optional)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — Finance Monthly |
+| **Cron** | `0 8 1 * *` (am 1. jeden Monats, 08:00 UTC) |
+| **Modell** | Composer |
+| **MCPs** | Supabase (Quotas) |
+
+**Anweisung:**
+
+```
+Du bist die Finance-Abteilung. Halte dich an .cursor/rules/40-finance.mdc.
+
+1. ops/finance/SERVICES.md und COSTS.md prüfen/aktualisieren
+2. Supabase MCP: DB-Größe, MAU, Bandwidth vs. Free-Tier-Limits
+3. Resend/GitHub: nur Hinweis falls relevant
+4. Bericht ops/reports/YYYY-MM-DD-finance-monthly.md
+5. Bei Quota >70%: Warnung in ops/LEITSTAND.md
+Keine Upgrades ohne Menschen-OK.
+```
+
+---
+
+## 5. Support Monthly (optional)
+
+| | |
+|---|---|
+| **Name** | KiezQuiz — Support Monthly |
+| **Cron** | `0 10 1 * *` (am 1. jeden Monats, 10:00 UTC) |
+| **Modell** | Composer |
+| **MCPs** | Supabase |
+
+**Anweisung:**
+
+```
+Du bist Support/Analytics. Halte dich an .cursor/rules/50-support-analytics.mdc.
+
+1. Supabase: city_wish_requests aggregiert (Städte, Trends, keine PII)
+2. Bericht ops/reports/YYYY-MM-DD-support-monthly.md
+3. Top-3 Feature-Wünsche für Kalle
+Kein Google Analytics. Keine E-Mails an Nutzer.
+```
