@@ -8,7 +8,7 @@
 
 | Abteilung | Status | Kurz |
 |---|---|---|
-| **Leitagent (Kalle)** | 🟢 | Masterauftrag v2 abgeschlossen |
+| **Leitagent (Kalle)** | 🟢 | 5 Cursor-Automations aktiv · DEADLINES live |
 | **SEO** | 🟢 | GSC OK · Automation „SEO Weekly" live |
 | **DevOps / Monitoring** | 🟢 | Uptime-Automation live · Backup CI + Archiv |
 | **Security** | 🟢 | Automation „Security Weekly" live · 0 Dependabot |
@@ -20,7 +20,7 @@
 
 ---
 
-## 2. Cursor-Automations (🟢 alle live seit 2026-06-15)
+## 2. Cursor-Automations (🟢 5 live)
 
 | # | Name | Cron | Aufgabe |
 |---|---|---|---|
@@ -28,8 +28,9 @@
 | 1 | Uptime Smoke Check | `0 8 * * 1-5` | kiezquiz.de erreichbar? |
 | 2 | Security Weekly | `0 7 * * 1` | Dependabot + Supabase Advisors |
 | 3 | SEO Weekly | `0 9 * * 1` | Sitemap, SEO-Tests, Leitstand |
+| 4 | **Ops Weekly Review** | `0 7 * * 1` | Fälligkeiten · `ops/DEADLINES.md` |
 
-Optional (Phase 2): Finance Monthly, Support Monthly — siehe `ops/AUTOMATIONS.md`
+Optional: Finance Monthly, Support Monthly — `ops/AUTOMATIONS.md` §4–5
 
 ---
 
@@ -52,7 +53,7 @@ Optional (Phase 2): Finance Monthly, Support Monthly — siehe `ops/AUTOMATIONS.
 | **Du** | Legora-Aufträge, Merge-Freigaben, NB `--send`, **Domain verlängern** (D1) |
 | **Du (optional)** | GSC OAuth · Dependabot-PRs mergen |
 
-**Anstehend (Termine):** `ops/DEADLINES.md` — wöchentlich via Ops Review Automation
+**Anstehend (Termine):** `ops/DEADLINES.md` — **Ops Weekly Review** (Mo 07:00 UTC) prüft automatisch
 
 ---
 
@@ -68,7 +69,6 @@ Merge auf `main` (Spiel-Code) · E-Mails an Nutzer · Rechtstexte live · DNS ·
 |---|---|---|---|
 | GSC API OAuth | SEO-Daten automatisch | mittel | niedrig |
 | Finance/Support-Automation anlegen | Monatsberichte ohne Chat | gering | niedrig |
-| **Ops Weekly Review** Automation | Fälligkeiten aus DEADLINES.md | gering | **empfohlen** |
 | Dependabot-PRs mergen | Security aktuell | gering | niedrig |
 | Monetarisierung + Legal | Umsatz | hoch | wenn du willst |
 | Telegram-Agent reaktivieren | Fern-PRs | hoch | pausiert |
@@ -84,6 +84,7 @@ Merge auf `main` (Spiel-Code) · E-Mails an Nutzer · Rechtstexte live · DNS ·
 | 2026-06-15 | Phase 1 abgeschlossen (PR #42) |
 | 2026-06-15 | 4 Cursor-Automations live (0–3) |
 | 2026-06-15 | **Masterauftrag v2 abgeschlossen** — Finance, Support, Legal-Koordination |
+| 2026-06-15 | **Ops Weekly Review** live (Automation #4) · `ops/DEADLINES.md` |
 
 Berichte: `ops/reports/`
 

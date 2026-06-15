@@ -136,6 +136,7 @@ Leitstand aktualisieren.
 - [x] 1 — Uptime Smoke Check (live 2026-06-15)
 - [x] 2 — Security Weekly (live 2026-06-15)
 - [x] 3 — SEO Weekly (live 2026-06-15)
+- [x] 6 — Ops Weekly Review (live 2026-06-15)
 
 Kalle trägt den Status in `ops/LEITSTAND.md` ein — du musst nichts melden.
 
@@ -221,4 +222,3 @@ Kein Merge auf main nötig wenn nur Bericht + DEADLINES-Status. PR optional.
 
 - [ ] 4 — Finance Monthly
 - [ ] 5 — Support Monthly
-- [ ] 6 — Ops Weekly Review

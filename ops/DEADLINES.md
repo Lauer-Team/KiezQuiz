@@ -2,7 +2,7 @@
 
 > **Zweck:** Termine mit Erinnerungsdatum — getrennt vom Leitstand (Status) und Backlogs (Themen).  
 > **Pflege:** Jeder Agent/Kalle trägt hier **fristgebundene** Punkte ein.  
-> **Erinnerung:** Wöchentliche „Ops Review"-Automation prüft `Erinnern ab` und meldet in `ops/reports/`.
+> **Erinnerung:** Automation **Ops Weekly Review** (Mo 07:00 UTC) prüft `Erinnern ab` und meldet in `ops/reports/`.
 
 **Legende Status:** 🟢 erledigt · 🟡 anstehend · 🔴 dringend (≤14 Tage bis Fälligkeit) · ⏸️ wartet
 

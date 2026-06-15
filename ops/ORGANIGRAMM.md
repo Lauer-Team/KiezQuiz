@@ -31,6 +31,7 @@ flowchart TB
         A1["Uptime Smoke Check"]
         A2["Security Weekly"]
         A3["SEO Weekly"]
+        A4["Ops Weekly Review"]
     end
 
     subgraph shared["Gemeinsame Dateien"]
@@ -51,6 +52,7 @@ flowchart TB
     A1 --> DEV
     A2 --> SEC
     A3 --> SEO
+    A4 --> K
 
     SEO & DEV & SEC & FIN & SUP --> RP
     LEGC --> LEGF
@@ -74,4 +76,4 @@ flowchart TB
 | Datum | Änderung |
 |---|---|
 | 2026-06-15 | Erstversion: Kalle, SEO, DevOps, Security |
-| 2026-06-15 | 4 Automations live; Finance, Support, Legal-Koordination; Masterauftrag v2 done |
+| 2026-06-15 | 5 Automations live (inkl. Ops Weekly); Finance, Support, Legal-Koordination |

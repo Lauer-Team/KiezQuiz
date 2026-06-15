@@ -24,7 +24,7 @@
 | United Domains | 🟡 | — | DNS/Mail nur bei Bedarf manuell |
 | Legora | 🟡 | Legal-Arbeitsauftrag, Koordination | Rechtstexte dort prüfen · `ops/legal/` |
 | Finance-Tracking | 🟢 | `ops/finance/SERVICES.md`, COSTS.md | Domain-Verlängerungsdatum eintragen |
-| Cursor Automations | 🟢 | 4 Routinen live (s. LEITSTAND) | optional §4–5 Finance/Support |
+| Cursor Automations | 🟢 | **5 Routinen live** (s. LEITSTAND) | optional §4–5 Finance/Support |
 | GSC API (OAuth) | 🔴 | — | Erst wenn SEO-Automation soll |
 | Analytics | ⚪ | — | bewusst nicht genutzt |
 
