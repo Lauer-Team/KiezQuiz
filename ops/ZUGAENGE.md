@@ -23,7 +23,7 @@
 | Telegram-Bot | ⏸️ | Anleitung im Repo | **Pausiert** bis auf Weiteres |
 | United Domains | 🟡 | — | DNS/Mail nur bei Bedarf manuell |
 | Legora | 🟡 | Legal-Arbeitsaufträge | Rechtstexte dort prüfen |
-| Cursor Automations | 🔴 | Config-Blöcke vorschlagen | Phase 2 — auf cursor.com anlegen |
+| Cursor Automations | 🟢 | 4 Routinen live (s. LEITSTAND) | — |
 | GSC API (OAuth) | 🔴 | — | Erst wenn SEO-Automation soll |
 | Analytics | ⚪ | — | bewusst nicht genutzt |
 
