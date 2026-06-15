@@ -39,7 +39,9 @@ jobs:
         env:
           KIEZ_SUPABASE_DB_URL: ${{ secrets.KIEZ_SUPABASE_DB_URL }}
           KIEZ_SUPABASE_USE_POOLER: "true"
+          PATH: /usr/lib/postgresql/17/bin:${{ env.PATH }}
         run: |
+          pg_dump --version
           python3 scripts/export_supabase_backup.py --retain 3
 
       - name: Upload backup artifact

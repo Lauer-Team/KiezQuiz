@@ -76,19 +76,20 @@ def resolve_output_dir(cfg: dict) -> Path:
 
 
 def find_pg_dump() -> str:
+    for candidate in (
+        Path("/usr/lib/postgresql/17/bin/pg_dump"),
+        Path("/opt/homebrew/opt/libpq/bin/pg_dump"),
+        Path("/usr/local/opt/libpq/bin/pg_dump"),
+    ):
+        if candidate.exists():
+            return str(candidate)
     exe = shutil.which("pg_dump")
     if exe:
         return exe
-    brew_pg = Path("/opt/homebrew/opt/libpq/bin/pg_dump")
-    if brew_pg.exists():
-        return str(brew_pg)
-    usr_pg = Path("/usr/local/opt/libpq/bin/pg_dump")
-    if usr_pg.exists():
-        return str(usr_pg)
     sys.exit(
         "pg_dump nicht gefunden.\n"
         "macOS: brew install libpq && brew link --force libpq\n"
-        "Oder PostgreSQL.app / Postgres.app installieren."
+        "Linux CI: postgresql-client-17 installieren."
     )
 
 
