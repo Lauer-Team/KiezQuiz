@@ -1,4 +1,4 @@
-# Routinen — CFO Finanzen
+# Routinen — Frida (CFO)
 
 | Automation | Cron | Bericht |
 |---|---|---|

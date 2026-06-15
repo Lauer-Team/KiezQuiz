@@ -1,4 +1,4 @@
-# Backlog — CSO Security
+# Backlog — Samira (CSO)
 
 | Thema | Priorität | Nächster Schritt |
 |---|---|---|

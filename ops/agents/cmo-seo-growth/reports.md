@@ -1,4 +1,4 @@
-# Reports — CMO SEO & Growth
+# Reports — Maja (CMO)
 
 | Datum | Datei | Status |
 |---|---|---|

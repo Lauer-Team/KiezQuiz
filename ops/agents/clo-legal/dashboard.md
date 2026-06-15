@@ -1,4 +1,4 @@
-# Dashboard — CLO Legal
+# Dashboard — Lara (CLO)
 
 **Status:** 🟢  
 **Kurz:** NB-E-Mails erledigt · Banner bis 11.07. · Legora-Koordination live

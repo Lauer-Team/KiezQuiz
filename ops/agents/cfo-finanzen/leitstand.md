@@ -1,4 +1,4 @@
-# Leitstand — CFO Finanzen
+# Leitstand — Frida (CFO)
 
 > **Rolle:** CFO / Finance · Stand: **2026-06-15**
 

@@ -1,4 +1,4 @@
-# Anweisungen — CXO Support & Analytics
+# Anweisungen — Xenia (CXO)
 
 **Regel:** `.cursor/rules/50-support-analytics.mdc`
 

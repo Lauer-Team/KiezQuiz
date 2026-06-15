@@ -48,7 +48,7 @@ Berichte immer nach: `reports/YYYY-MM-DD-<thema>.md`
 **Anweisung:**
 
 ```
-Du bist COO Operations für KiezQuiz (.cursor/rules/20-devops-monitoring.mdc).
+Du bist Oskar (COO) für KiezQuiz (.cursor/rules/20-devops-monitoring.mdc).
 
 1. python3 scripts/sync_supabase_backup_artifact.py
 2. Bericht reports/YYYY-MM-DD-backup-archiv.md
@@ -71,7 +71,7 @@ Bei Fehler: Ursache in Bericht, Mensch nur wenn gh auth fehlt.
 **Anweisung:**
 
 ```
-Du bist COO Operations (.cursor/rules/20-devops-monitoring.mdc).
+Du bist Oskar (COO) (.cursor/rules/20-devops-monitoring.mdc).
 
 Prüfe live: kiezquiz.de/version.json, /, /hamburg/, robots.txt, sitemap.xml, kiezquiz.lauer.team (301).
 
@@ -94,7 +94,7 @@ Bei rot: Fix-PR vorschlagen, nicht mergen.
 **Anweisung:**
 
 ```
-Du bist CSO Security (.cursor/rules/30-security.mdc).
+Du bist Samira (CSO) (.cursor/rules/30-security.mdc).
 
 1. Dependabot-Alerts prüfen
 2. Supabase MCP: get_advisors — Security-Hinweise
@@ -117,7 +117,7 @@ Kritische Fixes: Branch+PR, nicht mergen.
 **Anweisung:**
 
 ```
-Du bist CMO SEO (.cursor/rules/10-seo.mdc).
+Du bist Maja (CMO) (.cursor/rules/10-seo.mdc).
 
 Prüfe: sitemap.xml, robots.txt, node scripts/test_seo_compat.js, Stadtseiten.
 
@@ -187,7 +187,7 @@ Keine Upgrades ohne Menschen-OK.
 **Anweisung:**
 
 ```
-Du bist CXO Support (.cursor/rules/50-support-analytics.mdc).
+Du bist Xenia (CXO) (.cursor/rules/50-support-analytics.mdc).
 
 1. Supabase: city_wish_requests aggregiert (keine PII)
 2. Bericht reports/YYYY-MM-DD-support-monthly.md

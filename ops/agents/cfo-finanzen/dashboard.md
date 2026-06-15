@@ -1,4 +1,4 @@
-# Dashboard — CFO Finanzen
+# Dashboard — Frida (CFO)
 
 **Status:** 🟢  
 **Kurz:** Service-Tracking · Cursor ~55→18 €/Jul · Supabase/Resend 🟡 beobachten

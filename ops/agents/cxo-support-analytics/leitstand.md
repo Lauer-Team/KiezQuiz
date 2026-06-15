@@ -1,4 +1,4 @@
-# Leitstand — CXO Support & Analytics
+# Leitstand — Xenia (CXO)
 
 > **Rolle:** CXO / Support & Analytics · Stand: **2026-06-15**
 

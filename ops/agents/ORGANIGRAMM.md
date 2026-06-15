@@ -27,97 +27,45 @@
 
 ```mermaid
 flowchart TB
-    subgraph mensch["👤 Du (Jeremiah) — Eigentümer & Freigabe"]
-        OK["Freigabe-Gates<br/>Deploy · Geld · Recht · DNS · E-Mails"]
-    end
+    ME["Ich (Mensch)<br/>gebe Freigaben und Sonderaufgaben"]
+    LEAD["Leitagent (Kalle)<br/>einziger Ansprechpartner"]
 
-    subgraph leit["🕊️ Kalle — CEO / Leitagent"]
-        K["ops/agents/ceo-kalle/<br/>Orchestrator · PROTOKOLL.md"]
-    end
+    CTO["Theo (CTO)<br/>Produkt & Code"]
+    SEO["Maja (CMO)<br/>Sichtbarkeit & Growth"]
+    FIN["Frida (CFO)<br/>Zahlen · Gate"]
+    OPS["Oskar (COO)<br/>Betrieb & DevOps"]
+    SEC["Samira (CSO)<br/>Schutz"]
+    SUP["Xenia (CXO)<br/>Support & Analytics"]
+    LEG["Lara (CLO)<br/>via Legora"]
 
-    subgraph fach["Fach-Agenten · ops/agents/"]
-        CTO["cto-ingenieur<br/>Engineering"]
-        CFO["cfo-finanzen<br/>Finance"]
-        CLO["clo-legal<br/>Legal · Legora"]
-        CMO["cmo-seo-growth<br/>SEO"]
-        COO["coo-operations<br/>DevOps"]
-        CSO["cso-security<br/>Security"]
-        CXO["cxo-support-analytics<br/>Support"]
-    end
+    SHARED["Gemeinsame Aktenstruktur (pro Agent)<br/>leitstand.md · dashboard.md · todos.md · backlog.md · routinen.md · anweisungen.md · memories.md · reports.md"]
 
-    subgraph mcp["🔌 MCPs & Connections (Kalles Werkzeuge)"]
-        M1["Supabase"]
-        M2["Cloudflare (Docs/Bindings/Builds/Observability)"]
-        M3["Notion"]
-        M4["Cursor App-Control / IDE-Browser"]
-        M5["GitHub (gh CLI)"]
-    end
+    ME <--> LEAD
+    LEAD --> CTO
+    LEAD --> SEO
+    LEAD --> FIN
+    LEAD --> OPS
+    LEAD --> SEC
+    LEAD --> SUP
+    LEAD --> LEG
 
-    subgraph auto["⏰ Cursor Automations 🟢 live"]
-        A0["Backup Archiv Sync"]
-        A1["Uptime Smoke Check"]
-        A2["Security Weekly"]
-        A3["SEO Weekly"]
-        A4["Ops Weekly Review"]
-        A5["Finance Monthly"]
-        A6["Support Monthly"]
-        A7["Leit-Routine / Orchestrator<br/>(koordiniert alle, baut Dashboard)"]
-    end
+    CTO -.-> SHARED
+    SEO -.-> SHARED
+    FIN -.-> SHARED
+    OPS -.-> SHARED
+    SEC -.-> SHARED
+    SUP -.-> SHARED
+    LEG -.-> SHARED
 
-    subgraph gha["⚙️ GitHub Actions (im Code-Repo)"]
-        G1["deploy.yml — Live-Deploy"]
-        G2["supabase-backup.yml — DB-Backup 1./Monat"]
-        G3["backup-reminder.yml — Erinnerungs-Mail"]
-        G4["notify-terms.yml — NB-Mail"]
-    end
+    classDef kontakt fill:#ece9ff,stroke:#8a80d6,color:#222,stroke-width:1px;
+    classDef autonom fill:#dff4ec,stroke:#69b89c,color:#222,stroke-width:1px;
+    classDef gate fill:#f9edd9,stroke:#d6ae72,color:#222,stroke-width:1px;
+    classDef shared fill:#f7f7f7,stroke:#b7b7b7,color:#333,stroke-dasharray: 4 4;
 
-    subgraph hooks["🪝 Hooks (.cursor/hooks)"]
-        H1["after-terms-edit.sh<br/>nach NB-/Legal-Änderung"]
-    end
-
-    subgraph external["🌐 Extern (nicht Cursor)"]
-        LEG["Legora — Rechtstexte & Compliance"]
-        TG["Telegram-Bot — ⏸️ pausiert"]
-        GSC["Google Search Console"]
-        RES["Resend — E-Mail"]
-    end
-
-    subgraph shared["📁 Gemeinsame Dateien (Quelle der Wahrheit)"]
-        LS["ops/agents/ceo-kalle/"]
-        REG["ops/agents/registry.json"]
-        DL["ops/agents/ceo-kalle/todos.md"]
-        RP["reports/"]
-        DASH["ops/_generated/dashboard-data.json"]
-    end
-
-    mensch -->|"Anweisungen / Freigaben"| K
-    K --> CTO & CFO & CLO & CMO & COO & CSO & CXO
-    K --- M1 & M2 & M3 & M4 & M5
-    K -->|"Legal-Arbeitsauftrag"| LEG
-    LEG -->|"geprüfte Texte"| K
-    mensch -.->|"⏸️"| TG
-
-    A0 --> COO
-    A1 --> COO
-    A2 --> CSO
-    A3 --> CMO
-    A4 --> K
-    A5 --> CFO
-    A6 --> CXO
-    A7 ==> A0 & A1 & A2 & A3 & A4 & A5 & A6
-    A7 ==> DASH
-
-    CMO -.-> GSC
-    CSO --- M1
-    CFO --- M1
-    CXO --- M1
-    G4 --- RES
-    H1 -.-> CLO
-
-    CMO & COO & CSO & CFO & CXO --> RP
-    CLO --> LEGF
-    CFO --> FINS
-    K --> LS & REG & DL
+    class ME,LEAD kontakt;
+    class CTO,SEO,OPS,SEC,SUP autonom;
+    class FIN,LEG gate;
+    class SHARED shared;
 ```
 
 ---
@@ -129,13 +77,13 @@ flowchart TB
 | Agent | Akte | Regel-Datei | Auftrag (kurz) |
 |---|---|---|---|
 | 🕊️ **Kalle — CEO** | `ops/agents/ceo-kalle/` | `00-leitagent.mdc` | Orchestriert alles |
-| 🛠️ **CTO Engineering** | `ops/agents/cto-ingenieur/` | `deploy-and-cache-busting.mdc` | Code, Deploy, Layout |
-| 💰 **CFO Finance** | `ops/agents/cfo-finanzen/` | `40-finance.mdc` | Kosten, Free-Tier |
-| ⚖️ **CLO Legal** | `ops/agents/clo-legal/` | `60-legal-coordination.mdc` | Legora-Koordination |
-| 📈 **CMO SEO** | `ops/agents/cmo-seo-growth/` | `10-seo.mdc` | Technisches SEO |
-| ⚙️ **COO Ops** | `ops/agents/coo-operations/` | `20-devops-monitoring.mdc` | Uptime, Backup |
-| 🔒 **CSO Security** | `ops/agents/cso-security/` | `30-security.mdc` | Dependabot, RLS |
-| 💬 **CXO Support** | `ops/agents/cxo-support-analytics/` | `50-support-analytics.mdc` | Stadt-Wünsche |
+| 🛠️ **Theo (CTO)** | `ops/agents/cto-ingenieur/` | `deploy-and-cache-busting.mdc` | Code, Deploy, Layout |
+| 💰 **Frida (CFO)** | `ops/agents/cfo-finanzen/` | `40-finance.mdc` | Kosten, Free-Tier |
+| ⚖️ **Lara (CLO)** | `ops/agents/clo-legal/` | `60-legal-coordination.mdc` | Legora-Koordination |
+| 📈 **Maja (CMO)** | `ops/agents/cmo-seo-growth/` | `10-seo.mdc` | Technisches SEO |
+| ⚙️ **Oskar (COO)** | `ops/agents/coo-operations/` | `20-devops-monitoring.mdc` | Uptime, Backup |
+| 🔒 **Samira (CSO)** | `ops/agents/cso-security/` | `30-security.mdc` | Dependabot, RLS |
+| 💬 **Xenia (CXO)** | `ops/agents/cxo-support-analytics/` | `50-support-analytics.mdc` | Stadt-Wünsche |
 
 Register: `ops/agents/registry.json` · Protokoll: `ops/agents/PROTOKOLL.md`
 

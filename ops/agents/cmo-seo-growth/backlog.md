@@ -1,4 +1,4 @@
-# Backlog — CMO SEO & Growth
+# Backlog — Maja (CMO)
 
 | Thema | Priorität | Nächster Schritt |
 |---|---|---|

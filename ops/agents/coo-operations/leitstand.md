@@ -1,4 +1,4 @@
-# Leitstand — COO Operations
+# Leitstand — Oskar (COO)
 
 > **Rolle:** COO / Ops & DevOps · Stand: **2026-06-15**
 

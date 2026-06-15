@@ -1,4 +1,4 @@
-# Anweisungen — CTO Engineering
+# Anweisungen — Theo (CTO)
 
 **Regeln:** `deploy-and-cache-busting.mdc`, `Layout.mdc`
 

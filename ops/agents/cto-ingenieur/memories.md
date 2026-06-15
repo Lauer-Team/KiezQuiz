@@ -1,4 +1,4 @@
-# Memories — CTO Engineering
+# Memories — Theo (CTO)
 
 - Stadtseiten: `generate_seo_pages.py` — nicht manuell pflegen.
 - Cache-Busting: `versionGuard.js` am Ende von `<head>`, nach CSS.

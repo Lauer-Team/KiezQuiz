@@ -1,4 +1,4 @@
-# Leitstand — CMO SEO & Growth
+# Leitstand — Maja (CMO)
 
 > **Rolle:** CMO / SEO · Stand: **2026-06-15**
 

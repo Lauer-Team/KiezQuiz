@@ -1,4 +1,4 @@
-# Reports — CTO Engineering
+# Reports — Theo (CTO)
 
 Technische Änderungen dokumentiert in PRs und ggf. `reports/` bei größeren Refactors.
 

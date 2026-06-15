@@ -1,4 +1,4 @@
-# Reports — CLO Legal
+# Reports — Lara (CLO)
 
 Legal-Arbeitsaufträge und Koordinations-Notizen in `reports/` bei Bedarf.
 

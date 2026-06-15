@@ -38,3 +38,9 @@ Ziel: Supplement-Ordner in `backup-supabase.config.json` → `archiveDir` (gitig
 
 ## Referenzen
 - `.cursor/rules/deploy-and-cache-busting.mdc`, `ops/TECHSTACK.md`
+
+## Verbindlicher Arbeitszyklus (Reporting)
+- Vor Bearbeitung: neue Reports in `ops/agents/coo-operations/reports/` und `ops/agents/ceo-kalle/reports/` prüfen.
+- Nach Bearbeitung: die 8 Akten von `ops/agents/coo-operations/` aktualisieren (wo nötig).
+- Pflicht: immer ein Report an `ops/agents/ceo-kalle/reports/`.
+- Zusätzlich: Reports an betroffene Agentenordner schreiben (z. B. CTO, CSO), jeweils in deren `reports/`.

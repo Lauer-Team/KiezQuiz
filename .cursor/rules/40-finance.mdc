@@ -48,3 +48,9 @@ Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/agents/cfo-finanz
 ## Referenzen
 
 - `ops/agents/cto-ingenieur/memories.md`, `ops/agents/cfo-finanzen/leitstand.md`
+
+## Verbindlicher Arbeitszyklus (Reporting)
+- Vor Bearbeitung: neue Reports in `ops/agents/cfo-finanzen/reports/` und `ops/agents/ceo-kalle/reports/` prüfen.
+- Nach Bearbeitung: die 8 Akten von `ops/agents/cfo-finanzen/` aktualisieren (wo nötig).
+- Pflicht: immer ein Report an `ops/agents/ceo-kalle/reports/`.
+- Zusätzlich: Reports an betroffene Agentenordner schreiben (z. B. COO bei Quota-Risiko), jeweils in deren `reports/`.

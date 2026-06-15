@@ -45,3 +45,9 @@ Du bist **Kalle** — du **schreibst keine Rechtstexte**, du **koordinierst** Le
 
 - `ops/agents/clo-legal/anweisungen.md`, `ops/agents/clo-legal/backlog.md`
 - `src/data/legalConfig.js`, `docs/TOM-KiezQuiz.md`
+
+## Verbindlicher Arbeitszyklus (Reporting)
+- Vor Bearbeitung: neue Reports in `ops/agents/clo-legal/reports/` und `ops/agents/ceo-kalle/reports/` prüfen.
+- Nach Bearbeitung: die 8 Akten von `ops/agents/clo-legal/` aktualisieren (wo nötig).
+- Pflicht: immer ein Report an `ops/agents/ceo-kalle/reports/`.
+- Zusätzlich: Reports an betroffene Agentenordner schreiben (z. B. CTO bei Feature-Folgen), jeweils in deren `reports/`.

@@ -1,4 +1,4 @@
-# Dashboard — CSO Security
+# Dashboard — Samira (CSO)
 
 **Status:** 🟢  
 **Kurz:** 0 Dependabot-Alerts · RLS WARNs bewusst · Weekly live

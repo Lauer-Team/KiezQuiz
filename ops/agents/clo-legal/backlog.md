@@ -1,4 +1,4 @@
-# Backlog — CLO Legal
+# Backlog — Lara (CLO)
 
 > Migriert aus `backlog.md`
 

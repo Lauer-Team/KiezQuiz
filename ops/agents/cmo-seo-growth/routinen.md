@@ -1,4 +1,4 @@
-# Routinen — CMO SEO & Growth
+# Routinen — Maja (CMO)
 
 | Automation | Cron | Bericht |
 |---|---|---|

@@ -1,4 +1,4 @@
-# Routinen — COO Operations
+# Routinen — Oskar (COO)
 
 | Automation | Cron | Bericht |
 |---|---|---|

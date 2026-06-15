@@ -1,4 +1,4 @@
-# Leitstand — CSO Security
+# Leitstand — Samira (CSO)
 
 > **Rolle:** CSO / Security · Stand: **2026-06-15**
 
