@@ -130,15 +130,11 @@ Leitstand aktualisieren.
 3. **Backup Archiv Sync** — `0 10 2 * *`
 4. **SEO Weekly** — `0 9 * * 1`
 
-## Checkliste (optional — ein Häkchen pro Automation)
+## Checkliste
 
-- [ ] 0 — Backup Archiv Sync
-- [ ] 1 — Uptime Smoke Check
-- [ ] 2 — Security Weekly
-- [ ] 3 — SEO Weekly
+- [x] 0 — Backup Archiv Sync (live 2026-06-15)
+- [x] 1 — Uptime Smoke Check (live 2026-06-15)
+- [x] 2 — Security Weekly (live 2026-06-15)
+- [x] 3 — SEO Weekly (live 2026-06-15)
 
-Nach dem Speichern auf cursor.com: Häkchen setzen oder Kalle Bescheid geben.
-
-## Freigabe
-
-Automations laufen in der Sandbox (Berichte/PRs). Aktivierung ist deine Entscheidung — **Phase 1 funktioniert auch ohne sie** (Kalle in Chat-Sessions).
+Kalle trägt den Status in `ops/LEITSTAND.md` ein — du musst nichts melden.
