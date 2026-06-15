@@ -101,7 +101,7 @@ Kritische Fixes: Branch+PR vorschlagen, nicht mergen.
 | **Modell** | Composer |
 | **MCPs** | *(optional Notion für Notizen)* |
 
-**Hinweis:** GSC-Daten brauchen noch **Search Console API (OAuth)** für Vollautomatik. Bis dahin: Automation prüft technisches SEO im Code + Live-URLs.
+**Hinweis:** GSC-Daten automatisch via `scripts/gsc_weekly_brief.py` — nach OAuth (`docs/GSC-API-SETUP.md`). Bis dahin: technisches SEO im Code + Live-URLs.
 
 **Anweisung:**
 
@@ -112,10 +112,11 @@ Prüfe:
 - curl https://kiezquiz.de/sitemap.xml und robots.txt
 - node scripts/test_seo_compat.js (falls vorhanden)
 - Stadtseiten /hamburg/ /berlin/ /frankfurt/ erreichbar
+- Falls GSC OAuth eingerichtet: python3 scripts/gsc_weekly_brief.py --days 28 --out ops/reports/YYYY-MM-DD-seo-gsc.md
 
 Bericht ops/reports/YYYY-MM-DD-seo-weekly.md mit:
 - Technischer Status (grün/gelb/rot)
-- Hinweis an Mensch: GSC Performance/Coverage manuell prüfen (Property kiezquiz.de)
+- GSC-Kennzahlen (wenn Skript läuft) oder Hinweis: OAuth fehlt → docs/GSC-API-SETUP.md
 - Verbesserungsvorschläge als PR, nicht mergen
 
 Leitstand aktualisieren.
@@ -130,18 +131,19 @@ Leitstand aktualisieren.
 3. **Backup Archiv Sync** — `0 10 2 * *`
 4. **SEO Weekly** — `0 9 * * 1`
 
-## Checkliste
+## Checkliste (alle live 2026-06-15)
 
-- [x] 0 — Backup Archiv Sync (live 2026-06-15)
-- [x] 1 — Uptime Smoke Check (live 2026-06-15)
-- [x] 2 — Security Weekly (live 2026-06-15)
-- [x] 3 — SEO Weekly (live 2026-06-15)
-
-Kalle trägt den Status in `ops/LEITSTAND.md` ein — du musst nichts melden.
+- [x] 0 — Backup Archiv Sync
+- [x] 1 — Uptime Smoke Check
+- [x] 2 — Security Weekly
+- [x] 3 — SEO Weekly
+- [x] 4 — Finance Monthly
+- [x] 5 — Support Monthly
+- [x] 6 — Ops Weekly Review
 
 ---
 
-## 4. Finance Monthly (optional)
+## 4. Finance Monthly
 
 | | |
 |---|---|
@@ -165,7 +167,7 @@ Keine Upgrades ohne Menschen-OK.
 
 ---
 
-## 5. Support Monthly (optional)
+## 5. Support Monthly
 
 | | |
 |---|---|
@@ -187,7 +189,7 @@ Kein Google Analytics. Keine E-Mails an Nutzer.
 
 ---
 
-## 6. Ops Weekly Review (empfohlen — Fälligkeiten)
+## 6. Ops Weekly Review (Fälligkeiten)
 
 | | |
 |---|---|
@@ -215,10 +217,10 @@ Du bist Kalle (Leitagent).
 5. Neue fristgebundene Punkte aus Berichten anderer Agenten → Zeile in DEADLINES.md
 
 Kein Merge auf main nötig wenn nur Bericht + DEADLINES-Status. PR optional.
+Ab 2026-07-12: wenn D4 fällig → scripts/deactivate_terms_notice.py --apply (siehe DEADLINES.md).
 ```
 
 ## Checkliste optional
 
-- [ ] 4 — Finance Monthly
-- [ ] 5 — Support Monthly
+_(alle Pflicht-Automations live — siehe Checkliste oben)_
 - [ ] 6 — Ops Weekly Review

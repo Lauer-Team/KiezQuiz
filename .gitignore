@@ -18,6 +18,10 @@ src/supabaseConfig.js
 scripts/terms-notify.config.json
 scripts/.terms-notify-log.json
 
+# GSC API (OAuth — nie committen)
+scripts/gsc-oauth-client.json
+scripts/gsc-token.json
+
 # Supabase-Backup (DB-URI + Dumps — nie committen)
 scripts/backup-supabase.config.json
 backups/

@@ -1,6 +1,6 @@
 # Organigramm — KiezQuiz Agenten-Struktur
 
-> Mermaid rendert auf GitHub als Diagramm. Stand: **2026-06-15** (Masterauftrag v2 abgeschlossen)
+> Mermaid rendert auf GitHub als Diagramm. Stand: **2026-06-15**
 
 ```mermaid
 flowchart TB
@@ -26,17 +26,21 @@ flowchart TB
         TG["Telegram-Bot<br/>⏸️ pausiert"]
     end
 
-    subgraph auto["Cursor Automations 🟢 live"]
+    subgraph auto["Cursor Automations 🟢 live (7)"]
         A0["Backup Archiv Sync"]
         A1["Uptime Smoke Check"]
         A2["Security Weekly"]
         A3["SEO Weekly"]
+        A4["Ops Weekly Review"]
+        A5["Finance Monthly"]
+        A6["Support Monthly"]
     end
 
     subgraph shared["Gemeinsame Dateien"]
         LS["ops/LEITSTAND.md"]
         RP["ops/reports/"]
         RT["ops/RETRO.md"]
+        RD["ops/ROADMAP.md"]
         FINS["ops/finance/"]
         LEGF["ops/legal/"]
     end
@@ -51,11 +55,14 @@ flowchart TB
     A1 --> DEV
     A2 --> SEC
     A3 --> SEO
+    A4 --> K
+    A5 --> FIN
+    A6 --> SUP
 
     SEO & DEV & SEC & FIN & SUP --> RP
     LEGC --> LEGF
     FIN --> FINS
-    K --> LS & RT
+    K --> LS & RT & RD
 ```
 
 ## Freigabe-Gates (nur du)
@@ -74,4 +81,5 @@ flowchart TB
 | Datum | Änderung |
 |---|---|
 | 2026-06-15 | Erstversion: Kalle, SEO, DevOps, Security |
-| 2026-06-15 | 4 Automations live; Finance, Support, Legal-Koordination; Masterauftrag v2 done |
+| 2026-06-15 | 4 Automations live; Finance, Support, Legal-Koordination |
+| 2026-06-15 | 7 Automations live; ROADMAP + Monetarisierungsplan |

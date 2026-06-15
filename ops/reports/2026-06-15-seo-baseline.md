@@ -9,6 +9,6 @@
 - Live: `/`, Stadtseiten, `robots.txt`, `sitemap.xml` — HTTP 200
 - GSC Property **kiezquiz.de** — bestätigt (manuell)
 
-## Offen (Phase 2)
+## Offen (Roadmap)
 
-- GSC Search Console API (OAuth) für automatische Performance-Daten in Wochenberichten
+- GSC Search Console API (OAuth) — Skript bereit: `scripts/gsc_weekly_brief.py` · `docs/GSC-API-SETUP.md`

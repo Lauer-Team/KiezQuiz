@@ -26,4 +26,12 @@ Kurze Learnings nach größeren Durchläufen (Datum · Kontext · Lehre).
 
 **Lehre:** Legal = Koordination in Cursor, Formulierung in Legora — getrennte Rollen klar halten.
 
+## 2026-06-15 — Ops-Aufräumen (NB, Roadmap, Actions)
+
+**Kontext:** NB-Backlog war veraltet (E-Mails schon am 10.06. raus). Finance/Support-Automations live.
+
+**Lehre:** `pendingNotice: true` ≠ „E-Mail offen" — Gäste-Banner bis Inkrafttreten trennen.
+
+**Lehre:** Aufgeschobenes gehört in `ROADMAP.md`, Termine in `DEADLINES.md` — nicht alles in den Leitstand.
+
 ---

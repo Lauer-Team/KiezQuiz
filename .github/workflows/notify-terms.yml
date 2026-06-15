@@ -27,7 +27,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Validate send approval
         if: inputs.mode == 'send' && inputs.owner_approved != true
