@@ -1,4 +1,4 @@
-# Dashboard — CMO SEO & Growth
+# Dashboard — Maja (CMO)
 
 **Status:** 🟢  
 **Kurz:** GSC manuell · SEO Weekly live · Sitemap/Stadtseiten OK

@@ -1,4 +1,4 @@
-# Anweisungen — COO Operations
+# Anweisungen — Oskar (COO)
 
 **Regel:** `.cursor/rules/20-devops-monitoring.mdc`
 

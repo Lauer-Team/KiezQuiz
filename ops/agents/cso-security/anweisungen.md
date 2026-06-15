@@ -1,4 +1,4 @@
-# Anweisungen — CSO Security
+# Anweisungen — Samira (CSO)
 
 **Regel:** `.cursor/rules/30-security.mdc`
 

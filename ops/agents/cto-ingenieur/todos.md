@@ -1,4 +1,4 @@
-# Todos — CTO Engineering
+# Todos — Theo (CTO)
 
 - [ ] Features nur via Branch + PR
 - [ ] Bei HTML-Änderungen: versionGuard + DESIGN_REVISION beachten

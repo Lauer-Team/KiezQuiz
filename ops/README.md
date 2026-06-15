@@ -44,10 +44,10 @@ Reporting-Regeln: [`agents/PROTOKOLL.md`](agents/PROTOKOLL.md)
 | Emoji | Agent | Ordner |
 |---|---|---|
 | 🕊️ | Kalle (CEO) | [`ceo-kalle/`](agents/ceo-kalle/) |
-| 🛠️ | CTO Engineering | [`cto-ingenieur/`](agents/cto-ingenieur/) |
-| 💰 | CFO Finanzen | [`cfo-finanzen/`](agents/cfo-finanzen/) |
-| ⚖️ | CLO Legal | [`clo-legal/`](agents/clo-legal/) |
-| 📈 | CMO SEO & Growth | [`cmo-seo-growth/`](agents/cmo-seo-growth/) |
-| ⚙️ | COO Operations | [`coo-operations/`](agents/coo-operations/) |
-| 🔒 | CSO Security | [`cso-security/`](agents/cso-security/) |
-| 💬 | CXO Support | [`cxo-support-analytics/`](agents/cxo-support-analytics/) |
+| 🛠️ | Theo (CTO) | [`cto-ingenieur/`](agents/cto-ingenieur/) |
+| 💰 | Frida (CFO) | [`cfo-finanzen/`](agents/cfo-finanzen/) |
+| ⚖️ | Lara (CLO) | [`clo-legal/`](agents/clo-legal/) |
+| 📈 | Maja (CMO) | [`cmo-seo-growth/`](agents/cmo-seo-growth/) |
+| ⚙️ | Oskar (COO) | [`coo-operations/`](agents/coo-operations/) |
+| 🔒 | Samira (CSO) | [`cso-security/`](agents/cso-security/) |
+| 💬 | Xenia (CXO) | [`cxo-support-analytics/`](agents/cxo-support-analytics/) |

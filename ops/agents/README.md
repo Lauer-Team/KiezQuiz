@@ -16,3 +16,10 @@ Jeder Agent ist ein „Mitarbeiter“ mit **8 Pflicht-Dateien** + optional `repo
 **CEO** verdichtet Reports aller Agenten in [`ceo-kalle/leitstand.md`](ceo-kalle/leitstand.md).
 
 Siehe auch: [`PROTOKOLL.md`](PROTOKOLL.md) · [`registry.json`](registry.json) · [`ORGANIGRAMM.md`](ORGANIGRAMM.md)
+
+## Synchron-Regel (wichtig)
+
+- Jeder Agent prüft vor jeder Aufgabe neue Reports (eigener Ordner + CEO-Ordner).
+- Danach bearbeitet er die Aufgabe, aktualisiert seine 8 Dateien (wo nötig) und schreibt Reports:
+  - immer an Kalle (`ceo-kalle/reports/`)
+  - zusätzlich an alle betroffenen Agenten (`<ziel>/reports/`).

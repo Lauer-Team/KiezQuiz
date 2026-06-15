@@ -1,4 +1,4 @@
-# Leitstand — CTO Engineering
+# Leitstand — Theo (CTO)
 
 > **Rolle:** CTO / Produkt & Code · Stand: **2026-06-15**
 

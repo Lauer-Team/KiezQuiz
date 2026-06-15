@@ -1,4 +1,4 @@
-# Backlog — CTO Engineering
+# Backlog — Theo (CTO)
 
 | Thema | Priorität | Nächster Schritt |
 |---|---|---|

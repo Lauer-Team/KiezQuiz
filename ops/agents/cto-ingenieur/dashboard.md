@@ -1,4 +1,4 @@
-# Dashboard — CTO Engineering
+# Dashboard — Theo (CTO)
 
 **Status:** 🟢  
 **Kurz:** Branch+PR · Deploy-Pipeline healthy · Admin-Dashboard JSON-UI

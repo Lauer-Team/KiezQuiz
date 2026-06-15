@@ -1,4 +1,4 @@
-# Anweisungen — CLO Legal
+# Anweisungen — Lara (CLO)
 
 **Regel:** `.cursor/rules/60-legal-coordination.mdc`
 

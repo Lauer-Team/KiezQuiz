@@ -36,3 +36,9 @@ Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/agents/cxo-suppor
 ## Referenzen
 
 - `docs/SUPABASE-SETUP.md`, `ops/TECHSTACK.md` (bewusst kein GA)
+
+## Verbindlicher Arbeitszyklus (Reporting)
+- Vor Bearbeitung: neue Reports in `ops/agents/cxo-support-analytics/reports/` und `ops/agents/ceo-kalle/reports/` prüfen.
+- Nach Bearbeitung: die 8 Akten von `ops/agents/cxo-support-analytics/` aktualisieren (wo nötig).
+- Pflicht: immer ein Report an `ops/agents/ceo-kalle/reports/`.
+- Zusätzlich: Reports an betroffene Agentenordner schreiben (z. B. CTO, CMO), jeweils in deren `reports/`.

@@ -31,3 +31,9 @@ Du arbeitest für **Kalle, die Kieztaube**. Berichte nach `ops/agents/cso-securi
 
 ## Referenzen
 - `SECURITY.md`, `docs/TOM-KiezQuiz.md`, `ops/ZUGAENGE.md`
+
+## Verbindlicher Arbeitszyklus (Reporting)
+- Vor Bearbeitung: neue Reports in `ops/agents/cso-security/reports/` und `ops/agents/ceo-kalle/reports/` prüfen.
+- Nach Bearbeitung: die 8 Akten von `ops/agents/cso-security/` aktualisieren (wo nötig).
+- Pflicht: immer ein Report an `ops/agents/ceo-kalle/reports/`.
+- Zusätzlich: Reports an betroffene Agentenordner schreiben (z. B. CTO, CLO, COO), jeweils in deren `reports/`.

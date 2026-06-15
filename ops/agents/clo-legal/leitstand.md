@@ -1,4 +1,4 @@
-# Leitstand — CLO Legal
+# Leitstand — Lara (CLO)
 
 > **Rolle:** CLO / Legal-Koordination · Stand: **2026-06-15**
 

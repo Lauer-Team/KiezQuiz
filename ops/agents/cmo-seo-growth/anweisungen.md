@@ -1,4 +1,4 @@
-# Anweisungen — CMO SEO & Growth
+# Anweisungen — Maja (CMO)
 
 **Regel:** `.cursor/rules/10-seo.mdc`
 

@@ -1,4 +1,4 @@
-# Anweisungen — CFO Finanzen
+# Anweisungen — Frida (CFO)
 
 **Regel:** `.cursor/rules/40-finance.mdc`
 

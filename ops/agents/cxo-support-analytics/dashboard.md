@@ -1,4 +1,4 @@
-# Dashboard — CXO Support & Analytics
+# Dashboard — Xenia (CXO)
 
 **Status:** 🟢  
 **Kurz:** Stadt-Wünsche · Support Monthly live · kein GA

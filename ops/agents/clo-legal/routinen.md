@@ -1,4 +1,4 @@
-# Routinen — CLO Legal
+# Routinen — Lara (CLO)
 
 - **Bei jedem relevanten PR:** Trigger-Check (6 Fragen in `anweisungen.md`)
 - **NB-Prozess:** `.cursor/rules/terms-change-notify.mdc` + `docs/TERMS-CHANGE-PROCESS.md`

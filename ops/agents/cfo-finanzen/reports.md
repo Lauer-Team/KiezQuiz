@@ -1,4 +1,4 @@
-# Reports — CFO Finanzen
+# Reports — Frida (CFO)
 
 | Datum | Datei | Status |
 |---|---|---|

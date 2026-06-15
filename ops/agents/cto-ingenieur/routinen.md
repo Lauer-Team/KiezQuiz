@@ -1,4 +1,4 @@
-# Routinen — CTO Engineering
+# Routinen — Theo (CTO)
 
 | GitHub Action | Auslöser | Was |
 |---|---|---|

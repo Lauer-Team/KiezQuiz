@@ -1,4 +1,4 @@
-# Backlog — CFO Finanzen
+# Backlog — Frida (CFO)
 
 | Thema | Priorität | Nächster Schritt |
 |---|---|---|

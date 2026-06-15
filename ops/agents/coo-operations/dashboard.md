@@ -1,4 +1,4 @@
-# Dashboard — COO Operations
+# Dashboard — Oskar (COO)
 
 **Status:** 🟢  
 **Kurz:** Uptime-Automation live · Backup CI + Archiv · Deploy healthy

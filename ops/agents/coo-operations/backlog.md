@@ -1,4 +1,4 @@
-# Backlog — COO Operations
+# Backlog — Oskar (COO)
 
 | Thema | Priorität | Nächster Schritt |
 |---|---|---|

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-15T20:07:03.421937+00:00",
-  "generatedAtDe": "Monday, 15.06.2026 · 22:07 Uhr",
+  "generatedAt": "2026-06-15T20:10:49.852063+00:00",
+  "generatedAtDe": "Monday, 15.06.2026 · 22:10 Uhr",
   "version": 2,
   "ceo": {
     "id": "ceo-kalle",
@@ -60,7 +60,7 @@
   "agents": [
     {
       "id": "cto-ingenieur",
-      "name": "CTO Engineering",
+      "name": "Theo (CTO)",
       "role": "CTO / Produkt & Code",
       "emoji": "🛠️",
       "ruleFile": ".cursor/rules/deploy-and-cache-busting.mdc",
@@ -78,7 +78,7 @@
     },
     {
       "id": "cfo-finanzen",
-      "name": "CFO Finanzen",
+      "name": "Frida (CFO)",
       "role": "CFO / Finance",
       "emoji": "💰",
       "ruleFile": ".cursor/rules/40-finance.mdc",
@@ -104,7 +104,7 @@
     },
     {
       "id": "clo-legal",
-      "name": "CLO Legal",
+      "name": "Lara (CLO)",
       "role": "CLO / Legal-Koordination",
       "emoji": "⚖️",
       "ruleFile": ".cursor/rules/60-legal-coordination.mdc",
@@ -122,7 +122,7 @@
     },
     {
       "id": "cmo-seo-growth",
-      "name": "CMO SEO & Growth",
+      "name": "Maja (CMO)",
       "role": "CMO / SEO & Growth",
       "emoji": "📈",
       "ruleFile": ".cursor/rules/10-seo.mdc",
@@ -148,7 +148,7 @@
     },
     {
       "id": "coo-operations",
-      "name": "COO Operations",
+      "name": "Oskar (COO)",
       "role": "COO / Ops & DevOps",
       "emoji": "⚙️",
       "ruleFile": ".cursor/rules/20-devops-monitoring.mdc",
@@ -181,7 +181,7 @@
     },
     {
       "id": "cso-security",
-      "name": "CSO Security",
+      "name": "Samira (CSO)",
       "role": "CSO / Security",
       "emoji": "🔒",
       "ruleFile": ".cursor/rules/30-security.mdc",
@@ -207,7 +207,7 @@
     },
     {
       "id": "cxo-support-analytics",
-      "name": "CXO Support & Analytics",
+      "name": "Xenia (CXO)",
       "role": "CXO / Support & Analytics",
       "emoji": "💬",
       "ruleFile": ".cursor/rules/50-support-analytics.mdc",
@@ -320,43 +320,43 @@
     "agents": [
       {
         "id": "cto-ingenieur",
-        "label": "CTO Engineering",
+        "label": "Theo (CTO)",
         "emoji": "🛠️",
         "role": "CTO / Produkt & Code"
       },
       {
         "id": "cfo-finanzen",
-        "label": "CFO Finanzen",
+        "label": "Frida (CFO)",
         "emoji": "💰",
         "role": "CFO / Finance"
       },
       {
         "id": "clo-legal",
-        "label": "CLO Legal",
+        "label": "Lara (CLO)",
         "emoji": "⚖️",
         "role": "CLO / Legal-Koordination"
       },
       {
         "id": "cmo-seo-growth",
-        "label": "CMO SEO & Growth",
+        "label": "Maja (CMO)",
         "emoji": "📈",
         "role": "CMO / SEO & Growth"
       },
       {
         "id": "coo-operations",
-        "label": "COO Operations",
+        "label": "Oskar (COO)",
         "emoji": "⚙️",
         "role": "COO / Ops & DevOps"
       },
       {
         "id": "cso-security",
-        "label": "CSO Security",
+        "label": "Samira (CSO)",
         "emoji": "🔒",
         "role": "CSO / Security"
       },
       {
         "id": "cxo-support-analytics",
-        "label": "CXO Support & Analytics",
+        "label": "Xenia (CXO)",
         "emoji": "💬",
         "role": "CXO / Support & Analytics"
       }

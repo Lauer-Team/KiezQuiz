@@ -1,83 +1,127 @@
 # Reporting- & Kollaborationsprotokoll — KiezQuiz Agenten
 
-> **Zweck:** Einheitliche Regeln, wann Agenten sich gegenseitig einbinden, was Reports enthalten müssen, und wie Kalle als CEO verdichtet.  
+> **Zweck:** Alle Agenten bleiben synchron.  
+> **Prinzip:** Wer arbeitet, aktualisiert seine Akte und verteilt zielgerichtete Reports.  
 > **Pflege:** Kalle · Stand: **2026-06-15**
 
 ---
 
-## 1. Akten-Schema (jeder Agent)
+## 1. Verbindlicher Arbeitszyklus (für jeden Agenten, immer)
 
-Jeder Agent unter `ops/agents/<id>/` pflegt **dieselben 8 Dateien**:
+Wenn ein Agent angesprochen wird (Chat, Automation, Aufgabe), läuft immer dieselbe Reihenfolge:
+
+1. **Eingang prüfen (vor Bearbeitung)**
+   - Neue Reports in `ops/agents/<eigene-id>/reports/` lesen.
+   - Zusätzlich Reports in `ops/agents/ceo-kalle/reports/` lesen (CEO-Lagebild).
+   - Letzten Sync in `memories.md` unter `## Report-Sync` führen.
+2. **Aufgabe bearbeiten**
+   - Facharbeit durchführen.
+3. **Eigene 8 Dateien aktualisieren (wo nötig)**
+   - `leitstand.md`, `backlog.md`, `todos.md`, `memories.md`, `routinen.md`, `anweisungen.md`, `dashboard.md`, `reports.md`.
+4. **Reports verteilen**
+   - **Immer** Report an Kalle schreiben.
+   - Zusätzlich je einen Report an jeden betroffenen Fach-Agenten schreiben.
+5. **Sync markieren**
+   - `memories.md`: Zeitstempel + Kurznotiz „Eingang geprüft / verteilt“.
+
+Ohne diesen Zyklus gilt ein Lauf als unvollständig.
+
+---
+
+## 2. Report-Zielorte (Pflicht)
+
+Ein Agent schreibt Reports **nicht nur in den eigenen Ordner**, sondern in die Ordner der Empfänger:
+
+- CEO immer: `ops/agents/ceo-kalle/reports/`
+- Fachlich betroffen: `ops/agents/<ziel-agent>/reports/`
+
+### Dateiname (Standard)
+
+`YYYY-MM-DD-HHMM-from-<quelle>-to-<ziel>-<thema>.md`
+
+Beispiel:  
+`2026-06-15-2210-from-cfo-finanzen-to-ceo-kalle-quota-warnung.md`
+
+---
+
+## 3. Report-Pflichtinhalt (für den Empfänger relevant)
+
+Jeder Report enthält mindestens:
+
+1. **Kontext** — warum du den Report bekommst
+2. **Status** — 🟢/🟡/🔴 + ein Satz
+3. **Was sich geändert hat** — nur empfängerrelevante Punkte
+4. **Risiko/Implikation** — was der Empfänger beachten muss
+5. **Erwartete Aktion** — was der Empfänger jetzt tun soll (falls nötig)
+6. **Links in Akten** — betroffene Dateien
+
+Kurzformat:
+
+```markdown
+# [Thema] — YYYY-MM-DD HH:MM
+**Von:** <quelle> · **An:** <ziel> · **Status:** 🟢/🟡/🔴
+
+## Für dich relevant
+- ...
+
+## Erwartete Aktion
+1. ...
+
+## Betroffene Akten
+- ops/agents/<quelle>/dashboard.md
+- ops/agents/<quelle>/leitstand.md
+```
+
+---
+
+## 4. Akten-Schema (jeder Agent)
+
+Jeder Agent unter `ops/agents/<id>/` pflegt dieselben 8 Dateien:
 
 | Datei | Inhalt | Wann aktualisieren |
 |---|---|---|
-| `leitstand.md` | Status, Entscheidungen, Kurzüberblick der Abteilung | Bei jeder Statusänderung |
+| `leitstand.md` | Status, Entscheidungen, Kurzüberblick | Bei jeder Statusänderung |
 | `backlog.md` | Themen ohne festes Datum | Bei neuen Ideen / Prioritätswechsel |
-| `todos.md` | Konkrete offene Aufgaben | Wöchentlich + bei neuen Aufgaben |
-| `memories.md` | Dauerhafte Learnings (für Automations-Memories) | Nach größeren Läufen |
-| `routinen.md` | Cron-Routinen, die dieser Agent betreut | Bei neuen/geänderten Automationen |
-| `anweisungen.md` | Definition of Done, Grenzen, Reporting-Pflicht | Bei Regeländerungen |
-| `dashboard.md` | **„Heute“-Sicht** — Status, Top-Todos, Automations (für UI) | Bei jedem Report-Lauf |
-| `reports.md` | Index + Kurzfassung der jüngsten Berichte | Nach jedem Bericht in `reports/` |
+| `todos.md` | Konkrete Aufgaben | Bei neuen/erledigten Aufgaben |
+| `memories.md` | Learnings + Report-Sync | Nach jedem Lauf |
+| `routinen.md` | Cron-Routinen | Bei neuen/geänderten Automationen |
+| `anweisungen.md` | Definition of Done, Grenzen | Bei Regeländerungen |
+| `dashboard.md` | Heute-Sicht für UI | Bei jedem Lauf |
+| `reports.md` | Index eigener Berichte | Nach jedem Bericht |
 
-**Quelle der Wahrheit für das Admin-Dashboard:** `dashboard.md` (+ Konsolidierung via `scripts/build_ai_dashboard_data.py`).
+**Quelle der Wahrheit fürs Dashboard:** `dashboard.md` (+ `scripts/build_ai_dashboard_data.py`).
 
 ---
 
-## 2. Themen-Matrix — wann ruft ein Agent wen?
+## 5. Themen-Matrix — wen zusätzlich informieren?
 
-| Auslöser | Primär | Sekundär (Kalle informieren) |
+| Auslöser | Primär | Zusätzlich reporten an |
 |---|---|---|
-| Neues Feature / Code-PR | CTO | Legal (Trigger?), Security, SEO |
-| Deploy / Live-Gang | COO + CTO | Kalle (Freigabe-Gate) |
-| Kosten / Quota >70 % | CFO | Kalle → Mensch (Upgrade-Gate) |
-| Rechtstext / NB / DSGVO | CLO | Kalle → Legora (Human-as-agent) |
-| SEO / Sitemap / GSC | CMO | Kalle |
-| Uptime / Backup / CI | COO | Kalle |
-| Dependabot / RLS / Secrets | CSO | Kalle, ggf. CLO (TOM) |
-| Stadt-Wünsche / Feedback | CXO | Kalle, ggf. CTO (Feature) |
-| Fristen / Deadlines | Kalle (CEO) | Betroffener Fach-Agent |
+| Neues Feature / Code-PR | Theo (CTO) | Kalle, Lara (CLO), Samira (CSO), Maja (CMO) |
+| Deploy / Live-Gang | Oskar (COO) + Theo (CTO) | Kalle |
+| Kosten / Quota >70 % | Frida (CFO) | Kalle, ggf. Oskar (COO) |
+| Rechtstext / NB / DSGVO | Lara (CLO) | Kalle |
+| SEO / Sitemap / GSC | Maja (CMO) | Kalle, ggf. Theo (CTO) |
+| Uptime / Backup / CI | Oskar (COO) | Kalle, ggf. Samira (CSO) |
+| Dependabot / RLS / Secrets | Samira (CSO) | Kalle, ggf. Lara (CLO), Theo (CTO) |
+| Stadt-Wünsche / Feedback | Xenia (CXO) | Kalle, ggf. Theo (CTO), Maja (CMO) |
+| Fristen / Deadlines | Kalle | Betroffener Fach-Agent |
 
-**Regel:** Fach-Agenten **melden an Kalle**, nicht direkt an den Menschen — außer Human-as-agent-Aufgaben (nummerierte Schritte).
-
----
-
-## 3. Report-Pflichtfelder (jeder Bericht in `reports/`)
-
-Jeder Bericht beginnt mit:
-
-```markdown
-# [Titel] — YYYY-MM-DD
-**Agent:** [Rolle] · **Status:** 🟢/🟡/🔴
-```
-
-Und enthält mindestens:
-
-1. **Status** — grün/gelb/rot + ein Satz
-2. **Risiken** — was könnte schiefgehen?
-3. **Entscheidungen** — was wurde festgelegt?
-4. **Offene Fragen** — was braucht Mensch/Kalle?
-5. **Nächste Schritte** — nummeriert, laienverständlich
-
-Danach: betroffene Agenten-Akten aktualisieren (`dashboard.md`, `leitstand.md`, ggf. `reports.md`).
+Regel: Fach-Agenten reporten nicht direkt an den Menschen, außer bei Human-as-agent-Schritten.
 
 ---
 
-## 4. Wie Kalle Reports empfängt und verdichtet
+## 6. Kalle als CEO-Drehscheibe
 
-1. **Session-Start:** `ops/agents/ceo-kalle/leitstand.md` + jüngste `reports/` lesen.
-2. **Nach Automation-Lauf:** Fach-Agent schreibt Bericht → aktualisiert eigene Akte → Kalle aktualisiert CEO-Akte + ggf. `ops/agents/ceo-kalle/todos.md`.
-3. **Wöchentlich (Orchestrator #7):** Alle Agenten-`dashboard.md` konsolidieren, `build_ai_dashboard_data.py` ausführen, Upload.
-4. **Leitstand-Pointer:** `ops/agents/ceo-kalle/leitstand.md` verweist auf CEO-Akte — kein paralleles Todo-Dump.
+Kalle muss immer wissen, was läuft:
 
----
-
-## 5. Automations → Agenten-Dateien
-
-Siehe `ops/agents/ceo-kalle/routinen.md` — jede Automation listet exakt, welche Dateien sie schreibt.
+1. Liest alle neuen Reports in `ops/agents/ceo-kalle/reports/`.
+2. Aktualisiert CEO-Akte (`leitstand.md`, `dashboard.md`, `todos.md`, `reports.md`).
+3. Verteilt Rückfragen oder Folgeaufträge an betroffene Agenten via Report-Datei.
+4. Konsolidiert für Dashboard-Refresh (`build_ai_dashboard_data.py`).
 
 ---
 
-## 6. Freigabe-Gates (nur Mensch)
+## 7. Freigabe-Gates (nur Mensch)
 
-Deploy · Geld · Recht · DNS · E-Mails · Daten löschen — siehe `ops/agents/ORGANIGRAMM.md` §12.
+Deploy · Geld · Recht · DNS · E-Mails · Daten löschen — siehe `ops/agents/ORGANIGRAMM.md`.

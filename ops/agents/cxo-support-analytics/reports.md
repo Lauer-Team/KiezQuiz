@@ -1,4 +1,4 @@
-# Reports — CXO Support & Analytics
+# Reports — Xenia (CXO)
 
 Monatlich: `reports/*support-monthly*`
 

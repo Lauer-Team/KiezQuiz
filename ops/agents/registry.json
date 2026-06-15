@@ -13,7 +13,7 @@
     },
     {
       "id": "cto-ingenieur",
-      "displayName": "CTO Engineering",
+      "displayName": "Theo (CTO)",
       "role": "CTO / Produkt & Code",
       "emoji": "🛠️",
       "ruleFile": ".cursor/rules/deploy-and-cache-busting.mdc",
@@ -22,7 +22,7 @@
     },
     {
       "id": "cfo-finanzen",
-      "displayName": "CFO Finanzen",
+      "displayName": "Frida (CFO)",
       "role": "CFO / Finance",
       "emoji": "💰",
       "ruleFile": ".cursor/rules/40-finance.mdc",
@@ -31,7 +31,7 @@
     },
     {
       "id": "clo-legal",
-      "displayName": "CLO Legal",
+      "displayName": "Lara (CLO)",
       "role": "CLO / Legal-Koordination",
       "emoji": "⚖️",
       "ruleFile": ".cursor/rules/60-legal-coordination.mdc",
@@ -40,7 +40,7 @@
     },
     {
       "id": "cmo-seo-growth",
-      "displayName": "CMO SEO & Growth",
+      "displayName": "Maja (CMO)",
       "role": "CMO / SEO & Growth",
       "emoji": "📈",
       "ruleFile": ".cursor/rules/10-seo.mdc",
@@ -49,7 +49,7 @@
     },
     {
       "id": "coo-operations",
-      "displayName": "COO Operations",
+      "displayName": "Oskar (COO)",
       "role": "COO / Ops & DevOps",
       "emoji": "⚙️",
       "ruleFile": ".cursor/rules/20-devops-monitoring.mdc",
@@ -58,7 +58,7 @@
     },
     {
       "id": "cso-security",
-      "displayName": "CSO Security",
+      "displayName": "Samira (CSO)",
       "role": "CSO / Security",
       "emoji": "🔒",
       "ruleFile": ".cursor/rules/30-security.mdc",
@@ -67,7 +67,7 @@
     },
     {
       "id": "cxo-support-analytics",
-      "displayName": "CXO Support & Analytics",
+      "displayName": "Xenia (CXO)",
       "role": "CXO / Support & Analytics",
       "emoji": "💬",
       "ruleFile": ".cursor/rules/50-support-analytics.mdc",
