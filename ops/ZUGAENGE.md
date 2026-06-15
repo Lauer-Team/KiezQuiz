@@ -97,5 +97,4 @@ Pausiert bis auf Weiteres. Anleitung: `telegram-agent/ANLEITUNG.md`
 
 ## Nächster Schritt
 
-**Phase 1 gestartet:** `ops/LEITSTAND.md`, `ops/ORGANIGRAMM.md`, Regeln `10-seo`, `20-devops-monitoring`, `30-security`.  
-**Phase 2:** Automations + Finance + GSC-API — wenn du soweit bist.
+**Phase 1 abgeschlossen** (2026-06-15). Phase 2: `ops/PHASE2.md` · Automations optional in `ops/AUTOMATIONS.md`.

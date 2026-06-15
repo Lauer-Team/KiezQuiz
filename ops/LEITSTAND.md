@@ -1,7 +1,6 @@
 # Leitstand — KiezQuiz
 
-> **Einzige Quelle der Wahrheit** für Status, Aufgaben und Entscheidungen.  
-> Pflege: **Kalle, die Kieztaube** · Stand: 2026-06-15
+> **Einzige Quelle der Wahrheit** · Pflege: **Kalle, die Kieztaube** · Stand: **2026-06-15 — Phase 1 abgeschlossen**
 
 ---
 
@@ -9,72 +8,64 @@
 
 | Abteilung | Status | Kurz |
 |---|---|---|
-| **Leitagent (Kalle)** | 🟢 | Ops-Struktur, Regeln, Automations-Vorlagen |
-| **SEO** | 🟡 | GSC OK; wöchentliche Automation vorbereitet |
-| **DevOps / Monitoring** | 🟢 | Smoke-Check grün; Uptime-Automation bereit |
-| **Security** | 🟡 | Dependabot aktiv; Weekly-Scan Automation bereit |
-| **Finance** | ⚪ | Phase 2 |
-| **Support / Analytics** | ⚪ | Kein Tracking (bewusst); Phase 2 |
-| **Legal (Legora)** | 🟡 | Laufend über Legora |
+| **Leitagent (Kalle)** | 🟢 | Ops live, Routinen dokumentiert |
+| **SEO** | 🟢 | GSC OK, techn. Checks grün |
+| **DevOps / Monitoring** | 🟢 | Live + Backup CI + Archiv |
+| **Security** | 🟡 | 0 Dependabot; Supabase WARNs bekannt/absicht |
+| **Supabase-Backup** | 🟢 | CI am 1. · Archiv Supplement · Sync-Skript |
+| **Finance** | ⚪ | Phase 2 — siehe `ops/PHASE2.md` |
+| **Support / Analytics** | ⚪ | Phase 2 |
+| **Legal (Legora)** | 🟡 | Laufend |
 | **Telegram-Agent** | ⏸️ | Pausiert |
-| **Supabase-Backup** | 🟢 | CI + Supplement-Archiv (Kalle) | — |
 
 ---
 
-## 2. Offene Aufgaben
+## 2. Was läuft automatisch
 
-### Kalle erledigt selbst
-- [x] Phase 1 ops + PR #40
-- [x] Backup CI grün; Archiv-Skripte + erste Kopien im Supplement-Ordner
-- [ ] PR backup-archiv mergen (Skripte + Docs)
+| Rhythmus | Was |
+|---|---|
+| **1×/Monat** | GitHub: Supabase-Backup → Artifact |
+| **Nach Backup** | Kalle: `sync_supabase_backup_artifact.py` → Supplement-Ordner |
+| **2×/Monat** | E-Mail Erinnerung info@kiezquiz.de (Info, kein manuelles Kopieren) |
+| **Auf Anfrage / Session** | Smoke-Check, SEO-Test, Security-Baseline |
 
-### Aufgabe für dich (Mensch)
-
-- [ ] **Cursor Automations** anlegen — siehe `ops/AUTOMATIONS.md` (Start: Uptime Smoke Check)
-- [ ] GSC API (OAuth) — optional, für automatisches SEO-Briefing
-
-#### Backup-Archiv (erledigt durch Kalle)
-
-| Wann | Wer | Was |
-|---|---|---|
-| **1. des Monats** | GitHub Actions | Backup + Artifact |
-| **danach** | **Kalle** | `sync_supabase_backup_artifact.py` → Supplement-Ordner |
-| **2. des Monats** | E-Mail | Info an info@kiezquiz.de (kein manuelles Kopieren nötig) |
-
-Archiv: `KiezQuiz (supplement)/Backups/Supabase` · CI-Backup 🟢 (Run 27550083985)
+**Archiv:** `KiezQuiz (supplement)/Backups/Supabase`
 
 ---
 
-## 3. Wartet auf deine Freigabe
+## 3. Optional — du (nur wenn du willst)
 
-| Was | Risiko | Status |
-|---|---|---|
-| Merge PR `ops/leitagent-phase1` | Docs + Regeln, kein Spiel-Code | offen |
-| Cursor Automations aktivieren | Sandbox-PRs/Berichte | deine Entscheidung |
-
----
-
-## 4. Entscheidungs-Logbuch
-
-| Datum | Entscheidung | Warum |
-|---|---|---|
-| 2026-06-15 | Leitagent „Kalle" + ops-Struktur | Master-Auftrag v2 |
-| 2026-06-15 | Zugänge: Supabase, Cloudflare, Notion, GSC, Resend | Agent-Management |
-| 2026-06-15 | PR #38 + #39 — Backup CI | Free Tier pg_dump |
-| 2026-06-15 | **PR #40 merged** — Phase 1 ops live | Leitstand, Regeln, Automations-Vorlagen |
-| 2026-06-15 | **Backup-Archiv** — Kalle → Supplement-Ordner | Kein manuelles Kopieren mehr |
-| 2026-06-15 | Telegram pausiert | Später |
+| Aufgabe | Priorität |
+|---|---|
+| Cursor Automations anlegen (`ops/AUTOMATIONS.md`) | mittel — erspart dir Dashboard-Besuche |
+| GSC API OAuth | niedrig — erst für auto SEO-Briefings |
+| Dependabot-PRs #11–#12, #37 mergen | niedrig — GitHub Actions Updates |
 
 ---
 
-## 5. Optimierungs-Backlog
+## 4. Wartet auf deine Freigabe
 
-| Idee | Nutzen | Aufwand | Priorität |
-|---|---|---|---|
-| Uptime-Automation anlegen | Ausfall früh erkennen | gering | **jetzt** |
-| Security-Automation anlegen | Schwachstellen | gering | hoch |
-| SEO-Automation + GSC API | Rankings automatisch | mittel | mittel |
-| Finance Phase 2 | Kosten im Blick | mittel | später |
+| Was | Risiko |
+|---|---|
+| Merge auf `main` (Spiel-Code) | Live-Deploy |
+| E-Mails an Nutzer | Irreversibel |
+| Rechtstexte live | Legora + OK |
+| DNS-Änderungen | Öffentlich |
+| Supabase RLS-Hardening (Security-WARNs) | App-Verhalten — nur mit OK |
+
+---
+
+## 5. Entscheidungs-Logbuch (Kurz)
+
+| Datum | Entscheidung |
+|---|---|
+| 2026-06-15 | Leitagent Kalle + ops-Struktur (PR #40) |
+| 2026-06-15 | Zugänge: Supabase, Cloudflare, Notion, GSC, Resend |
+| 2026-06-15 | Backup Free Tier + CI (PR #38–#41) |
+| 2026-06-15 | Archivierung → Kalle, Supplement-Ordner |
+| 2026-06-15 | **Phase 1 abgeschlossen** |
+
+Berichte: `ops/reports/2026-06-15-*.md`
 
 ---
 
@@ -82,9 +73,7 @@ Archiv: `KiezQuiz (supplement)/Backups/Supabase` · CI-Backup 🟢 (Run 27550083
 
 | Begriff | In einem Satz |
 |---|---|
-| **Leitstand** | Diese Datei — zentraler Status für alle Agenten. |
-| **Leitagent / Kalle** | Dein einziger Ansprechpartner; koordiniert Fach-Agenten. |
-| **PR** | Code-/Doc-Änderungsvorschlag — Merge = live bei Spiel-Code. |
-| **MCP** | Anbindung an Supabase, Cloudflare, Notion usw. |
-| **Automation** | Zeitgesteuerter Cursor-Agent im Repo (Bericht oder PR). |
-| **GSC** | Google Search Console — wie Google deine Seite sieht. |
+| **Leitstand** | Diese Datei — zentraler Status. |
+| **Kalle** | Dein Leitagent — ein Ansprechpartner für alles. |
+| **Supplement-Ordner** | Langzeit-Backup außerhalb des Git-Repos. |
+| **Phase 2** | Finance, volle Automations — siehe `ops/PHASE2.md`. |
