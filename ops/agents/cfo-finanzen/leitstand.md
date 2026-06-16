@@ -47,7 +47,7 @@ Kalle warnt bei **>70 %** eines Free-Tier-Limits im CEO-Leitstand.
 | **Google Search Console** | Free | 0 | SEO | 🟢 |
 | **GitHub Pages** | Free (public) | 0 | Hosting | 🟢 |
 | **Notion** | Free/Personal | 0 | Doku | 🟢 |
-| **Legora** | (dein Plan) | ? | Recht | 🟢 |
+| **Legora** | Campus-Lizenz Bucerius Law School | 0 | Recht | 🟢 |
 | **United Domains** | Domain .de | ~1–2* | kiezquiz.de | 🟢 | **bis 30.05.2027** (D1) |
 | **Telegram** | Free | 0 | ⏸️ pausiert | 🟢 |
 
@@ -177,8 +177,8 @@ Kalle warnt bei **>70 %** eines Free-Tier-Limits im Leitstand.
 | **Resend** | 0 € | 0 € | Free Tier |
 | **GSC / Pages / Notion** | 0 € | 0 € | Free |
 | **Domain kiezquiz.de** | ~1 €/Monat | ~1 €/Monat | United Domains · **läuft bis 30.05.2027** |
-| **Legora** | (dein Plan) | — | Recht — nicht in Cursor |
-| **Summe (ohne Legora/Domain)** | **~66 €** | **~29 €** | Cursor + Hetzner |
+| **Legora** | 0 € | 0 € | Campus-Lizenz Bucerius Law School |
+| **Summe (ohne Domain)** | **~66 €** | **~29 €** | Cursor + Hetzner |
 
 **Domain kiezquiz.de:** Registrierung 31.05.2026–30.05.2027 (United Domains). Erinnerung ab 01.04.2027 → `ops/agents/ceo-kalle/todos.md` D1.
 

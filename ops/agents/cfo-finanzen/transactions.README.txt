@@ -14,7 +14,7 @@ Trennzeichen: Semikolon (;) · UTF-8 · Kopfzeile nicht löschen
 Spalten
 -------
 datum          YYYY-MM-DD (Zahlungs- oder Rechnungsdatum)
-typ            ausgabe | einnahme | service-gratis
+typ            ausgabe | einnahme | service-gratis | service-kostenpflichtig
 kategorie      Dev-Tools | Infrastruktur | Recht | Marketing | Service-Inventar | Sonstiges | Einnahmen
 anbieter       z. B. Cursor, Supabase, United Domains
 beschreibung   Kurztext, wofür
@@ -37,13 +37,18 @@ Typ „service-gratis“
 Kostenlose Dienste im Einsatz (0 €) — damit du siehst, was später Geld kosten *könnte*.
 Nicht in Saldo/Quartalssummen einrechnen (betrag_eur = 0). Risiko-Hinweis in notiz.
 
+Typ „service-kostenpflichtig“
+-----------------------------
+Normalerweise kostenpflichtiger Dienst, tatsächliche Kosten 0 € (z. B. Campus-Lizenz).
+Nicht in Saldo einrechnen. In notiz vermerken, warum keine Kosten anfallen.
+
 Quartals- / Jahresbericht (manuell oder Tabellenkalkulation)
 --------------------------------------------------------------
 - Filter: datum im Quartal (Q1=Jan–Mrz, Q2=Apr–Jun, …)
 - Summe ausgaben = SUM(betrag_eur) WHERE typ=ausgabe
 - Summe einnahmen = SUM(betrag_eur) WHERE typ=einnahme
 - Saldo = einnahmen − ausgaben
-- Service-Inventar = alle Zeilen WHERE typ=service-gratis (Übersicht, kein Geldfluss)
+- Service-Inventar = alle Zeilen WHERE typ=service-gratis ODER typ=service-kostenpflichtig
 
 Beispiel Einnahme (wenn Monetarisierung startet)
 ------------------------------------------------
