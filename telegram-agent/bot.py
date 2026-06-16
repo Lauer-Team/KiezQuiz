@@ -41,7 +41,7 @@ HELP_TEXT = """KiezQuiz Agent — Befehle
 • /new → neuer Agent (frischer Kontext)
 • /new <Aufgabe> → neu starten und gleich Aufgabe senden
 • /end → aktuelle Session beenden (ohne neue anzulegen)
-• ja oder /deploy → Pull Request mergen → kiezquiz.de wird aktualisiert
+• ja, „Ja deployen“, /deploy → Pull Request mergen → kiezquiz.de wird aktualisiert
 • nein → PR bleibt offen (nicht live)
 • /status → Session, Branch, PR
 • /restart → Bot neu starten (lädt Code-Änderungen)
@@ -142,6 +142,17 @@ READ_ONLY_TASK_RE = re.compile(
     re.IGNORECASE,
 )
 
+# „ja“, „Ja alles deployen“, „bitte mergen“ — nicht als Agent-Aufgabe missverstehen
+DEPLOY_CONFIRM_RE = re.compile(
+    r"^(ja|j|yes|yep|klar|ok|okay|gerne)\b|"
+    r"\b(deploy|deployen|merg|mergen|live\s*schalten|einchecken)\b",
+    re.IGNORECASE,
+)
+REJECT_CONFIRM_RE = re.compile(
+    r"^(nein|n|no|nö|lieber\s+nicht|abbrechen)\b",
+    re.IGNORECASE,
+)
+
 
 def git_changed_paths(repo: Path) -> list[str]:
     code, out, _ = run_cmd(["git", "status", "--porcelain"], cwd=repo, timeout=60)
@@ -172,6 +183,40 @@ def changes_affect_website(paths: list[str]) -> bool:
 
 def is_likely_read_only_task(task: str) -> bool:
     return bool(READ_ONLY_TASK_RE.search(task))
+
+
+def is_deploy_confirmation(text: str) -> bool:
+    t = text.strip()
+    if t.lower() in ("ja", "j", "yes", "deploy"):
+        return True
+    return bool(DEPLOY_CONFIRM_RE.search(t))
+
+
+def is_reject_confirmation(text: str) -> bool:
+    t = text.strip()
+    if t.lower() in ("nein", "n", "no"):
+        return True
+    return bool(REJECT_CONFIRM_RE.search(t))
+
+
+def pr_state(repo: Path, pr_number: int) -> str | None:
+    code, out, _ = run_cmd(
+        ["gh", "pr", "view", str(pr_number), "--json", "state", "-q", ".state"],
+        cwd=repo,
+        timeout=60,
+    )
+    if code != 0:
+        return None
+    return out.strip() or None
+
+
+def sync_repo_main(repo: Path, state: dict[str, Any]) -> None:
+    run_cmd(["git", "checkout", "main"], cwd=repo, timeout=60)
+    run_cmd(["git", "pull", "--ff-only", "origin", "main"], cwd=repo, timeout=120)
+    state["branch"] = None
+    state["pr_url"] = None
+    state["pr_number"] = None
+    save_state(state)
 
 
 def git_current_branch(repo: Path) -> str:
@@ -314,20 +359,23 @@ def merge_pr(cfg: dict[str, Any], state: dict[str, Any]) -> tuple[bool, str]:
         return False, "Kein offener PR. Erst eine Aufgabe senden, die Code ändert."
 
     repo = Path(cfg["repo_path"])
+    status = pr_state(repo, pr_number)
+    if status == "MERGED":
+        sync_repo_main(repo, state)
+        return True, f"PR #{pr_number} war bereits gemerged. main ist aktualisiert."
+
     code, out, _ = run_cmd(
         ["gh", "pr", "merge", str(pr_number), "--merge", "--delete-branch"],
         cwd=repo,
         timeout=120,
     )
     if code != 0:
+        if status == "MERGED" or "already" in out.lower() or "merged" in out.lower():
+            sync_repo_main(repo, state)
+            return True, f"PR #{pr_number} war bereits gemerged. main ist aktualisiert."
         return False, f"Merge fehlgeschlagen:\n{out}"
 
-    run_cmd(["git", "checkout", "main"], cwd=repo)
-    run_cmd(["git", "pull", "--ff-only", "origin", "main"], cwd=repo)
-    state["branch"] = None
-    state["pr_url"] = None
-    state["pr_number"] = None
-    save_state(state)
+    sync_repo_main(repo, state)
     return True, f"PR #{pr_number} gemerged. Deploy läuft (~2 Min) → https://kiezquiz.de"
 
 
@@ -501,7 +549,21 @@ async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: 
         repo = Path(cfg["repo_path"])
         changed = git_changed_paths(repo)
         if not changed:
-            await update.message.reply_text("Keine Datei-Änderungen im Repo.")
+            pr_number = state.get("pr_number")
+            pr_url = state.get("pr_url")
+            if pr_number and pr_state(repo, pr_number) == "MERGED":
+                sync_repo_main(repo, state)
+                await update.message.reply_text(
+                    f"Keine neuen lokalen Änderungen — PR #{pr_number} ist bereits gemerged, main aktualisiert."
+                )
+            elif pr_url or pr_number:
+                label = pr_url or f"#{pr_number}"
+                await update.message.reply_text(
+                    f"Keine neuen lokalen Änderungen (bereits committed).\n"
+                    f"Offener PR: {label}\n\nMergen? (ja / nein)"
+                )
+            else:
+                await update.message.reply_text("Keine Datei-Änderungen im Repo.")
         elif is_likely_read_only_task(task) and not changes_affect_website(changed):
             preview = ", ".join(changed[:4])
             if len(changed) > 4:
@@ -541,12 +603,11 @@ async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         return
 
     text = update.message.text.strip()
-    lower = text.lower()
 
-    if lower in ("ja", "j", "yes", "deploy"):
+    if is_deploy_confirmation(text):
         await cmd_deploy(update, context)
         return
-    if lower in ("nein", "n", "no"):
+    if is_reject_confirmation(text):
         state = load_state()
         await update.message.reply_text(await reject_deploy(state))
         return
