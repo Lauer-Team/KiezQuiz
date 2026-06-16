@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -22,6 +23,17 @@ def load_config() -> dict:
         return json.load(handle)
 
 
+def load_dotenv(path: Path) -> None:
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip())
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Kalle: E-Mail via Resend senden")
     parser.add_argument("--to", help="Empfänger (Standard: default_to aus config)")
@@ -30,6 +42,7 @@ def main() -> None:
     parser.add_argument("--attach", action="append", default=[], help="Datei-Anhang (mehrfach möglich)")
     args = parser.parse_args()
 
+    load_dotenv(SCRIPT_DIR / ".env")
     cfg = load_config()
     email_cfg = resolve_email_config(cfg)
     if not email_cfg:
