@@ -280,6 +280,26 @@
       }
     },
     {
+      date: '2026-06-16',
+      version: '2.2.0',
+      de: {
+        title: 'Ravensburg',
+        items: [
+          'Ravensburg als neue spielbare Stadt mit 4 Ortschaften und 10 Wohnbezirken',
+          'Karte aus OpenStreetMap (ODbL) — Stadt- und Ortschaftsgrenzen',
+          'Eigene Ränge, Pokale und SEO-Seite unter /ravensburg/'
+        ]
+      },
+      en: {
+        title: 'Ravensburg',
+        items: [
+          'Ravensburg as a new playable city with 4 villages and 10 residential districts',
+          'Map from OpenStreetMap (ODbL) — city and village boundaries',
+          'Dedicated ranks, trophies, and SEO page at /ravensburg/'
+        ]
+      }
+    },
+    {
       date: '2026-06-10',
       version: '2.1.0',
       de: {

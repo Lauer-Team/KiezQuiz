@@ -18,6 +18,7 @@ URLS = [
     "/frankfurt/",
     "/muenchen/",
     "/duesseldorf/",
+    "/ravensburg/",
     "/europe/",
     "/mississippi/",
 ]

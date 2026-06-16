@@ -100,6 +100,13 @@
     { name: 'Laim', xpNeeded: 3100 }
   ];
 
+  const RAVENSBURG_ORTSCHAFTEN_PROGRESSION = [
+    { name: 'Ravensburg', xpNeeded: 0 },
+    { name: 'Eschach', xpNeeded: 50 },
+    { name: 'Schmalegg', xpNeeded: 150 },
+    { name: 'Taldorf', xpNeeded: 300 }
+  ];
+
   const DUESSELDORF_BEZIRKE_PROGRESSION = [
     { name: 'Altstadt', xpNeeded: 0 },
     { name: 'Flingern', xpNeeded: 50 },
@@ -209,6 +216,24 @@
       paradiseTarget: 'Schwabing'
     },
     {
+      id: 'ravensburg',
+      name: 'Ravensburg',
+      greetingKey: 'cities.ravensburg.greeting',
+      blurbKey: 'cities.ravensburg.blurb',
+      hue: 165,
+      status: 'playable',
+      levels: [
+        { key: 'ortschaften', labelKey: 'cities.ravensburg.levels.ortschaften', singularKey: 'cities.ravensburg.singular.ortschaft', tierKey: 'cities.tier.overview', count: 4 },
+        { key: 'wohnbezirke', labelKey: 'cities.ravensburg.levels.wohnbezirke', singularKey: 'cities.ravensburg.singular.wohnbezirk', tierKey: 'cities.tier.detail', count: 10 }
+      ],
+      dataGlobal: 'RAVENSBURG_DATA',
+      mapSvg: 'src/data/ravensburg_map.svg',
+      progression: RAVENSBURG_ORTSCHAFTEN_PROGRESSION,
+      trophyCatalog: 'ravensburg',
+      totalTrophies: 7,
+      paradiseTarget: 'Veitsburg'
+    },
+    {
       id: 'duesseldorf',
       name: 'Düsseldorf',
       greetingKey: 'cities.duesseldorf.greeting',
@@ -272,6 +297,7 @@
     FRANKFURT_BEZIRKE_PROGRESSION,
     MUENCHEN_BEZIRKE_PROGRESSION,
     DUESSELDORF_BEZIRKE_PROGRESSION,
+    RAVENSBURG_ORTSCHAFTEN_PROGRESSION,
     EUROPE_COUNTRIES_PROGRESSION
   };
 })();

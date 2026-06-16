@@ -542,6 +542,21 @@
     "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "Düsseldorf rank"
   },
+  "cityRanksRavensburg": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Orchard Rookie" },
+    "3": { "name": "Toy Town Buff" },
+    "4": { "name": "Tower Explorer" },
+    "5": { "name": "Ravensburg Expert" },
+    "6": { "name": "Upper Swabia Pro" },
+    "7": { "name": "Village Boss" },
+    "8": { "name": "King of Ravensburg" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Ravensburg rank — all villages & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Villages {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Ravensburg rank"
+  },
   "cityRanksEurope": {
     "1": { "name": "Tourist" },
     "2": { "name": "Backpacker" },
@@ -752,6 +767,26 @@
       "unlockDesc": "Name all 10 districts in the challenge!"
     }
   },
+  "trophiesRavensburg": {
+    "paradise_explorer": {
+      "name": "Veitsburg Explorer!",
+      "unlockTitle": "Veitsburg Explorer! 🏰",
+      "desc": "Correctly tap \"Veitsburg\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Veitsburg for the first time."
+    },
+    "meister_alle_stadtteile": {
+      "name": "King of Ravensburg",
+      "unlockTitle": "King of Ravensburg 👑",
+      "desc": "Name all residential districts in \"Name all places\".",
+      "unlockDesc": "Find every residential district in the Name Sprint!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Village Boss",
+      "unlockTitle": "Village Boss 🏛️",
+      "desc": "Name all 4 villages in the challenge.",
+      "unlockDesc": "Name all 4 villages in the challenge!"
+    }
+  },
   "trophies": {
     "neuwerk_island": {
       "name": "Neuwerk Islander",
@@ -803,6 +838,7 @@
     "defaultBezirkFrankfurt": "A significant district of Frankfurt.",
     "defaultBezirkMuenchen": "A significant district of Munich.",
     "defaultBezirkDuesseldorf": "A significant district of Düsseldorf.",
+    "defaultOrtschaftRavensburg": "One of the four official villages of Ravensburg.",
     "defaultCountryEurope": "A sovereign state in Europe.",
     "defaultCountyMississippi": "A county in the state of Mississippi.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
@@ -951,6 +987,8 @@
     "emptyStadtteilFrankfurt": "Click a neighbourhood on the map to see fascinating metadata and Frankfurt facts!",
     "emptyBezirksteilMuenchen": "Click a district section on the map to see fascinating metadata and Munich facts!",
     "emptyStadtteilDuesseldorf": "Click a neighbourhood on the map to see fascinating metadata and Düsseldorf facts!",
+    "emptyOrtschaftRavensburg": "Click a village on the map to discover facts about Ravensburg and Upper Swabia!",
+    "emptyWohnbezirkRavensburg": "Click a residential district on the map to see metadata and Ravensburg facts!",
     "emptyOrtsteil": "Click a neighbourhood on the map to see fascinating metadata and Berlin facts!",
     "residents": "Population",
     "area": "Area",
@@ -966,7 +1004,8 @@
     "subdistrictsBerlin": "Neighbourhoods ({count})",
     "subdistrictsFrankfurt": "Neighbourhoods ({count})",
     "subdistrictsMuenchen": "District sections ({count})",
-    "subdistrictsDuesseldorf": "Neighbourhoods ({count})"
+    "subdistrictsDuesseldorf": "Neighbourhoods ({count})",
+    "subdistrictsRavensburg": "Residential districts ({count})"
   },
   "game": {
     "roundStartTitle": "Start a run",
@@ -1294,6 +1333,18 @@
         "stadtteil": "Neighbourhood"
       }
     },
+    "ravensburg": {
+      "greeting": "Hello!",
+      "blurb": "4 villages · 10 residential districts",
+      "levels": {
+        "ortschaften": "Villages",
+        "wohnbezirke": "Residential districts"
+      },
+      "singular": {
+        "ortschaft": "Village",
+        "wohnbezirk": "Residential district"
+      }
+    },
     "europe": {
       "greeting": "Welcome to Europe!",
       "blurb": "44 countries · 44 capitals",
@@ -1332,7 +1383,7 @@
     "modesTitle": "Game modes",
     "modesBody": "Explorer mode for free discovery, map quiz for clicking, detective for searching, challenge under time pressure and typing mode — something for every learning style.",
     "citiesTitle": "Cities & wishes",
-    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Düsseldorf and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
+    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Munich, Düsseldorf, Ravensburg and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
     "privacyTitle": "Privacy",
     "privacyBody": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username and save data are transmitted via TLS and stored with Supabase (EU); passwords are hashed. Full details in the <a href=\"/datenschutz/\">privacy policy</a>.",
     "licensesTitle": "Open source & licences",
