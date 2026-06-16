@@ -40,6 +40,7 @@ HELP_TEXT = """KiezQuiz Agent — Befehle
 • Einfach schreiben → Agent setzt fort (gleiches Gespräch)
 • /new → neuer Agent (frischer Kontext)
 • /new <Aufgabe> → neu starten und gleich Aufgabe senden
+• /end → aktuelle Session beenden (ohne neue anzulegen)
 • ja oder /deploy → Pull Request mergen → kiezquiz.de wird aktualisiert
 • nein → PR bleibt offen (nicht live)
 • /status → Session, Branch, PR
@@ -320,6 +321,25 @@ async def cmd_status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     await update.message.reply_text("\n".join(lines))
 
 
+async def cmd_end(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+    state = load_state()
+    if state.get("busy"):
+        await update.message.reply_text("Agent läuft noch. Bitte warten.")
+        return
+    if not state.get("cursor_chat_id"):
+        await update.message.reply_text("Keine aktive Session.")
+        return
+
+    state["cursor_chat_id"] = None
+    save_state(state)
+    await update.message.reply_text(
+        "Session beendet. Schreib /new oder einfach eine Aufgabe für einen neuen Start."
+    )
+
+
 async def cmd_new(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     cfg = context.application.bot_data["cfg"]
     if not await ensure_auth(update, cfg):
@@ -430,6 +450,7 @@ def main() -> None:
     app.add_handler(CommandHandler("start", cmd_help))
     app.add_handler(CommandHandler("status", cmd_status))
     app.add_handler(CommandHandler("new", cmd_new))
+    app.add_handler(CommandHandler("end", cmd_end))
     app.add_handler(CommandHandler("deploy", cmd_deploy))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_message))
 
