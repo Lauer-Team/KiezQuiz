@@ -17,13 +17,10 @@ import argparse
 import json
 import os
 import re
-import ssl
 import sys
 import urllib.error
 import urllib.request
 from datetime import date, datetime, timedelta, timezone
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -39,7 +36,10 @@ ENV_MAP = {
     "KIEZ_NOTIFY_TERMS_SECRET": "notifySecret",
     "KIEZ_SUPABASE_URL": "supabaseUrl",
     "KIEZ_SUPABASE_SERVICE_ROLE_KEY": "supabaseServiceRoleKey",
-    "KIEZ_RESEND_API_KEY": "resendApiKey",
+    "KIEZ_ICLOUD_LOGIN": "smtpUser",
+    "KIEZ_ICLOUD_APP_PASSWORD": "smtpPassword",
+    "KIEZ_SMTP_HOST": "smtpHost",
+    "KIEZ_SMTP_PORT": "smtpPort",
     "KIEZ_TERMS_FROM_EMAIL": "fromEmail",
     "KIEZ_TERMS_FROM_NAME": "fromName",
     "KIEZ_SITE_URL": "siteUrl",
@@ -66,6 +66,16 @@ def load_config() -> dict:
 
     if not cfg.get("mode"):
         cfg["mode"] = "edge" if cfg.get("edgeFunctionUrl") else "direct"
+
+    cfg.setdefault("emailProvider", "smtp")
+    if cfg.get("smtpUser") and cfg.get("smtpPassword"):
+        cfg["smtp"] = {
+            "host": cfg.get("smtpHost", "smtp.mail.me.com"),
+            "port": int(cfg.get("smtpPort", 587)),
+            "user": cfg["smtpUser"],
+            "password": cfg["smtpPassword"],
+            "useTls": True,
+        }
 
     return cfg
 
@@ -264,56 +274,30 @@ Viele Grüße
     return subject, text, html
 
 
-def send_via_resend(cfg: dict, to: str, subject: str, text: str, html: str) -> None:
-    payload = json.dumps({
-        "from": f"{cfg.get('fromName', 'KiezQuiz')} <{cfg.get('fromEmail', 'info@kiezquiz.de')}>",
-        "to": [to],
-        "subject": subject,
-        "text": text,
-        "html": html,
-    }).encode()
-
-    req = urllib.request.Request(
-        "https://api.resend.com/emails",
-        data=payload,
-        headers={
-            "Authorization": f"Bearer {cfg['resendApiKey']}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        if resp.status >= 300:
-            raise RuntimeError(f"Resend HTTP {resp.status}")
-
-
 def send_via_smtp(cfg: dict, to: str, subject: str, text: str, html: str) -> None:
-    import smtplib
+    import sys
+    from pathlib import Path
 
-    smtp = cfg["smtp"]
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"] = f"{cfg.get('fromName', 'KiezQuiz')} <{cfg.get('fromEmail')}>"
-    msg["To"] = to
-    msg.attach(MIMEText(text, "plain", "utf-8"))
-    msg.attach(MIMEText(html, "html", "utf-8"))
+    root = Path(__file__).resolve().parent.parent
+    sys.path.insert(0, str(root / "scripts"))
+    from lib.email_smtp import send_html_email
 
-    context = ssl.create_default_context()
-    with smtplib.SMTP(smtp["host"], int(smtp["port"])) as server:
-        if smtp.get("useTls", True):
-            server.starttls(context=context)
-        server.login(smtp["user"], smtp["password"])
-        server.sendmail(cfg["fromEmail"], [to], msg.as_string())
+    send_html_email(
+        to=to,
+        subject=subject,
+        text=text,
+        html=html,
+        from_email=cfg.get("fromEmail", "info@kiezquiz.de"),
+        from_name=cfg.get("fromName", "KiezQuiz"),
+    )
 
 
 def send_email(cfg: dict, to: str, subject: str, text: str, html: str) -> None:
-    provider = cfg.get("emailProvider", "resend")
-    if provider == "resend":
-        send_via_resend(cfg, to, subject, text, html)
-    elif provider == "smtp":
-        send_via_smtp(cfg, to, subject, text, html)
-    else:
-        raise ValueError(f"Unbekannter emailProvider: {provider}")
+    if not cfg.get("smtp"):
+        raise RuntimeError(
+            "SMTP nicht konfiguriert — KIEZ_ICLOUD_LOGIN + KIEZ_ICLOUD_APP_PASSWORD setzen"
+        )
+    send_via_smtp(cfg, to, subject, text, html)
 
 
 def update_legal_config(version: str, effective_date: str) -> None:

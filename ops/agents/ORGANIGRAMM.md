@@ -137,7 +137,7 @@ Details & Zugangsstatus: **`ops/ZUGAENGE.md`** · Anbieterliste: **`ops/TECHSTAC
 | **Deploy** | `.github/workflows/deploy.yml` | Push auf `main` | Baut & deployt nach kiezquiz.de (GitHub Pages) |
 | **Supabase Backup** | `.github/workflows/supabase-backup.yml` | 1. jeden Monats, 03:00 UTC | `pg_dump` → Artifact |
 | **Backup-Erinnerung** | `.github/workflows/backup-reminder.yml` | 2. jeden Monats, 09:00 UTC | E-Mail an info@kiezquiz.de |
-| **NB-Benachrichtigung** | `.github/workflows/notify-terms.yml` | manuell/bei NB-Änderung | E-Mail-Versand via Resend |
+| **NB-Benachrichtigung** | `.github/workflows/notify-terms.yml` | manuell/bei NB-Änderung | E-Mail via iCloud SMTP |
 
 ---
 
@@ -269,9 +269,9 @@ Diese Dateien sind per `.gitignore` **bewusst nicht** auf GitHub (enthalten Gehe
 |---|---|
 | **Cursor Automations** | 8 Automationen neu anlegen — Konfig steht in `ops/agents/ceo-kalle/routinen.md` |
 | **MCP-Zugänge** | Supabase, Cloudflare, Notion im neuen Cursor-Account neu verbinden (`ops/ZUGAENGE.md`) |
-| **GitHub Secrets** | `KIEZ_SUPABASE_DB_URL`, Resend etc. neu setzen |
+| **GitHub Secrets** | `KIEZ_SUPABASE_DB_URL`, `KIEZ_ICLOUD_*` etc. neu setzen |
 | **Supabase** | Projekt bleibt; Zugang/Keys übertragen |
-| **Resend / GSC / Cloudflare / United Domains** | Logins behalten; Domains/Verifizierung bleiben |
+| **iCloud / GSC / Cloudflare / United Domains** | Logins behalten; DNS/MX bei united-domains |
 | **Notion** | Projektseite bleibt; MCP neu verbinden |
 
 **Kurz:** Repo klonen **+** Block B kopieren **+** Block C neu verbinden = vollständiger Umzug.

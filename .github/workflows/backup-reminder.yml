@@ -15,18 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Validate Resend secret
+      - name: Validate iCloud SMTP secrets
         env:
-          KIEZ_RESEND_API_KEY: ${{ secrets.KIEZ_RESEND_API_KEY }}
+          KIEZ_ICLOUD_LOGIN: ${{ secrets.KIEZ_ICLOUD_LOGIN }}
+          KIEZ_ICLOUD_APP_PASSWORD: ${{ secrets.KIEZ_ICLOUD_APP_PASSWORD }}
         run: |
-          if [ -z "$KIEZ_RESEND_API_KEY" ]; then
-            echo "::error::GitHub Secret KIEZ_RESEND_API_KEY fehlt."
-            echo "Resend API Key von resend.com → GitHub Secrets → Actions"
+          if [ -z "$KIEZ_ICLOUD_LOGIN" ] || [ -z "$KIEZ_ICLOUD_APP_PASSWORD" ]; then
+            echo "::error::GitHub Secrets KIEZ_ICLOUD_LOGIN und KIEZ_ICLOUD_APP_PASSWORD fehlen."
+            echo "Apple-ID (@icloud.com) + App-Passwort → GitHub Secrets → Actions"
             exit 1
           fi
 
       - name: Send monthly backup reminder
         env:
-          KIEZ_RESEND_API_KEY: ${{ secrets.KIEZ_RESEND_API_KEY }}
+          KIEZ_ICLOUD_LOGIN: ${{ secrets.KIEZ_ICLOUD_LOGIN }}
+          KIEZ_ICLOUD_APP_PASSWORD: ${{ secrets.KIEZ_ICLOUD_APP_PASSWORD }}
           KIEZ_BACKUP_REMINDER_TO: info@kiezquiz.de
         run: python3 scripts/send_backup_reminder.py --send

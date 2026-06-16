@@ -13,8 +13,8 @@ window.KIEZ_LEGAL = {
   },
   responsibleContent: 'Jeremiah J. Lauer',
   editorialResponsible: 'Jeremiah J. Lauer',
-  lastUpdated: '10. Juni 2026',
-  lastUpdatedEn: '10 June 2026',
+  lastUpdated: '16. Juni 2026',
+  lastUpdatedEn: '16 June 2026',
   supabaseJsVersion: '2.49.8',
   supervisoryAuthority: {
     name: 'Hamburgischer Beauftragter für Datenschutz und Informationsfreiheit (HmbBfDI)',

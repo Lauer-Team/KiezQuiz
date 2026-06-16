@@ -168,31 +168,36 @@ async function listUserEmails(supabase: ReturnType<typeof createClient>): Promis
   return emails.sort();
 }
 
-async function sendResend(
+async function sendSmtp(
   to: string,
   mail: ReturnType<typeof buildEmail>,
 ): Promise<void> {
-  const key = Deno.env.get("RESEND_API_KEY");
-  if (!key) throw new Error("RESEND_API_KEY fehlt in Supabase Secrets");
+  const login = Deno.env.get("SMTP_LOGIN");
+  const password = Deno.env.get("SMTP_APP_PASSWORD");
+  if (!login || !password) {
+    throw new Error("SMTP_LOGIN / SMTP_APP_PASSWORD fehlt in Supabase Secrets");
+  }
 
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ from: mail.from, to: [to], subject: mail.subject, text: mail.text, html: mail.html }),
+  const { SMTPClient } = await import("https://deno.land/x/denomailer@1.6.0/mod.ts");
+  const client = new SMTPClient({
+    connection: {
+      hostname: Deno.env.get("SMTP_HOST") ?? "smtp.mail.me.com",
+      port: Number(Deno.env.get("SMTP_PORT") ?? "587"),
+      tls: true,
+      auth: { username: login, password },
+    },
+  });
+
+  try {
+    await client.send({
+      from: mail.from,
+      to,
+      subject: mail.subject,
+      content: mail.text,
+      html: mail.html,
     });
-
-    if (res.ok) return;
-
-    const body = await res.text();
-    if (res.status === 429 && attempt < 2) {
-      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
-      continue;
-    }
-    throw new Error(`Resend ${res.status}: ${body}`);
+  } finally {
+    await client.close();
   }
 }
 
@@ -240,7 +245,7 @@ Deno.serve(async (req: Request) => {
 
   for (const email of recipients) {
     try {
-      await sendResend(email, mail);
+      await sendSmtp(email, mail);
       await new Promise((r) => setTimeout(r, 250));
     } catch (err) {
       result.errors.push(`${email}: ${err instanceof Error ? err.message : String(err)}`);

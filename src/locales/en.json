@@ -1505,11 +1505,10 @@
           ]
         },
         {
-          "title": "7. Transactional email (Resend.com)",
+          "title": "7. Transactional email (iCloud Mail)",
           "paragraphs": [
-            "For registered users we occasionally send transactional emails (e.g. notice of material changes to the terms of use, password reset via Supabase Auth). Delivery is via Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
-            "Data processed: email address, subject and body of the message. A data processing agreement pursuant to Art. 28 GDPR is in place with Resend.",
-            "For transfers of data to the USA, the EU Standard Contractual Clauses (SCCs) issued by the European Commission pursuant to Art. 46(2)(c) GDPR apply; Resend Inc. has committed to compliance therewith. A copy of the SCCs can be requested via <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a>. Resend Inc. is also certified under the EU-US Data Privacy Framework (DPF).",
+            "For registered users we occasionally send transactional emails (e.g. notice of material changes to the terms of use, password reset via Supabase Auth). Delivery is via Apple iCloud Mail (SMTP smtp.mail.me.com) using the sender address info@kiezquiz.de (custom domain via iCloud+). Service provider: Apple Distribution International Ltd., Hollyhill Industrial Estate, Hollyhill, Cork, Ireland.",
+            "Data processed: email address, subject and body of the message. Processing is governed by Apple's iCloud Terms of Service and Privacy Policy.",
             "Legal basis: Art. 6 para. 1 lit. b GDPR (contract performance) or lit. f (operational security). Retention: at the email provider per their policies; with us until account deletion."
           ]
         },

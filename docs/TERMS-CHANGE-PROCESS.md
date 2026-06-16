@@ -61,7 +61,8 @@ Edge Functions → `notify-terms-change` → **Secrets**:
 | Secret | Wert |
 |--------|------|
 | `NOTIFY_TERMS_SECRET` | identisch mit `notifySecret` in `scripts/terms-notify.config.json` |
-| `RESEND_API_KEY` | API-Key von [resend.com](https://resend.com) (Domain `kiezquiz.de` verifizieren) |
+| `SMTP_LOGIN` | Apple-ID (`@icloud.com`) — **nicht** `@kiezquiz.de` |
+| `SMTP_APP_PASSWORD` | App-Passwort von appleid.apple.com |
 
 Optional: `FROM_EMAIL=info@kiezquiz.de`, `SITE_URL=https://kiezquiz.de`
 

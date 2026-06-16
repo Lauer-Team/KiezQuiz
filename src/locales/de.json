@@ -1657,12 +1657,11 @@
           ]
         },
         {
-          "title": "7. Transaktionale E-Mails (Resend.com)",
+          "title": "7. Transaktionale E-Mails (iCloud Mail)",
           "paragraphs": [
-            "Für registrierte Nutzer versenden wir gelegentlich transaktionale E-Mails (z. B. Hinweis auf wesentliche Änderungen der Nutzungsbedingungen, Passwort-Reset über Supabase Auth). Der Versand erfolgt über Resend Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
-            "Verarbeitete Daten: E-Mail-Adresse, Betreff und Inhalt der Nachricht. Mit Resend besteht ein Auftragsverarbeitungsvertrag gemäß Art. 28 DSGVO.",
-            "Für die Übermittlung von Daten in die USA gelten die EU-Standardvertragsklauseln (SCCs) der Europäischen Kommission gemäß Art. 46 Abs. 2 lit. c DSGVO; Resend Inc. hat sich zu deren Einhaltung verpflichtet. Eine Kopie der SCCs kann auf Anfrage über <a href=\"mailto:info@kiezquiz.de\">info@kiezquiz.de</a> angefordert werden. Resend Inc. ist außerdem unter dem EU-US Data Privacy Framework (DPF) zertifiziert.",
-            "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. lit. f (Betriebssicherheit). Speicherdauer: beim E-Mail-Dienstleister gemäß deren Richtlinien; bei uns bis Account-Löschung."
+            "Für registrierte Nutzer versenden wir gelegentlich transaktionale E-Mails (z. B. Hinweis auf wesentliche Änderungen der Nutzungsbedingungen, Passwort-Reset über Supabase Auth). Der Versand erfolgt über Apple iCloud Mail (SMTP smtp.mail.me.com) mit der Absenderadresse info@kiezquiz.de (Custom Domain über iCloud+). Technischer Anbieter: Apple Distribution International Ltd., Hollyhill Industrial Estate, Hollyhill, Cork, Irland.",
+            "Verarbeitete Daten: E-Mail-Adresse, Betreff und Inhalt der Nachricht. Die Verarbeitung erfolgt auf Grundlage der Apple iCloud-Nutzungsbedingungen und Datenschutzrichtlinie.",
+            "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) bzw. lit. f (Betriebssicherheit). Speicherdauer: beim E-Mail-Dienstleister gemäß dessen Richtlinien; bei uns bis Account-Löschung."
           ]
         },
         {

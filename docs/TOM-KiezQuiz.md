@@ -67,7 +67,7 @@
 | VVT geführt | `docs/VVT-KiezQuiz.md` | ✅ |
 | AVV Supabase | DPA akzeptiert (10.06.2026) | ✅ |
 | AVV GitHub/Microsoft | DPA archiviert (10.06.2026) | ✅ |
-| AVV Resend | DPA abgeschlossen (10.06.2026) | ✅ |
+| AVV iCloud Mail | Apple Terms dokumentiert (16.06.2026) | ✅ |
 | Löschkonzept | Account-Löschung in App; Gast-Daten nur localStorage | ✅ |
 | Mindestalter | 16 Jahre — Checkbox bei Registrierung + DSE/NB | ✅ |
 | Barrierefreiheitserklärung | `/barrierefreiheit/` | ✅ |

@@ -39,7 +39,7 @@ Verwende stattdessen einen dieser Meldewege:
 - Physische Angriffe
 - DoS/DDoS
 - Spam
-- Angriffe auf Drittanbieter-Infrastruktur (Supabase, GitHub, Resend)
+- Angriffe auf Drittanbieter-Infrastruktur (Supabase, GitHub, iCloud)
 
 ## Danksagung / Hall of Fame
 

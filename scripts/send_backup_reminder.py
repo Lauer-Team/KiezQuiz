@@ -7,25 +7,27 @@ Nutzung:
   python3 scripts/send_backup_reminder.py --send
 
 Umgebungsvariablen:
-  KIEZ_RESEND_API_KEY      (Pflicht für --send)
-  KIEZ_BACKUP_REMINDER_TO  (Standard: info@kiezquiz.de)
-  KIEZ_TERMS_FROM_EMAIL    (Standard: info@kiezquiz.de)
-  KIEZ_TERMS_FROM_NAME     (Standard: KiezQuiz)
-  KIEZ_SITE_URL            (Standard: https://kiezquiz.de)
-  KIEZ_GITHUB_REPO         (Standard: logic3/KiezQuiz)
+  KIEZ_ICLOUD_LOGIN           (Pflicht für --send, Apple-ID @icloud.com)
+  KIEZ_ICLOUD_APP_PASSWORD    (Pflicht für --send)
+  KIEZ_BACKUP_REMINDER_TO     (Standard: info@kiezquiz.de)
+  KIEZ_TERMS_FROM_EMAIL       (Standard: info@kiezquiz.de)
+  KIEZ_TERMS_FROM_NAME        (Standard: KiezQuiz)
+  KIEZ_SITE_URL               (Standard: https://kiezquiz.de)
+  KIEZ_GITHUB_REPO            (Standard: Lauer-Team/KiezQuiz)
 """
 
 from __future__ import annotations
 
 import argparse
-import json
-import os
 import sys
-import urllib.request
 from datetime import datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from lib.email_smtp import send_html_email  # noqa: E402
+
 TEMPLATE = ROOT / "docs/email-backup-reminder.html"
 
 MONTHS_DE = (
@@ -35,13 +37,14 @@ MONTHS_DE = (
 
 
 def load_cfg() -> dict:
+    import os
+
     return {
-        "resendApiKey": os.environ.get("KIEZ_RESEND_API_KEY", "").strip(),
         "toEmail": os.environ.get("KIEZ_BACKUP_REMINDER_TO", "info@kiezquiz.de").strip(),
         "fromEmail": os.environ.get("KIEZ_TERMS_FROM_EMAIL", "info@kiezquiz.de").strip(),
         "fromName": os.environ.get("KIEZ_TERMS_FROM_NAME", "KiezQuiz").strip(),
         "siteUrl": os.environ.get("KIEZ_SITE_URL", "https://kiezquiz.de").strip().rstrip("/"),
-        "githubRepo": os.environ.get("KIEZ_GITHUB_REPO", "logic3/KiezQuiz").strip(),
+        "githubRepo": os.environ.get("KIEZ_GITHUB_REPO", "Lauer-Team/KiezQuiz").strip(),
     }
 
 
@@ -72,7 +75,7 @@ SCHRITT 2 — Dauerhaft archivieren
 GitHub speichert Artifacts nur 90 Tage.
 Kopie ablegen in z. B. Rechtsdokumente / iCloud / externe Festplatte.
 
-ALTERNATIVE — Manuell auf dem Mac
+ALTERNATIVE — Manuell
   python3 scripts/setup_supabase_backup.py   # einmalig
   python3 scripts/export_supabase_backup.py --dry-run
   python3 scripts/export_supabase_backup.py
@@ -90,31 +93,6 @@ Anleitung: {docs_url}
         html = html.replace(key, value)
 
     return subject, text, html
-
-
-def send_via_resend(cfg: dict, subject: str, text: str, html: str) -> None:
-    payload = json.dumps({
-        "from": f"{cfg['fromName']} <{cfg['fromEmail']}>",
-        "to": [cfg["toEmail"]],
-        "subject": subject,
-        "text": text,
-        "html": html,
-    }).encode()
-
-    req = urllib.request.Request(
-        "https://api.resend.com/emails",
-        data=payload,
-        headers={
-            "Authorization": f"Bearer {cfg['resendApiKey']}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        if resp.status >= 300:
-            raise RuntimeError(f"Resend HTTP {resp.status}")
-        body = json.loads(resp.read().decode())
-        print(f"✓ E-Mail gesendet an {cfg['toEmail']} (Resend-ID: {body.get('id', '—')})")
 
 
 def main() -> None:
@@ -139,12 +117,15 @@ def main() -> None:
         print("--- Dry-run OK ---")
         return
 
-    if not cfg["resendApiKey"]:
-        print("Fehler: KIEZ_RESEND_API_KEY fehlt.", file=sys.stderr)
-        print("GitHub → Settings → Secrets → Actions → KIEZ_RESEND_API_KEY", file=sys.stderr)
-        sys.exit(1)
-
-    send_via_resend(cfg, subject, text, html)
+    send_html_email(
+        to=cfg["toEmail"],
+        subject=subject,
+        text=text,
+        html=html,
+        from_email=cfg["fromEmail"],
+        from_name=cfg["fromName"],
+    )
+    print(f"✓ E-Mail gesendet an {cfg['toEmail']} (iCloud SMTP)")
 
 
 if __name__ == "__main__":

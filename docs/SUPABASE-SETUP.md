@@ -428,7 +428,7 @@ Bei wesentlichen Änderungen der Nutzungsbedingungen müssen registrierte Nutzer
 **Einmalig Secrets setzen:** Edge Functions → `notify-terms-change` → Secrets:
 
 - `NOTIFY_TERMS_SECRET` — siehe `scripts/terms-notify.config.json` (lokal, via `python3 scripts/setup_terms_notify.py`)
-- `RESEND_API_KEY` — von [resend.com](https://resend.com), Domain `kiezquiz.de` verifizieren
+- `SMTP_LOGIN` + `SMTP_APP_PASSWORD` — iCloud (Apple-ID + App-Passwort, siehe `telegram-agent/EMAIL.md`)
 
 Vollständiger Ablauf: **`docs/TERMS-CHANGE-PROCESS.md`**
 
@@ -443,7 +443,7 @@ Vollständiger Ablauf: **`docs/TERMS-CHANGE-PROCESS.md`**
 | Spielstand sync nicht | Browser-Konsole (F12) → Netzwerk/Console auf Fehler prüfen |
 | RLS-Fehler | SQL-Skript aus Schritt 2 erneut ausführen |
 | NB-Versand HTTP 401 | `NOTIFY_TERMS_SECRET` in Supabase = `notifySecret` in lokaler Config |
-| NB-Versand Resend-Fehler | `RESEND_API_KEY` in Supabase Secrets, Domain verifiziert |
+| NB-Versand SMTP-Fehler | `SMTP_LOGIN` + `SMTP_APP_PASSWORD` in Supabase Secrets (Apple-ID + App-Passwort) |
 | Kein DB-Backup (Free Tier) | Monatlicher Export: `docs/BACKUP-SUPABASE.md` |
 
 ---

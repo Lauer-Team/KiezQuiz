@@ -54,7 +54,7 @@ def main() -> None:
     print("  • Manuell: Actions → „Supabase monthly backup“ → Run workflow")
     print()
     print("=== 4. E-Mail-Erinnerung (automatisch) ===")
-    print("GitHub Secret: KIEZ_RESEND_API_KEY (Resend API Key)")
+    print("GitHub Secrets: KIEZ_ICLOUD_LOGIN + KIEZ_ICLOUD_APP_PASSWORD (Apple-ID + App-Passwort)")
     print("  → Am 2. jeden Monats E-Mail an info@kiezquiz.de mit Export-Anleitung")
     print("  Workflow: .github/workflows/backup-reminder.yml")
     print()

@@ -5,12 +5,13 @@ datum;typ;kategorie;anbieter;beschreibung;betrag;waehrung;wechselkurs_eur;betrag
 2026-06-16;service-gratis;Service-Inventar;GitHub;Repositories KiezQuiz + KiezQuiz-App · Pages · Actions CI/CD;0.00;EUR;1.0000;0.00;;;Free (public Repos) · Upgrade: Team/Private
 2026-06-16;service-gratis;Service-Inventar;Supabase;Backend KiezQuiz — Auth · Postgres · Edge Functions · Storage (EU);0.00;EUR;1.0000;0.00;;;Free Tier 🟡 · Upgrade ab ~25 USD/Monat bei Quota
 2026-06-16;service-gratis;Service-Inventar;Cloudflare;DNS · Redirect kiezquiz.lauer.team → kiezquiz.de;0.00;EUR;1.0000;0.00;;;Free Tier 🟢
-2026-06-16;service-gratis;Service-Inventar;Resend;Transaktions- & NB-E-Mails (info@kiezquiz.de);0.00;EUR;1.0000;0.00;;;Free Tier 🟡 · 3.000 Mails/Monat · Paid ab ~20 USD
+2026-06-16;service-gratis;Service-Inventar;Resend;*(ersetzt durch iCloud 16.06.)*;0.00;EUR;1.0000;0.00;;;Beendet · kein aktiver Dienst
+2026-06-16;service-gratis;Service-Inventar;Apple iCloud+;Custom Domain kiezquiz.de · Bot-Mail kalle@;0.00;EUR;1.0000;0.00;;;In iCloud+-Abo enthalten · MX bei united-domains
+2026-06-16;service-gratis;Service-Inventar;Telegram;Bot @kalle_kieztaube_bot — Hetzner VPS;0.00;EUR;1.0000;0.00;;;Free · 🟢 live seit 16.06.
+2026-06-16;service-gratis;Service-Inventar;United Domains;DNS kiezquiz.de (MX/SPF/DKIM → iCloud);0.00;EUR;1.0000;0.00;;;Inkl. Domain
+2026-06-16;service-gratis;Service-Inventar;Web.de;Postfach kiezquiz@web.de — **ersetzt durch iCloud**;0.00;EUR;1.0000;0.00;;;Kündigung optional
 2026-06-16;service-gratis;Service-Inventar;Google;Search Console — SEO-Monitoring kiezquiz.de;0.00;EUR;1.0000;0.00;;;Free 🟢 · kein Analytics im Projekt
 2026-06-16;service-gratis;Service-Inventar;Notion;Projektdoku JJL - TBD - KiezQuiz (MCP);0.00;EUR;1.0000;0.00;;;Free/Personal 🟢
-2026-06-16;service-gratis;Service-Inventar;Telegram;Bot @kalle_kieztaube_bot — Fernsteuerung;0.00;EUR;1.0000;0.00;;;Free · ⏸️ pausiert
-2026-06-16;service-gratis;Service-Inventar;United Domains;Mail-Weiterleitung info@kiezquiz.de → kiezquiz@web.de;0.00;EUR;1.0000;0.00;;;Inkl. Domain · kein Extra-Abo bekannt
-2026-06-16;service-gratis;Service-Inventar;Web.de;Postfach KiezQuiz@web.de (Ziel der Weiterleitung);0.00;EUR;1.0000;0.00;;;Privates Free-Postfach 🟢
 2026-06-16;service-gratis;Service-Inventar;Google;Gemini — Recherche & Bilder;0.00;EUR;1.0000;0.00;;;Free-Limits · Ad-hoc
 2026-06-16;service-gratis;Service-Inventar;Google;Antigravity 2.0 — Erstes UI-Design;0.00;EUR;1.0000;0.00;;;Free-Limits · Ad-hoc
 2026-06-16;service-gratis;Service-Inventar;Canva;Design-Übersichten;0.00;EUR;1.0000;0.00;;;Free Tier · selten genutzt

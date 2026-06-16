@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""CLI für kiezquiz@web.de — von Kalle-Agent aufrufbar."""
+"""CLI für iCloud-Postfach (kalle@kiezquiz.de) — von Kalle-Agent aufrufbar."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ def load_config() -> dict:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="KiezQuiz Web.de Postfach")
+    parser = argparse.ArgumentParser(description="KiezQuiz iCloud Postfach")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_inbox = sub.add_parser("inbox", help="Posteingang auflisten")
@@ -49,7 +49,7 @@ def main() -> None:
     box_cfg = resolve_mailbox_config(cfg)
     if not box_cfg:
         print(
-            "Web.de nicht konfiguriert (webde_mailbox in config.json + KIEZ_WEBDE_* in .env)",
+            "iCloud nicht konfiguriert (icloud_mailbox in config.json + KIEZ_ICLOUD_* in .env, siehe EMAIL.md)",
             file=sys.stderr,
         )
         sys.exit(1)

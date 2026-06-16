@@ -7,6 +7,7 @@
 - [ ] NB-Gäste-Banner abschalten ab **12.07.2026** (`deactivate_terms_notice.py`)
 - [ ] Cursor-Downgrade Juli prüfen → CFO-Akte + `leitstand.md (COSTS)`
 - [ ] Agenten-Akten bei Statusänderungen synchron halten
+- [x] E-Mail-Migration Resend/Web.de → iCloud abgeschlossen (16.06.)
 - [ ] `build_ai_dashboard_data.py` nach Orchestrator-Lauf ausführen
 
 ## Offen (Mensch)
@@ -50,7 +51,7 @@ Alles Bewusst-später — Details und IDs in **[`ROADMAP.md`](ROADMAP.md)**:
 | Umsatz | Monetarisierung (Plan in [`plans/MONETIZATION.md`](plans/MONETIZATION.md)) |
 | SEO | GSC manuell (~5 Min/Monat), Bing Webmaster |
 | Security | HaveIBeenPwned — erst mit Supabase Pro + Umsatz |
-| Ops | Telegram reaktivieren, Dependabot-PRs mergen |
+| Ops | Dependabot-PRs mergen |
 
 ---
 
