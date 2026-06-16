@@ -128,9 +128,49 @@ def truncate_telegram(text: str, limit: int = 3900) -> str:
     return text[: limit - 40] + "\n\n… (gekürzt, Details im Repo/PR)"
 
 
-def git_has_changes(repo: Path) -> bool:
+# Pfade, die kiezquiz.de (GitHub Pages) nicht sichtbar betreffen — rsync schließt ops/ aus.
+NON_WEBSITE_PREFIXES = ("telegram-agent/", "ops/", ".cursor/")
+NON_WEBSITE_FILES = frozenset({"CHANGELOG.md", ".gitignore"})
+
+READ_ONLY_TASK_RE = re.compile(
+    r"\b("
+    r"l[äa]uft|funktioniert|erreichbar|online|"
+    r"deployed|status|pr[üu]f|check|"
+    r"teste?\s+(ob|mal)|gibt\s+es\s+(fehler|probleme)"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def git_changed_paths(repo: Path) -> list[str]:
     code, out, _ = run_cmd(["git", "status", "--porcelain"], cwd=repo, timeout=60)
-    return code == 0 and bool(out.strip())
+    if code != 0 or not out.strip():
+        return []
+    paths: list[str] = []
+    for line in out.strip().splitlines():
+        part = line[3:].strip()
+        if " -> " in part:
+            part = part.split(" -> ", 1)[1]
+        paths.append(part)
+    return paths
+
+
+def git_has_changes(repo: Path) -> bool:
+    return bool(git_changed_paths(repo))
+
+
+def changes_affect_website(paths: list[str]) -> bool:
+    for path in paths:
+        if path in NON_WEBSITE_FILES:
+            continue
+        if any(path.startswith(prefix) for prefix in NON_WEBSITE_PREFIXES):
+            continue
+        return True
+    return False
+
+
+def is_likely_read_only_task(task: str) -> bool:
+    return bool(READ_ONLY_TASK_RE.search(task))
 
 
 def git_current_branch(repo: Path) -> str:
@@ -163,7 +203,13 @@ def create_cursor_chat(cfg: dict[str, Any]) -> tuple[str | None, str]:
 
 
 def build_agent_prompt(user_text: str) -> str:
-    return f"{KIEZQUIZ_RULES}\n\n---\n\nAufgabe:\n{user_text}"
+    extra = ""
+    if is_likely_read_only_task(user_text):
+        extra = (
+            "\n\nHinweis: Reine Check-/Status-Frage — nur prüfen und antworten, "
+            "keine Dateien ändern."
+        )
+    return f"{KIEZQUIZ_RULES}{extra}\n\n---\n\nAufgabe:\n{user_text}"
 
 
 def run_agent(cfg: dict[str, Any], state: dict[str, Any], user_text: str) -> tuple[int, str]:
@@ -395,16 +441,30 @@ async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: 
         prefix = "Fertig." if code == 0 else "Agent beendet mit Fehler."
         await update.message.reply_text(f"{prefix}\n\n{summary}")
 
-        if git_has_changes(Path(cfg["repo_path"])):
+        repo = Path(cfg["repo_path"])
+        changed = git_changed_paths(repo)
+        if not changed:
+            await update.message.reply_text("Keine Datei-Änderungen im Repo.")
+        elif is_likely_read_only_task(task) and not changes_affect_website(changed):
+            preview = ", ".join(changed[:4])
+            if len(changed) > 4:
+                preview += f" (+{len(changed) - 4} weitere)"
+            await update.message.reply_text(
+                "Kein Pull Request (reine Check-Aufgabe, betrifft kiezquiz.de nicht).\n"
+                f"Lokal geändert: {preview}"
+            )
+        else:
             ok, pr_info = await asyncio.to_thread(commit_and_pr, cfg, state, task, agent_out)
             if ok:
+                if changes_affect_website(changed):
+                    follow_up = "Deployen? (ja / nein)"
+                else:
+                    follow_up = "Mergen? (ja / nein) — betrifft kiezquiz.de nicht."
                 await update.message.reply_text(
-                    f"Geänderte Dateien → Pull Request:\n{pr_info}\n\nDeployen? (ja / nein)"
+                    f"Geänderte Dateien → Pull Request:\n{pr_info}\n\n{follow_up}"
                 )
             elif pr_info:
                 await update.message.reply_text(truncate_telegram(pr_info))
-        else:
-            await update.message.reply_text("Keine Datei-Änderungen im Repo.")
     finally:
         state = load_state()
         state["busy"] = False

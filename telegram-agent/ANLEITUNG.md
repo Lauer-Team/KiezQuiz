@@ -247,8 +247,8 @@ Füge in CHANGELOG.md ganz unten eine Zeile hinzu: Test Telegram-Agent (wird nic
 Warten (Minuten sind normal). Du bekommst:
 
 - Agent-Antwort
-- PR-Link
-- „Deployen? (ja / nein)“
+- Bei reinen Check-Fragen **kein** PR/Deploy (auch wenn der Agent versehentlich Bot-Dateien anfasst)
+- Sonst: PR-Link + „Deployen? (ja / nein)“ nur bei echten Webseiten-Änderungen
 
 Antwort: **nein**
 
