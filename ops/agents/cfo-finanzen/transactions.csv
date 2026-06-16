@@ -1,3 +1,18 @@
 datum;typ;kategorie;anbieter;beschreibung;betrag;waehrung;wechselkurs_eur;betrag_eur;beleg_ref;zahlungsweise;notiz
 2026-05-31;ausgabe;Infrastruktur;United Domains;Domain kiezquiz.de (1 Jahr · 31.05.2026–30.05.2027);13.00;EUR;1.0000;13.00;;Kreditkarte;Schätzung — exakten Betrag aus Rechnung eintragen
 2026-06-01;ausgabe;Dev-Tools;Cursor;Cursor Pro+ Abonnement Juni 2026;55.00;USD;0.9167;50.42;;Kreditkarte;Schätzung ~60 USD — exakten Betrag aus Rechnung eintragen
+2026-06-16;ausgabe;Infrastruktur;Hetzner;Cloud-Server (monatlich);10.70;EUR;1.0000;10.70;;Überweisung;Neu · monatlich wiederkehrend — jeden Monat neue Zeile bei Abbuchung
+2026-06-16;service-gratis;Service-Inventar;GitHub;Repositories KiezQuiz + KiezQuiz-App · Pages · Actions CI/CD;0.00;EUR;1.0000;0.00;;;Free (public Repos) · Upgrade: Team/Private
+2026-06-16;service-gratis;Service-Inventar;Supabase;Backend KiezQuiz — Auth · Postgres · Edge Functions · Storage (EU);0.00;EUR;1.0000;0.00;;;Free Tier 🟡 · Upgrade ab ~25 USD/Monat bei Quota
+2026-06-16;service-gratis;Service-Inventar;Cloudflare;DNS · Redirect kiezquiz.lauer.team → kiezquiz.de;0.00;EUR;1.0000;0.00;;;Free Tier 🟢
+2026-06-16;service-gratis;Service-Inventar;Resend;Transaktions- & NB-E-Mails (info@kiezquiz.de);0.00;EUR;1.0000;0.00;;;Free Tier 🟡 · 3.000 Mails/Monat · Paid ab ~20 USD
+2026-06-16;service-gratis;Service-Inventar;Google;Search Console — SEO-Monitoring kiezquiz.de;0.00;EUR;1.0000;0.00;;;Free 🟢 · kein Analytics im Projekt
+2026-06-16;service-gratis;Service-Inventar;Notion;Projektdoku JJL - TBD - KiezQuiz (MCP);0.00;EUR;1.0000;0.00;;;Free/Personal 🟢
+2026-06-16;service-gratis;Service-Inventar;Telegram;Bot @kalle_kieztaube_bot — Fernsteuerung;0.00;EUR;1.0000;0.00;;;Free · ⏸️ pausiert
+2026-06-16;service-gratis;Service-Inventar;United Domains;Mail-Weiterleitung info@kiezquiz.de → kiezquiz@web.de;0.00;EUR;1.0000;0.00;;;Inkl. Domain · kein Extra-Abo bekannt
+2026-06-16;service-gratis;Service-Inventar;Web.de;Postfach KiezQuiz@web.de (Ziel der Weiterleitung);0.00;EUR;1.0000;0.00;;;Privates Free-Postfach 🟢
+2026-06-16;service-gratis;Service-Inventar;Google;Gemini — Recherche & Bilder;0.00;EUR;1.0000;0.00;;;Free-Limits · Ad-hoc
+2026-06-16;service-gratis;Service-Inventar;Google;Antigravity 2.0 — Erstes UI-Design;0.00;EUR;1.0000;0.00;;;Free-Limits · Ad-hoc
+2026-06-16;service-gratis;Service-Inventar;Canva;Design-Übersichten;0.00;EUR;1.0000;0.00;;;Free Tier · selten genutzt
+2026-06-16;service-gratis;Service-Inventar;QR Code Monkey;QR-Code-Generierung;0.00;EUR;1.0000;0.00;;;Free · Ad-hoc
+2026-06-16;service-gratis;Service-Inventar;OpenStreetMap;Kartendaten (ODbL) — u. a. Ravensburg;0.00;EUR;1.0000;0.00;;;Community-Daten · keine Abo-Kosten · Attribution in ODBL-Prüfung

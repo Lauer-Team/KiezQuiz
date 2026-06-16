@@ -14,8 +14,8 @@ Trennzeichen: Semikolon (;) · UTF-8 · Kopfzeile nicht löschen
 Spalten
 -------
 datum          YYYY-MM-DD (Zahlungs- oder Rechnungsdatum)
-typ            ausgabe | einnahme
-kategorie      Dev-Tools | Infrastruktur | Recht | Marketing | Sonstiges | Einnahmen
+typ            ausgabe | einnahme | service-gratis
+kategorie      Dev-Tools | Infrastruktur | Recht | Marketing | Service-Inventar | Sonstiges | Einnahmen
 anbieter       z. B. Cursor, Supabase, United Domains
 beschreibung   Kurztext, wofür
 betrag         Positiver Betrag (Vorzeichen steckt in typ)
@@ -32,12 +32,18 @@ Neue Zeile eintragen
 2. betrag_eur pflegen — Quartalsberichte summieren diese Spalte.
 3. Schätzungen in notiz mit „Schätzung“ kennzeichnen, später durch echten Beleg ersetzen.
 
+Typ „service-gratis“
+--------------------
+Kostenlose Dienste im Einsatz (0 €) — damit du siehst, was später Geld kosten *könnte*.
+Nicht in Saldo/Quartalssummen einrechnen (betrag_eur = 0). Risiko-Hinweis in notiz.
+
 Quartals- / Jahresbericht (manuell oder Tabellenkalkulation)
 --------------------------------------------------------------
 - Filter: datum im Quartal (Q1=Jan–Mrz, Q2=Apr–Jun, …)
 - Summe ausgaben = SUM(betrag_eur) WHERE typ=ausgabe
 - Summe einnahmen = SUM(betrag_eur) WHERE typ=einnahme
 - Saldo = einnahmen − ausgaben
+- Service-Inventar = alle Zeilen WHERE typ=service-gratis (Übersicht, kein Geldfluss)
 
 Beispiel Einnahme (wenn Monetarisierung startet)
 ------------------------------------------------
@@ -45,5 +51,5 @@ Beispiel Einnahme (wenn Monetarisierung startet)
 
 Pflege
 ------
-Monatlich: Cursor-Rechnung + ggf. Domain/Resend/Supabase eintragen.
+Monatlich: Cursor- + Hetzner-Rechnung + ggf. Domain/Resend/Supabase eintragen.
 Finance Monthly Automation ergänzt Hinweise in reports/ — CSV bleibt Source of Truth.
