@@ -6,12 +6,13 @@
 
 ## Kurzüberblick
 
-- Einzige laufende Software-Kosten: **Cursor** (~55 €/Jun → ~18 €/Jul)
+- Laufende Kosten: **Cursor** (~55 €/Jun → ~18 €/Jul) + **Hetzner** (10,70 €/Monat)
 - Supabase + Resend: 🟡 beobachten (Free Tier)
 - Upgrade-Gates: immer Menschen-OK
 
 ## Detaildateien (Referenz)
 
+- **Transaktionsbuch:** `transactions.csv` (+ `transactions.README.txt`) — alle Einnahmen/Ausgaben für Quartals- & Jahresberichte
 - Service-Inventar: `leitstand.md (SERVICES)` (vollständig migriert)
 - Monatskosten: `leitstand.md (COSTS)`
 
@@ -38,6 +39,7 @@ Kalle warnt bei **>70 %** eines Free-Tier-Limits im CEO-Leitstand.
 | Dienst | Plan | €/Monat (ca.) | Kritisch? | Risiko |
 |---|---|---:|---|---|
 | **Cursor** | Pro+ → Pro (ab Jul 2026) | ~55 → ~18 USD | Dev/Ops | 🟢 |
+| **Hetzner** | Cloud-Server | **10,70** | Server/Infra | 🟢 |
 | **GitHub** | Free (public Repos) | 0 | Code, Pages, CI | 🟢 |
 | **Supabase** | Free | 0 | Auth, DB, Edge | 🟡 |
 | **Cloudflare** | Free | 0 | DNS lauer.team | 🟢 |
@@ -45,13 +47,13 @@ Kalle warnt bei **>70 %** eines Free-Tier-Limits im CEO-Leitstand.
 | **Google Search Console** | Free | 0 | SEO | 🟢 |
 | **GitHub Pages** | Free (public) | 0 | Hosting | 🟢 |
 | **Notion** | Free/Personal | 0 | Doku | 🟢 |
-| **Legora** | (dein Plan) | ? | Recht | 🟢 |
+| **Legora** | Campus-Lizenz Bucerius Law School | 0 | Recht | 🟢 |
 | **United Domains** | Domain .de | ~1–2* | kiezquiz.de | 🟢 | **bis 30.05.2027** (D1) |
 | **Telegram** | Free | 0 | ⏸️ pausiert | 🟢 |
 
 \* Domain meist **jährlich** (~12–15 €/Jahr ≈ ~1 €/Monat). **kiezquiz.de:** 31.05.2026–30.05.2027.
 
-**Aktuell zahlst du laut dir nur Cursor** (~60 USD/Monat bis Juni, ab Juli ~20 USD/Monat).
+**Aktuell zahlst du:** Cursor + Hetzner (10,70 €/Monat) + Domain (~1 €/Monat anteilig).
 
 ---
 
@@ -168,14 +170,15 @@ Kalle warnt bei **>70 %** eines Free-Tier-Limits im Leitstand.
 | Posten | Jun 2026 | ab Jul 2026 | Notiz |
 |---|---:|---:|---|
 | **Cursor** | ~60 USD (~55 €) | ~20 USD (~18 €) | Downgrade Pro+ → Pro |
+| **Hetzner** | 10,70 € | 10,70 € | Cloud-Server (ab 16.06.2026) |
 | **GitHub** | 0 € | 0 € | Public Repos |
 | **Supabase** | 0 € | 0 € | Free Tier |
 | **Cloudflare** | 0 € | 0 € | Free Tier |
 | **Resend** | 0 € | 0 € | Free Tier |
 | **GSC / Pages / Notion** | 0 € | 0 € | Free |
 | **Domain kiezquiz.de** | ~1 €/Monat | ~1 €/Monat | United Domains · **läuft bis 30.05.2027** |
-| **Legora** | (dein Plan) | — | Recht — nicht in Cursor |
-| **Summe (ohne Legora/Domain)** | **~55 €** | **~18 €** | nur Cursor |
+| **Legora** | 0 € | 0 € | Campus-Lizenz Bucerius Law School |
+| **Summe (ohne Domain)** | **~66 €** | **~29 €** | Cursor + Hetzner |
 
 **Domain kiezquiz.de:** Registrierung 31.05.2026–30.05.2027 (United Domains). Erinnerung ab 01.04.2027 → `ops/agents/ceo-kalle/todos.md` D1.
 
@@ -213,7 +216,7 @@ Kalle warnt bei **>70 %** eines Free-Tier-Limits im Leitstand.
 ## Für Buchhaltung (Vorbereitung)
 
 - **Kategorie Dev-Tools:** Cursor (Beleg: Cursor-Rechnung)
-- **Kategorie Infrastruktur:** Domain (United Domains, jährlich)
+- **Kategorie Infrastruktur:** Domain (United Domains), Hetzner Server
 - **Kategorie 0 € mit Beobachtung:** Supabase, GitHub, Resend, Cloudflare
 
 → Keine Buchungen durch Kalle. Bei Steuerfragen: Steuerberater.

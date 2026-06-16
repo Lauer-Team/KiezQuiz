@@ -336,6 +336,39 @@ async def reject_deploy(state: dict[str, Any]) -> str:
     return f"OK, nicht deployed. PR bleibt offen:\n{pr}"
 
 
+
+
+async def notify_user(bot, chat_id: int, text: str) -> None:
+    try:
+        await bot.send_message(chat_id=chat_id, text=truncate_telegram(text))
+    except Exception:
+        log.exception("Telegram-Benachrichtigung fehlgeschlagen")
+
+
+async def send_restart_online_notice(app: Application) -> None:
+    state = load_state()
+    chat_id = state.pop("restart_notify_chat_id", None)
+    if chat_id is not None:
+        save_state(state)
+        await notify_user(app.bot, int(chat_id), "✅ Wieder online — bereit.")
+
+
+async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    log.exception("Unhandled error", exc_info=context.error)
+    cfg = context.application.bot_data.get("cfg")
+    if not cfg:
+        return
+    err = context.error
+    msg = truncate_telegram(f"⚠️ Interner Fehler:\n{type(err).__name__}: {err}")
+    try:
+        if isinstance(update, Update) and update.effective_chat:
+            await update.effective_chat.send_message(msg)
+        else:
+            await notify_user(context.bot, int(cfg["telegram_user_id"]), msg)
+    except Exception:
+        log.exception("Fehler-Benachrichtigung fehlgeschlagen")
+
+
 async def ensure_auth(update: Update, cfg: dict[str, Any]) -> bool:
     uid = update.effective_user.id if update.effective_user else None
     if not authorized(cfg, uid):
@@ -397,6 +430,11 @@ async def cmd_restart(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if state.get("busy"):
         await update.message.reply_text("Agent läuft noch. Erst warten oder /end.")
         return
+
+    chat_id = update.effective_chat.id if update.effective_chat else None
+    if chat_id is not None:
+        state["restart_notify_chat_id"] = chat_id
+        save_state(state)
 
     await update.message.reply_text(
         "Starte neu … (Code-Änderungen werden geladen, ~15 Sekunden)"
@@ -484,6 +522,11 @@ async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: 
                 )
             elif pr_info:
                 await update.message.reply_text(truncate_telegram(pr_info))
+    except Exception as exc:
+        log.exception("Agent-Aufgabe fehlgeschlagen")
+        await update.message.reply_text(
+            truncate_telegram(f"Interner Fehler: {exc}\n\nBitte /restart und erneut versuchen.")
+        )
     finally:
         state = load_state()
         state["busy"] = False
@@ -522,8 +565,14 @@ def main() -> None:
     if not ok:
         log.warning("Repo-Check: %s", msg)
 
-    app = Application.builder().token(cfg["telegram_bot_token"]).build()
+    app = (
+        Application.builder()
+        .token(cfg["telegram_bot_token"])
+        .post_init(send_restart_online_notice)
+        .build()
+    )
     app.bot_data["cfg"] = cfg
+    app.add_error_handler(on_error)
 
     app.add_handler(CommandHandler("help", cmd_help))
     app.add_handler(CommandHandler("start", cmd_help))
