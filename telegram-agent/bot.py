@@ -44,6 +44,7 @@ HELP_TEXT = """KiezQuiz Agent — Befehle
 • ja oder /deploy → Pull Request mergen → kiezquiz.de wird aktualisiert
 • nein → PR bleibt offen (nicht live)
 • /status → Session, Branch, PR
+• /restart → Bot neu starten (lädt Code-Änderungen)
 • /help → diese Hilfe
 
 Rote Linie: Agent läuft nur lokal (Modell auto), kein Cloud Agent.
@@ -386,6 +387,23 @@ async def cmd_end(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     )
 
 
+
+async def cmd_restart(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+    state = load_state()
+    if state.get("busy"):
+        await update.message.reply_text("Agent läuft noch. Erst warten oder /end.")
+        return
+
+    await update.message.reply_text(
+        "Starte neu … (Code-Änderungen werden geladen, ~15 Sekunden)"
+    )
+    await asyncio.sleep(1.5)
+    log.info("Neustart angefordert via /restart")
+    sys.exit(0)
+
 async def cmd_new(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     cfg = context.application.bot_data["cfg"]
     if not await ensure_auth(update, cfg):
@@ -512,6 +530,7 @@ def main() -> None:
     app.add_handler(CommandHandler("new", cmd_new))
     app.add_handler(CommandHandler("end", cmd_end))
     app.add_handler(CommandHandler("deploy", cmd_deploy))
+    app.add_handler(CommandHandler("restart", cmd_restart))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_message))
 
     log.info("KiezQuiz Telegram-Agent startet (repo=%s)", repo)

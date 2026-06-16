@@ -282,6 +282,7 @@ Neuer `build`-Wert = Deploy gelaufen.
 | `ja` oder `/deploy` | PR → main → live |
 | `nein` | Nichts live |
 | `/status` | Wo stehen wir? |
+| `/restart` | Bot neu starten (lädt Code-Änderungen) |
 | `/help` | Kurzhelp |
 
 **Merksatz:** Neues Thema → `/new`. Nachbesserung → einfach weiter schreiben.
@@ -296,7 +297,7 @@ Neuer `build`-Wert = Deploy gelaufen.
 | „Nicht autorisiert“ | Falsche `telegram_user_id` in config.json |
 | `agent: command not found` | Terminal neu öffnen; `which agent` |
 | `gh auth` fehlgeschlagen | `gh auth login` wiederholen |
-| Agent hängt ewig | `/status` — evtl. Mac neu starten, `systemctl restart kiezquiz-agent` |
+| Agent hängt ewig | `/status` — warten oder `/restart` (lädt neuen Code) |
 | PR-Merge klappt nicht | Auf GitHub prüfen ob Checks grün; manuell mergen |
 
 ---
