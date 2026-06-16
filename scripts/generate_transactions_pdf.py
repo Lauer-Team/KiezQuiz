@@ -11,6 +11,13 @@ PDF_PATH = ROOT / "ops/agents/cfo-finanzen/transactions.pdf"
 
 
 def pdf_literal(text: str) -> str:
+    text = (
+        text.replace("\u2014", "-")
+        .replace("\u2013", "-")
+        .replace("\u2192", "->")
+        .replace("\u2022", "-")
+        .replace("\u00b7", " ")
+    )
     out = []
     for ch in text:
         if ch == "\\":
@@ -94,7 +101,8 @@ def layout_pages(rows: list[dict]) -> list[list[tuple[float, float, str, int]]]:
 def stream_body(layout: list[tuple[float, float, str, int]]) -> str:
     stream = ["BT"]
     for x, yy, text, size in layout:
-        stream.append(f"/F1 {size} Tf {x} {yy} Td {pdf_literal(text)} Tj")
+        # Tm = absolute position (Td would accumulate and draw off-page)
+        stream.append(f"/F1 {size} Tf 1 0 0 1 {x} {yy} Tm {pdf_literal(text)} Tj")
     stream.append("ET")
     return "\n".join(stream)
 
