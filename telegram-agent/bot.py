@@ -9,12 +9,30 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 import re
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from mailbox import (
+    delete_message,
+    format_inbox_list,
+    format_message_detail,
+    list_inbox,
+    read_message,
+    resolve_mailbox_config,
+    send_message as send_webde_mail,
+)
+from outbound import (
+    collect_outbound_files,
+    resolve_email_config,
+    send_email,
+    send_files_to_chat,
+)
 
 from telegram import Update
 from telegram.constants import ParseMode
@@ -33,21 +51,34 @@ Wichtige Regeln:
 - Jede HTML-Seite braucht versionGuard.js am Ende von <head>
 - Keine Secrets committen
 - Antworte auf Deutsch, kurz und klar
+- Erstellte Dateien (PDF, CSV, …): Pfad in Antwort nennen — Bot sendet sie automatisch per Telegram
+- E-Mail Resend (/email): info@kiezquiz.de — Transaktionsmails
+- Postfach Web.de (/post): kiezquiz@web.de — inbox, lesen, senden, löschen; CLI: mailbox_cli.py
+- Pull Request nur bei echten Website-Änderungen (src/, Seiten) — ops/ und reine Chat-Aufgaben nicht committen
 """.strip()
 
 HELP_TEXT = """KiezQuiz Agent — Befehle
 
-• Einfach schreiben → Agent setzt fort (gleiches Gespräch)
-• /new → neuer Agent (frischer Kontext)
-• /new <Aufgabe> → neu starten und gleich Aufgabe senden
-• /end → aktuelle Session beenden (ohne neue anzulegen)
-• ja, „Ja deployen“, /deploy → Pull Request mergen → kiezquiz.de wird aktualisiert
-• nein → PR bleibt offen (nicht live)
-• /status → Session, Branch, PR
-• /restart → Bot neu starten (lädt Code-Änderungen)
-• /help → diese Hilfe
+• Konkrete Aufgabe schreiben → Agent (Code, Recherche, ops/)
+• Kurz „Hallo“ → schnelle Antwort, kein Agent
+• /new → neuer Agent · /end → Session beenden
+• ja/nein · /deploy → PR mergen → kiezquiz.de
+• /status · /restart · /file <pfad> · /help
 
-Rote Linie: Agent läuft nur lokal (Modell auto), kein Cloud Agent.
+E-Mail:
+• /email <betreff> | <text> → Resend (info@kiezquiz.de)
+• Freitext: „Schick mir eine Mail: …“ → Resend
+
+Postfach kiezquiz@web.de:
+• /post inbox → letzte Mails
+• /post read <nr> → Mail lesen (Nr. aus inbox)
+• /post send <an> <betreff> | <text> → senden als kiezquiz@web.de
+• /post delete <nr> → Mail löschen
+• Freitext: „Posteingang“ / „zeig Mails“
+
+PR nur bei kiezquiz.de-Dateien — nicht bei ops/, Hallo, E-Mail.
+
+Rote Linie: Agent lokal (Modell auto), kein Cloud Agent.
 """
 
 logging.basicConfig(
@@ -55,6 +86,18 @@ logging.basicConfig(
     level=logging.INFO,
 )
 log = logging.getLogger("kiezquiz-bot")
+
+
+def load_dotenv(path: Path) -> None:
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip())
+
 
 
 def load_json(path: Path, default: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -93,6 +136,7 @@ def load_state() -> dict[str, Any]:
             "pr_url": None,
             "pr_number": None,
             "busy": False,
+            "mail_list": [],
         },
     )
 
@@ -153,6 +197,46 @@ REJECT_CONFIRM_RE = re.compile(
     re.IGNORECASE,
 )
 
+TRIVIAL_CHAT_RE = re.compile(
+    r"^(hi|hallo|hey|moin|servus|danke|thanks|thx|ok|okay|test)[!.?\s]*$",
+    re.IGNORECASE,
+)
+
+EMAIL_FREETEXT_RE = re.compile(
+    r"(?:"
+    r"(?:schick|sende|mail).{0,40}(?:e-?mail|mail\b)|"
+    r"(?:e-?mail|mail).{0,25}(?:schick|senden)|"
+    r"mail\s+mir\b"
+    r")",
+    re.IGNORECASE,
+)
+
+POST_INBOX_FREETEXT_RE = re.compile(
+    r"\b(posteingang|inbox|neue?\s+mails?|mails?\s+(zeigen|lesen)|zeig\s+(mir\s+)?(die\s+)?mails?)\b",
+    re.IGNORECASE,
+)
+
+POST_SEND_FREETEXT_RE = re.compile(
+    r"(?:"
+    r"(?:schick|sende).{0,30}(?:von\s+)?(?:web\.de|kiezquiz@web\.de)|"
+    r"web\.de.{0,20}(?:schick|senden)"
+    r")",
+    re.IGNORECASE,
+)
+
+EXPLICIT_PR_RE = re.compile(
+    r"\b(pr|pull\s*request|commit|push|github|einchecken)\b",
+    re.IGNORECASE,
+)
+
+CODE_CHANGE_RE = re.compile(
+    r"\b("
+    r"[äa]nder|fix|bug|implement|bau|erstell|schreib|update|"
+    r"css|html|js|javascript|design|layout|seite|deploy|feature"
+    r")\b",
+    re.IGNORECASE,
+)
+
 
 def git_changed_paths(repo: Path) -> list[str]:
     code, out, _ = run_cmd(["git", "status", "--porcelain"], cwd=repo, timeout=60)
@@ -183,6 +267,71 @@ def changes_affect_website(paths: list[str]) -> bool:
 
 def is_likely_read_only_task(task: str) -> bool:
     return bool(READ_ONLY_TASK_RE.search(task))
+
+
+def is_trivial_chat(task: str) -> bool:
+    return bool(TRIVIAL_CHAT_RE.match(task.strip()))
+
+
+def is_email_freitext(task: str) -> bool:
+    if POST_SEND_FREETEXT_RE.search(task) or POST_INBOX_FREETEXT_RE.search(task):
+        return False
+    return bool(EMAIL_FREETEXT_RE.search(task))
+
+
+def is_post_inbox_freitext(task: str) -> bool:
+    return bool(POST_INBOX_FREETEXT_RE.search(task))
+
+
+def is_post_send_freitext(task: str) -> bool:
+    return bool(POST_SEND_FREETEXT_RE.search(task))
+
+
+def is_post_freitext(task: str) -> bool:
+    return is_post_inbox_freitext(task) or is_post_send_freitext(task)
+
+
+def should_create_pr(task: str, paths: list[str]) -> bool:
+    """PR nur bei Website-Dateien oder explizitem Wunsch — nie für ops-only/Hallo."""
+    if not paths:
+        return False
+    if is_trivial_chat(task) or is_email_freitext(task) or is_post_freitext(task):
+        return False
+    if is_likely_read_only_task(task):
+        return False
+    if changes_affect_website(paths):
+        return True
+    if EXPLICIT_PR_RE.search(task):
+        return True
+    if CODE_CHANGE_RE.search(task) and changes_affect_website(paths):
+        return True
+    return False
+
+
+def parse_email_request(raw: str, default_to: str) -> tuple[str, str, str] | None:
+    text = raw.strip()
+    if "|" in text:
+        head, body = text.split("|", 1)
+        body = body.strip()
+        parts = head.strip().split(None, 1)
+        if len(parts) == 2 and "@" in parts[0]:
+            return parts[0], parts[1], body
+        if len(parts) >= 1 and body:
+            to = default_to if "@" not in head else parts[0]
+            subject = parts[1] if len(parts) == 2 and "@" in parts[0] else head.strip()
+            return to, subject, body
+
+    if is_email_freitext(text):
+        body = re.sub(
+            r"^(?:bitte\s+)?(?:schick|sende|mail)\s+(?:mir\s+)?(?:eine\s+)?(?:e-?mail|mail)[:\s]*",
+            "",
+            text,
+            flags=re.IGNORECASE,
+        ).strip()
+        if not body:
+            body = text
+        return default_to, "Nachricht von Kalle", body
+    return None
 
 
 def is_deploy_confirmation(text: str) -> bool:
@@ -528,6 +677,252 @@ async def cmd_deploy(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     await update.message.reply_text(truncate_telegram(msg))
 
 
+async def deliver_agent_files(
+    update: Update,
+    cfg: dict[str, Any],
+    agent_out: str,
+    started_at: float,
+) -> None:
+    if not update.message or not update.effective_chat:
+        return
+    repo = Path(cfg["repo_path"])
+    paths = await asyncio.to_thread(collect_outbound_files, agent_out, repo, started_at)
+    if not paths:
+        return
+    sent = await send_files_to_chat(update.get_bot(), update.effective_chat.id, paths)
+    if sent:
+        lines = "\n".join(f"📎 {Path(p).name}" for p in sent)
+        await update.message.reply_text(f"Dateien:\n{lines}")
+
+
+async def cmd_file(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+    if not context.args:
+        await update.message.reply_text(
+            "Nutze: /file <pfad-im-repo>\n"
+            "Beispiel: /file ops/agents/cfo-finanzen/transactions.pdf"
+        )
+        return
+
+    repo = Path(cfg["repo_path"])
+    rel = " ".join(context.args).strip()
+    paths = await asyncio.to_thread(collect_outbound_files, rel, repo, None)
+    if not paths:
+        await update.message.reply_text(f"Datei nicht gefunden: {rel}")
+        return
+    sent = await send_files_to_chat(update.get_bot(), update.effective_chat.id, paths[:1])
+    if not sent:
+        await update.message.reply_text("Senden fehlgeschlagen (zu groß oder nicht lesbar).")
+
+
+async def cmd_email(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+
+    email_cfg = resolve_email_config(cfg)
+    if not email_cfg:
+        await update.message.reply_text(
+            "E-Mail nicht eingerichtet.\n"
+            "Setze KIEZ_RESEND_API_KEY und email-Abschnitt in config.json."
+        )
+        return
+
+    raw = " ".join(context.args).strip()
+    if not raw:
+        await update.message.reply_text(
+            "Nutze: /email <betreff> | <text>\n"
+            "Oder: /email empfaenger@… Betreff | Text\n"
+            f"Standard-Empfänger: {email_cfg.get('default_to') or '—'}"
+        )
+        return
+
+    parsed = parse_email_request(raw, email_cfg.get("default_to") or "")
+    if not parsed:
+        await update.message.reply_text("Betreff und Text dürfen nicht leer sein.")
+        return
+    to, subject, body = parsed
+
+    if not to:
+        await update.message.reply_text("Empfänger fehlt (default_to in config).")
+        return
+    if not subject or not body:
+        await update.message.reply_text("Betreff und Text dürfen nicht leer sein.")
+        return
+
+    try:
+        await asyncio.to_thread(send_email, email_cfg, to, subject, body)
+        await update.message.reply_text(f"✉️ Gesendet an {to}\nBetreff: {subject}")
+    except Exception as exc:
+        log.exception("E-Mail fehlgeschlagen")
+        await update.message.reply_text(truncate_telegram(f"E-Mail fehlgeschlagen: {exc}"))
+
+
+async def send_email_from_text(update: Update, cfg: dict[str, Any], text: str) -> bool:
+    email_cfg = resolve_email_config(cfg)
+    if not email_cfg:
+        await update.message.reply_text("E-Mail nicht eingerichtet.")
+        return True
+
+    default_to = email_cfg.get("default_to") or ""
+    parsed = parse_email_request(text, default_to)
+    if not parsed:
+        return False
+
+    to, subject, body = parsed
+    if not to or not body:
+        await update.message.reply_text("Empfänger oder Text fehlt.")
+        return True
+
+    try:
+        await asyncio.to_thread(send_email, email_cfg, to, subject, body)
+        await update.message.reply_text(f"✉️ Gesendet an {to}\nBetreff: {subject}")
+    except Exception as exc:
+        log.exception("E-Mail fehlgeschlagen")
+        await update.message.reply_text(truncate_telegram(f"E-Mail fehlgeschlagen: {exc}"))
+    return True
+
+
+def parse_post_send(raw: str, default_to: str) -> tuple[str, str, str] | None:
+    text = raw.strip()
+    if "|" in text:
+        head, body = text.split("|", 1)
+        body = body.strip()
+        parts = head.strip().split(None, 1)
+        if len(parts) == 2 and "@" in parts[0]:
+            return parts[0], parts[1], body
+        if body:
+            return default_to, head.strip(), body
+    if is_post_send_freitext(text):
+        body = re.sub(
+            r"^(?:bitte\s+)?(?:schick|sende).{0,40}(?:web\.de|kiezquiz@web\.de)[:\s]*",
+            "",
+            text,
+            flags=re.IGNORECASE,
+        ).strip()
+        if body:
+            return default_to, "Nachricht von Kalle", body
+    return None
+
+
+def mail_item_by_index(state: dict[str, Any], index: int) -> dict[str, str] | None:
+    items = state.get("mail_list") or []
+    if index < 1 or index > len(items):
+        return None
+    return items[index - 1]
+
+
+async def cmd_post(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+
+    box_cfg = resolve_mailbox_config(cfg)
+    if not box_cfg:
+        await update.message.reply_text(
+            "Web.de-Postfach nicht eingerichtet.\n"
+            "Setze KIEZ_WEBDE_EMAIL + KIEZ_WEBDE_PASSWORD in .env "
+            "und webde_mailbox in config.json."
+        )
+        return
+
+    if not context.args:
+        await update.message.reply_text(
+            "Postfach kiezquiz@web.de:\n"
+            "• /post inbox\n"
+            "• /post read <nr>\n"
+            "• /post send <an> <betreff> | <text>\n"
+            "• /post delete <nr>"
+        )
+        return
+
+    sub = context.args[0].lower()
+    state = load_state()
+
+    try:
+        if sub == "inbox":
+            items = await asyncio.to_thread(list_inbox, box_cfg, 10)
+            state["mail_list"] = items
+            save_state(state)
+            await update.message.reply_text(truncate_telegram(format_inbox_list(items)))
+
+        elif sub == "read" and len(context.args) >= 2:
+            item = mail_item_by_index(state, int(context.args[1]))
+            if not item:
+                await update.message.reply_text("Ungültige Nr. — zuerst /post inbox")
+                return
+            msg = await asyncio.to_thread(read_message, box_cfg, item["uid"])
+            await update.message.reply_text(truncate_telegram(format_message_detail(msg)))
+
+        elif sub == "delete" and len(context.args) >= 2:
+            item = mail_item_by_index(state, int(context.args[1]))
+            if not item:
+                await update.message.reply_text("Ungültige Nr. — zuerst /post inbox")
+                return
+            await asyncio.to_thread(delete_message, box_cfg, item["uid"])
+            await update.message.reply_text(f"🗑 Mail #{context.args[1]} gelöscht.")
+
+        elif sub == "send":
+            raw = " ".join(context.args[1:]).strip()
+            default_to = cfg.get("email", {}).get("default_to", "")
+            parsed = parse_post_send(raw, default_to)
+            if not parsed:
+                await update.message.reply_text(
+                    "Nutze: /post send <an> <betreff> | <text>\n"
+                    f"Oder nur: /post send Betreff | text (an {default_to or 'default_to'})"
+                )
+                return
+            to, subject, body = parsed
+            await asyncio.to_thread(send_webde_mail, box_cfg, to, subject, body)
+            await update.message.reply_text(f"✉️ Gesendet von kiezquiz@web.de an {to}\nBetreff: {subject}")
+
+        else:
+            await update.message.reply_text("Unbekannter /post-Befehl. Nutze /post ohne Argumente für Hilfe.")
+    except ValueError as exc:
+        await update.message.reply_text(f"Fehler: {exc}")
+    except Exception as exc:
+        log.exception("Postfach-Befehl fehlgeschlagen")
+        await update.message.reply_text(truncate_telegram(f"Postfach-Fehler: {exc}"))
+
+
+async def handle_post_freitext(update: Update, cfg: dict[str, Any], text: str) -> bool:
+    if not is_post_freitext(text):
+        return False
+
+    box_cfg = resolve_mailbox_config(cfg)
+    if not box_cfg:
+        await update.message.reply_text("Web.de-Postfach nicht eingerichtet (.env + config.json).")
+        return True
+
+    if is_post_inbox_freitext(text):
+        state = load_state()
+        try:
+            items = await asyncio.to_thread(list_inbox, box_cfg, 10)
+            state["mail_list"] = items
+            save_state(state)
+            await update.message.reply_text(truncate_telegram(format_inbox_list(items)))
+        except Exception as exc:
+            await update.message.reply_text(truncate_telegram(f"Postfach-Fehler: {exc}"))
+        return True
+
+    if is_post_send_freitext(text):
+        default_to = cfg.get("email", {}).get("default_to", "")
+        parsed = parse_post_send(text, default_to)
+        if parsed:
+            to, subject, body = parsed
+            try:
+                await asyncio.to_thread(send_webde_mail, box_cfg, to, subject, body)
+                await update.message.reply_text(
+                    f"✉️ Gesendet von kiezquiz@web.de an {to}\nBetreff: {subject}"
+                )
+            except Exception as exc:
+                await update.message.reply_text(truncate_telegram(f"Postfach-Fehler: {exc}"))
+            return True
+    return False
+
+
 async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: str) -> None:
     cfg = context.application.bot_data["cfg"]
     state = load_state()
@@ -540,11 +935,13 @@ async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: 
     save_state(state)
     await update.message.reply_text("Agent läuft … (kann einige Minuten dauern)")
 
+    started_at = time.time()
     try:
         code, agent_out = await asyncio.to_thread(run_agent, cfg, state, task)
         summary = truncate_telegram(agent_out)
         prefix = "Fertig." if code == 0 else "Agent beendet mit Fehler."
         await update.message.reply_text(f"{prefix}\n\n{summary}")
+        await deliver_agent_files(update, cfg, agent_out, started_at)
 
         repo = Path(cfg["repo_path"])
         changed = git_changed_paths(repo)
@@ -564,13 +961,13 @@ async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: 
                 )
             else:
                 await update.message.reply_text("Keine Datei-Änderungen im Repo.")
-        elif is_likely_read_only_task(task) and not changes_affect_website(changed):
+        elif not should_create_pr(task, changed):
             preview = ", ".join(changed[:4])
             if len(changed) > 4:
                 preview += f" (+{len(changed) - 4} weitere)"
             await update.message.reply_text(
-                "Kein Pull Request (reine Check-Aufgabe, betrifft kiezquiz.de nicht).\n"
-                f"Lokal geändert: {preview}"
+                "Kein Pull Request (nur ops/intern oder keine Website-Änderung).\n"
+                f"Lokal geändert: {preview or '—'}"
             )
         else:
             ok, pr_info = await asyncio.to_thread(commit_and_pr, cfg, state, task, agent_out)
@@ -612,10 +1009,25 @@ async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         await update.message.reply_text(await reject_deploy(state))
         return
 
+    if is_trivial_chat(text):
+        await update.message.reply_text(
+            "Hallo! 👋 Schreib eine konkrete Aufgabe — oder /help für Befehle "
+            "(/file, /email, /status)."
+        )
+        return
+
+    if is_email_freitext(text):
+        if await send_email_from_text(update, cfg, text):
+            return
+
+    if await handle_post_freitext(update, cfg, text):
+        return
+
     await handle_task(update, context, text)
 
 
 def main() -> None:
+    load_dotenv(SCRIPT_DIR / ".env")
     cfg = load_config()
     repo = Path(cfg["repo_path"])
     if not repo.is_dir():
@@ -642,6 +1054,9 @@ def main() -> None:
     app.add_handler(CommandHandler("end", cmd_end))
     app.add_handler(CommandHandler("deploy", cmd_deploy))
     app.add_handler(CommandHandler("restart", cmd_restart))
+    app.add_handler(CommandHandler("file", cmd_file))
+    app.add_handler(CommandHandler("email", cmd_email))
+    app.add_handler(CommandHandler("post", cmd_post))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_message))
 
     log.info("KiezQuiz Telegram-Agent startet (repo=%s)", repo)
