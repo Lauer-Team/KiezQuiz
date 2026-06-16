@@ -56,7 +56,7 @@
 | **Google** | **Search Console** | SEO-Monitoring |
 | **Legora** | Legal / Compliance | Rechtstexte, Checkliste (Projekt: KiezQuiz) |
 | QR Code Monkey | QR-Codes | QR-Generierung |
-| **Resend** | E-Mail (Website) | NB-Benachrichtigungen via Supabase — **Resend abgeschaltet**, Migration offen |
+| **Apple iCloud+** | E-Mail (Bot + Website) | Custom Domain kiezquiz.de · SMTP/IMAP |
 | **Apple iCloud+** | E-Mail (Bot) | Custom Domain `kiezquiz.de`, Bot-Absender `kalle@kiezquiz.de` |
 | **Supabase** | Backend, Accounts, Spielerdaten | Projekt „KiezQuiz Backend“ (`iuixaesbzftgmnmelcad`, EU) |
 | **Telegram** | Bot | @kalle_kieztaube_bot — Hetzner VPS, systemd `kiezquiz-agent` |

@@ -11,7 +11,7 @@
 | Kosten / Monat | 66 € | 29 € | 🟡 | 66,66,29 | manuell |
 | Genutzte Services | 4 | — | 🟢 |  | manuell |
 | Supabase-Auslastung | Free-Tier | <80% | 🟢 |  | live (grob) |
-| Resend (E-Mail) | Free-Tier | <80% | 🟡 |  | manuell |
+| iCloud Mail (E-Mail) | iCloud+ | — | 🟢 |  | in Abo |
 
 ## Projekte
 

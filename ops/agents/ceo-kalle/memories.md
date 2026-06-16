@@ -3,7 +3,7 @@
 > Dauerhafte Learnings für Automations-Memories · Stand: **2026-06-16**
 
 - **Bot-Mail:** iCloud+ Custom Domain — Mail-Module Source of Truth im **Server-Repo** (rsync). Doku: `telegram-agent/EMAIL.md`.
-- **Resend:** Für Bot abgeschaltet; Supabase NB/Backup noch Resend-Code — separate Migration (CLO L6).
+- **Resend:** Abgeschaltet (16.06.2026) — alles über iCloud Mail.
 
 - **GSC:** Manueller Check Standard; Google Cloud/API nicht nötig.
 - **HaveIBeenPwned:** Bewusst offen — nur Supabase Pro; erst bei Umsatz.
