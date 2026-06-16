@@ -13,7 +13,9 @@
     stadtbezirke: 'BEZIRKE',
     countries: 'BEZIRKE',
     capitals: 'STADTTEILE',
-    counties: 'BEZIRKE'
+    counties: 'BEZIRKE',
+    orschaften: 'BEZIRKE',
+    wohnbezirke: 'STADTTEILE'
   };
 
   function isLightTheme() {

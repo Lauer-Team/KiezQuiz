@@ -542,6 +542,21 @@
     "progressHint": "Stadtbezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Düsseldorf-Rang"
   },
+  "cityRanksRavensburg": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Obstgarten-Neuling" },
+    "3": { "name": "Spielstadt-Kenner" },
+    "4": { "name": "Turm-Entdecker" },
+    "5": { "name": "Ravensburg-Experte" },
+    "6": { "name": "Oberschwaben-Profi" },
+    "7": { "name": "Ortschafts-Babo" },
+    "8": { "name": "König von Ravensburg" },
+    "fallback": "Tourist",
+    "maxReached": "Höchster Ravensburg-Rang — alle Ortschaften & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Ortschaften {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Ravensburg-Rang"
+  },
   "cityRanksEurope": {
     "1": { "name": "Tourist" },
     "2": { "name": "Backpacker" },
@@ -752,6 +767,26 @@
       "unlockDesc": "Benenne alle 10 Stadtbezirke in der Challenge!"
     }
   },
+  "trophiesRavensburg": {
+    "paradise_explorer": {
+      "name": "Veitsburg-Entdecker!",
+      "unlockTitle": "Veitsburg-Entdecker! 🏰",
+      "desc": "Tippe „Veitsburg“ zum ersten Mal richtig – in einem beliebigen Modus.",
+      "unlockDesc": "Du hast die Veitsburg zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_stadtteile": {
+      "name": "König von Ravensburg",
+      "unlockTitle": "König von Ravensburg 👑",
+      "desc": "Benenne alle Wohnbezirke in „Nenne alle Orte“.",
+      "unlockDesc": "Finde alle Wohnbezirke in der Namens-Sprint!"
+    },
+    "meister_alle_bezirke": {
+      "name": "Ortschafts-Babo",
+      "unlockTitle": "Ortschafts-Babo 🏛️",
+      "desc": "Benenne alle 4 Ortschaften in der Challenge.",
+      "unlockDesc": "Benenne alle 4 Ortschaften in der Challenge!"
+    }
+  },
   "trophies": {
     "neuwerk_island": {
       "name": "Neuwerk-Insulaner",
@@ -803,6 +838,7 @@
     "defaultBezirkFrankfurt": "Ein bedeutender Ortsbezirk Frankfurts.",
     "defaultBezirkMuenchen": "Ein bedeutender Stadtbezirk Münchens.",
     "defaultBezirkDuesseldorf": "Ein bedeutender Stadtbezirk Düsseldorfs.",
+    "defaultOrtschaftRavensburg": "Eine der vier Ortschaften der Großen Kreisstadt Ravensburg.",
     "defaultCountryEurope": "Ein souveräner Staat in Europa.",
     "defaultCountyMississippi": "Ein County im Bundesstaat Mississippi.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
@@ -1103,6 +1139,8 @@
     "emptyStadtteilFrankfurt": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Frankfurter Fakten anzuzeigen!",
     "emptyBezirksteilMuenchen": "Klicke auf einen Bezirksteil der Karte, um spannende Metadaten und Münchner Fakten anzuzeigen!",
     "emptyStadtteilDuesseldorf": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und Düsseldorfer Fakten anzuzeigen!",
+    "emptyOrtschaftRavensburg": "Klicke auf eine Ortschaft der Karte, um Fakten über Ravensburg und Oberschwaben zu entdecken!",
+    "emptyWohnbezirkRavensburg": "Klicke auf einen Wohnbezirk der Karte, um spannende Metadaten und Ravensburger Fakten anzuzeigen!",
     "emptyOrtsteil": "Klicke auf einen Ortsteil der Karte, um spannende Metadaten und Berliner Fakten anzuzeigen!",
     "residents": "Einwohner",
     "area": "Fläche",
@@ -1118,7 +1156,8 @@
     "subdistrictsBerlin": "Ortsteile ({count})",
     "subdistrictsFrankfurt": "Stadtteile ({count})",
     "subdistrictsMuenchen": "Bezirksteile ({count})",
-    "subdistrictsDuesseldorf": "Stadtteile ({count})"
+    "subdistrictsDuesseldorf": "Stadtteile ({count})",
+    "subdistrictsRavensburg": "Wohnbezirke ({count})"
   },
   "game": {
     "roundStartTitle": "Durchlauf starten",
@@ -1446,6 +1485,18 @@
         "stadtteil": "Stadtteil"
       }
     },
+    "ravensburg": {
+      "greeting": "Grüezi!",
+      "blurb": "4 Ortschaften · 10 Wohnbezirke",
+      "levels": {
+        "ortschaften": "Ortschaften",
+        "wohnbezirke": "Wohnbezirke"
+      },
+      "singular": {
+        "ortschaft": "Ortschaft",
+        "wohnbezirk": "Wohnbezirk"
+      }
+    },
     "europe": {
       "greeting": "Willkommen in Europa!",
       "blurb": "44 Länder · 44 Hauptstädte",
@@ -1484,7 +1535,7 @@
     "modesTitle": "Spielmodi",
     "modesBody": "Entdecker-Modus zum freien Erkunden, Karten-Quiz zum Anklicken, Detektiv zum Suchen, Challenge unter Zeitdruck und Eingabe-Modus zum Tippen — für jeden Lerntyp das Richtige.",
     "citiesTitle": "Städte & Wünsche",
-    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, Düsseldorf und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
+    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, München, Düsseldorf, Ravensburg und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
     "privacyTitle": "Datenschutz",
     "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand per TLS übertragen und bei Supabase (EU) gespeichert; Passwörter werden gehasht. Ausführlich in der <a href=\"/datenschutz/\">Datenschutzerklärung</a>.",
     "licensesTitle": "Open Source & Lizenzen",

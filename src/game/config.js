@@ -85,6 +85,16 @@ const CITY_LOCALE_CONFIG = {
     specialIds: ['paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
     detailUnit: 'Stadtteil'
   },
+  ravensburg: {
+    rankKey: 'cityRanksRavensburg',
+    trophyNs: 'trophiesRavensburg',
+    defaultBezirkTrivia: 'trivia.defaultOrtschaftRavensburg',
+    emptyBezirk: 'explorer.emptyOrtschaftRavensburg',
+    emptyDetail: 'explorer.emptyWohnbezirkRavensburg',
+    subdistricts: 'explorer.subdistrictsRavensburg',
+    specialIds: ['paradise_explorer', 'meister_alle_stadtteile', 'meister_alle_bezirke'],
+    detailUnit: 'Wohnbezirk'
+  },
   europe: {
     rankKey: 'cityRanksEurope',
     trophyNs: 'trophiesEurope',
@@ -207,6 +217,7 @@ function getCityDataArray(cityId) {
   if (key === 'FRANKFURT_DATA' && typeof FRANKFURT_DATA !== 'undefined') return FRANKFURT_DATA;
   if (key === 'MUENCHEN_DATA' && typeof MUENCHEN_DATA !== 'undefined') return MUENCHEN_DATA;
   if (key === 'DUESSELDORF_DATA' && typeof DUESSELDORF_DATA !== 'undefined') return DUESSELDORF_DATA;
+  if (key === 'RAVENSBURG_DATA' && typeof RAVENSBURG_DATA !== 'undefined') return RAVENSBURG_DATA;
   if (key === 'EUROPE_DATA' && typeof EUROPE_DATA !== 'undefined') return EUROPE_DATA;
   if (key === 'MISSISSIPPI_DATA' && typeof MISSISSIPPI_DATA !== 'undefined') return MISSISSIPPI_DATA;
   if (key === 'EUROPE_ISLAND_EGGS' && typeof EUROPE_ISLAND_EGGS !== 'undefined') return EUROPE_ISLAND_EGGS;

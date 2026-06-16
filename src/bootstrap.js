@@ -18,6 +18,7 @@
     'src/data/frankfurt_data.js',
     'src/data/muenchen_data.js',
     'src/data/duesseldorf_data.js',
+    'src/data/ravensburg_data.js',
     'src/data/europe_data.js',
     'src/data/mississippi_data.js',
     'src/data/europe_islands.js',

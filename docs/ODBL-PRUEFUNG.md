@@ -12,6 +12,7 @@
 | `src/data/berlin_ortsteile.json` | Click That Hood / OSM | Analog Hamburg: Ortsteil-Filter, Quiz-Metadaten, SVG-Aufbereitung | **Produced Work** (vorläufig) |
 | `src/data/frankfurt_stadtteile.json` | Click That Hood / OSM | Analog: Stadtteil-Filter, Metadaten, SVG | **Produced Work** (vorläufig) |
 | `src/data/duesseldorf_stadtteile.json` | Click That Hood / OSM | Analog: Stadtteil-Filter, Metadaten, SVG | **Produced Work** (vorläufig) |
+| `src/data/ravensburg_wohnbezirke.json` | OpenStreetMap (Stadt-/Ortschaftsgrenzen) | Grenzen aus OSM-Relationen; Quiz-Metadaten; SVG-Aufbereitung | **Produced Work** (vorläufig) |
 
 **Nicht betroffen (unproblematisch):**
 
