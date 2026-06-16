@@ -38,6 +38,7 @@ from outbound import (
 
 from telegram import Update
 from telegram.constants import ParseMode
+from telegram.error import Conflict, NetworkError, TimedOut
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -62,8 +63,9 @@ Wichtige Regeln:
 HELP_TEXT = """KiezQuiz Agent — Befehle
 
 • Konkrete Aufgabe schreiben → Agent (Code, Recherche, ops/)
+• /agent <aufgabe> → Agent erzwingen (auch bei Hallo/Mail/Post)
 • Kurz „Hallo“ → schnelle Antwort, kein Agent
-• /new → neuer Agent · /end → Session beenden
+• /new → neuer Agent · /end → Session + PR + busy zurücksetzen
 • ja/nein · /deploy → PR mergen → kiezquiz.de
 • /status · /restart · /file <pfad> · /help
 
@@ -145,6 +147,21 @@ def load_state() -> dict[str, Any]:
 
 def save_state(state: dict[str, Any]) -> None:
     save_json(STATE_PATH, state)
+
+
+def clear_session_state(state: dict[str, Any]) -> None:
+    state["cursor_chat_id"] = None
+    state["branch"] = None
+    state["pr_url"] = None
+    state["pr_number"] = None
+    state["busy"] = False
+
+
+def reset_stale_busy(state: dict[str, Any]) -> None:
+    if state.get("busy"):
+        log.warning("Stale busy flag cleared on startup")
+        state["busy"] = False
+        save_state(state)
 
 
 def authorized(cfg: dict[str, Any], user_id: int | None) -> bool:
@@ -573,6 +590,7 @@ async def notify_user(bot, chat_id: int, text: str) -> None:
 
 async def send_restart_online_notice(app: Application) -> None:
     state = load_state()
+    reset_stale_busy(state)
     chat_id = state.pop("restart_notify_chat_id", None)
     if chat_id is not None:
         save_state(state)
@@ -580,11 +598,17 @@ async def send_restart_online_notice(app: Application) -> None:
 
 
 async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
-    log.exception("Unhandled error", exc_info=context.error)
+    err = context.error
+    if isinstance(err, Conflict):
+        log.warning("Telegram polling conflict (evtl. doppelte Instanz): %s", err)
+        return
+    if isinstance(err, (NetworkError, TimedOut)):
+        log.warning("Telegram-Netzwerkproblem: %s", err)
+        return
+    log.exception("Unhandled error", exc_info=err)
     cfg = context.application.bot_data.get("cfg")
     if not cfg:
         return
-    err = context.error
     msg = truncate_telegram(f"⚠️ Interner Fehler:\n{type(err).__name__}: {err}")
     try:
         if isinstance(update, Update) and update.effective_chat:
@@ -633,18 +657,32 @@ async def cmd_end(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not await ensure_auth(update, cfg):
         return
     state = load_state()
-    if state.get("busy"):
-        await update.message.reply_text("Agent läuft noch. Bitte warten.")
-        return
-    if not state.get("cursor_chat_id"):
+    had_session = bool(
+        state.get("cursor_chat_id") or state.get("pr_url") or state.get("branch")
+    )
+    was_busy = bool(state.get("busy"))
+    clear_session_state(state)
+    save_state(state)
+    if not had_session and not was_busy:
         await update.message.reply_text("Keine aktive Session.")
         return
-
-    state["cursor_chat_id"] = None
-    save_state(state)
+    extra = " (busy zurückgesetzt)" if was_busy else ""
     await update.message.reply_text(
-        "Session beendet. Schreib /new oder einfach eine Aufgabe für einen neuen Start."
+        f"Session beendet{extra}. /agent <aufgabe> oder Freitext für neuen Start."
     )
+
+
+async def cmd_agent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+    task = " ".join(context.args).strip()
+    if not task:
+        await update.message.reply_text(
+            "Nutze: /agent <aufgabe>\nErzwingt den Cursor-Agent — auch bei Hallo, Mail oder Post."
+        )
+        return
+    await handle_task(update, context, task)
 
 
 
@@ -1114,6 +1152,7 @@ def main() -> None:
     app.add_handler(CommandHandler("start", cmd_help))
     app.add_handler(CommandHandler("status", cmd_status))
     app.add_handler(CommandHandler("new", cmd_new))
+    app.add_handler(CommandHandler("agent", cmd_agent))
     app.add_handler(CommandHandler("end", cmd_end))
     app.add_handler(CommandHandler("deploy", cmd_deploy))
     app.add_handler(CommandHandler("restart", cmd_restart))
