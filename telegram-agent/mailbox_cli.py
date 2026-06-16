@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -19,6 +20,17 @@ from mailbox import (
 )
 
 CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
+
+
+def load_dotenv(path: Path) -> None:
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip())
 
 
 def load_config() -> dict:
@@ -45,6 +57,7 @@ def main() -> None:
     p_del.add_argument("--uid", required=True)
 
     args = parser.parse_args()
+    load_dotenv(CONFIG_PATH.parent / ".env")
     cfg = load_config()
     box_cfg = resolve_mailbox_config(cfg)
     if not box_cfg:
