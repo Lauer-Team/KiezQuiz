@@ -12,9 +12,17 @@ import logging
 import re
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from outbound import (
+    collect_outbound_files,
+    resolve_email_config,
+    send_email,
+    send_files_to_chat,
+)
 
 from telegram import Update
 from telegram.constants import ParseMode
@@ -33,6 +41,8 @@ Wichtige Regeln:
 - Jede HTML-Seite braucht versionGuard.js am Ende von <head>
 - Keine Secrets committen
 - Antworte auf Deutsch, kurz und klar
+- Erstellte Dateien (PDF, CSV, …): Pfad in Antwort nennen — Bot sendet sie automatisch per Telegram
+- E-Mail: `python3 send_email.py --to … --subject … --body …` (Resend, nur wenn konfiguriert)
 """.strip()
 
 HELP_TEXT = """KiezQuiz Agent — Befehle
@@ -45,7 +55,11 @@ HELP_TEXT = """KiezQuiz Agent — Befehle
 • nein → PR bleibt offen (nicht live)
 • /status → Session, Branch, PR
 • /restart → Bot neu starten (lädt Code-Änderungen)
+• /file <pfad> → Datei aus dem Repo senden (PDF, CSV, …)
+• /email <an> <betreff> | <text> → E-Mail via Resend
 • /help → diese Hilfe
+
+Dateien: Nach Agent-Aufgaben werden erwähnte/neu erstellte Dateien automatisch mitgeschickt.
 
 Rote Linie: Agent läuft nur lokal (Modell auto), kein Cloud Agent.
 """
@@ -528,6 +542,94 @@ async def cmd_deploy(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     await update.message.reply_text(truncate_telegram(msg))
 
 
+async def deliver_agent_files(
+    update: Update,
+    cfg: dict[str, Any],
+    agent_out: str,
+    started_at: float,
+) -> None:
+    if not update.message or not update.effective_chat:
+        return
+    repo = Path(cfg["repo_path"])
+    paths = await asyncio.to_thread(collect_outbound_files, agent_out, repo, started_at)
+    if not paths:
+        return
+    sent = await send_files_to_chat(update.get_bot(), update.effective_chat.id, paths)
+    if sent:
+        lines = "\n".join(f"📎 {Path(p).name}" for p in sent)
+        await update.message.reply_text(f"Dateien:\n{lines}")
+
+
+async def cmd_file(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+    if not context.args:
+        await update.message.reply_text(
+            "Nutze: /file <pfad-im-repo>\n"
+            "Beispiel: /file ops/agents/cfo-finanzen/transactions.pdf"
+        )
+        return
+
+    repo = Path(cfg["repo_path"])
+    rel = " ".join(context.args).strip()
+    paths = await asyncio.to_thread(collect_outbound_files, rel, repo, None)
+    if not paths:
+        await update.message.reply_text(f"Datei nicht gefunden: {rel}")
+        return
+    sent = await send_files_to_chat(update.get_bot(), update.effective_chat.id, paths[:1])
+    if not sent:
+        await update.message.reply_text("Senden fehlgeschlagen (zu groß oder nicht lesbar).")
+
+
+async def cmd_email(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cfg = context.application.bot_data["cfg"]
+    if not await ensure_auth(update, cfg):
+        return
+
+    email_cfg = resolve_email_config(cfg)
+    if not email_cfg:
+        await update.message.reply_text(
+            "E-Mail nicht eingerichtet.\n"
+            "Setze KIEZ_RESEND_API_KEY und email-Abschnitt in config.json."
+        )
+        return
+
+    raw = " ".join(context.args).strip()
+    if "|" not in raw:
+        await update.message.reply_text(
+            "Nutze: /email <an> <betreff> | <text>\n"
+            f"Ohne <an>: Standard {email_cfg.get('default_to') or '—'}"
+        )
+        return
+
+    head, body = raw.split("|", 1)
+    body = body.strip()
+    parts = head.strip().split(None, 1)
+    if len(parts) == 2 and "@" in parts[0]:
+        to, subject = parts[0], parts[1]
+    elif len(parts) == 2:
+        to = email_cfg.get("default_to") or ""
+        subject = head.strip()
+    else:
+        to = email_cfg.get("default_to") or ""
+        subject = head.strip()
+
+    if not to:
+        await update.message.reply_text("Empfänger fehlt (--to oder default_to in config).")
+        return
+    if not subject or not body:
+        await update.message.reply_text("Betreff und Text dürfen nicht leer sein.")
+        return
+
+    try:
+        await asyncio.to_thread(send_email, email_cfg, to, subject, body)
+        await update.message.reply_text(f"✉️ Gesendet an {to}\nBetreff: {subject}")
+    except Exception as exc:
+        log.exception("E-Mail fehlgeschlagen")
+        await update.message.reply_text(truncate_telegram(f"E-Mail fehlgeschlagen: {exc}"))
+
+
 async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: str) -> None:
     cfg = context.application.bot_data["cfg"]
     state = load_state()
@@ -540,11 +642,13 @@ async def handle_task(update: Update, context: ContextTypes.DEFAULT_TYPE, task: 
     save_state(state)
     await update.message.reply_text("Agent läuft … (kann einige Minuten dauern)")
 
+    started_at = time.time()
     try:
         code, agent_out = await asyncio.to_thread(run_agent, cfg, state, task)
         summary = truncate_telegram(agent_out)
         prefix = "Fertig." if code == 0 else "Agent beendet mit Fehler."
         await update.message.reply_text(f"{prefix}\n\n{summary}")
+        await deliver_agent_files(update, cfg, agent_out, started_at)
 
         repo = Path(cfg["repo_path"])
         changed = git_changed_paths(repo)
@@ -642,6 +746,8 @@ def main() -> None:
     app.add_handler(CommandHandler("end", cmd_end))
     app.add_handler(CommandHandler("deploy", cmd_deploy))
     app.add_handler(CommandHandler("restart", cmd_restart))
+    app.add_handler(CommandHandler("file", cmd_file))
+    app.add_handler(CommandHandler("email", cmd_email))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, on_message))
 
     log.info("KiezQuiz Telegram-Agent startet (repo=%s)", repo)

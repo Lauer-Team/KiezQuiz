@@ -3,5 +3,13 @@
   "telegram_user_id": 123456789,
   "repo_path": "/home/DEINNAME/KiezQuiz",
   "agent_bin": "agent",
-  "model": "auto"
+  "model": "auto",
+  "email": {
+    "enabled": true,
+    "provider": "resend",
+    "from_email": "info@kiezquiz.de",
+    "from_name": "Kalle",
+    "default_to": "deine@email.de",
+    "resend_api_key_env": "KIEZ_RESEND_API_KEY"
+  }
 }
