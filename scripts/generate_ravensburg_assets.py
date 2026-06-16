@@ -3,19 +3,24 @@
 
 Level 1 (Ortschaften): Ravensburg, Eschach, Schmalegg, Taldorf
 Level 2 (Wohnbezirke): official Wohnbezirke per Hauptsatzung der Stadt Ravensburg
+
+Note: OSM relation 2808301 is the whole municipality (admin_level 8). The Ravensburg
+Ortschaft has no separate relation — it is derived by excluding the three outer
+Ortschaften (Eschach, Schmalegg, Taldorf) from the municipality rings.
 """
 
 import json
 import math
 import os
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
 OVERPASS = "https://overpass-api.de/api/interpreter"
+MUNICIPALITY_ID = 2808301
 
-RELATIONS = {
-    "Ravensburg": 2808301,
+ORTSCHAFT_RELATIONS = {
     "Eschach": 10847818,
     "Schmalegg": 10847816,
     "Taldorf": 10847817,
@@ -28,7 +33,7 @@ WOHNBEZIRKE = [
     {"name": "Weißenau", "bezirk": "Eschach", "lat": 47.7270, "lon": 9.6330, "population": "3.500", "area_km2": "4,5 km²", "polygon": "circle"},
     {"name": "Obereschach", "bezirk": "Eschach", "lat": 47.7520, "lon": 9.6220, "population": "2.800", "area_km2": "5,0 km²", "polygon": "circle"},
     {"name": "Gornhofen", "bezirk": "Eschach", "lat": 47.7680, "lon": 9.6450, "population": "1.200", "area_km2": "2,0 km²", "polygon": "circle"},
-    {"name": "Schmalegg", "bezirk": "Schmalegg", "lat": 47.7910, "lon": 9.5420, "population": "2.150", "area_km2": "8,0 km²", "polygon": "relation:Schmalegg"},
+    {"name": "Schmalegg", "bezirk": "Schmalegg", "lat": 47.7910, "lon": 9.5420, "population": "2.150", "area_km2": "8,0 km²", "polygon": "ortschaft"},
     {"name": "Oberzell", "bezirk": "Taldorf", "lat": 47.7280, "lon": 9.5190, "population": "1.400", "area_km2": "6,0 km²", "polygon": "circle"},
     {"name": "Bavendorf", "bezirk": "Taldorf", "lat": 47.7420, "lon": 9.5040, "population": "1.600", "area_km2": "7,0 km²", "polygon": "circle"},
     {"name": "Taldorf", "bezirk": "Taldorf", "lat": 47.7510, "lon": 9.5280, "population": "900", "area_km2": "3,0 km²", "polygon": "circle"},
@@ -36,15 +41,24 @@ WOHNBEZIRKE = [
 ]
 
 
-def overpass(query: str) -> dict:
+def overpass(query: str, retries: int = 3) -> dict:
     data = urllib.parse.urlencode({"data": query}).encode()
-    req = urllib.request.Request(
-        OVERPASS,
-        data=data,
-        headers={"User-Agent": "KiezQuiz/1.0 (https://kiezquiz.de)"},
-    )
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        return json.load(resp)
+    last_error: Exception | None = None
+    for attempt in range(retries):
+        req = urllib.request.Request(
+            OVERPASS,
+            data=data,
+            headers={"User-Agent": "KiezQuiz/1.0 (https://kiezquiz.de)"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                return json.load(resp)
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as exc:
+            last_error = exc
+            wait = 3 * (attempt + 1)
+            print(f"    Overpass retry in {wait}s ({exc})…")
+            time.sleep(wait)
+    raise RuntimeError(f"Overpass failed after {retries} attempts: {last_error}")
 
 
 def fetch_relation_geom(rel_id: int) -> list[list[tuple[float, float]]]:
@@ -63,6 +77,38 @@ def fetch_relation_geom(rel_id: int) -> list[list[tuple[float, float]]]:
             if len(ring) >= 3:
                 rings.append(ring)
     return rings
+
+
+def ring_centroid(ring: list[tuple[float, float]]) -> tuple[float, float]:
+    lons = [p[0] for p in ring]
+    lats = [p[1] for p in ring]
+    return sum(lons) / len(lons), sum(lats) / len(lats)
+
+
+def point_in_ring(lon: float, lat: float, ring: list[tuple[float, float]]) -> bool:
+    inside = False
+    j = len(ring) - 1
+    for i in range(len(ring)):
+        xi, yi = ring[i]
+        xj, yj = ring[j]
+        if ((yi > lat) != (yj > lat)) and (
+            lon < (xj - xi) * (lat - yi) / (yj - yi + 1e-15) + xi
+        ):
+            inside = not inside
+        j = i
+    return inside
+
+
+def ring_in_other_ortschaft(
+    ring: list[tuple[float, float]],
+    other_rings: dict[str, list[list[tuple[float, float]]]],
+) -> str | None:
+    cx, cy = ring_centroid(ring)
+    for ort, rings in other_rings.items():
+        for other in rings:
+            if point_in_ring(cx, cy, other):
+                return ort
+    return None
 
 
 def collect_bounds(rings: list[list[tuple[float, float]]]) -> tuple[float, float, float, float]:
@@ -95,18 +141,53 @@ def circle_path(lon: float, lat: float, radius_px: float, bounds, width: int, he
     )
 
 
+def append_polygon_paths(
+    svg_paths: list[str],
+    idx: int,
+    rings: list[list[tuple[float, float]]],
+    data_name: str,
+    data_bezirk: str,
+    bounds,
+    width: int,
+    height: int,
+) -> int:
+    for ring in rings:
+        path_data = ring_to_path(ring, bounds, width, height)
+        svg_paths.append(
+            f'<path id="stadtteil-{idx}" class="stadtteil-path" d="{path_data}" '
+            f'data-name="{data_name}" data-bezirk="{data_bezirk}" />'
+        )
+        idx += 1
+    return idx
+
+
 def main() -> None:
     print("Generating Ravensburg assets from OpenStreetMap…")
     os.makedirs("src/data", exist_ok=True)
 
-    relation_rings: dict[str, list[list[tuple[float, float]]]] = {}
-    for name, rel_id in RELATIONS.items():
-        print(f"  Fetching relation {rel_id} ({name})…")
-        time.sleep(1.5)
-        relation_rings[name] = fetch_relation_geom(rel_id)
-        print(f"    → {len(relation_rings[name])} ring(s)")
+    ortschaft_rings: dict[str, list[list[tuple[float, float]]]] = {}
+    for name, rel_id in ORTSCHAFT_RELATIONS.items():
+        print(f"  Fetching Ortschaft {name} (relation {rel_id})…")
+        time.sleep(2)
+        ortschaft_rings[name] = fetch_relation_geom(rel_id)
+        print(f"    → {len(ortschaft_rings[name])} ring(s)")
 
-    all_rings = [ring for rings in relation_rings.values() for ring in rings]
+    print(f"  Fetching municipality (relation {MUNICIPALITY_ID})…")
+    time.sleep(2)
+    municipality_rings = fetch_relation_geom(MUNICIPALITY_ID)
+    print(f"    → {len(municipality_rings)} ring(s)")
+
+    ravensburg_rings: list[list[tuple[float, float]]] = []
+    for ring in municipality_rings:
+        owner = ring_in_other_ortschaft(ring, ortschaft_rings)
+        if owner is None:
+            ravensburg_rings.append(ring)
+        else:
+            print(f"    Skipping municipality ring inside {owner}")
+
+    print(f"  Ravensburg Ortschaft: {len(ravensburg_rings)} ring(s)")
+
+    all_rings = ravensburg_rings + [ring for rings in ortschaft_rings.values() for ring in rings]
     min_lon, min_lat, max_lon, max_lat = collect_bounds(all_rings)
     lat_center = (min_lat + max_lat) / 2.0
     cos_lat = math.cos(math.radians(lat_center))
@@ -120,35 +201,19 @@ def main() -> None:
     svg_paths: list[str] = []
     idx = 0
 
-    # Kernstadt base: full city outline under peripheral Ortschaften
-    for ring in relation_rings["Ravensburg"]:
-        path_data = ring_to_path(ring, bounds, width, height)
-        svg_paths.append(
-            f'<path id="stadtteil-{idx}" class="stadtteil-path" d="{path_data}" '
-            f'data-name="Ravensburg" data-bezirk="Ravensburg" />'
-        )
-        idx += 1
+    idx = append_polygon_paths(
+        svg_paths, idx, ravensburg_rings, "Ravensburg", "Ravensburg", bounds, width, height
+    )
 
     for ort in ("Eschach", "Schmalegg", "Taldorf"):
-        for ring in relation_rings.get(ort, []):
-            path_data = ring_to_path(ring, bounds, width, height)
-            for wb in WOHNBEZIRKE:
-                if wb["name"] == ort and wb.get("polygon", "").startswith("relation:"):
-                    svg_paths.append(
-                        f'<path id="stadtteil-{idx}" class="stadtteil-path" d="{path_data}" '
-                        f'data-name="{wb["name"]}" data-bezirk="{wb["bezirk"]}" />'
-                    )
-                    idx += 1
-                    break
-            else:
-                continue
-            break
+        idx = append_polygon_paths(
+            svg_paths, idx, ortschaft_rings[ort], ort, ort, bounds, width, height
+        )
 
     circle_radius = max(14, min(width, height) * 0.028)
     for wb in WOHNBEZIRKE:
-        if wb.get("polygon") == "city_base":
-            continue
-        if wb.get("polygon", "").startswith("relation:"):
+        polygon = wb.get("polygon", "circle")
+        if polygon in ("city_base", "ortschaft"):
             continue
         path_data = circle_path(wb["lon"], wb["lat"], circle_radius, bounds, width, height)
         svg_paths.append(
@@ -189,7 +254,7 @@ def main() -> None:
 </svg>'''
     with open(svg_path, "w", encoding="utf-8") as f:
         f.write(svg_content)
-    print(f"  Saved map → {svg_path}")
+    print(f"  Saved map → {svg_path} ({idx} paths)")
     print("Ravensburg assets generated successfully!")
 
 

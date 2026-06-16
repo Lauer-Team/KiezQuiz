@@ -7,7 +7,7 @@
     frankfurt: ['Innenstadt', 'Bahnhofsv.', 'Gallus', 'Bockenheim', 'Westend', 'Nordend', 'Bornheim', 'Ostend', 'Sachsenh.', 'Niederrad', 'Höchst', 'Bergen'],
     muenchen: ['Altstadt', 'Lehel', 'Schwabing', 'Maxvorstadt', 'Glockenbach', 'Au', 'Haidhausen', 'Sendling', 'Nymphenburg', 'Bogenhausen', 'Perlach', 'Pasing'],
     duesseldorf: ['Altstadt', 'Unterbilk', 'Oberkassel', 'Benrath', 'Golzheim', 'Flingern', 'Derendorf', 'Kaisersw.', 'Hafen', 'Heerdt', 'Stockum', 'Gerresheim'],
-    ravensburg: ['Altstadt', 'Weststadt', 'Veitsburg', 'Weißenau', 'Obereschach', 'Schmalegg', 'Bavendorf', 'Taldorf', 'Oberzell', 'Adelsreute', 'Gornhofen', 'Hochberg'],
+    ravensburg: ['Ravensburg', 'Veitsburg', 'Weißenau', 'Obereschach', 'Gornhofen', 'Schmalegg', 'Oberzell', 'Bavendorf', 'Taldorf', 'Adelsreute', 'Eschach', 'Spetzel'],
     europe: ['Paris', 'London', 'Berlin', 'Madrid', 'Rom', 'Wien', 'Amsterdam', 'Brüssel', 'Prag', 'Warschau', 'Stockholm', 'Oslo'],
     mississippi: ['Jackson', 'Hinds', 'Harrison', 'DeSoto', 'Madison', 'Rankin', 'Lee', 'Lauderdale', 'Forrest', 'Adams', 'Warren', 'Washington']
   };
