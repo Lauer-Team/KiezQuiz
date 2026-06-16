@@ -5,10 +5,10 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=DEIN_LINUX_USERNAME
-WorkingDirectory=/home/DEIN_LINUX_USERNAME/KiezQuiz/telegram-agent
-Environment=PATH=/home/DEIN_LINUX_USERNAME/.local/bin:/usr/local/bin:/usr/bin:/bin
-ExecStart=/home/DEIN_LINUX_USERNAME/KiezQuiz/telegram-agent/.venv/bin/python bot.py
+User=jjl
+WorkingDirectory=/home/jjl/KiezQuiz/telegram-agent
+Environment=PATH=/home/jjl/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/jjl/KiezQuiz/telegram-agent/.venv/bin/python bot.py
 Restart=always
 RestartSec=15
 
