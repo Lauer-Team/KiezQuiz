@@ -7,7 +7,7 @@
 ## Kurzüberblick
 
 - Laufende Kosten: **Cursor** (~55 €/Jun → ~18 €/Jul) + **Hetzner** (10,70 €/Monat)
-- Supabase + Resend: 🟡 beobachten (Free Tier)
+- Supabase: 🟡 beobachten (Free Tier) · E-Mail über iCloud (kein Resend mehr)
 - Upgrade-Gates: immer Menschen-OK
 
 ## Detaildateien (Referenz)
@@ -43,7 +43,7 @@ Kalle warnt bei **>70 %** eines Free-Tier-Limits im CEO-Leitstand.
 | **GitHub** | Free (public Repos) | 0 | Code, Pages, CI | 🟢 |
 | **Supabase** | Free | 0 | Auth, DB, Edge | 🟡 |
 | **Cloudflare** | Free | 0 | DNS lauer.team | 🟢 |
-| **Resend** | Free | 0 | NB-E-Mails | 🟡 |
+| **iCloud Mail** | iCloud+ | 0 | Bot + NB + Backup | 🟢 |
 | **Google Search Console** | Free | 0 | SEO | 🟢 |
 | **GitHub Pages** | Free (public) | 0 | Hosting | 🟢 |
 | **Notion** | Free/Personal | 0 | Doku | 🟢 |
