@@ -17,6 +17,7 @@
 
 | Projekt | Status | Fortschritt | Termin |
 |---|---|---|---|
+| Transaktionsbuch (`transactions.csv`) | live | 100% | — |
 | Cursor-Downgrade Pro+ → Pro | geplant | 0% | 2026-07-01 |
 | Monetarisierung (Kostenplan) | Konzept | 10% | offen |
 

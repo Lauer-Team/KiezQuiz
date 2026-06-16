@@ -12,6 +12,7 @@
 
 ## Detaildateien (Referenz)
 
+- **Transaktionsbuch:** `transactions.csv` (+ `transactions.README.txt`) — alle Einnahmen/Ausgaben für Quartals- & Jahresberichte
 - Service-Inventar: `leitstand.md (SERVICES)` (vollständig migriert)
 - Monatskosten: `leitstand.md (COSTS)`
 
