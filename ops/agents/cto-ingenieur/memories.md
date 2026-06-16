@@ -56,32 +56,34 @@
 | **Google** | **Search Console** | SEO-Monitoring |
 | **Legora** | Legal / Compliance | Rechtstexte, Checkliste (Projekt: KiezQuiz) |
 | QR Code Monkey | QR-Codes | QR-Generierung |
-| **Resend** | E-Mail-Services | NB-Benachrichtigungen, Transaktionsmail |
+| **Resend** | E-Mail (Website) | NB-Benachrichtigungen via Supabase — **Resend abgeschaltet**, Migration offen |
+| **Apple iCloud+** | E-Mail (Bot) | Custom Domain `kiezquiz.de`, Bot-Absender `kalle@kiezquiz.de` |
 | **Supabase** | Backend, Accounts, Spielerdaten | Projekt „KiezQuiz Backend“ (`iuixaesbzftgmnmelcad`, EU) |
-| **Telegram** | Bot | @kalle_kieztaube_bot — Fernsteuerung (⏸️ pausiert) |
+| **Telegram** | Bot | @kalle_kieztaube_bot — Hetzner VPS, systemd `kiezquiz-agent` |
 | **Notion** | Projekt-Doku | **JJL - TBD - KiezQuiz** (MCP verbunden) |
-| **United Domains** | Domain | `kiezquiz.de` |
-| United Domains | Mail-Weiterleitung | info@kiezquiz.de → kiezquiz@web.de |
-| Web.de | Mail | KiezQuiz@web.de |
+| **United Domains** | Domain + DNS | `kiezquiz.de` (MX/SPF/DKIM → iCloud) |
+| **Hetzner** | VPS | Bot-Host `138.199.159.170` |
 
 ---
 
 ## Kontakt & Rechtliches (öffentlich)
 
-- **E-Mail:** info@kiezquiz.de (Weiterleitung → kiezquiz@web.de)
+- **E-Mail (öffentlich):** info@kiezquiz.de (iCloud+ Custom Domain)
+- **E-Mail (Bot):** kalle@kiezquiz.de (iCloud SMTP/IMAP)
 - **Betreiber:** Jeremiah J. Lauer, Hamburg
 - **Tracking:** bewusst kein Google Analytics (Datenschutzerklärung)
 
 ---
 
-## Telegram-Agent (alter Mac)
+## Telegram-Agent (Hetzner VPS)
 
 | | |
 |---|---|
 | **Bot** | @kalle_kieztaube_bot |
-| **Hardware** | MacBook Pro 13" 2010, Ubuntu 22.04, LAN |
-| **Anleitung** | `telegram-agent/ANLEITUNG.md` |
+| **Host** | Hetzner VPS `138.199.159.170`, systemd `kiezquiz-agent` |
+| **Anleitung** | `telegram-agent/ANLEITUNG.md` · E-Mail: `telegram-agent/EMAIL.md` |
 | **Zweck** | Nachrichten vom Handy → Code-Änderungen als PR → Freigabe → live |
+| **Mail-Module** | Source of Truth: Server-Repo (`deploy/kiezquiz-agent/`), rsync-Deploy |
 
 ---
 

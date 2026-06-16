@@ -9,6 +9,7 @@
 | L3 | Monetarisierung | ⚪ | Aufgeschoben | Vor Paid Feature: AGB, Widerruf → Legora |
 | L4 | App Store (Capacitor iOS) | ⚪ | Backlog | Vor Release: Apple-Richtlinien, App-DSE |
 | L5 | Supabase RLS WARNs | 🟡 | Beobachten | Security-Weekly · optional TOM-Update |
+| L6 | E-Mail-Anbieter DSE (Resend → iCloud) | 🟢 | Erledigt | DSE §7 + Skripte + Supabase SMTP (16.06.) |
 
 Trigger-Liste: `anweisungen.md (Trigger)`
 

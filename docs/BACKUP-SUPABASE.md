@@ -98,16 +98,16 @@ Am **2. jeden Monats** (09:00 UTC) sendet GitHub Actions automatisch eine E-Mail
 | Komponente | Zweck |
 |------------|--------|
 | `.github/workflows/backup-reminder.yml` | Cron + manueller Start |
-| `scripts/send_backup_reminder.py` | Versand via Resend |
+| `scripts/send_backup_reminder.py` | Versand via iCloud SMTP |
 | `docs/email-backup-reminder.html` | HTML-Vorlage |
 
-**Einmal-Setup:** GitHub Secret `KIEZ_RESEND_API_KEY` (derselbe Resend-Key wie für NB-Benachrichtigungen).
+**Einmal-Setup:** GitHub Secrets `KIEZ_ICLOUD_LOGIN` + `KIEZ_ICLOUD_APP_PASSWORD` (Apple-ID + App-Passwort).
 
 Test lokal:
 ```bash
 python3 scripts/send_backup_reminder.py --dry-run
-# Mit Versand (Resend-Key in Umgebung):
-KIEZ_RESEND_API_KEY=re_... python3 scripts/send_backup_reminder.py --send
+# Mit Versand (iCloud-Credentials in Umgebung):
+KIEZ_ICLOUD_LOGIN=...@icloud.com KIEZ_ICLOUD_APP_PASSWORD=... python3 scripts/send_backup_reminder.py --send
 ```
 
 Manuell auslösen: **Actions** → **Supabase backup reminder** → **Run workflow**.

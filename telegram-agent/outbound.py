@@ -1,17 +1,14 @@
-"""Datei-Versand (Telegram) und E-Mail (Resend) für Kalle."""
+"""Datei-Versand (Telegram) und E-Mail (iCloud SMTP) für Kalle."""
 
 from __future__ import annotations
 
-import base64
 import io
-import json
 import logging
-import os
 import re
-import urllib.error
-import urllib.request
 from pathlib import Path
 from typing import Any
+
+from email_smtp import resolve_smtp_email_config, send_email_smtp
 
 log = logging.getLogger(__name__)
 
@@ -35,6 +32,8 @@ SENDABLE_EXTENSIONS = {
 MAX_FILE_BYTES = 49 * 1024 * 1024
 MAX_FILES = 8
 SKIP_DIR_PARTS = {".git", ".venv", "node_modules", "__pycache__", "dist", "build", ".secrets"}
+SKIP_FILE_NAMES = frozenset({"state.json", "config.json", ".env"})
+AUTO_SKIP_PREFIXES = ("telegram-agent/",)
 
 BACKTICK_RE = re.compile(r"`([^`\n]+)`")
 PLAIN_PATH_RE = re.compile(
@@ -52,6 +51,18 @@ def _path_allowed(path: Path, repo: Path) -> bool:
     except ValueError:
         return False
     return not any(part in SKIP_DIR_PARTS for part in path.parts)
+
+
+def _auto_send_allowed(path: Path, repo: Path) -> bool:
+    if path.name in SKIP_FILE_NAMES:
+        return False
+    try:
+        rel = path.resolve().relative_to(repo.resolve()).as_posix()
+    except ValueError:
+        return False
+    if any(rel.startswith(prefix) for prefix in AUTO_SKIP_PREFIXES):
+        return False
+    return _path_allowed(path, repo)
 
 
 def _resolve_repo_path(raw: str, repo: Path) -> Path | None:
@@ -74,7 +85,7 @@ def extract_paths_from_text(text: str, repo: Path) -> list[Path]:
     for pattern in (BACKTICK_RE, PLAIN_PATH_RE):
         for match in pattern.finditer(text):
             candidate = _resolve_repo_path(match.group(1), repo)
-            if candidate and candidate not in seen:
+            if candidate and _auto_send_allowed(candidate, repo) and candidate not in seen:
                 seen.add(candidate)
                 result.append(candidate)
             if len(result) >= MAX_FILES:
@@ -82,36 +93,10 @@ def extract_paths_from_text(text: str, repo: Path) -> list[Path]:
     return result
 
 
-def files_modified_since(repo: Path, since: float) -> list[Path]:
-    found: list[tuple[float, Path]] = []
-    for path in repo.rglob("*"):
-        if not path.is_file():
-            continue
-        if path.suffix.lower() not in SENDABLE_EXTENSIONS:
-            continue
-        if not _path_allowed(path, repo):
-            continue
-        try:
-            mtime = path.stat().st_mtime
-        except OSError:
-            continue
-        if mtime >= since - 1:
-            found.append((mtime, path))
-    found.sort(key=lambda item: item[0], reverse=True)
-    return [path for _, path in found[:MAX_FILES]]
-
-
 def collect_outbound_files(text: str, repo: Path, since: float | None = None) -> list[Path]:
-    paths = extract_paths_from_text(text, repo)
-    seen = set(paths)
-    if since is not None:
-        for path in files_modified_since(repo, since):
-            if path not in seen:
-                paths.append(path)
-                seen.add(path)
-            if len(paths) >= MAX_FILES:
-                break
-    return paths[:MAX_FILES]
+    """Nur explizit in der Agent-Antwort genannte Pfade — kein mtime-Scan."""
+    del since
+    return extract_paths_from_text(text, repo)[:MAX_FILES]
 
 
 async def send_files_to_chat(bot: Any, chat_id: int, paths: list[Path]) -> list[str]:
@@ -173,29 +158,7 @@ async def send_mail_attachments_to_chat(
 
 
 def resolve_email_config(cfg: dict[str, Any]) -> dict[str, Any] | None:
-    email = cfg.get("email")
-    if not email:
-        return None
-    if email.get("enabled") is False:
-        return None
-
-    env_name = email.get("resend_api_key_env", "KIEZ_RESEND_API_KEY")
-    api_key = os.environ.get(env_name, "").strip()
-    if not api_key:
-        log.warning("E-Mail: Umgebungsvariable %s nicht gesetzt", env_name)
-        return None
-
-    from_email = email.get("from_email", "info@kiezquiz.de").strip()
-    if not from_email:
-        return None
-
-    return {
-        "provider": email.get("provider", "resend"),
-        "from_email": from_email,
-        "from_name": email.get("from_name", "Kalle"),
-        "default_to": email.get("default_to", "").strip(),
-        "resend_api_key": api_key,
-    }
+    return resolve_smtp_email_config(cfg)
 
 
 def send_email(
@@ -207,48 +170,4 @@ def send_email(
     html: str | None = None,
     attachments: list[Path] | None = None,
 ) -> None:
-    provider = email_cfg.get("provider", "resend")
-    if provider != "resend":
-        raise ValueError(f"Unbekannter E-Mail-Provider: {provider}")
-
-    payload: dict[str, Any] = {
-        "from": f"{email_cfg['from_name']} <{email_cfg['from_email']}>",
-        "to": [to],
-        "subject": subject,
-        "text": text,
-    }
-    if html:
-        payload["html"] = html
-
-    if attachments:
-        att_list = []
-        for path in attachments:
-            if not path.is_file():
-                continue
-            att_list.append(
-                {
-                    "filename": path.name,
-                    "content": base64.b64encode(path.read_bytes()).decode("ascii"),
-                }
-            )
-        if att_list:
-            payload["attachments"] = att_list
-
-    data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-    req = urllib.request.Request(
-        "https://api.resend.com/emails",
-        data=data,
-        headers={
-            "Authorization": f"Bearer {email_cfg['resend_api_key']}",
-            "Content-Type": "application/json",
-            "User-Agent": "kiezquiz-telegram-agent/1.0",
-        },
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            if resp.status >= 300:
-                raise RuntimeError(f"Resend HTTP {resp.status}")
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:400]
-        raise RuntimeError(f"Resend HTTP {exc.code}: {detail or exc.reason}") from exc
+    send_email_smtp(email_cfg, to, subject, text, html=html, attachments=attachments)

@@ -1,6 +1,10 @@
 # KiezQuiz Telegram-Agent — Einrichtung
 
-> Vom Handy per Telegram Nachrichten schicken → alter Mac ändert Code → du sagst **ja** → kiezquiz.de ist live.
+> Vom Handy per Telegram Nachrichten schicken → Agent ändert Code → du sagst **ja** → kiezquiz.de ist live.
+
+**Produktion (Stand 2026-06):** Bot läuft auf dem **Hetzner VPS** (`138.199.159.170`, systemd `kiezquiz-agent`). E-Mail über **iCloud** — Details in [`EMAIL.md`](EMAIL.md).
+
+Diese Anleitung beschreibt die lokale Einrichtung (historisch alter Mac; funktioniert auch auf dem VPS analog).
 
 ---
 
@@ -12,7 +16,7 @@
 | **8 GB RAM** (besser 16 GB) | Sonst wird der Agent langsam |
 | **LAN-Kabel** (wenn möglich) | Stabiler als WLAN |
 | **Cursor-Account** (gleicher wie am Laptop) | Für den Agent |
-| **GitHub-Zugang** zu `logic3/KiezQuiz` | Push + Pull Requests |
+| **GitHub-Zugang** zu `Lauer-Team/KiezQuiz` | Push + Pull Requests |
 | **Telegram** auf dem Handy | Deine Fernbedienung |
 
 **Du brauchst NICHT:** Cursor Cloud Agent, My Machines, `-c` / `--cloud` in der CLI.
@@ -102,14 +106,14 @@ Bei `gh auth login`:
 Test:
 
 ```bash
-gh repo view logic3/KiezQuiz
+gh repo view Lauer-Team/KiezQuiz
 ```
 
 ### B3 — KiezQuiz klonen
 
 ```bash
 cd ~
-git clone https://github.com/logic3/KiezQuiz.git
+git clone https://github.com/Lauer-Team/KiezQuiz.git
 cd KiezQuiz
 ```
 
@@ -190,6 +194,8 @@ Eintragen:
 - `telegram_user_id` → deine Zahl von userinfobot
 - `repo_path` → z. B. `/home/jjl/KiezQuiz` (dein echter Pfad!)
 - `model` → `auto` lassen
+
+E-Mail (optional, iCloud): `.env` mit `KIEZ_ICLOUD_LOGIN` + `KIEZ_ICLOUD_APP_PASSWORD` — siehe [`EMAIL.md`](EMAIL.md) und `config.example.json`.
 
 Speichern in nano: **Strg+O**, Enter, **Strg+X**
 

@@ -2,8 +2,9 @@
   "mode": "edge",
   "edgeFunctionUrl": "https://iuixaesbzftgmnmelcad.supabase.co/functions/v1/notify-terms-change",
   "notifySecret": "IN_SETUP_GENERIERT",
+  "emailProvider": "smtp",
   "fromEmail": "info@kiezquiz.de",
   "fromName": "KiezQuiz",
   "siteUrl": "https://kiezquiz.de",
-  "_comment": "python3 scripts/setup_terms_notify.py erzeugt notifySecret. Supabase Secrets: NOTIFY_TERMS_SECRET + RESEND_API_KEY"
+  "_comment": "python3 scripts/setup_terms_notify.py erzeugt notifySecret. Supabase Secrets: NOTIFY_TERMS_SECRET + SMTP_LOGIN + SMTP_APP_PASSWORD"
 }

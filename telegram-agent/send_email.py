@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""E-Mail versenden (Resend) — für Kalle-Agent und Cursor-Aufgaben."""
+"""E-Mail versenden (iCloud SMTP) — für Kalle-Agent und Cursor-Aufgaben."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def load_dotenv(path: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Kalle: E-Mail via Resend senden")
+    parser = argparse.ArgumentParser(description="Kalle: E-Mail via iCloud SMTP senden")
     parser.add_argument("--to", help="Empfänger (Standard: default_to aus config)")
     parser.add_argument("--subject", required=True, help="Betreff")
     parser.add_argument("--body", required=True, help="Nachricht (Plain-Text)")
@@ -47,7 +47,8 @@ def main() -> None:
     email_cfg = resolve_email_config(cfg)
     if not email_cfg:
         print(
-            "E-Mail nicht konfiguriert. Setze KIEZ_RESEND_API_KEY und email-Abschnitt in config.json",
+            "E-Mail nicht konfiguriert. Setze KIEZ_ICLOUD_LOGIN + KIEZ_ICLOUD_APP_PASSWORD "
+            "in .env und email-Abschnitt in config.json (siehe EMAIL.md)",
             file=sys.stderr,
         )
         sys.exit(1)

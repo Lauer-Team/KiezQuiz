@@ -112,8 +112,8 @@
 | **Zweck** | Information über wesentliche NB-Änderungen |
 | **Daten** | E-Mail-Adresse registrierter Nutzer |
 | **Rechtsgrundlage** | Art. 6 Abs. 1 lit. b DSGVO |
-| **Empfänger** | Resend.com (Versand), Supabase Edge Function |
-| **AVV/DPA** | Resend DPA abgeschlossen (10.06.2026) |
+| **Empfänger** | Apple iCloud Mail (SMTP), Supabase Edge Function |
+| **AVV/DPA** | Apple iCloud Terms / Privacy Policy (16.06.2026) |
 | **Speicherdauer** | Bis Account-Löschung |
 | **DSFA erforderlich** | Nein — siehe `docs/DSFA-Pruefung.md` |
 

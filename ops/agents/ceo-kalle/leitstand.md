@@ -1,6 +1,6 @@
 # Leitstand — Kalle (CEO)
 
-> **Rolle:** Leitagent · einziger Ansprechpartner · Stand: **2026-06-15**
+> **Rolle:** Leitagent · einziger Ansprechpartner · Stand: **2026-06-16**
 
 ---
 
@@ -17,7 +17,7 @@
 | **Support / Analytics (CXO)** | 🟢 | Stadt-Wünsche · Automation „Support Monthly" live |
 | **Legal (CLO)** | 🟢 | NB-E-Mails erledigt (10.06.) · Banner bis 11.07. · Koordination live |
 | **Engineering (CTO)** | 🟢 | Branch+PR · Deploy via GitHub Actions |
-| **Telegram-Agent** | ⏸️ | Pausiert |
+| **Telegram-Agent** | 🟢 | Hetzner VPS · iCloud-Mail · Handoff Server 16.06. |
 
 ---
 
@@ -33,7 +33,7 @@
 | 2026-06-15 | **AI-Management-Cockpit:** Organigramm · Dashboard · Leit-Routine (#7) |
 | 2026-06-15 | **Dashboard admin-only:** Supabase Storage + Edge Functions |
 | 2026-06-15 | **Agenten-Betriebssystem v2:** `ops/agents/*` Akten + JSON-Dashboard |
-| 2026-06-15 | **Dashboard UX:** Zeitleiste dedupliziert · Organigramm-Baum · Automationen pro Agent |
+| 2026-06-16 | **E-Mail komplett:** Resend/Web.de → iCloud · DSE · NB/Backup · Bot · Source of Truth KiezQuiz-Repo |
 
 Berichte: `reports/` · Fach-Akten: `ops/agents/*/`
 

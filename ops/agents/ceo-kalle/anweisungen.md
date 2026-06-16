@@ -193,7 +193,7 @@ Arbeite in Phasen, mit Checkpoint nach jeder Phase:
 | Supabase MCP | 🟢 | DB, Logs, Edge Functions | — |
 | Live-Site kiezquiz.de | 🟢 | curl, Smoke-Checks | — |
 | Lokale Supabase-Config | 🟢 | lokal testen | — |
-| Resend + NB-Mail | 🟢 | Skripte + Edge-Secrets | — (verified) |
+| iCloud Mail + NB | 🟢 | Skripte + Edge SMTP-Secrets | info@ / kalle@kiezquiz.de |
 | Google Search Console | 🟢 | Briefings (manuell/API später) | — (GSC OK) |
 | Cloudflare MCP | 🟢 | DNS, Workers, Observability | — |
 | Notion MCP | 🟢 | Projekt „JJL - TBD - KiezQuiz" | — |
@@ -215,7 +215,7 @@ Arbeite in Phasen, mit Checkpoint nach jeder Phase:
 - Edge-Secrets in Supabase (`NOTIFY_TERMS_SECRET`, `RESEND_API_KEY`)
 - Cloudflare MCP (alle)
 - **GSC OK** — Property + Sitemap
-- **Resend verified** — kiezquiz.de
+- **iCloud Mail** — kiezquiz.de Custom Domain (seit 16.06.2026)
 - **Notion MCP** — [JJL - TBD - KiezQuiz](https://app.notion.com/p/36f2a5a91f4c8058ba40cc83785b8dbc)
 
 ---
