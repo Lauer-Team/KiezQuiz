@@ -99,6 +99,11 @@ def point_in_ring(lon: float, lat: float, ring: list[tuple[float, float]]) -> bo
     return inside
 
 
+def ring_key(ring: list[tuple[float, float]], precision: int = 5) -> tuple[tuple[float, float], ...]:
+    """Stable identity for deduplicating identical OSM outer rings."""
+    return tuple((round(lon, precision), round(lat, precision)) for lon, lat in ring)
+
+
 def ring_in_other_ortschaft(
     ring: list[tuple[float, float]],
     other_rings: dict[str, list[list[tuple[float, float]]]],
@@ -109,6 +114,47 @@ def ring_in_other_ortschaft(
             if point_in_ring(cx, cy, other):
                 return ort
     return None
+
+
+def assign_ortschaft_rings(
+    municipality_rings: list[list[tuple[float, float]]],
+    ortschaft_rings: dict[str, list[list[tuple[float, float]]]],
+) -> dict[str, list[list[tuple[float, float]]]]:
+    """Assign each outer ring exactly once to Ravensburg or an outer Ortschaft.
+
+    OSM shares boundary rings across relations; the old approach drew municipality
+    leftovers as Ravensburg *and* appended all Ortschaft rings → double shapes.
+    """
+    assigned: dict[str, list[list[tuple[float, float]]]] = {
+        "Ravensburg": [],
+        "Eschach": [],
+        "Schmalegg": [],
+        "Taldorf": [],
+    }
+    seen: set[tuple[tuple[float, float], ...]] = set()
+
+    def claim(ring: list[tuple[float, float]], ort: str) -> None:
+        key = ring_key(ring)
+        if key in seen:
+            return
+        assigned[ort].append(ring)
+        seen.add(key)
+
+    # Outer Ortschaften first (canonical polygons from admin_level 9 relations).
+    for ort in ORTSCHAFT_RELATIONS:
+        for ring in ortschaft_rings[ort]:
+            owner = ring_in_other_ortschaft(ring, ortschaft_rings)
+            claim(ring, owner or ort)
+
+    # Remaining municipality rings = Ravensburg core (holes, enclaves, Veitsburg, …).
+    for ring in municipality_rings:
+        key = ring_key(ring)
+        if key in seen:
+            continue
+        owner = ring_in_other_ortschaft(ring, ortschaft_rings)
+        claim(ring, owner or "Ravensburg")
+
+    return assigned
 
 
 def collect_bounds(rings: list[list[tuple[float, float]]]) -> tuple[float, float, float, float]:
@@ -177,17 +223,11 @@ def main() -> None:
     municipality_rings = fetch_relation_geom(MUNICIPALITY_ID)
     print(f"    → {len(municipality_rings)} ring(s)")
 
-    ravensburg_rings: list[list[tuple[float, float]]] = []
-    for ring in municipality_rings:
-        owner = ring_in_other_ortschaft(ring, ortschaft_rings)
-        if owner is None:
-            ravensburg_rings.append(ring)
-        else:
-            print(f"    Skipping municipality ring inside {owner}")
+    assigned = assign_ortschaft_rings(municipality_rings, ortschaft_rings)
+    for ort in ("Ravensburg", "Eschach", "Schmalegg", "Taldorf"):
+        print(f"  {ort}: {len(assigned[ort])} ring(s)")
 
-    print(f"  Ravensburg Ortschaft: {len(ravensburg_rings)} ring(s)")
-
-    all_rings = ravensburg_rings + [ring for rings in ortschaft_rings.values() for ring in rings]
+    all_rings = [ring for rings in assigned.values() for ring in rings]
     min_lon, min_lat, max_lon, max_lat = collect_bounds(all_rings)
     lat_center = (min_lat + max_lat) / 2.0
     cos_lat = math.cos(math.radians(lat_center))
@@ -201,13 +241,9 @@ def main() -> None:
     svg_paths: list[str] = []
     idx = 0
 
-    idx = append_polygon_paths(
-        svg_paths, idx, ravensburg_rings, "Ravensburg", "Ravensburg", bounds, width, height
-    )
-
-    for ort in ("Eschach", "Schmalegg", "Taldorf"):
+    for ort in ("Ravensburg", "Eschach", "Schmalegg", "Taldorf"):
         idx = append_polygon_paths(
-            svg_paths, idx, ortschaft_rings[ort], ort, ort, bounds, width, height
+            svg_paths, idx, assigned[ort], ort, ort, bounds, width, height
         )
 
     circle_radius = max(14, min(width, height) * 0.028)
