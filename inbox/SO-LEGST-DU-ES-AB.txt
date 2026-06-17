@@ -1,10 +1,15 @@
-Projekt-Inbox — Dateien ablegen
-================================
+Projekt-Inbox — Dateien & Ordner ablegen
+=========================================
 
-1. Datei oder Ordner hier reinziehen (oder in Desktop/Projekte ablegen/KiezQuiz/).
-2. Fertig. Innerhalb ~1 Minute wandert alles nach: docs/
+Lege Dateien oder Ordner in diesen inbox/-Ordner. Fertig.
 
-Du musst nichts committen, pushen oder SSH machen.
-Ziel ändern: diese Datei anpassen → inbox/ZIEL.txt
+Wo es funktioniert (gleiche Logik überall):
+  • Mac:   projects/KiezQuiz/inbox/  (~1 Min Auto-Sync)
+  • VPS:   ~/projects/KiezQuiz/inbox/  (~1 Min Auto-Sync)
+  • GitHub: Datei in inbox/ hochladen & committen → Action läuft
 
-Log: ~/Library/Logs/projects-inbox.log
+Danach liegt alles in: docs/
+
+Ziel ändern: inbox/ZIEL.txt (eine Zeile)
+Log Mac: ~/Library/Logs/projects-inbox.log
+Log VPS: ~/projects/server/backups/projects-inbox-cron.log

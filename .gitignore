@@ -31,9 +31,7 @@ scripts/gsc-token.json
 scripts/backup-supabase.config.json
 backups/
 
-# Inbox — nur ablegen, nicht committen (Ziel siehe inbox/ZIEL.txt)
-inbox/*
-!inbox/.gitkeep
-!inbox/ZIEL.txt
-!inbox/SO-LEGST-DU-ES-AB.txt
 
+
+# Inbox — Drop-Dateien dürfen ins Repo (Sync verschiebt sie ins Ziel)
+inbox/.DS_Store
