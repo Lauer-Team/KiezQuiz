@@ -1,15 +1,15 @@
 [Unit]
-Description=KiezQuiz Telegram Agent
+Description=KiezQuiz Telegram Agent (Kalle)
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=DEIN_LINUX_USERNAME
-WorkingDirectory=/home/DEIN_LINUX_USERNAME/KiezQuiz/telegram-agent
-Environment=PATH=/home/DEIN_LINUX_USERNAME/.local/bin:/usr/local/bin:/usr/bin:/bin
-EnvironmentFile=-/home/DEIN_LINUX_USERNAME/KiezQuiz/telegram-agent/.env
-ExecStart=/home/DEIN_LINUX_USERNAME/KiezQuiz/telegram-agent/.venv/bin/python bot.py
+User=jjl
+WorkingDirectory=/home/jjl/projects/KiezQuiz/telegram-agent
+Environment=PATH=/home/jjl/.local/bin:/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=-/home/jjl/projects/KiezQuiz/telegram-agent/.env
+ExecStart=/home/jjl/projects/KiezQuiz/telegram-agent/.venv/bin/python bot.py
 Restart=always
 RestartSec=15
 

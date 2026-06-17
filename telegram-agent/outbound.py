@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from email_smtp import resolve_smtp_email_config, send_email_smtp
+from lauer_bot_lib.email_smtp import resolve_smtp_email_config, send_email_smtp
 
 log = logging.getLogger(__name__)
 
