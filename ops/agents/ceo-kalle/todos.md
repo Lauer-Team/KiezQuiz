@@ -1,9 +1,10 @@
 # Todos — Kalle (CEO)
 
-> Stand: **2026-06-15**
+> Stand: **2026-06-16**
 
 ## Offen (Kalle)
 
+- [ ] **Ravensburg-Karte** — Darstellung stimmt noch nicht (Nutzer 16.06., nach PR #76 live); Dedup reichte nicht · zurückgestellt, muss später behoben werden
 - [ ] NB-Gäste-Banner abschalten ab **12.07.2026** (`deactivate_terms_notice.py`)
 - [ ] Cursor-Downgrade Juli prüfen → CFO-Akte + `leitstand.md (COSTS)`
 - [ ] Agenten-Akten bei Statusänderungen synchron halten

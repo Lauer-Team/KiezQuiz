@@ -34,6 +34,7 @@
 | 2026-06-15 | **Dashboard admin-only:** Supabase Storage + Edge Functions |
 | 2026-06-15 | **Agenten-Betriebssystem v2:** `ops/agents/*` Akten + JSON-Dashboard |
 | 2026-06-16 | **E-Mail komplett:** Resend/Web.de → iCloud · DSE · NB/Backup · Bot · Source of Truth KiezQuiz-Repo |
+| 2026-06-16 | **Ravensburg-Karte:** PR #76 live (Dedup) — Nutzer: immer noch falsch → **zurückgestellt**, Todo in `todos.md` |
 
 Berichte: `reports/` · Fach-Akten: `ops/agents/*/`
 

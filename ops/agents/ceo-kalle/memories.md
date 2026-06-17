@@ -10,6 +10,7 @@
 - **Dashboard:** Admin-only via Supabase Storage — `ops/` nicht auf kiezquiz.de deployen.
 - **Leitstand:** Kein Todo-Dump — Termine in `ops/agents/ceo-kalle/todos.md`, Themen in Agenten-Backlogs.
 - **Legal:** Nie selbst Rechtstexte — nur Legora-Arbeitsaufträge vorbereiten.
+- **Ravensburg-Karte (16.06.2026):** PR #75/#76 (Ortschafts-Split + Ring-Dedup) live, Nutzer meldet weiter falsche Darstellung → **offen**, Session bewusst pausiert. Nächster Schritt: Referenz Wikipedia/OSM, ggf. andere Datenquelle oder vereinfachtes 4-Flächen-Modell statt OSM-Multiring.
 
 Weitere Learnings: `ops/RETRO.md`
 

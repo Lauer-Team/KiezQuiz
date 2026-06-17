@@ -14,4 +14,6 @@ OSM-Relation 2808301 ist die **gesamte** Große Kreisstadt (admin_level 8), nich
 - Wohnbezirke weiter als Marker-Kreise (keine OSM-Grenzen)
 - Hub-Vorschau-Namen an echte Bezirke angepasst (`src/ui/hub.js`)
 
+**Nachfolger:** `2026-06-16-ravensburg-karte-dedup.md` — Doppel-Polygone (9×) entfernt, 33 Pfade.
+
 **Offen:** Branch + PR + Merge auf `main` → Deploy
