@@ -1,7 +1,7 @@
 # Agents — Einstieg
 
-Portabler Pointer zum zentralen AIOS-Gehirn (`../AIOS-Docs/`).
+Portabler Pointer zum zentralen AIOS-Gehirn (`../AIOS/`).
 
-**Lies zuerst:** `../AIOS-Docs/AIOS/me.md` · `../AIOS-Docs/AIOS/vault-map.md`  
-**Server/Ops:** `../AIOS-Docs/Efforts/setup-status.md`  
-**System:** `../AIOS-Docs/Atlas/file-over-ai-global.md`
+**Lies zuerst:** `../AIOS/AIOS/me.md` · `../AIOS/AIOS/vault-map.md`  
+**Server/Ops:** `../AIOS/Efforts/setup-status.md`  
+**System:** `../AIOS/Atlas/file-over-ai-global.md`

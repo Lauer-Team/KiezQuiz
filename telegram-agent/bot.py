@@ -47,7 +47,7 @@ STATE_PATH = SCRIPT_DIR / "state.json"
 
 KIEZQUIZ_RULES = """
 Projekt: KiezQuiz (HTML/CSS/JavaScript, GitHub Lauer-Team/KiezQuiz).
-Cross-Projekt: ../AIOS-Docs/AIOS/me.md · ../AIOS-Docs/Efforts/setup-status.md bei Server/Ops.
+Cross-Projekt: ../AIOS/AIOS/me.md · ../AIOS/Efforts/setup-status.md bei Server/Ops.
 Wichtige Regeln:
 - Layout nur in src/styles/device/*.css (siehe src/styles/device/README.md)
 - Stadtseiten (hamburg/, berlin/, frankfurt/, duesseldorf/, europe/) NICHT manuell editieren — werden beim Deploy generiert

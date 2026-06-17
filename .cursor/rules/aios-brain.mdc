@@ -5,8 +5,8 @@ alwaysApply: true
 
 # AIOS-Kontext (KiezQuiz)
 
-Globales Gehirn: `../AIOS-Docs/` — User Rule lädt `me.md` automatisch.
+Globales Gehirn: `../AIOS/` — User Rule lädt `me.md` automatisch.
 
 **Dieses Repo:** KiezQuiz-Website + Kalle (`telegram-agent/`).
 
-Bei Server/Deploy-Fragen: `../AIOS-Docs/Efforts/setup-status.md`
+Bei Server/Deploy-Fragen: `../AIOS/Efforts/setup-status.md`
