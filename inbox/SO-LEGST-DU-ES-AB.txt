@@ -1,0 +1,10 @@
+Projekt-Inbox — Dateien ablegen
+================================
+
+1. Datei oder Ordner hier reinziehen (oder in Desktop/Projekte ablegen/KiezQuiz/).
+2. Fertig. Innerhalb ~1 Minute wandert alles nach: docs/
+
+Du musst nichts committen, pushen oder SSH machen.
+Ziel ändern: diese Datei anpassen → inbox/ZIEL.txt
+
+Log: ~/Library/Logs/projects-inbox.log

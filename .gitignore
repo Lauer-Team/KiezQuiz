@@ -30,3 +30,10 @@ scripts/gsc-token.json
 # Supabase-Backup (DB-URI + Dumps — nie committen)
 scripts/backup-supabase.config.json
 backups/
+
+# Inbox — nur ablegen, nicht committen (Ziel siehe inbox/ZIEL.txt)
+inbox/*
+!inbox/.gitkeep
+!inbox/ZIEL.txt
+!inbox/SO-LEGST-DU-ES-AB.txt
+
