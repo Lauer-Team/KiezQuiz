@@ -1,4 +1,4 @@
-"""iCloud IMAP/SMTP für Kalle (/post)."""
+"""kiezquiz@web.de — IMAP/SMTP (Web.de) für Kalle."""
 
 from __future__ import annotations
 
@@ -16,9 +16,9 @@ from typing import Any
 
 log = logging.getLogger(__name__)
 
-DEFAULT_IMAP_HOST = "imap.mail.me.com"
+DEFAULT_IMAP_HOST = "imap.web.de"
 DEFAULT_IMAP_PORT = 993
-DEFAULT_SMTP_HOST = "smtp.mail.me.com"
+DEFAULT_SMTP_HOST = "smtp.web.de"
 DEFAULT_SMTP_PORT = 587
 MAX_MAIL_ATTACHMENTS = 5
 MAX_MAIL_ATTACHMENT_BYTES = 49 * 1024 * 1024
@@ -100,7 +100,7 @@ def _message_body(msg: email.message.Message) -> str:
 
 
 def resolve_mailbox_config(cfg: dict[str, Any]) -> dict[str, Any] | None:
-    box = cfg.get("icloud_mailbox") or cfg.get("webde_mailbox")
+    box = cfg.get("webde_mailbox")
     if not box or box.get("enabled") is False:
         return None
 

@@ -135,8 +135,8 @@ Im Browser mit **demselben Cursor-Account** anmelden wie am Laptop.
 ### B5 — Einmal testen (wichtig!)
 
 ```bash
-cd ~/KiezQuiz
-agent -p --force --trust --model auto --workspace ~/KiezQuiz "Sag in einem Satz auf Deutsch, wofür index.html da ist."
+cd ~/projects/KiezQuiz
+agent -p --force --trust --model auto --workspace ~/projects/KiezQuiz "Sag in einem Satz auf Deutsch, wofür index.html da ist."
 ```
 
 **Erwartung:** Eine kurze deutsche Antwort im Terminal.  
@@ -174,7 +174,7 @@ Falls der Ordner noch nicht auf dem Mac ist: erst `git pull` im geklonten Repo, 
 ### D1 — Python-Umgebung
 
 ```bash
-cd ~/KiezQuiz/telegram-agent
+cd ~/projects/KiezQuiz/telegram-agent
 sudo apt install -y python3 python3-venv python3-pip
 python3 -m venv .venv
 source .venv/bin/activate
@@ -192,7 +192,7 @@ Eintragen:
 
 - `telegram_bot_token` → Token von BotFather
 - `telegram_user_id` → deine Zahl von userinfobot
-- `repo_path` → z. B. `/home/jjl/KiezQuiz` (dein echter Pfad!)
+- `repo_path` → z. B. `/home/jjl/projects/KiezQuiz` (dein echter Pfad!)
 - `model` → `auto` lassen
 
 E-Mail (optional, iCloud): `.env` mit `KIEZ_ICLOUD_LOGIN` + `KIEZ_ICLOUD_APP_PASSWORD` — siehe [`EMAIL.md`](EMAIL.md) und `config.example.json`.
@@ -202,7 +202,7 @@ Speichern in nano: **Strg+O**, Enter, **Strg+X**
 ### D3 — Manuell starten (Test)
 
 ```bash
-cd ~/KiezQuiz/telegram-agent
+cd ~/projects/KiezQuiz/telegram-agent
 source .venv/bin/activate
 python bot.py
 ```
@@ -214,7 +214,7 @@ Terminal offen lassen. Am Handy deinem Bot schreiben: `/help`
 ### D4 — Dauerbetrieb (startet nach Neustart automatisch)
 
 ```bash
-sudo cp ~/KiezQuiz/telegram-agent/kiezquiz-agent.service /etc/systemd/system/
+sudo cp ~/projects/KiezQuiz/telegram-agent/kiezquiz-agent.service /etc/systemd/system/
 sudo nano /etc/systemd/system/kiezquiz-agent.service
 ```
 

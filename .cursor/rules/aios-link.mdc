@@ -1,0 +1,18 @@
+---
+description: AIOS-Gehirn — Pflicht-Kontext aus ../AIOS-Docs
+alwaysApply: true
+---
+
+# File-over-AI (dieses Repo)
+
+Zentrales Gehirn: `../AIOS-Docs/` — **nicht** kopieren, dort lesen.
+
+Session-Start (bei operativen Tasks):
+1. `../AIOS-Docs/AIOS/me.md`
+2. `../AIOS-Docs/AIOS/vault-map.md`
+3. `../AIOS-Docs/Efforts/setup-status.md` (bei Server/VPS)
+4. `../AIOS-Docs/AIOS/skills-map.md` (bei Deploy/Prozessen)
+
+# Dieses Repo: KiezQuiz
+
+KiezQuiz-Website (HTML/CSS/JS) + Telegram-Bot Kalle (`telegram-agent/`).

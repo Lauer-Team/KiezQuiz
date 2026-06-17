@@ -22,7 +22,7 @@
 
 | Bereich | Repo / Ort |
 |---------|------------|
-| `telegram-agent/email_smtp.py`, `outbound.py`, `mailbox.py` | **KiezQuiz-Repo** (`telegram-agent/`) |
+| `telegram-agent/outbound.py`, `mailbox.py` (+ `lauer_bot_lib` aus bot-lib) | **KiezQuiz-Repo** (`telegram-agent/`) |
 | `scripts/lib/email_smtp.py` | KiezQuiz-Repo (NB, Backup-Erinnerung) |
 | `supabase/functions/notify-terms-change/` | KiezQuiz-Repo (SMTP via denomailer) |
 | Bot-Logik, Doku, Config-Beispiele | KiezQuiz-Repo |
@@ -34,14 +34,14 @@
 
 ### Bot (Hetzner VPS)
 
-Pfad: `/home/jjl/KiezQuiz/telegram-agent/.env`
+Pfad: `/home/jjl/projects/KiezQuiz/telegram-agent/.env`
 
 ```bash
 KIEZ_ICLOUD_LOGIN=deinname@icloud.com
 KIEZ_ICLOUD_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
 ```
 
-Setup: `bash /opt/server/scripts/setup-kiezquiz-icloud-email.sh` (Server-Repo)
+Setup: `bash /home/jjl/projects/server/scripts/setup-kiezquiz-icloud-email.sh` (Server-Repo)
 
 ### GitHub Actions (Backup-Erinnerung)
 
@@ -84,7 +84,7 @@ Siehe `config.example.json` — Key `icloud_mailbox` (Legacy-Alias `webde_mailbo
 
 ```bash
 # Bot (Server)
-cd /home/jjl/KiezQuiz/telegram-agent
+cd /home/jjl/projects/KiezQuiz/telegram-agent
 python3 send_email.py --subject Test --body OK
 python3 mailbox_cli.py inbox
 
