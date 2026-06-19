@@ -1,0 +1,31 @@
+name: AI Dashboard Refresh
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [dashboard-refresh]
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout KiezQuiz-Ops
+        uses: actions/checkout@v4
+        with:
+          repository: Lauer-Team/KiezQuiz-Ops
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: KiezQuiz-Ops
+
+      - name: Build dashboard JSON
+        working-directory: KiezQuiz-Ops
+        run: python3 scripts/build_ai_dashboard_data.py
+
+      - name: Upload to Supabase Storage
+        working-directory: KiezQuiz-Ops
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python3 scripts/upload_ai_dashboard.py
