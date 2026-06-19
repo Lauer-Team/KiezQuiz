@@ -342,7 +342,9 @@
 
     push('page_views', pageViews);
     push('games', games);
-    push('unique_players', players);
+    if (!actorKey) {
+      push('unique_players', players);
+    }
 
     if (siteWide && impressions != null) {
       push('gsc_impressions', impressions);
@@ -395,7 +397,6 @@
     return `
       <div class="admin-analytics-summary">
         <h3 class="admin-analytics-summary-title">${escapeHtml(t('adminPage.analyticsSummaryTitle', { range: rangeLabel }))}</h3>
-        <p class="admin-analytics-summary-lead">${escapeHtml(t('adminPage.analyticsSummaryLead'))}</p>
         <div class="admin-analytics-kpis admin-analytics-kpis--summary">
           ${cards.map((card) => `
             <article class="admin-analytics-kpi admin-analytics-kpi--summary" style="--kpi-accent:${card.color}">

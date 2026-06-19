@@ -84,7 +84,12 @@
         p_guest_id: guestId
       });
       if (error) throw error;
-      return data && typeof data === 'object' ? data : { ok: true };
+      const payload = data && typeof data === 'object' ? data : { ok: true };
+      if (payload.ok !== false) {
+        window.kiezAnalytics?.trackPageView?.(`/${city}/`, city);
+        void window.kiezAnalytics?.flush?.();
+      }
+      return payload;
     } catch (err) {
       console.warn('log_player_game failed:', err.message || err);
       return { ok: false, error: err.message || String(err) };

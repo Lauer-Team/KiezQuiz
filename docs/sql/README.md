@@ -21,3 +21,4 @@ supabase migration new feature_name
 | `analytics-chart-series.sql` | `20250619000001_analytics_chart_series.sql` |
 | `analytics-dashboard-fixes.sql` | `20250619100001_analytics_dashboard_fixes.sql` |
 | `analytics-period-summary.sql` | `20250619120001_analytics_period_summary.sql` |
+| `analytics-game-page-view-sync.sql` | `20250619180001_analytics_game_page_view_sync.sql` |

@@ -556,12 +556,12 @@
 }
 
 .admin-analytics-summary {
-  margin: 0.5rem 0 1rem;
+  margin: 0.25rem 0 0.5rem;
 }
 
 .admin-analytics-summary-title {
-  margin: 0 0 0.25rem;
-  font-size: 1rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -574,34 +574,51 @@
 }
 
 .admin-analytics-kpis--summary {
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: 0.45rem;
 }
 
 .admin-analytics-kpi--summary {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding-top: 1.85rem;
+  padding: 1.25rem 0.5rem 0.45rem;
+  border-top-width: 2px;
+}
+
+.admin-analytics-kpi--summary .admin-analytics-kpi-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.12rem;
+  line-height: 1.2;
+}
+
+.admin-analytics-kpi--summary .admin-analytics-kpi-value {
+  font-size: 1rem;
+}
+
+.admin-analytics-kpi--summary .admin-analytics-kpi-meta {
+  margin-top: 0.15rem;
+  font-size: 0.68rem;
 }
 
 .admin-kpi-help-trigger {
   position: absolute;
-  top: 0.45rem;
-  right: 0.45rem;
+  top: 0.3rem;
+  right: 0.3rem;
   z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 0.95rem;
+  height: 0.95rem;
   padding: 0;
   border: 1px solid var(--border-color);
   border-radius: 999px;
   background: var(--surface-2, rgba(255, 255, 255, 0.06));
   color: var(--text-muted);
   font: inherit;
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 700;
   line-height: 1;
   cursor: help;
@@ -618,18 +635,19 @@
 
 .admin-kpi-help-tip {
   position: absolute;
-  top: 1.65rem;
-  right: 0.35rem;
+  top: 1.35rem;
+  right: 0.25rem;
   z-index: 5;
-  width: min(16rem, calc(100% - 0.7rem));
-  padding: 0.55rem 0.65rem;
+  width: min(14rem, calc(100vw - 2rem));
+  max-width: calc(100% - 0.5rem);
+  padding: 0.45rem 0.55rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   background: var(--surface, var(--bg-surface));
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
   color: var(--text-secondary);
-  font-size: 0.76rem;
-  line-height: 1.4;
+  font-size: 0.72rem;
+  line-height: 1.35;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
