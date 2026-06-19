@@ -12,6 +12,8 @@ First-Party-Statistik in Supabase (0 €): Besucher, Seitenaufrufe, Spielrunden 
 2. Zuerst (falls noch nicht): `docs/sql/admin-player-activity.sql`
 3. Dann: **`docs/sql/analytics.sql`** komplett ausführen
 
+**Falls Pageviews nicht ankommen (Fehler `42P01` / `analytics_daily`):** zusätzlich **`docs/sql/analytics-fix-refresh-daily.sql`** ausführen.
+
 Enthält: Tabellen `analytics_events`, `analytics_gsc_daily`, `analytics_daily`, RPCs, Erweiterung `player_game_log` für Gäste.
 
 ---

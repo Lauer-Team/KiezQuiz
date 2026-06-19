@@ -151,7 +151,7 @@ begin
   v_start := (v_day::timestamp at time zone 'Europe/Berlin');
   v_end := v_start + interval '1 day';
 
-  insert into public.analytics_daily as d (
+  insert into public.analytics_daily (
     day,
     page_views,
     unique_visitors,
