@@ -1,77 +1,59 @@
-# GSC — manueller Wochen-Check (Standard für KiezQuiz)
+# GSC — Google Search Console (automatisch)
 
-> **Empfehlung:** So bleibst du ohne Google Cloud, ohne OAuth und ohne Extra-Kosten auf dem Laufenden.  
-> Die **SEO Weekly**-Automation prüft parallel das **technische** SEO im Code (Sitemap, robots, Live-URLs).
+> **Standard:** GSC-Daten kommen **automatisch** per API in den wöchentlichen SEO-Bericht (Marie / `seo_check.py`).  
+> **Kosten:** 0 € (Google Search Console API, Free Tier).  
+> **Einmalig:** OAuth einrichten → [`GSC-API-SETUP.md`](GSC-API-SETUP.md)
 
 **Property:** [search.google.com/search-console](https://search.google.com/search-console) → **kiezquiz.de**
 
 ---
 
-## Wann?
+## Was läuft automatisch?
 
-- **Ca. 5 Minuten**, z. B. montags nach dem SEO-Automation-Bericht in `ops/reports/`
-- Oder nur **1× pro Monat**, wenn wenig Zeit — reicht für KiezQuiz-Größe meist
+| Was | Wie oft | Skript |
+|---|---|---|
+| Sitemap, robots, Stadtseiten live | **Täglich** 06:00 UTC + montags Vollbericht | `seo_daily.py` / `seo_check.py` |
+| GSC KPI (7 Tage) | **Täglich** 06:00 UTC | `seo_daily.py` |
+| GSC Vollbericht (28 Tage, Top-Seiten) | **Montags** (weekly-all) | `seo_check.py` |
+| Berichte | täglich / montags | `CMO-Marie/reports/*-seo-daily.md` · `*-seo-weekly.md` |
+
+**Alter & Refresh-Zyklen:** `KiezQuiz-Ops/CMO-Marie/gsc-metriken.md`
+
+Du musst **nicht** in die GSC-Website — außer bei Auffälligkeiten im Bericht.
 
 ---
 
-## Checkliste (der Reihe nach)
+## Einmalige Einrichtung (du, ~15 Min)
 
-### 1. Übersicht (Performance)
+1. Google Cloud Projekt + Search Console API aktivieren  
+2. OAuth Desktop-Client → `KiezQuiz-Ops/scripts/gsc-oauth-client.json`  
+3. Lokal: `python3 scripts/gsc_weekly_brief.py --auth`  
+4. Token auf VPS: `GSC_TOKEN_JSON` in `Server/.env` **oder** `gsc-token.json` auf dem VPS  
 
-Links: **Leistung** → letzte **28 Tage**
+Details Schritt für Schritt: [`GSC-API-SETUP.md`](GSC-API-SETUP.md)
 
-| Frage | Notiz |
-|---|---|
-| Klicks/Impressionen vs. Vorwoche plausibel? | |
-| Auffälliger Einbruch oder Spike? | |
+---
 
-→ Kurz in `ops/reports/YYYY-MM-DD-seo-manual.md` (optional, 3 Zeilen reichen)
+## Fallback (nur wenn API ausfällt)
 
-### 2. Indexierung
+Wenn der Bericht „GSC nicht konfiguriert“ zeigt:
 
-**Seiten** → **Indexierung**
+1. Token prüfen (`GSC_TOKEN_JSON` oder `scripts/gsc-token.json` auf VPS)
+2. Notfalls kurz in GSC-Web-Oberfläche nachsehen (Checkliste unten)
+
+### Manuelle Stichprobe
 
 | Prüfen | Aktion |
 |---|---|
 | „Nicht indexiert" mit neuen Fehlern? | URL inspizieren |
-| Wichtige URLs (`/`, `/hamburg/`, …) indexiert? | ggf. **URL prüfen** → Indexierung beantragen |
-
-### 3. Coverage / Crawling (falls sichtbar)
-
-- Keine neuen **5xx** oder **404** auf kiezquiz.de?
-- Sitemap-Fehler? → sollte leer sein (Automation prüft `sitemap.xml` auch technisch)
-
-### 4. Manuell suchen (Stichprobe)
-
-Google: `site:kiezquiz.de hamburg` — erscheint die Stadtseite?
-
----
-
-## Was du **nicht** brauchst
-
-| Thema | Warum nicht nötig |
-|---|---|
-| **Google Cloud Projekt** | Nur für die **API** (Automatisierung der Zahlen) — GSC-Web-Oberfläche reicht |
-| **Google Cloud Kosten** | API wäre i. d. R. kostenlos — aber Setup-Aufwand; bewusst **nicht** Standard |
-| **Skript `gsc_weekly_brief.py`** | Optional später; siehe [`GSC-API-SETUP.md`](GSC-API-SETUP.md) |
-
----
-
-## Vorlage Mini-Bericht
-
-```markdown
-# SEO manuell — YYYY-MM-DD
-- Performance 28d: X Klicks, Y Impressionen (≈ wie letzte Woche / …)
-- Indexierung: grün / [Problem]
-- Aktion: keine / [URL nachindexieren]
-```
-
-Speichern unter `ops/reports/` — Kalle kann den Leitstand dazu aktualisieren.
+| Wichtige URLs indexiert? | ggf. Indexierung beantragen |
+| `site:kiezquiz.de hamburg` in Google | Stadtseite sichtbar? |
 
 ---
 
 ## Referenzen
 
+- API-Setup: [`GSC-API-SETUP.md`](GSC-API-SETUP.md)
 - Technisches SEO: `node scripts/test_seo_compat.js`
-- Automation-Prompt: `ops/AUTOMATIONS.md` §3
+- Automation: `KiezQuiz-Ops` → `weekly-all` via n8n
 - Ersteinrichtung GSC: `docs/SEO-SETUP.md`
