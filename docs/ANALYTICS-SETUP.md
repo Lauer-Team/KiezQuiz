@@ -16,6 +16,8 @@ First-Party-Statistik in Supabase (0 €): Besucher, Seitenaufrufe, Spielrunden 
 
 **Falls Admin-Tab „Besucher & Statistik“ fehlschlägt (`user_id is ambiguous`):** **`docs/sql/analytics-fix-player-activity-ambiguous.sql`** ausführen.
 
+**Für Zeitreihen-Chart (Stundenansicht „Heute“, Nutzerfilter):** **`docs/sql/analytics-chart-series.sql`** ausführen.
+
 Enthält: Tabellen `analytics_events`, `analytics_gsc_daily`, `analytics_daily`, RPCs, Erweiterung `player_game_log` für Gäste.
 
 ---

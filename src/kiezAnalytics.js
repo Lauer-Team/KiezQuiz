@@ -225,6 +225,68 @@
     }
   }
 
+  function legacySeriesFromByDay(series, range) {
+    const dayMap = { today: 1, week: 7, month: 30, '90d': 90 };
+    const slice = dayMap[range] || 7;
+    const points = (series || []).slice(-slice).map((row) => ({
+      t: row.day,
+      label: row.day ? String(row.day).slice(5).replace('-', '.') : '',
+      visitors: row.visitors || 0,
+      page_views: row.page_views || 0,
+      games: row.games || 0,
+      gsc_clicks: row.gsc_clicks ?? 0,
+      gsc_impressions: row.gsc_impressions ?? 0,
+    }));
+    return {
+      points,
+      granularity: range === 'today' ? 'hour' : 'day',
+      gsc_available: true,
+      range,
+      legacy: true,
+    };
+  }
+
+  async function fetchAdminSeries(range, actorKey) {
+    if (!isEnabled() || !(await window.cityWishes?.isAdmin?.())) {
+      return { meta: null, error: null };
+    }
+    const pRange = range || 'week';
+    const pActor = actorKey || null;
+    try {
+      const { data, error } = await window.authManager.supabase.rpc('get_admin_analytics_series', {
+        p_range: pRange,
+        p_actor_key: pActor,
+      });
+      if (error) throw error;
+      if (data?.ok === false) {
+        return { meta: null, error: data.reason || 'forbidden' };
+      }
+      return {
+        meta: {
+          points: Array.isArray(data?.points) ? data.points : [],
+          granularity: data?.granularity || 'day',
+          gsc_available: data?.gsc_available !== false,
+          range: data?.range || pRange,
+          actor_key: data?.actor_key || pActor,
+          legacy: false,
+        },
+        error: null,
+      };
+    } catch (e) {
+      const msg = e?.message || String(e);
+      if (!/get_admin_analytics_series|42883|does not exist/i.test(msg)) {
+        return { meta: null, error: msg };
+      }
+      const days = pRange === 'today' ? 1 : pRange === 'week' ? 7 : pRange === 'month' ? 30 : 90;
+      const legacy = await fetchAdminByDay(days);
+      if (legacy.error) return { meta: null, error: legacy.error };
+      return {
+        meta: legacySeriesFromByDay(legacy.series, pRange),
+        error: null,
+      };
+    }
+  }
+
   async function fetchAdminActors() {
     if (!isEnabled() || !(await window.cityWishes?.isAdmin?.())) {
       return { rows: [], error: null };
@@ -272,6 +334,7 @@
     linkGuestToUser,
     fetchAdminOverview,
     fetchAdminByDay,
+    fetchAdminSeries,
     fetchAdminActors,
     mapActorRow
   };
