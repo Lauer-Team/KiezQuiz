@@ -12,6 +12,13 @@
   let activitySort = 'week';
   let activityLoadError = null;
 
+  let analyticsOverview = null;
+  let analyticsSeries = [];
+  let analyticsActors = [];
+  let analyticsSearchQuery = '';
+  let analyticsSort = 'week';
+  let analyticsLoadError = null;
+
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g, '&amp;')
@@ -221,6 +228,20 @@
     activitySort = 'week';
     activityLoadError = null;
     activityVolume = null;
+    analyticsOverview = null;
+    analyticsSeries = [];
+    analyticsActors = [];
+    analyticsSearchQuery = '';
+    analyticsSort = 'week';
+    analyticsLoadError = null;
+  }
+
+  function formatActorLabel(row) {
+    if (row.username) return `@${row.username}`;
+    if (row.actorType === 'guest' && row.guestId) {
+      return t('adminPage.guestLabel', { id: row.guestId.slice(0, 8) });
+    }
+    return t('adminPage.unknownUser');
   }
 
   function formatActivityTimestamp(iso) {
@@ -236,18 +257,22 @@
     const q = activitySearchQuery.trim().toLowerCase();
     let filtered = list;
     if (q) {
-      filtered = list.filter((row) => row.username.toLowerCase().includes(q));
+      filtered = list.filter((row) =>
+        (row.username || '').toLowerCase().includes(q)
+        || (row.guestId || '').toLowerCase().includes(q)
+        || formatActorLabel(row).toLowerCase().includes(q)
+      );
     }
     const sorted = [...filtered];
     sorted.sort((a, b) => {
       if (activitySort === 'lastPlayed') {
-        return Date.parse(b.lastPlayedAt || 0) - Date.parse(a.lastPlayedAt || 0)
-          || a.username.localeCompare(b.username);
+        return Date.parse(b.lastPlayedAt || b.lastPageViewAt || 0) - Date.parse(a.lastPlayedAt || a.lastPageViewAt || 0)
+          || formatActorLabel(a).localeCompare(formatActorLabel(b));
       }
-      if (activitySort === 'today') return b.gamesToday - a.gamesToday || a.username.localeCompare(b.username);
-      if (activitySort === 'month') return b.gamesMonth - a.gamesMonth || a.username.localeCompare(b.username);
-      if (activitySort === 'allTime') return b.gamesAllTime - a.gamesAllTime || a.username.localeCompare(b.username);
-      return b.gamesWeek - a.gamesWeek || a.username.localeCompare(b.username);
+      if (activitySort === 'today') return b.gamesToday - a.gamesToday || formatActorLabel(a).localeCompare(formatActorLabel(b));
+      if (activitySort === 'month') return b.gamesMonth - a.gamesMonth || formatActorLabel(a).localeCompare(formatActorLabel(b));
+      if (activitySort === 'allTime') return b.gamesAllTime - a.gamesAllTime || formatActorLabel(a).localeCompare(formatActorLabel(b));
+      return b.gamesWeek - a.gamesWeek || formatActorLabel(a).localeCompare(formatActorLabel(b));
     });
     return sorted;
   }
@@ -265,7 +290,22 @@
       { key: 'allTime', games: volume.allTime, players: volume.accounts, labelKey: 'adminPage.activityPeriodAllTime', playersKey: 'adminPage.activityRegisteredAccounts' }
     ];
 
+    const trafficCards = volume.pageViewsToday != null ? `
+      <div class="admin-volume-grid admin-volume-grid--compact">
+        <article class="admin-volume-card">
+          <h3>${escapeHtml(t('adminPage.analyticsVisitorsToday'))}</h3>
+          <p class="admin-volume-value">${formatNumber(volume.visitorsToday || 0)}</p>
+          <p class="admin-volume-meta">${t('adminPage.analyticsPageViewsToday', { count: formatNumber(volume.pageViewsToday || 0) })}</p>
+        </article>
+        <article class="admin-volume-card">
+          <h3>${escapeHtml(t('adminPage.analyticsGscClicks7d'))}</h3>
+          <p class="admin-volume-value">${formatNumber(volume.gscClicks7d || 0)}</p>
+          <p class="admin-volume-meta">${t('adminPage.analyticsGscImpressions7d', { count: formatNumber(volume.gscImpressions7d || 0) })}</p>
+        </article>
+      </div>` : '';
+
     return `
+      ${trafficCards}
       <div class="admin-volume-grid">
         ${cards.map((card) => `
           <article class="admin-volume-card">
@@ -297,13 +337,13 @@
           <th>${t('adminPage.activityColLastPlayed')}</th>
         </tr></thead>
         <tbody>${filtered.map((row) => `
-          <tr class="${row.gamesAllTime > 0 ? '' : 'admin-row-muted'}">
-            <td><strong>@${escapeHtml(row.username)}</strong></td>
+          <tr class="${row.gamesAllTime > 0 || row.pageViewsAllTime > 0 ? '' : 'admin-row-muted'}">
+            <td><strong>${escapeHtml(formatActorLabel(row))}</strong></td>
             <td class="admin-num-col">${formatNumber(row.gamesToday)}</td>
             <td class="admin-num-col">${formatNumber(row.gamesWeek)}</td>
             <td class="admin-num-col">${formatNumber(row.gamesMonth)}</td>
             <td class="admin-num-col">${formatNumber(row.gamesAllTime)}</td>
-            <td>${escapeHtml(formatActivityTimestamp(row.lastPlayedAt))}</td>
+            <td>${escapeHtml(formatActivityTimestamp(row.lastPlayedAt || row.lastPageViewAt))}</td>
           </tr>`).join('')}
         </tbody>
       </table>`;
@@ -396,13 +436,226 @@
     return activityRows.length;
   }
 
+  function renderAnalyticsOverviewCards(overview) {
+    if (!overview) {
+      return `<p class="admin-hint">${t('adminPage.analyticsVolumePending')}</p>`;
+    }
+
+    const periods = [
+      { key: 'today', labelKey: 'adminPage.activityPeriodToday' },
+      { key: 'week', labelKey: 'adminPage.activityPeriodWeek' },
+      { key: 'month', labelKey: 'adminPage.activityPeriodMonth' }
+    ];
+
+    const periodCards = periods.map((period) => {
+      const data = overview[period.key] || {};
+      return `
+        <article class="admin-volume-card">
+          <h3>${escapeHtml(t(period.labelKey))}</h3>
+          <p class="admin-volume-value">${formatNumber(data.visitors || 0)}</p>
+          <p class="admin-volume-meta">${t('adminPage.analyticsCardMeta', {
+            views: formatNumber(data.page_views || 0),
+            games: formatNumber(data.games || 0)
+          })}</p>
+        </article>`;
+    }).join('');
+
+    const gsc = overview.gsc_7d || {};
+    const gscCard = `
+      <article class="admin-volume-card">
+        <h3>${escapeHtml(t('adminPage.analyticsGscClicks7d'))}</h3>
+        <p class="admin-volume-value">${formatNumber(gsc.clicks || 0)}</p>
+        <p class="admin-volume-meta">${t('adminPage.analyticsGscImpressions7d', { count: formatNumber(gsc.impressions || 0) })}
+          ${overview.gsc_latest_day ? ` · ${t('adminPage.analyticsGscLatest', { date: overview.gsc_latest_day })}` : ''}
+        </p>
+      </article>`;
+
+    return `
+      <div class="admin-volume-grid">
+        ${periodCards}
+        ${gscCard}
+      </div>
+      <p class="admin-volume-note">${t('adminPage.activityTimezoneNote')}</p>`;
+  }
+
+  function renderAnalyticsSeriesTable(series) {
+    if (!series.length) {
+      return `<p class="admin-empty">${t('adminPage.analyticsSeriesEmpty')}</p>`;
+    }
+
+    const rows = [...series].reverse().slice(0, 30);
+    return `
+      <table class="wish-admin-table admin-data-table">
+        <thead><tr>
+          <th>${t('adminPage.analyticsColDay')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColVisitors')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColPageViews')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColGames')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColGscClicks')}</th>
+        </tr></thead>
+        <tbody>${rows.map((row) => `
+          <tr>
+            <td>${escapeHtml(row.day || '—')}</td>
+            <td class="admin-num-col">${formatNumber(row.visitors || 0)}</td>
+            <td class="admin-num-col">${formatNumber(row.page_views || 0)}</td>
+            <td class="admin-num-col">${formatNumber(row.games || 0)}</td>
+            <td class="admin-num-col">${formatNumber(row.gsc_clicks || 0)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  function filterAnalyticsActors(list) {
+    const q = analyticsSearchQuery.trim().toLowerCase();
+    let filtered = list;
+    if (q) {
+      filtered = list.filter((row) =>
+        (row.username || '').toLowerCase().includes(q)
+        || (row.guestId || '').toLowerCase().includes(q)
+        || formatActorLabel(row).toLowerCase().includes(q)
+      );
+    }
+    const sorted = [...filtered];
+    sorted.sort((a, b) => {
+      if (analyticsSort === 'views') {
+        return b.pageViewsWeek - a.pageViewsWeek || b.gamesWeek - a.gamesWeek;
+      }
+      if (analyticsSort === 'games') {
+        return b.gamesWeek - a.gamesWeek || b.pageViewsWeek - a.pageViewsWeek;
+      }
+      if (analyticsSort === 'last') {
+        return Date.parse(b.lastPageViewAt || b.lastPlayedAt || 0)
+          - Date.parse(a.lastPageViewAt || a.lastPlayedAt || 0);
+      }
+      return b.pageViewsWeek + b.gamesWeek - (a.pageViewsWeek + a.gamesWeek);
+    });
+    return sorted;
+  }
+
+  function renderAnalyticsActorsTable(list) {
+    const filtered = filterAnalyticsActors(list);
+    if (!filtered.length) {
+      return `<p class="admin-empty">${t('adminPage.analyticsActorsEmpty')}</p>`;
+    }
+
+    return `
+      <table class="wish-admin-table admin-data-table">
+        <thead><tr>
+          <th>${t('adminPage.activityColUser')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColViewsWeek')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColGamesWeek')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColToday')}</th>
+          <th class="admin-num-col">${t('adminPage.analyticsColAllTime')}</th>
+          <th>${t('adminPage.analyticsColLastSeen')}</th>
+        </tr></thead>
+        <tbody>${filtered.map((row) => `
+          <tr>
+            <td><strong>${escapeHtml(formatActorLabel(row))}</strong></td>
+            <td class="admin-num-col">${formatNumber(row.pageViewsWeek)}</td>
+            <td class="admin-num-col">${formatNumber(row.gamesWeek)}</td>
+            <td class="admin-num-col">${formatNumber(row.pageViewsToday)} / ${formatNumber(row.gamesToday)}</td>
+            <td class="admin-num-col">${formatNumber(row.pageViewsAllTime)} / ${formatNumber(row.gamesAllTime)}</td>
+            <td>${escapeHtml(formatActivityTimestamp(row.lastPageViewAt || row.lastPlayedAt))}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+  }
+
+  function renderAnalyticsSection() {
+    const filtered = filterAnalyticsActors(analyticsActors);
+    const errorBanner = analyticsLoadError
+      ? `<div class="admin-error-banner" role="alert">${t('adminPage.analyticsLoadError')}</div>`
+      : '';
+
+    return `
+      <section class="admin-panel profile-panel" id="profile-section-admin-analytics">
+        <div class="admin-panel-head">
+          <div>
+            <p class="admin-panel-intro">${t('adminPage.analyticsIntro')}</p>
+          </div>
+          <p class="admin-stats-line">${t('adminPage.analyticsStatsLine', {
+            days: formatNumber(analyticsSeries.length),
+            actors: formatNumber(analyticsActors.length),
+            shown: formatNumber(filtered.length)
+          })}</p>
+        </div>
+
+        ${errorBanner}
+
+        ${renderAnalyticsOverviewCards(analyticsOverview)}
+
+        <h3 class="admin-subsection-title">${t('adminPage.analyticsSeriesTitle')}</h3>
+        <div class="admin-table-wrap">${renderAnalyticsSeriesTable(analyticsSeries)}</div>
+
+        <div class="admin-toolbar">
+          <div class="admin-view-tabs" role="tablist">
+            <button type="button" class="admin-view-tab ${analyticsSort === 'week' ? 'is-active' : ''}" data-analytics-sort="week">${t('adminPage.analyticsSortCombined')}</button>
+            <button type="button" class="admin-view-tab ${analyticsSort === 'views' ? 'is-active' : ''}" data-analytics-sort="views">${t('adminPage.analyticsSortViews')}</button>
+            <button type="button" class="admin-view-tab ${analyticsSort === 'games' ? 'is-active' : ''}" data-analytics-sort="games">${t('adminPage.analyticsSortGames')}</button>
+            <button type="button" class="admin-view-tab ${analyticsSort === 'last' ? 'is-active' : ''}" data-analytics-sort="last">${t('adminPage.activitySortLastPlayed')}</button>
+          </div>
+          <label class="admin-search">
+            <span class="admin-search-label">${t('adminPage.searchLabel')}</span>
+            <input type="search" class="text-input-field" id="admin-analytics-search" value="${escapeHtml(analyticsSearchQuery)}" placeholder="${t('adminPage.activitySearchPlaceholder')}">
+          </label>
+        </div>
+
+        <h3 class="admin-subsection-title">${t('adminPage.analyticsActorsTitle')}</h3>
+        <div class="admin-table-wrap">${renderAnalyticsActorsTable(analyticsActors)}</div>
+      </section>`;
+  }
+
+  function bindAnalyticsSectionEvents(main, onRerender) {
+    if (!main) return;
+
+    main.querySelectorAll('[data-analytics-sort]').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        analyticsSort = tab.dataset.analyticsSort || 'week';
+        onRerender();
+      });
+    });
+
+    main.querySelector('#admin-analytics-search')?.addEventListener('input', (e) => {
+      analyticsSearchQuery = e.target.value;
+      onRerender();
+      const input = main.querySelector('#admin-analytics-search');
+      if (input) {
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    });
+  }
+
+  async function loadAnalyticsData() {
+    analyticsLoadError = null;
+    analyticsOverview = null;
+    analyticsSeries = [];
+    analyticsActors = [];
+
+    const [overviewResult, seriesResult, actorsResult] = await Promise.all([
+      window.kiezAnalytics?.fetchAdminOverview?.() || { overview: null, error: null },
+      window.kiezAnalytics?.fetchAdminByDay?.(30) || { series: [], error: null },
+      window.kiezAnalytics?.fetchAdminActors?.() || { rows: [], error: null }
+    ]);
+
+    analyticsOverview = overviewResult?.overview || null;
+    analyticsSeries = seriesResult?.series || [];
+    analyticsActors = actorsResult?.rows || [];
+    analyticsLoadError = overviewResult?.error || seriesResult?.error || actorsResult?.error || null;
+
+    return analyticsActors.length;
+  }
+
   window.kiezAdminSections = {
     renderCityWishesSection,
     renderPlayerActivitySection,
+    renderAnalyticsSection,
     bindSectionEvents,
     bindActivitySectionEvents,
+    bindAnalyticsSectionEvents,
     loadAdminData,
     loadActivityData,
+    loadAnalyticsData,
     fetchWishCount,
     resetFilters
   };

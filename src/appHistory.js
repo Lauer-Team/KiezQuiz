@@ -51,6 +51,12 @@
     });
   }
 
+  function notifyViewChange(view, cityId) {
+    document.dispatchEvent(new CustomEvent('kiez:viewchange', {
+      detail: { view, cityId: cityId || null }
+    }));
+  }
+
   function onEnterCity(game, cityId, fromHub) {
     if (!window.history.pushState) return;
     const next = state('city', cityId);
@@ -60,11 +66,13 @@
     } else if (game.view === 'city') {
       window.history.replaceState(next, '', url);
     }
+    notifyViewChange('city', cityId);
   }
 
   function onShowHub() {
     if (!window.history.pushState) return;
     window.history.pushState(state('hub'), '', '/');
+    notifyViewChange('hub', null);
   }
 
   window.kiezAppHistory = { bind, onEnterCity, onShowHub, hubUrl, cityUrl };

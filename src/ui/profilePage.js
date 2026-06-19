@@ -19,6 +19,7 @@
     settings: 'profilePage.navSettings',
     'admin-city-wishes': 'adminPage.navCityWishes',
     'admin-player-activity': 'adminPage.navPlayerActivity',
+    'admin-analytics': 'adminPage.navAnalytics',
     'admin-changelog': 'header.adminChangelog',
     'admin-ai-dashboard': 'adminPage.navAiDashboard'
   };
@@ -26,6 +27,7 @@
   const ADMIN_SECTIONS = new Set([
     'admin-city-wishes',
     'admin-player-activity',
+    'admin-analytics',
     'admin-changelog',
     'admin-ai-dashboard'
   ]);
@@ -901,6 +903,7 @@
       ? `<span class="profile-admin-badge">${adminWishCount}</span>`
       : '';
     const items = [
+      { section: 'admin-analytics', labelKey: 'adminPage.navAnalytics', badge: '' },
       { section: 'admin-ai-dashboard', labelKey: 'adminPage.navAiDashboard', badge: '' },
       { section: 'admin-city-wishes', labelKey: 'adminPage.navCityWishes', badge },
       { section: 'admin-player-activity', labelKey: 'adminPage.navPlayerActivity', badge: '' },
@@ -944,6 +947,9 @@
       }
       if (activeSection === 'admin-player-activity') {
         return window.kiezAdminSections?.renderPlayerActivitySection?.() || '';
+      }
+      if (activeSection === 'admin-analytics') {
+        return window.kiezAdminSections?.renderAnalyticsSection?.() || '';
       }
       if (activeSection === 'admin-changelog') return renderAdminChangelogSection();
       if (activeSection === 'admin-ai-dashboard') {
@@ -1211,6 +1217,9 @@
     }
     if (activeSection === 'admin-player-activity' && isAdmin) {
       window.kiezAdminSections?.bindActivitySectionEvents?.(main, () => renderDashboard());
+    }
+    if (activeSection === 'admin-analytics' && isAdmin) {
+      window.kiezAdminSections?.bindAnalyticsSectionEvents?.(main, () => renderDashboard());
     }
     if (activeSection === 'admin-ai-dashboard' && isAdmin) {
       window.kiezAdminAiDashboard?.bindAiDashboardSectionEvents?.(main);
@@ -1498,6 +1507,9 @@
     if (isAdminSection(activeSection) && isAdmin && activeSection === 'admin-player-activity') {
       await window.kiezAdminSections?.loadActivityData?.();
     }
+    if (isAdminSection(activeSection) && isAdmin && activeSection === 'admin-analytics') {
+      await window.kiezAdminSections?.loadAnalyticsData?.();
+    }
 
     if (window.authManager?.isConfigured?.()
       && window.authManager.isLoggedIn()
@@ -1578,6 +1590,7 @@
           || document.getElementById('profile-section-account')
           || document.getElementById('profile-section-admin-city-wishes')
           || document.getElementById('profile-section-admin-player-activity')
+          || document.getElementById('profile-section-admin-analytics')
           || document.getElementById('profile-section-admin-changelog')
           || document.getElementById('profile-section-admin-ai-dashboard')
           || document.getElementById('profile-section-settings')) {

@@ -2,7 +2,9 @@
  * Player game volume — log rounds + admin analytics RPCs.
  */
 (function () {
-  const VALID_CITIES = new Set(['hamburg', 'berlin', 'frankfurt', 'muenchen', 'duesseldorf', 'ravensburg', 'europe']);
+  const VALID_CITIES = new Set([
+    'hamburg', 'berlin', 'frankfurt', 'muenchen', 'duesseldorf', 'ravensburg', 'europe', 'mississippi'
+  ]);
 
   function getSupabase() {
     return window.authManager?.supabase || null;
@@ -13,15 +15,23 @@
   }
 
   function mapAdminRow(row) {
-    return {
+    return window.kiezAnalytics?.mapActorRow?.(row) || {
+      actorKey: row.actor_key || '',
+      actorType: row.actor_type || 'unknown',
       userId: row.user_id,
+      guestId: row.guest_id,
       username: row.username || '',
       registeredAt: row.registered_at || null,
+      pageViewsToday: parseInt(row.page_views_today, 10) || 0,
+      pageViewsWeek: parseInt(row.page_views_week, 10) || 0,
+      pageViewsMonth: parseInt(row.page_views_month, 10) || 0,
+      pageViewsAllTime: parseInt(row.page_views_all_time, 10) || 0,
       gamesToday: parseInt(row.games_today, 10) || 0,
       gamesWeek: parseInt(row.games_week, 10) || 0,
       gamesMonth: parseInt(row.games_month, 10) || 0,
       gamesYear: parseInt(row.games_year, 10) || 0,
       gamesAllTime: parseInt(row.games_all_time, 10) || 0,
+      lastPageViewAt: row.last_page_view_at || null,
       lastPlayedAt: row.last_played_at || null
     };
   }
@@ -38,15 +48,28 @@
       playersToday: parseInt(data.players_today, 10) || 0,
       playersWeek: parseInt(data.players_week, 10) || 0,
       playersMonth: parseInt(data.players_month, 10) || 0,
-      accounts: parseInt(data.accounts, 10) || 0
+      accounts: parseInt(data.accounts, 10) || 0,
+      pageViewsToday: parseInt(data.page_views_today, 10) || 0,
+      visitorsToday: parseInt(data.visitors_today, 10) || 0,
+      pageViewsWeek: parseInt(data.page_views_week, 10) || 0,
+      visitorsWeek: parseInt(data.visitors_week, 10) || 0,
+      gscClicks7d: parseInt(data.gsc_clicks_7d, 10) || 0,
+      gscImpressions7d: parseInt(data.gsc_impressions_7d, 10) || 0
     };
   }
 
   async function logGame(cityId, { correct, total, durationSec, mode, playedAt } = {}) {
-    if (!isCloudEnabled() || !window.authManager?.isLoggedIn?.()) return { ok: false, skipped: true };
+    if (!isCloudEnabled()) return { ok: false, skipped: true };
 
     const city = (cityId || '').toLowerCase().trim();
     if (!VALID_CITIES.has(city)) return { ok: false, reason: 'invalid_city' };
+
+    const guestId = !window.authManager?.isLoggedIn?.()
+      ? window.cityWishes?.getGuestId?.() || null
+      : null;
+    if (!window.authManager?.isLoggedIn?.() && !guestId) {
+      return { ok: false, skipped: true, reason: 'missing_actor' };
+    }
 
     try {
       const { data, error } = await getSupabase().rpc('log_player_game', {
@@ -55,7 +78,8 @@
         p_correct: Number.isFinite(correct) ? correct : null,
         p_total: Number.isFinite(total) ? total : null,
         p_duration_sec: Number.isFinite(durationSec) ? durationSec : null,
-        p_played_at: playedAt || new Date().toISOString()
+        p_played_at: playedAt || new Date().toISOString(),
+        p_guest_id: guestId
       });
       if (error) throw error;
       return data && typeof data === 'object' ? data : { ok: true };

@@ -89,6 +89,7 @@ class AuthManager {
     if (session?.user) {
       const profile = await this._loadProfile(session.user.id);
       this._notify(session.user, profile);
+      void window.kiezAnalytics?.linkGuestToUser?.();
     } else {
       this._notify(null, null);
     }
@@ -101,6 +102,7 @@ class AuthManager {
       if (session?.user) {
         const profile = await this._loadProfile(session.user.id);
         this._notify(session.user, profile);
+        void window.kiezAnalytics?.linkGuestToUser?.();
       } else {
         this._notify(null, null);
       }
