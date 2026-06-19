@@ -153,22 +153,72 @@
       </li>`).join('')}</ul>`;
   }
 
-  function renderAgentAutomations(agent) {
-    const autos = agent?.automations || [];
-    if (!autos.length) {
+  function runStatusClass(status) {
+    const s = String(status || '').toLowerCase();
+    if (s === 'ok') return 'ok';
+    if (s === 'warn') return 'warn';
+    if (s === 'error') return 'urgent';
+    return 'neutral';
+  }
+
+  function renderAutomationsTable(autos, meta) {
+    if (!autos?.length) {
       return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoAutomations'))}</p>`;
     }
-    return `<ul class="ai-dash-auto-list">${autos.map((a) => {
-      const daysHint = a.daysUntil != null
-        ? ` <span class="ai-dash-muted">(${escapeHtml(t('adminPage.aiDashInDays', { n: a.daysUntil }))})</span>`
-        : '';
+    const rows = autos.map((a) => {
+      const rs = runStatusClass(a.lastStatus);
+      const owner = `${a.ownerEmoji || ''} ${a.ownerName || a.ownerId || ''}`.trim();
       return `
-        <li>
-          <span class="ai-dash-auto-name">${a.num ? `#${escapeHtml(a.num)} · ` : ''}${escapeHtml(a.name)}</span>
-          ${a.task ? `<span class="ai-dash-muted">${escapeHtml(a.task)}</span>` : ''}
-          ${a.nextRun ? `<span class="ai-dash-auto-next">${escapeHtml(t('adminPage.aiDashNextRun'))}: ${escapeHtml(a.nextRun)}${daysHint}</span>` : ''}
-        </li>`;
-    }).join('')}</ul>`;
+        <tr class="ai-dash-auto-row ai-dash-status--${rs}">
+          <td>
+            <strong>${escapeHtml(a.name)}</strong>
+            <span class="ai-dash-muted ai-dash-auto-slug">${escapeHtml(a.slug || '')}</span>
+          </td>
+          <td class="ai-dash-owner">${escapeHtml(owner)}</td>
+          <td><code class="ai-dash-cron">${escapeHtml(a.cron || '—')}</code></td>
+          <td><span class="ai-dash-kind ai-dash-kind--${escapeHtml(a.kind || 'n8n')}">${escapeHtml(a.kindLabel || a.kind || '—')}</span></td>
+          <td class="ai-dash-auto-next">${a.nextRun ? escapeHtml(a.nextRun) : '—'}${a.daysUntil != null ? ` <span class="ai-dash-muted">(${escapeHtml(t('adminPage.aiDashInDays', { n: a.daysUntil }))})</span>` : ''}</td>
+          <td class="ai-dash-auto-last">${a.lastRun ? escapeHtml(a.lastRun) : '—'}</td>
+          <td><span class="ai-dash-run-badge ai-dash-run-badge--${rs}">${escapeHtml(a.lastStatusLabel || a.lastStatus || '—')}</span></td>
+        </tr>
+        <tr class="ai-dash-auto-detail-row">
+          <td colspan="7">${escapeHtml(a.task || a.description || '')}</td>
+        </tr>`;
+    }).join('');
+
+    const bundle = meta?.weeklyBundle
+      ? `<p class="ai-dash-bundle-note"><strong>${escapeHtml(t('adminPage.aiDashWeeklyBundle'))}:</strong> ${escapeHtml(meta.weeklyBundle)}</p>`
+      : '';
+
+    return `
+      ${bundle}
+      <div class="ai-dash-table-wrap">
+        <table class="ai-dash-table ai-dash-auto-table">
+          <thead>
+            <tr>
+              <th>${escapeHtml(t('adminPage.aiDashColName'))}</th>
+              <th>${escapeHtml(t('adminPage.aiDashColOwner'))}</th>
+              <th>Cron (UTC)</th>
+              <th>${escapeHtml(t('adminPage.aiDashColKind'))}</th>
+              <th>${escapeHtml(t('adminPage.aiDashColNext'))}</th>
+              <th>${escapeHtml(t('adminPage.aiDashColLastRun'))}</th>
+              <th>${escapeHtml(t('adminPage.aiDashColRunStatus'))}</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function renderAutomationsSection(data) {
+    const autos = data.automationsGlobal || [];
+    const meta = data.automationMeta || {};
+    return `
+      <section class="ai-dash-section ai-dash-automations-section">
+        <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashGlobalAutomations'))}</h2>
+        <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashAutomationsHint'))}</p>
+        ${renderAutomationsTable(autos, meta)}
+      </section>`;
   }
 
   function renderMember(agent, isCeo) {
@@ -189,10 +239,6 @@
         <section class="ai-dash-block">
           <h4>${escapeHtml(t('adminPage.aiDashProjects'))}</h4>
           ${renderProjects(agent.projects)}
-        </section>
-        <section class="ai-dash-block">
-          <h4>${escapeHtml(t('adminPage.aiDashAutomations'))}</h4>
-          ${renderAgentAutomations(agent)}
         </section>
       </article>`;
   }
@@ -273,20 +319,26 @@
     const stats = data.stats || {};
     const ceo = data.ceo;
     const agents = data.agents || [];
+    const opsConnected = data.opsDb?.connected === true;
+    const opsLabel = opsConnected ? t('adminPage.aiDashOpsLive') : t('adminPage.aiDashOpsOffline');
 
     const statsHtml = `
       <div class="ai-dash-stats">
         <div class="ai-dash-stat"><span class="ai-dash-stat-num">${escapeHtml(String(stats.agentsOk ?? '—'))}/${escapeHtml(String(stats.agentsTotal ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatAgents'))}</span></div>
         <div class="ai-dash-stat ai-dash-stat--accent"><span class="ai-dash-stat-num">${escapeHtml(String(stats.yourTasks ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatYourTasks'))}</span></div>
         <div class="ai-dash-stat"><span class="ai-dash-stat-num">${escapeHtml(String(stats.openDeadlines ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatDeadlines'))}</span></div>
-        <div class="ai-dash-stat"><span class="ai-dash-stat-num">${escapeHtml(String(stats.automationsLive ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatAutomations'))}</span></div>
+        <div class="ai-dash-stat"><span class="ai-dash-stat-num">${escapeHtml(String(stats.automationsOk ?? stats.automationsLive ?? '—'))}/${escapeHtml(String(stats.automationsLive ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatAutoOk'))}</span></div>
       </div>`;
 
     return `
       <div class="ai-dash-root">
-        <p class="ai-dash-meta">${escapeHtml(t('adminPage.aiDashGenerated'))}: ${escapeHtml(data.generatedAtDe || data.generatedAt || '')}</p>
+        <p class="ai-dash-meta">
+          ${escapeHtml(t('adminPage.aiDashGenerated'))}: ${escapeHtml(data.generatedAtDe || data.generatedAt || '')}
+          <span class="ai-dash-ops-pill ai-dash-ops-pill--${opsConnected ? 'ok' : 'off'}">${escapeHtml(opsLabel)}</span>
+        </p>
         ${statsHtml}
         ${renderDesk(ceo, data.openDeadlines || data.deadlines)}
+        ${renderAutomationsSection(data)}
         <section class="ai-dash-section">
           <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashExecTitle'))}</h2>
           <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashExecHint'))}</p>
@@ -358,6 +410,9 @@
           <div>
             <p class="admin-panel-intro">${t('adminPage.aiDashboardIntro')}</p>
             <p class="admin-panel-hint ai-dash-hint">${escapeHtml(t('adminPage.aiDashboardHint'))}</p>
+          </div>
+          <div class="admin-ai-dashboard-actions">
+            <button type="button" class="kq-btn kq-btn--secondary" id="admin-ai-dashboard-refresh">${escapeHtml(t('adminPage.aiDashboardReloadBtn'))}</button>
           </div>
         </div>
         <p class="profile-feedback admin-ai-dashboard-status" id="admin-ai-dashboard-status" hidden></p>

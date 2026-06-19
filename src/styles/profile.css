@@ -206,7 +206,10 @@ body.kq.profile-page-body {
 }
 
 .admin-ai-dashboard-head {
+  display: flex;
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .admin-ai-dashboard-actions {
@@ -269,6 +272,30 @@ body.kq.profile-page-body {
   margin: 0 0 1rem;
   font-size: 0.8rem;
   color: var(--muted, #8b93a7);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.ai-dash-ops-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ai-dash-ops-pill--ok {
+  background: #e6f4ea;
+  color: #1a7f37;
+}
+
+.ai-dash-ops-pill--off {
+  background: #fff8e1;
+  color: #9a6700;
 }
 
 .ai-dash-h2 {
@@ -459,7 +486,12 @@ body.kq.profile-page-body {
 /* ---- Team-Mitglied-Karten ---- */
 .ai-dash-members {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1rem;
+}
+
+.ai-dash-member.is-ceo {
+  grid-column: 1 / -1;
 }
 
 .ai-dash-member {
@@ -652,6 +684,82 @@ body.kq.profile-page-body {
 
 .ai-dash-auto-name { font-weight: 600; font-size: 0.85rem; }
 .ai-dash-auto-next { font-size: 0.75rem; color: var(--accent, #0969da); }
+
+.ai-dash-automations-section {
+  background: linear-gradient(180deg, rgba(9, 105, 218, 0.04), transparent);
+  border: 1px solid var(--line, #d0d7de);
+  border-radius: 14px;
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.ai-dash-bundle-note {
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.75rem;
+  background: rgba(9, 105, 218, 0.08);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.ai-dash-auto-table .ai-dash-auto-slug {
+  display: block;
+  font-size: 0.68rem;
+  margin-top: 0.1rem;
+}
+
+.ai-dash-cron {
+  font-size: 0.72rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.ai-dash-kind {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.ai-dash-kind--n8n { background: #ddf4ff; color: #0969da; }
+.ai-dash-kind--cron { background: #eef1f4; color: #57606a; }
+.ai-dash-kind--github_action { background: #fbefff; color: #6b3fc0; }
+.ai-dash-kind--cursor_legacy { background: #fff8e1; color: #9a6700; }
+
+.ai-dash-run-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.ai-dash-run-badge--ok { background: #e6f4ea; color: #1a7f37; }
+.ai-dash-run-badge--warn { background: #fff8e1; color: #9a6700; }
+.ai-dash-run-badge--urgent { background: #ffebe9; color: #cf222e; }
+.ai-dash-run-badge--neutral { background: #eef1f4; color: #57606a; }
+
+.ai-dash-auto-detail-row td {
+  font-size: 0.78rem;
+  color: var(--muted, #8b93a7);
+  padding-top: 0;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--line, #d0d7de);
+}
+
+.ai-dash-auto-row td {
+  vertical-align: top;
+  padding-bottom: 0.25rem;
+  border-bottom: none;
+}
+
+.ai-dash-auto-last {
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
 
 /* ---- Listen, Chips, Muted ---- */
 .ai-dash-list {
