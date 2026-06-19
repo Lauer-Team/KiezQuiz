@@ -7,11 +7,12 @@ alwaysApply: true
 
 Zentrales Gehirn: `../AIOS/` — **nicht** kopieren, dort lesen.
 
-Session-Start (bei operativen Tasks):
+Session-Start:
 1. `../AIOS/AIOS/me.md`
 2. `../AIOS/AIOS/vault-map.md`
-3. `../AIOS/Efforts/vps-hub-live.md` (bei Server/VPS)
-4. `../AIOS/AIOS/skills-map.md` (bei Deploy/Prozessen)
+
+Bei Bedarf: `../AIOS/Todos/todos.md` → passende `Todos/*.md` · `../AIOS/AIOS/skills-map.md` → Skill
+
 
 # Dieses Repo: KiezQuiz (öffentlich)
 
