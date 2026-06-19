@@ -698,25 +698,25 @@ begin
   ),
   pv as (
     select
-      public._analytics_actor_key(user_id, guest_id, null) as actor_key,
-      count(*) filter (where occurred_at >= v_day and event_type = 'page_view')::bigint as page_views_today,
-      count(*) filter (where occurred_at >= v_week and event_type = 'page_view')::bigint as page_views_week,
-      count(*) filter (where occurred_at >= v_month and event_type = 'page_view')::bigint as page_views_month,
-      count(*) filter (where event_type = 'page_view')::bigint as page_views_all_time,
-      max(occurred_at) filter (where event_type = 'page_view') as last_page_view_at
-    from public.analytics_events
+      public._analytics_actor_key(ev.user_id, ev.guest_id, null) as actor_key,
+      count(*) filter (where ev.occurred_at >= v_day and ev.event_type = 'page_view')::bigint as page_views_today,
+      count(*) filter (where ev.occurred_at >= v_week and ev.event_type = 'page_view')::bigint as page_views_week,
+      count(*) filter (where ev.occurred_at >= v_month and ev.event_type = 'page_view')::bigint as page_views_month,
+      count(*) filter (where ev.event_type = 'page_view')::bigint as page_views_all_time,
+      max(ev.occurred_at) filter (where ev.event_type = 'page_view') as last_page_view_at
+    from public.analytics_events ev
     group by 1
   ),
   gm as (
     select
-      public._analytics_actor_key(user_id, guest_id, null) as actor_key,
-      count(*) filter (where played_at >= v_day)::bigint as games_today,
-      count(*) filter (where played_at >= v_week)::bigint as games_week,
-      count(*) filter (where played_at >= v_month)::bigint as games_month,
-      count(*) filter (where played_at >= v_year)::bigint as games_year,
+      public._analytics_actor_key(gl.user_id, gl.guest_id, null) as actor_key,
+      count(*) filter (where gl.played_at >= v_day)::bigint as games_today,
+      count(*) filter (where gl.played_at >= v_week)::bigint as games_week,
+      count(*) filter (where gl.played_at >= v_month)::bigint as games_month,
+      count(*) filter (where gl.played_at >= v_year)::bigint as games_year,
       count(*)::bigint as games_all_time,
-      max(played_at) as last_played_at
-    from public.player_game_log
+      max(gl.played_at) as last_played_at
+    from public.player_game_log gl
     group by 1
   )
   select

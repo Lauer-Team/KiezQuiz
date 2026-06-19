@@ -564,7 +564,7 @@
   function renderAnalyticsSection() {
     const filtered = filterAnalyticsActors(analyticsActors);
     const errorBanner = analyticsLoadError
-      ? `<div class="admin-error-banner" role="alert">${t('adminPage.analyticsLoadError')}</div>`
+      ? `<div class="admin-error-banner" role="alert">${escapeHtml(t('adminPage.analyticsLoadError'))}<br><span class="admin-error-detail">${escapeHtml(analyticsLoadError)}</span></div>`
       : '';
 
     return `
