@@ -1429,7 +1429,7 @@
     "modesTitle": "Game modes",
     "modesBody": "Explorer mode for free discovery, map quiz for clicking, detective for searching, challenge under time pressure and typing mode — something for every learning style.",
     "citiesTitle": "Cities & wishes",
-    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Munich, Düsseldorf, Ravensburg and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
+    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Munich, Düsseldorf and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
     "privacyTitle": "Privacy",
     "privacyBody": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username and save data are transmitted via TLS and stored with Supabase (EU); passwords are hashed. Full details in the <a href=\"/datenschutz/\">privacy policy</a>.",
     "licensesTitle": "Open source & licences",

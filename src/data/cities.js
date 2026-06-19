@@ -221,7 +221,7 @@
       greetingKey: 'cities.ravensburg.greeting',
       blurbKey: 'cities.ravensburg.blurb',
       hue: 165,
-      status: 'playable',
+      status: 'hidden',
       levels: [
         { key: 'ortschaften', labelKey: 'cities.ravensburg.levels.ortschaften', singularKey: 'cities.ravensburg.singular.ortschaft', tierKey: 'cities.tier.overview', count: 4 },
         { key: 'wohnbezirke', labelKey: 'cities.ravensburg.levels.wohnbezirke', singularKey: 'cities.ravensburg.singular.wohnbezirk', tierKey: 'cities.tier.detail', count: 10 }

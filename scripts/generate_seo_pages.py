@@ -127,29 +127,7 @@ CITIES = {
             ),
         ],
     },
-    "ravensburg": {
-        "slug": "ravensburg",
-        "name": "Ravensburg",
-        "meta_description": (
-            "Lerne alle 10 Wohnbezirke und 4 Ortschaften von Ravensburg spielerisch auf der Karte. "
-            "Kostenlos, ohne Anmeldung, mit XP, Streaks und Trivia — mobil und offline."
-        ),
-        "h1": "Ravensburg Ortschaften und Wohnbezirke spielerisch lernen",
-        "faq": [
-            (
-                "Wie ist Ravensburg gegliedert?",
-                "Ravensburg hat 4 Ortschaften (Ravensburg, Eschach, Schmalegg, Taldorf) und 10 Wohnbezirke laut Hauptsatzung.",
-            ),
-            (
-                "Woher stammen die Kartendaten?",
-                "Die Karte basiert auf OpenStreetMap (ODbL) — offene Geodaten der Stadt- und Ortschaftsgrenzen.",
-            ),
-            (
-                "Ist KiezQuiz kostenlos?",
-                "Ja — KiezQuiz ist komplett kostenlos, ohne Werbung und ohne Pflicht-Registrierung.",
-            ),
-        ],
-    },
+    # ravensburg: temporarily hidden — data kept in repo; re-add when re-enabling
     "europe": {
         "slug": "europe",
         "name": "Europa",

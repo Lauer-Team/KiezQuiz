@@ -1581,7 +1581,7 @@
     "modesTitle": "Spielmodi",
     "modesBody": "Entdecker-Modus zum freien Erkunden, Karten-Quiz zum Anklicken, Detektiv zum Suchen, Challenge unter Zeitdruck und Eingabe-Modus zum Tippen — für jeden Lerntyp das Richtige.",
     "citiesTitle": "Städte & Wünsche",
-    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, München, Düsseldorf, Ravensburg und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
+    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, München, Düsseldorf und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
     "privacyTitle": "Datenschutz",
     "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand per TLS übertragen und bei Supabase (EU) gespeichert; Passwörter werden gehasht. Ausführlich in der <a href=\"/datenschutz/\">Datenschutzerklärung</a>.",
     "licensesTitle": "Open Source & Lizenzen",

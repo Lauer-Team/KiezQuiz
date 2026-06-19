@@ -124,6 +124,20 @@ class KiezQuizGame {
       return;
     }
 
+    if (!window.cityRegistry.isPlayable(this.activeCityId)) {
+      this.view = 'hub';
+      this.activeCityId = window.cityRegistry.getPlayableCities()[0]?.id || 'hamburg';
+      if (hubEl) hubEl.hidden = false;
+      if (cityEl) cityEl.hidden = true;
+      this.setupHeaderListeners();
+      this.updateHeaderBadge();
+      this.renderStats();
+      window.kiezHub?.render(this, hubEl);
+      if (window.authManager) window.authManager.updateHeaderUI();
+      window.kiezAdminBar?.scheduleRender?.();
+      return;
+    }
+
     this._initCityPlay();
   }
 

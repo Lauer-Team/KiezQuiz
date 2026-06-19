@@ -373,7 +373,8 @@
   }
 
   function extraSectionsHtml(game, cities) {
-    const tiles = cities.map((city) => renderCityTile(city, computeCityStats(game, city))).join('');
+    const visible = cities.filter((c) => c.status !== 'hidden');
+    const tiles = visible.map((city) => renderCityTile(city, computeCityStats(game, city))).join('');
     return `
       <section class="hub-landing-section" id="hub-staedte">
         <h3>${escapeHtml(t('hub.citiesSectionTitle'))}</h3>

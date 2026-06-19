@@ -29,7 +29,7 @@
     const levelKey = window.cityRegistry.segmentToLevelKey(game.activeSegment, game.activeCityId);
     const level = city.levels.find((l) => l.key === levelKey) || city.levels[0];
     const modeLabel = getModeLabelForBreadcrumb(game);
-    const cities = window.cityRegistry.getAllCities();
+    const cities = window.cityRegistry.getAllCities().filter((c) => c.status !== 'hidden');
 
     const switcherItems = cities.map((c) => {
       const loc = window.cityRegistry.localizeCity(c);
