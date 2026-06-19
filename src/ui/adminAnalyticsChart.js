@@ -374,7 +374,7 @@
   }
 
   function renderPeriodSummaryHtml(totals, options) {
-    if (options?.loading) {
+    if (options?.loading && !totals) {
       return `<p class="admin-hint">${escapeHtml(t('adminPage.analyticsVolumePending'))}</p>`;
     }
 
@@ -399,10 +399,11 @@
         <div class="admin-analytics-kpis admin-analytics-kpis--summary">
           ${cards.map((card) => `
             <article class="admin-analytics-kpi admin-analytics-kpi--summary" style="--kpi-accent:${card.color}">
+              <button type="button" class="admin-kpi-help-trigger" aria-label="${escapeHtml(t('adminPage.analyticsMetricHelpAria'))}">?</button>
+              <span class="admin-kpi-help-tip" role="tooltip">${escapeHtml(card.help)}</span>
               <span class="admin-analytics-kpi-label">${escapeHtml(card.label)}</span>
               <strong class="admin-analytics-kpi-value">${escapeHtml(String(card.value))}</strong>
               ${card.sub ? `<span class="admin-analytics-kpi-meta">${escapeHtml(card.sub)}</span>` : ''}
-              <p class="admin-analytics-kpi-help">${escapeHtml(card.help)}</p>
             </article>`).join('')}
         </div>
       </div>`;

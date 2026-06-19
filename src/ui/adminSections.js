@@ -21,6 +21,7 @@
   let analyticsMetrics = ['visitors', 'page_views', 'games', 'gsc_clicks'];
   let analyticsActorKey = '';
   let analyticsShowDataTable = false;
+  let analyticsSeriesToken = 0;
 
   const ANALYTICS_RANGES = ['today', 'week', 'month', '90d'];
   const ANALYTICS_METRIC_KEYS = ['visitors', 'page_views', 'games', 'gsc_clicks', 'gsc_impressions'];
@@ -533,10 +534,10 @@
   }
 
   function renderAnalyticsChartBlock() {
-    if (analyticsSeriesLoading) {
+    const points = getAnalyticsPoints();
+    if (analyticsSeriesLoading && !points.length) {
       return `<div class="admin-analytics-chart-loading">${escapeHtml(t('adminPage.analyticsVolumePending'))}</div>`;
     }
-    const points = getAnalyticsPoints();
     const metrics = getActiveAnalyticsMetrics();
     return window.kiezAdminAnalyticsChart?.renderChartHtml?.(
       points,
@@ -634,13 +635,25 @@
       </section>`;
   }
 
-  async function reloadAnalyticsSeries() {
+  async function reloadAnalyticsSeries(onRerender) {
+    const token = ++analyticsSeriesToken;
     analyticsSeriesLoading = true;
-    const result = await window.kiezAnalytics?.fetchAdminSeries?.(analyticsRange, analyticsActorKey || null)
-      || { meta: null, error: null };
-    analyticsSeriesMeta = result.meta;
-    if (result.error && !analyticsLoadError) analyticsLoadError = result.error;
-    analyticsSeriesLoading = false;
+    onRerender?.();
+    try {
+      const result = await window.kiezAnalytics?.fetchAdminSeries?.(analyticsRange, analyticsActorKey || null)
+        || { meta: null, error: null };
+      if (token !== analyticsSeriesToken) return analyticsSeriesMeta;
+      analyticsSeriesMeta = result?.meta ?? null;
+      if (result?.error) analyticsLoadError = result.error;
+    } catch (e) {
+      if (token === analyticsSeriesToken) {
+        analyticsLoadError = e?.message || String(e);
+      }
+    } finally {
+      if (token === analyticsSeriesToken) {
+        analyticsSeriesLoading = false;
+      }
+    }
     return analyticsSeriesMeta;
   }
 
@@ -661,8 +674,7 @@
         const next = pill.dataset.analyticsRange;
         if (!next || next === analyticsRange) return;
         analyticsRange = next;
-        onRerender();
-        await reloadAnalyticsSeries();
+        await reloadAnalyticsSeries(onRerender);
         onRerender();
       });
     });
@@ -684,8 +696,7 @@
       const next = e.target.value || '';
       if (next === analyticsActorKey) return;
       analyticsActorKey = next;
-      onRerender();
-      await reloadAnalyticsSeries();
+      await reloadAnalyticsSeries(onRerender);
       onRerender();
     });
 
@@ -701,19 +712,25 @@
     analyticsSeriesMeta = null;
     analyticsActors = [];
     analyticsSeriesLoading = true;
+    analyticsSeriesToken += 1;
 
-    const [overviewResult, actorsResult, seriesResult] = await Promise.all([
-      window.kiezAnalytics?.fetchAdminOverview?.() || { overview: null, error: null },
-      window.kiezAnalytics?.fetchAdminActors?.() || { rows: [], error: null },
-      window.kiezAnalytics?.fetchAdminSeries?.(analyticsRange, analyticsActorKey || null)
-        || { meta: null, error: null },
-    ]);
+    try {
+      const [overviewResult, actorsResult, seriesResult] = await Promise.all([
+        window.kiezAnalytics?.fetchAdminOverview?.() || { overview: null, error: null },
+        window.kiezAnalytics?.fetchAdminActors?.() || { rows: [], error: null },
+        window.kiezAnalytics?.fetchAdminSeries?.(analyticsRange, analyticsActorKey || null)
+          || { meta: null, error: null },
+      ]);
 
-    analyticsOverview = overviewResult?.overview || null;
-    analyticsActors = actorsResult?.rows || [];
-    analyticsSeriesMeta = seriesResult?.meta || null;
-    analyticsLoadError = overviewResult?.error || actorsResult?.error || seriesResult?.error || null;
-    analyticsSeriesLoading = false;
+      analyticsOverview = overviewResult?.overview || null;
+      analyticsActors = actorsResult?.rows || [];
+      analyticsSeriesMeta = seriesResult?.meta || null;
+      analyticsLoadError = overviewResult?.error || actorsResult?.error || seriesResult?.error || null;
+    } catch (e) {
+      analyticsLoadError = e?.message || String(e);
+    } finally {
+      analyticsSeriesLoading = false;
+    }
 
     return analyticsActors.length;
   }

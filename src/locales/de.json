@@ -335,6 +335,7 @@
     "analyticsSummaryPlayRate": "Spielrate",
     "analyticsSummaryGscCtr": "Google-CTR",
     "analyticsSummaryPeakViews": "Stärkster Wert (Aufrufe)",
+    "analyticsMetricHelpAria": "Erklärung zu dieser Kennzahl",
     "analyticsHelpVisitors": "Verschiedene Personen, die mindestens eine Seite geladen haben. Jede Person zählt einmal — auch bei 100 Aufrufen. Summe aus Accounts, Gästen und anonymen Sitzungen.",
     "analyticsHelpUsers": "Verschiedene eingeloggte Accounts mit mindestens einem Seitenaufruf im Zeitraum.",
     "analyticsHelpGuests": "Verschiedene Gäste (Gast-ID im Browser), die nicht eingeloggt waren, mit mindestens einem Aufruf.",

@@ -335,6 +335,7 @@
     "analyticsSummaryPlayRate": "Play rate",
     "analyticsSummaryGscCtr": "Google CTR",
     "analyticsSummaryPeakViews": "Peak (page views)",
+    "analyticsMetricHelpAria": "Explanation for this metric",
     "analyticsHelpVisitors": "Distinct people who loaded at least one page. Each person counts once — even with 100 views. Sum of accounts, guests, and anonymous sessions.",
     "analyticsHelpUsers": "Distinct signed-in accounts with at least one page view in the period.",
     "analyticsHelpGuests": "Distinct guests (browser guest ID), not signed in, with at least one page view.",
