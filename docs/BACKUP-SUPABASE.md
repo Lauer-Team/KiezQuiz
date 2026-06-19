@@ -64,9 +64,15 @@ Manuell auslösen: **Actions** → **Supabase monthly backup** → **Run workflo
 | Auslöser | Wie |
 |---|---|
 | Lokaler Export | `export_supabase_backup.py` kopiert nach `archiveDir` |
-| GitHub Actions (1. des Monats) | Kalle: `python3 scripts/sync_supabase_backup_artifact.py` (lädt neuestes Artifact) |
+| GitHub Actions (1. des Monats) | n8n `kq-ops-backup-archiv` → `sync_supabase_backup_artifact.py` (GitHub API, kein `gh` nötig) |
 
-`archiveDir` und `backup-supabase.config.json` sind **gitignored** — nur auf deinem Mac.
+**VPS-Setup (einmalig):**
+```bash
+cp scripts/backup-supabase.config.vps.example.json scripts/backup-supabase.config.json
+# Server/.env: GITHUB_TOKEN=<PAT mit actions:read>
+```
+
+`archiveDir` und volle `backup-supabase.config.json` sind **gitignored** — Mac nutzt Supplement-Ordner; VPS nur `backups/supabase/`.
 
 Nach jedem Export optional: älteste Dateien werden auf `retainCount` (12) begrenzt.
 

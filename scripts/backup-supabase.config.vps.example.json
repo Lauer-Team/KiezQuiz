@@ -1,0 +1,5 @@
+{
+  "outputDir": "backups/supabase",
+  "retainCount": 12,
+  "_comment": "VPS: cp nach backup-supabase.config.json. archiveDir nur auf Mac (Supplement-Ordner). GITHUB_TOKEN in Server/.env."
+}
