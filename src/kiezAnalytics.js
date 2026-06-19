@@ -172,10 +172,6 @@
       trackCurrentView(ev.detail || {});
     });
 
-    window.addEventListener('popstate', () => {
-      trackPageView(window.location.pathname || '/', cityFromPath(window.location.pathname));
-    });
-
     window.addEventListener('pagehide', () => {
       void flush();
     });
@@ -264,6 +260,7 @@
       return {
         meta: {
           points: Array.isArray(data?.points) ? data.points : [],
+          totals: data?.totals && typeof data.totals === 'object' ? data.totals : null,
           granularity: data?.granularity || 'day',
           gsc_available: data?.gsc_available !== false,
           range: data?.range || pRange,

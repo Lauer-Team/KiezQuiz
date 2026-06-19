@@ -48,6 +48,8 @@
       playersToday: parseInt(data.players_today, 10) || 0,
       playersWeek: parseInt(data.players_week, 10) || 0,
       playersMonth: parseInt(data.players_month, 10) || 0,
+      playersYear: parseInt(data.players_year, 10) || 0,
+      playersAllTime: parseInt(data.players_all_time, 10) || 0,
       accounts: parseInt(data.accounts, 10) || 0,
       pageViewsToday: parseInt(data.page_views_today, 10) || 0,
       visitorsToday: parseInt(data.visitors_today, 10) || 0,

@@ -254,6 +254,9 @@
     if (row.actorType === 'guest' && row.guestId) {
       return t('adminPage.guestLabel', { id: row.guestId.slice(0, 8) });
     }
+    if (row.actorType === 'session' && row.actorKey) {
+      return t('adminPage.sessionLabel', { id: row.actorKey.slice(2, 10) });
+    }
     return t('adminPage.unknownUser');
   }
 
@@ -299,8 +302,8 @@
       { key: 'today', games: volume.today, players: volume.playersToday, labelKey: 'adminPage.activityPeriodToday' },
       { key: 'week', games: volume.week, players: volume.playersWeek, labelKey: 'adminPage.activityPeriodWeek' },
       { key: 'month', games: volume.month, players: volume.playersMonth, labelKey: 'adminPage.activityPeriodMonth' },
-      { key: 'year', games: volume.year, players: null, labelKey: 'adminPage.activityPeriodYear' },
-      { key: 'allTime', games: volume.allTime, players: volume.accounts, labelKey: 'adminPage.activityPeriodAllTime', playersKey: 'adminPage.activityRegisteredAccounts' }
+      { key: 'year', games: volume.year, players: volume.playersYear, labelKey: 'adminPage.activityPeriodYear' },
+      { key: 'allTime', games: volume.allTime, players: volume.playersAllTime, labelKey: 'adminPage.activityPeriodAllTime' }
     ];
 
     const trafficCards = volume.pageViewsToday != null ? `
@@ -377,7 +380,7 @@
             <p class="admin-panel-intro">${t('adminPage.activityIntro')}</p>
           </div>
           <p class="admin-stats-line">${t('adminPage.activityStatsLine', {
-            accounts: formatNumber(activityVolume?.accounts ?? activityRows.length),
+            accounts: activityVolume?.accounts != null ? formatNumber(activityVolume.accounts) : '—',
             active: formatNumber(activeWeek),
             shown: formatNumber(filtered.length)
           })}</p>
@@ -466,11 +469,19 @@
     if (row.actorType === 'guest' && row.guestId) {
       return `${t('adminPage.guestLabel', { id: row.guestId.slice(0, 8) })}`;
     }
+    if (row.actorType === 'session' && row.actorKey) {
+      return t('adminPage.sessionLabel', { id: row.actorKey.slice(2, 10) });
+    }
     return t('adminPage.unknownUser');
   }
 
   function renderAnalyticsKpiStrip(points, metrics, gscAvailable) {
-    const kpis = window.kiezAdminAnalyticsChart?.computeKpis?.(points, metrics, gscAvailable) || [];
+    const kpis = window.kiezAdminAnalyticsChart?.computeKpis?.(
+      points,
+      metrics,
+      gscAvailable,
+      analyticsSeriesMeta?.totals
+    ) || [];
     if (!kpis.length) {
       return analyticsSeriesLoading
         ? `<p class="admin-hint">${t('adminPage.analyticsVolumePending')}</p>`

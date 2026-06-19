@@ -257,39 +257,53 @@
     }, 0);
   }
 
-  function computeKpis(points, activeMetrics, gscAvailable) {
+  function metricTotal(totals, key, points) {
+    if (totals && totals[key] != null) {
+      const n = Number(totals[key]);
+      return Number.isFinite(n) ? n : null;
+    }
+    return sumMetric(points, key);
+  }
+
+  function computeKpis(points, activeMetrics, gscAvailable, totals) {
     const kpis = [];
+    const sumMeta = totals ? 'adminPage.analyticsKpiTotal' : 'adminPage.analyticsKpiSum';
     const add = (key, value, metaKey, metaParams) => {
       if (!activeMetrics.includes(key)) return;
+      if (value == null) return;
       kpis.push({
         key,
         label: metricLabel(key),
-        value,
+        value: typeof value === 'number' ? formatNumber(value) : value,
         meta: metaKey ? t(metaKey, metaParams) : '',
         color: METRICS[key]?.color,
       });
     };
 
     if (activeMetrics.includes('visitors')) {
-      add('visitors', sumMetric(points, 'visitors'), 'adminPage.analyticsKpiSum');
+      add(
+        'visitors',
+        metricTotal(totals, 'visitors', points),
+        totals ? 'adminPage.analyticsKpiUnique' : 'adminPage.analyticsKpiSum'
+      );
     }
     if (activeMetrics.includes('page_views')) {
-      add('page_views', sumMetric(points, 'page_views'), 'adminPage.analyticsKpiSum');
+      add('page_views', metricTotal(totals, 'page_views', points), sumMeta);
     }
     if (activeMetrics.includes('games')) {
-      add('games', sumMetric(points, 'games'), 'adminPage.analyticsKpiSum');
+      add('games', metricTotal(totals, 'games', points), sumMeta);
     }
     if (gscAvailable && activeMetrics.includes('gsc_clicks')) {
-      add('gsc_clicks', sumMetric(points, 'gsc_clicks'), 'adminPage.analyticsKpiSum');
+      add('gsc_clicks', metricTotal(totals, 'gsc_clicks', points), sumMeta);
     }
     if (gscAvailable && activeMetrics.includes('gsc_impressions')) {
-      add('gsc_impressions', sumMetric(points, 'gsc_impressions'), 'adminPage.analyticsKpiSum');
+      add('gsc_impressions', metricTotal(totals, 'gsc_impressions', points), sumMeta);
     }
 
-    const visitors = sumMetric(points, 'visitors');
-    const games = sumMetric(points, 'games');
-    const clicks = sumMetric(points, 'gsc_clicks');
-    const impressions = sumMetric(points, 'gsc_impressions');
+    const visitors = metricTotal(totals, 'visitors', points);
+    const games = metricTotal(totals, 'games', points);
+    const clicks = metricTotal(totals, 'gsc_clicks', points);
+    const impressions = metricTotal(totals, 'gsc_impressions', points);
 
     if (activeMetrics.includes('visitors') && activeMetrics.includes('games') && visitors > 0 && games > 0) {
       kpis.push({

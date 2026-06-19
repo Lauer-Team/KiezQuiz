@@ -121,6 +121,7 @@ Reihenfolge der Migrations:
 | `20250603000001` | Fix `get_admin_player_activity` |
 | `20250610000001` | RLS / Revoke hardening |
 | `20250619000001` | Chart-RPC `get_admin_analytics_series` (v2, schnell) |
+| `20250619100001` | Analytics-Dashboard-Fixes (KPI totals, Kalenderwoche, Session-Akteure) |
 
 ---
 
@@ -147,5 +148,35 @@ Workflow **`.github/workflows/supabase-db-push.yml`** — nur **manuell** (`work
 | `supabase: command not found` | CLI installieren (§1) |
 | `Access token not provided` (nach Browser-login) | [PAT setzen](https://supabase.com/dashboard/account/tokens) → `export SUPABASE_ACCESS_TOKEN=sbp_…` oder `.env` |
 | Nur Analytics-Chart fehlt | Einmal `db push` — holt `20250619000001` nach |
+| `Remote migration versions not found in local migrations directory` | Remote-only-Einträge (z. B. `20260531…`) — siehe unten |
+
+### Remote-only Migrationen (History-Drift)
+
+Wenn `migration list --linked` **Remote-Zeilen ohne Local-Spalte** zeigt (Migrationen wurden auf dem VPS/Dashboard angewendet, aber nie ins Git committed), blockiert `db push`.
+
+**Symptom:** *Remote migration versions not found in local migrations directory.*
+
+**Ursache (Beispiel Live-DB):** acht Einträge `20260531152137` … `20260610192433` (profiles, RLS, friend search …) — Schema ist ok, History passt nicht zum Repo.
+
+**Fix (History bereinigen, Schema bleibt):**
+
+```bash
+./scripts/supabase-migration-repair-orphans.sh
+./scripts/supabase-db-push.sh
+```
+
+Manuell (gleiche Versionen):
+
+```bash
+supabase migration repair --status reverted \
+  20260531152137 20260531152150 20260531153926 20260531174600 \
+  20260601172605 20260602211401 20260610192408 20260610192433 \
+  --linked
+supabase db push --linked
+```
+
+`reverted` entfernt nur den **History-Eintrag** — bereits angewendetes SQL wird **nicht** zurückgerollt.
+
+**Langfristig:** Neue Schema-Änderungen nur noch als Datei unter `supabase/migrations/` + `db push`, nicht per losem `supabase migration new` ohne Commit.
 
 Siehe auch: [ANALYTICS-SETUP.md](./ANALYTICS-SETUP.md) · [SUPABASE-SETUP.md](./SUPABASE-SETUP.md)
