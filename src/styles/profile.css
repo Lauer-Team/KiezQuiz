@@ -895,6 +895,87 @@ body.kq.profile-page-body {
 .ai-dash-src--pending { background: #fff8e1; color: #9a6700; }
 .ai-dash-src--neutral { background: #eef1f4; color: #57606a; }
 
+/* ---- GSC Wochen-Chart (Marie) ---- */
+.ai-dash-chart-block {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.ai-dash-chart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.ai-dash-chart-head h4 {
+  margin: 0;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted, #8b93a7);
+}
+
+.ai-dash-chart-meta {
+  margin: 0 0 0.65rem;
+  font-size: 0.76rem;
+  color: var(--muted, #8b93a7);
+}
+
+.ai-dash-bar-chart {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+  align-items: end;
+  height: 7.5rem;
+  padding: 0.25rem 0.15rem 0;
+}
+
+.ai-dash-bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.ai-dash-bar-val {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #1a7f37;
+  line-height: 1;
+  min-height: 0.85rem;
+}
+
+.ai-dash-bar-col.is-pending .ai-dash-bar-val {
+  color: var(--muted, #8b93a7);
+  font-weight: 500;
+}
+
+.ai-dash-bar {
+  display: block;
+  width: 100%;
+  max-width: 2.25rem;
+  min-height: 4px;
+  border-radius: 4px 4px 2px 2px;
+  background: linear-gradient(180deg, #3fb950 0%, #1a7f37 100%);
+}
+
+.ai-dash-bar-col.is-pending .ai-dash-bar {
+  background: rgba(139, 147, 167, 0.25);
+  min-height: 4px;
+}
+
+.ai-dash-bar-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--muted, #8b93a7);
+}
+
 /* ---- Kommende Projekte ---- */
 .ai-dash-projects {
   list-style: none;

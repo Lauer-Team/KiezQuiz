@@ -115,6 +115,52 @@
     return `<span class="ai-dash-src ai-dash-src--${escapeHtml(cls)}">${escapeHtml(kpi.sourceLabel)}</span>`;
   }
 
+  function renderWeekBarChart(chart) {
+    if (!chart?.bars?.length) return '';
+    const values = chart.bars.map((b) => (b.pending ? 0 : (b.clicks ?? 0)));
+    const max = Math.max(...values, 1);
+    const bars = chart.bars.map((b) => {
+      const clicks = b.pending ? null : (b.clicks ?? 0);
+      const height = clicks == null ? 4 : Math.max(6, Math.round((clicks / max) * 100));
+      const title = b.pending
+        ? `${b.weekdayFull} (${b.date}) — ${t('adminPage.aiDashGscPending')}`
+        : `${b.weekdayFull} (${b.date}): ${clicks} ${t('adminPage.aiDashGscClicks')}`;
+      return `
+        <div class="ai-dash-bar-col${b.pending ? ' is-pending' : ''}" title="${escapeHtml(title)}">
+          <span class="ai-dash-bar-val">${b.pending ? '·' : escapeHtml(String(clicks))}</span>
+          <span class="ai-dash-bar" style="height:${height}%"></span>
+          <span class="ai-dash-bar-label">${escapeHtml(b.weekday)}</span>
+        </div>`;
+    }).join('');
+
+    const lag = chart.latestDataDate
+      ? t('adminPage.aiDashGscDataThrough', { date: chart.latestDataDate })
+      : '';
+    const total = typeof chart.total === 'number' ? chart.total : '—';
+
+    return `
+      <section class="ai-dash-block ai-dash-chart-block">
+        <div class="ai-dash-chart-head">
+          <h4>${escapeHtml(t('adminPage.aiDashGscWeekTitle'))}</h4>
+          <span class="ai-dash-src ai-dash-src--live">${escapeHtml(chart.source || 'GSC')}</span>
+        </div>
+        <p class="ai-dash-chart-meta">
+          ${escapeHtml(chart.weekLabel || '')}
+          · ${escapeHtml(t('adminPage.aiDashGscWeekTotal', { n: total }))}
+          ${lag ? ` · ${escapeHtml(lag)}` : ''}
+        </p>
+        <div class="ai-dash-bar-chart" role="img" aria-label="${escapeHtml(t('adminPage.aiDashGscWeekTitle'))}">
+          ${bars}
+        </div>
+      </section>`;
+  }
+
+  function renderAgentCharts(agent) {
+    const chart = agent?.charts?.gscClicksWeek;
+    if (!chart) return '';
+    return renderWeekBarChart(chart);
+  }
+
   function renderKpis(kpis) {
     if (!kpis?.length) {
       return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoKpis'))}</p>`;
@@ -236,6 +282,7 @@
         </header>
         ${agent.lage ? `<p class="ai-dash-lage">${escapeHtml(agent.lage)}</p>` : ''}
         ${renderKpis(agent.kpis)}
+        ${renderAgentCharts(agent)}
         <section class="ai-dash-block">
           <h4>${escapeHtml(t('adminPage.aiDashProjects'))}</h4>
           ${renderProjects(agent.projects)}
