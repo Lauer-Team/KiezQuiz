@@ -265,6 +265,149 @@
     return sumMetric(points, key);
   }
 
+  function metricHelp(key) {
+    const map = {
+      visitors: 'adminPage.analyticsHelpVisitors',
+      unique_users: 'adminPage.analyticsHelpUsers',
+      unique_guests: 'adminPage.analyticsHelpGuests',
+      unique_sessions: 'adminPage.analyticsHelpSessions',
+      page_views: 'adminPage.analyticsHelpPageViews',
+      games: 'adminPage.analyticsHelpGames',
+      unique_players: 'adminPage.analyticsHelpPlayers',
+      gsc_impressions: 'adminPage.analyticsHelpGscImpressions',
+      gsc_clicks: 'adminPage.analyticsHelpGscClicks',
+      play_rate: 'adminPage.analyticsHelpPlayRate',
+      gsc_ctr: 'adminPage.analyticsHelpGscCtr',
+      peak_views: 'adminPage.analyticsHelpPeakViews',
+    };
+    return t(map[key] || key);
+  }
+
+  function summaryLabel(key) {
+    const map = {
+      visitors: 'adminPage.analyticsSummaryVisitors',
+      unique_users: 'adminPage.analyticsSummaryUsers',
+      unique_guests: 'adminPage.analyticsSummaryGuests',
+      unique_sessions: 'adminPage.analyticsSummarySessions',
+      page_views: 'adminPage.analyticsSummaryPageViews',
+      games: 'adminPage.analyticsSummaryGames',
+      unique_players: 'adminPage.analyticsSummaryPlayers',
+      gsc_impressions: 'adminPage.analyticsSummaryGscImpressions',
+      gsc_clicks: 'adminPage.analyticsSummaryGscClicks',
+      play_rate: 'adminPage.analyticsSummaryPlayRate',
+      gsc_ctr: 'adminPage.analyticsSummaryGscCtr',
+      peak_views: 'adminPage.analyticsSummaryPeakViews',
+    };
+    return t(map[key] || metricLabel(key));
+  }
+
+  function totalNum(totals, key) {
+    if (!totals || totals[key] == null) return null;
+    const n = Number(totals[key]);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function buildPeriodSummaryCards(totals, options) {
+    const { gscAvailable, actorKey, points } = options || {};
+    if (!totals) return [];
+
+    const cards = [];
+    const visitors = totalNum(totals, 'visitors') ?? 0;
+    const pageViews = totalNum(totals, 'page_views') ?? 0;
+    const games = totalNum(totals, 'games') ?? 0;
+    const players = totalNum(totals, 'unique_players') ?? 0;
+    const clicks = totalNum(totals, 'gsc_clicks');
+    const impressions = totalNum(totals, 'gsc_impressions');
+    const siteWide = gscAvailable && !actorKey;
+
+    const push = (key, value, extra) => {
+      cards.push({
+        key,
+        label: summaryLabel(key),
+        value: typeof value === 'string' ? value : formatNumber(value),
+        sub: extra?.sub || '',
+        help: metricHelp(key),
+        color: METRICS[key]?.color || extra?.color || '#8b93a7',
+      });
+    };
+
+    if (siteWide) {
+      push('visitors', visitors);
+      push('unique_users', totalNum(totals, 'unique_users') ?? 0);
+      push('unique_guests', totalNum(totals, 'unique_guests') ?? 0);
+      push('unique_sessions', totalNum(totals, 'unique_sessions') ?? 0);
+    } else {
+      push('visitors', visitors);
+    }
+
+    push('page_views', pageViews);
+    push('games', games);
+    push('unique_players', players);
+
+    if (siteWide && impressions != null) {
+      push('gsc_impressions', impressions);
+    }
+    if (siteWide && clicks != null) {
+      push('gsc_clicks', clicks);
+    }
+
+    if (visitors > 0 && games > 0) {
+      push('play_rate', `${((games / visitors) * 100).toFixed(1)}%`, {
+        color: '#f0b429',
+        sub: t('adminPage.analyticsKpiPlayRateMeta', {
+          games: formatNumber(games),
+          visitors: formatNumber(visitors),
+        }),
+      });
+    }
+
+    if (siteWide && impressions > 0 && clicks != null && clicks >= 0) {
+      push('gsc_ctr', `${((clicks / impressions) * 100).toFixed(2)}%`, { color: '#b48cff' });
+    }
+
+    const peak = maxMetric(points || [], 'page_views');
+    if (peak > 0) {
+      push('peak_views', peak, { color: '#3ecf8e' });
+    }
+
+    return cards;
+  }
+
+  function renderPeriodSummaryHtml(totals, options) {
+    if (options?.loading) {
+      return `<p class="admin-hint">${escapeHtml(t('adminPage.analyticsVolumePending'))}</p>`;
+    }
+
+    const rangeKey = options?.rangeKey || 'week';
+    const rangeLabels = {
+      today: 'adminPage.analyticsRangeToday',
+      week: 'adminPage.analyticsRangeWeek',
+      month: 'adminPage.analyticsRangeMonth',
+      '90d': 'adminPage.analyticsRange90d',
+    };
+    const rangeLabel = t(rangeLabels[rangeKey] || rangeKey);
+    const cards = buildPeriodSummaryCards(totals, options);
+
+    if (!cards.length) {
+      return `<p class="admin-hint">${escapeHtml(t('adminPage.analyticsSeriesEmpty'))}</p>`;
+    }
+
+    return `
+      <div class="admin-analytics-summary">
+        <h3 class="admin-analytics-summary-title">${escapeHtml(t('adminPage.analyticsSummaryTitle', { range: rangeLabel }))}</h3>
+        <p class="admin-analytics-summary-lead">${escapeHtml(t('adminPage.analyticsSummaryLead'))}</p>
+        <div class="admin-analytics-kpis admin-analytics-kpis--summary">
+          ${cards.map((card) => `
+            <article class="admin-analytics-kpi admin-analytics-kpi--summary" style="--kpi-accent:${card.color}">
+              <span class="admin-analytics-kpi-label">${escapeHtml(card.label)}</span>
+              <strong class="admin-analytics-kpi-value">${escapeHtml(String(card.value))}</strong>
+              ${card.sub ? `<span class="admin-analytics-kpi-meta">${escapeHtml(card.sub)}</span>` : ''}
+              <p class="admin-analytics-kpi-help">${escapeHtml(card.help)}</p>
+            </article>`).join('')}
+        </div>
+      </div>`;
+  }
+
   function computeKpis(points, activeMetrics, gscAvailable, totals) {
     const kpis = [];
     const sumMeta = totals ? 'adminPage.analyticsKpiTotal' : 'adminPage.analyticsKpiSum';
@@ -341,9 +484,12 @@
   window.kiezAdminAnalyticsChart = {
     METRICS,
     metricLabel,
+    metricHelp,
     renderChartHtml,
     bindChart,
     computeKpis,
+    buildPeriodSummaryCards,
+    renderPeriodSummaryHtml,
     sumMetric,
     readValue,
   };

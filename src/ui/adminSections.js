@@ -16,8 +16,6 @@
   let analyticsSeriesMeta = null;
   let analyticsSeriesLoading = false;
   let analyticsActors = [];
-  let analyticsSearchQuery = '';
-  let analyticsSort = 'week';
   let analyticsLoadError = null;
   let analyticsRange = 'week';
   let analyticsMetrics = ['visitors', 'page_views', 'games', 'gsc_clicks'];
@@ -240,8 +238,6 @@
     analyticsSeriesMeta = null;
     analyticsSeriesLoading = false;
     analyticsActors = [];
-    analyticsSearchQuery = '';
-    analyticsSort = 'week';
     analyticsLoadError = null;
     analyticsRange = 'week';
     analyticsMetrics = ['visitors', 'page_views', 'games', 'gsc_clicks'];
@@ -475,27 +471,17 @@
     return t('adminPage.unknownUser');
   }
 
-  function renderAnalyticsKpiStrip(points, metrics, gscAvailable) {
-    const kpis = window.kiezAdminAnalyticsChart?.computeKpis?.(
-      points,
-      metrics,
-      gscAvailable,
-      analyticsSeriesMeta?.totals
-    ) || [];
-    if (!kpis.length) {
-      return analyticsSeriesLoading
-        ? `<p class="admin-hint">${t('adminPage.analyticsVolumePending')}</p>`
-        : '';
-    }
-    return `
-      <div class="admin-analytics-kpis">
-        ${kpis.map((kpi) => `
-          <article class="admin-analytics-kpi" style="--kpi-accent:${kpi.color || '#8b93a7'}">
-            <span class="admin-analytics-kpi-label">${escapeHtml(kpi.label)}</span>
-            <strong class="admin-analytics-kpi-value">${escapeHtml(String(kpi.value))}</strong>
-            ${kpi.meta ? `<span class="admin-analytics-kpi-meta">${escapeHtml(kpi.meta)}</span>` : ''}
-          </article>`).join('')}
-      </div>`;
+  function renderAnalyticsPeriodSummary(points, gscAvailable) {
+    return window.kiezAdminAnalyticsChart?.renderPeriodSummaryHtml?.(
+      analyticsSeriesMeta?.totals,
+      {
+        gscAvailable,
+        actorKey: analyticsActorKey,
+        rangeKey: analyticsRange,
+        points,
+        loading: analyticsSeriesLoading,
+      }
+    ) || '';
   }
 
   function renderAnalyticsRangePills() {
@@ -591,64 +577,7 @@
     return `<p class="admin-hint admin-analytics-gsc-hint">${escapeHtml(t('adminPage.analyticsGscActorHint'))}</p>`;
   }
 
-  function filterAnalyticsActors(list) {
-    const q = analyticsSearchQuery.trim().toLowerCase();
-    let filtered = list;
-    if (q) {
-      filtered = list.filter((row) =>
-        (row.username || '').toLowerCase().includes(q)
-        || (row.guestId || '').toLowerCase().includes(q)
-        || formatActorLabel(row).toLowerCase().includes(q)
-      );
-    }
-    const sorted = [...filtered];
-    sorted.sort((a, b) => {
-      if (analyticsSort === 'views') {
-        return b.pageViewsWeek - a.pageViewsWeek || b.gamesWeek - a.gamesWeek;
-      }
-      if (analyticsSort === 'games') {
-        return b.gamesWeek - a.gamesWeek || b.pageViewsWeek - a.pageViewsWeek;
-      }
-      if (analyticsSort === 'last') {
-        return Date.parse(b.lastPageViewAt || b.lastPlayedAt || 0)
-          - Date.parse(a.lastPageViewAt || a.lastPlayedAt || 0);
-      }
-      return b.pageViewsWeek + b.gamesWeek - (a.pageViewsWeek + a.gamesWeek);
-    });
-    return sorted;
-  }
-
-  function renderAnalyticsActorsTable(list) {
-    const filtered = filterAnalyticsActors(list);
-    if (!filtered.length) {
-      return `<p class="admin-empty">${t('adminPage.analyticsActorsEmpty')}</p>`;
-    }
-
-    return `
-      <table class="wish-admin-table admin-data-table">
-        <thead><tr>
-          <th>${t('adminPage.activityColUser')}</th>
-          <th class="admin-num-col">${t('adminPage.analyticsColViewsWeek')}</th>
-          <th class="admin-num-col">${t('adminPage.analyticsColGamesWeek')}</th>
-          <th class="admin-num-col">${t('adminPage.analyticsColToday')}</th>
-          <th class="admin-num-col">${t('adminPage.analyticsColAllTime')}</th>
-          <th>${t('adminPage.analyticsColLastSeen')}</th>
-        </tr></thead>
-        <tbody>${filtered.map((row) => `
-          <tr>
-            <td><strong>${escapeHtml(formatActorLabel(row))}</strong></td>
-            <td class="admin-num-col">${formatNumber(row.pageViewsWeek)}</td>
-            <td class="admin-num-col">${formatNumber(row.gamesWeek)}</td>
-            <td class="admin-num-col">${formatNumber(row.pageViewsToday)} / ${formatNumber(row.gamesToday)}</td>
-            <td class="admin-num-col">${formatNumber(row.pageViewsAllTime)} / ${formatNumber(row.gamesAllTime)}</td>
-            <td>${escapeHtml(formatActivityTimestamp(row.lastPageViewAt || row.lastPlayedAt))}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>`;
-  }
-
   function renderAnalyticsSection() {
-    const filtered = filterAnalyticsActors(analyticsActors);
     const points = getAnalyticsPoints();
     const metrics = getActiveAnalyticsMetrics();
     const gscAvailable = analyticsSeriesMeta?.gsc_available !== false && !analyticsActorKey;
@@ -667,9 +596,7 @@
             <p class="admin-panel-intro">${t('adminPage.analyticsIntro')}</p>
           </div>
           <p class="admin-stats-line">${t('adminPage.analyticsStatsLine', {
-            days: formatNumber(points.length),
-            actors: formatNumber(analyticsActors.length),
-            shown: formatNumber(filtered.length)
+            days: formatNumber(points.length)
           })}${gscMeta ? ` · ${escapeHtml(gscMeta)}` : ''}</p>
         </div>
 
@@ -681,7 +608,7 @@
             <div class="admin-pill-row" role="tablist">${renderAnalyticsRangePills()}</div>
           </div>
           <div class="admin-analytics-control-group admin-analytics-control-group--grow">
-            <span class="admin-search-label">${escapeHtml(t('adminPage.analyticsMetricLabel'))}</span>
+            <span class="admin-search-label">${escapeHtml(t('adminPage.analyticsChartMetricLabel'))}</span>
             <div class="admin-pill-row admin-pill-row--wrap">${renderAnalyticsMetricPills()}</div>
           </div>
           ${renderAnalyticsActorSelect()}
@@ -690,7 +617,7 @@
         ${renderAnalyticsGscActorHint()}
         ${renderAnalyticsLegacyHint()}
 
-        ${renderAnalyticsKpiStrip(points, metrics, gscAvailable)}
+        ${renderAnalyticsPeriodSummary(points, gscAvailable)}
 
         <div class="admin-analytics-chart-host" id="admin-analytics-chart-host">
           ${renderAnalyticsChartBlock()}
@@ -704,22 +631,6 @@
         ${analyticsShowDataTable ? `<div class="admin-table-wrap">${renderAnalyticsDataTable(points, metrics)}</div>` : ''}
 
         <p class="admin-volume-note">${t('adminPage.activityTimezoneNote')}</p>
-
-        <div class="admin-toolbar">
-          <div class="admin-view-tabs" role="tablist">
-            <button type="button" class="admin-view-tab ${analyticsSort === 'week' ? 'is-active' : ''}" data-analytics-sort="week">${t('adminPage.analyticsSortCombined')}</button>
-            <button type="button" class="admin-view-tab ${analyticsSort === 'views' ? 'is-active' : ''}" data-analytics-sort="views">${t('adminPage.analyticsSortViews')}</button>
-            <button type="button" class="admin-view-tab ${analyticsSort === 'games' ? 'is-active' : ''}" data-analytics-sort="games">${t('adminPage.analyticsSortGames')}</button>
-            <button type="button" class="admin-view-tab ${analyticsSort === 'last' ? 'is-active' : ''}" data-analytics-sort="last">${t('adminPage.activitySortLastPlayed')}</button>
-          </div>
-          <label class="admin-search">
-            <span class="admin-search-label">${t('adminPage.searchLabel')}</span>
-            <input type="search" class="text-input-field" id="admin-analytics-search" value="${escapeHtml(analyticsSearchQuery)}" placeholder="${t('adminPage.activitySearchPlaceholder')}">
-          </label>
-        </div>
-
-        <h3 class="admin-subsection-title">${t('adminPage.analyticsActorsTitle')}</h3>
-        <div class="admin-table-wrap">${renderAnalyticsActorsTable(analyticsActors)}</div>
       </section>`;
   }
 
@@ -781,23 +692,6 @@
     main.querySelector('#admin-analytics-toggle-table')?.addEventListener('click', () => {
       analyticsShowDataTable = !analyticsShowDataTable;
       onRerender();
-    });
-
-    main.querySelectorAll('[data-analytics-sort]').forEach((tab) => {
-      tab.addEventListener('click', () => {
-        analyticsSort = tab.dataset.analyticsSort || 'week';
-        onRerender();
-      });
-    });
-
-    main.querySelector('#admin-analytics-search')?.addEventListener('input', (e) => {
-      analyticsSearchQuery = e.target.value;
-      onRerender();
-      const input = main.querySelector('#admin-analytics-search');
-      if (input) {
-        input.focus();
-        input.setSelectionRange(input.value.length, input.value.length);
-      }
     });
   }
 

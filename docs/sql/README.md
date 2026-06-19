@@ -20,3 +20,4 @@ supabase migration new feature_name
 | `rls-hardening-revoke-grants.sql` | `20250610000001_rls_hardening_revoke_grants.sql` |
 | `analytics-chart-series.sql` | `20250619000001_analytics_chart_series.sql` |
 | `analytics-dashboard-fixes.sql` | `20250619100001_analytics_dashboard_fixes.sql` |
+| `analytics-period-summary.sql` | `20250619120001_analytics_period_summary.sql` |

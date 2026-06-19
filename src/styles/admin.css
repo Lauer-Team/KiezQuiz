@@ -555,6 +555,42 @@
   color: var(--text-secondary);
 }
 
+.admin-analytics-summary {
+  margin: 0.5rem 0 1rem;
+}
+
+.admin-analytics-summary-title {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.admin-analytics-summary-lead {
+  margin: 0 0 0.65rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.admin-analytics-kpis--summary {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+.admin-analytics-kpi--summary {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-analytics-kpi-help {
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  flex: 1;
+}
+
 .admin-analytics-chart-host {
   margin-bottom: 0.5rem;
 }

@@ -122,6 +122,7 @@ Reihenfolge der Migrations:
 | `20250610000001` | RLS / Revoke hardening |
 | `20250619000001` | Chart-RPC `get_admin_analytics_series` (v2, schnell) |
 | `20250619100001` | Analytics-Dashboard-Fixes (KPI totals, Kalenderwoche, Session-Akteure) |
+| `20250619120001` | Perioden-Übersicht (Nutzer/Gäste/Sessions, Spieler, Hilfetexte) |
 
 ---
 
