@@ -331,9 +331,24 @@
     wrap?.classList.add('is-loading');
     setStatus(root, '', false);
 
-    showMaintenance(root);
+    const result = await fetchDashboardData();
     wrap?.classList.remove('is-loading');
-    return null;
+
+    if (!result.ok) {
+      if (result.reason === 'login') {
+        setStatus(root, t('adminPage.loginRequired') || 'Bitte einloggen.', true);
+      } else if (result.reason === 'forbidden') {
+        setStatus(root, t('adminPage.forbidden') || 'Kein Zugriff.', true);
+      } else {
+        const hint = result.message ? ` (${result.message})` : '';
+        setStatus(root, `${t('adminPage.aiDashboardLoadError')}${hint}`, true);
+        showMaintenance(root);
+      }
+      return null;
+    }
+
+    showDashboard(root, result.data);
+    return result.data;
   }
 
   function renderAiDashboardSection() {

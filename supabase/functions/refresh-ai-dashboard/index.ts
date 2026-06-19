@@ -54,11 +54,11 @@ Deno.serve(async (req) => {
 
   return new Response(
     JSON.stringify({
-      ok: false,
-      error: "maintenance",
-      message: "Dashboard in Wartung — Neuberechnung pausiert bis VPS-Cockpit live ist.",
+      ok: true,
+      message:
+        "Dashboard wird jeden Montag automatisch vom VPS aktualisiert. Bitte Ansicht neu laden.",
     }),
-    { status: 503, headers: cors },
+    { status: 200, headers: cors },
   );
 
   const githubPat = Deno.env.get("GITHUB_PAT")?.trim();
