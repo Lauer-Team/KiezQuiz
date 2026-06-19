@@ -19,8 +19,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: KiezQuiz-Ops
 
+      - name: Install Python deps
+        working-directory: KiezQuiz-Ops
+        run: pip install -r scripts/requirements-ops.txt
+
       - name: Build dashboard JSON
         working-directory: KiezQuiz-Ops
+        env:
+          GSC_TOKEN_JSON: ${{ secrets.GSC_TOKEN_JSON }}
         run: python3 scripts/build_ai_dashboard_data.py
 
       - name: Upload to Supabase Storage
