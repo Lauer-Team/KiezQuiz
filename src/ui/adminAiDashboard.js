@@ -305,28 +305,35 @@
     mount.innerHTML = renderDashboard(data);
   }
 
+  function renderMaintenance() {
+    return `
+      <div class="ai-dash-root ai-dash-maintenance">
+        <div class="ai-dash-desk">
+          <div class="ai-dash-desk-head">
+            <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashboardMaintenanceTitle'))}</h2>
+            <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashboardMaintenanceBody'))}</p>
+          </div>
+        </div>
+        <section class="ai-dash-section">
+          <p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashboardMaintenanceNote'))}</p>
+        </section>
+      </div>`;
+  }
+
+  function showMaintenance(root) {
+    const mount = root.querySelector('#admin-ai-dashboard-mount');
+    if (!mount) return;
+    mount.innerHTML = renderMaintenance();
+  }
+
   async function loadDashboardIntoMount(root) {
     const wrap = root.querySelector('.admin-ai-dashboard-mount-wrap');
     wrap?.classList.add('is-loading');
-    setStatus(root, t('adminPage.loading'), false);
-
-    const result = await fetchDashboardData();
-    wrap?.classList.remove('is-loading');
-
-    if (!result.ok) {
-      if (result.reason === 'forbidden') {
-        setStatus(root, t('adminPage.deniedBody'), true);
-      } else if (result.reason === 'login') {
-        setStatus(root, t('adminPage.loginRequiredBody'), true);
-      } else {
-        setStatus(root, result.message || t('adminPage.aiDashboardLoadError'), true);
-      }
-      return null;
-    }
-
-    showDashboard(root, result.data);
     setStatus(root, '', false);
-    return result.updated;
+
+    showMaintenance(root);
+    wrap?.classList.remove('is-loading');
+    return null;
   }
 
   function renderAiDashboardSection() {
@@ -336,11 +343,6 @@
           <div>
             <p class="admin-panel-intro">${t('adminPage.aiDashboardIntro')}</p>
             <p class="admin-panel-hint ai-dash-hint">${escapeHtml(t('adminPage.aiDashboardHint'))}</p>
-          </div>
-          <div class="admin-ai-dashboard-actions">
-            <button type="button" class="kq-btn" id="admin-ai-dashboard-refresh">
-              ${escapeHtml(t('adminPage.aiDashboardReloadBtn'))}
-            </button>
           </div>
         </div>
         <p class="profile-feedback admin-ai-dashboard-status" id="admin-ai-dashboard-status" hidden></p>

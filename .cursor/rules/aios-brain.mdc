@@ -7,6 +7,8 @@ alwaysApply: true
 
 Globales Gehirn: `../AIOS/` — User Rule lädt `me.md` automatisch.
 
-**Dieses Repo:** KiezQuiz-Website + Kalle (`telegram-agent/`).
+**Dieses Repo:** KiezQuiz-Website (öffentlich).
+
+**Ops & Bot Kalle:** `../KiezQuiz-Ops/` (privat).
 
 Bei Server/Deploy-Fragen: `../AIOS/Efforts/vps-hub-live.md`

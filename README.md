@@ -34,7 +34,8 @@ Dieses Repo ist die **Quelle für alles Spielrelevante**. Die native iOS/macOS-A
 
 | Repo | Inhalt |
 |------|--------|
-| **[KiezQuiz](https://github.com/logic3/KiezQuiz)** (dieses Repo) | Web-App — HTML, CSS, JavaScript, Daten |
+| **[KiezQuiz](https://github.com/Lauer-Team/KiezQuiz)** (dieses Repo) | Web-App — HTML, CSS, JavaScript, Daten |
+| **[KiezQuiz-Ops](https://github.com/Lauer-Team/KiezQuiz-Ops)** (privat) | Ops-Team, Leitstand, Telegram-Bot Kalle |
 | **[KiezQuiz-App](https://github.com/logic3/KiezQuiz-App)** | Native Hülle — Capacitor, Xcode, iOS/macOS |
 
 ---

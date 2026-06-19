@@ -14,11 +14,6 @@ _site/
 # Lokale Supabase-Keys (Vorlage: src/supabaseConfig.example.js)
 src/supabaseConfig.js
 
-# Telegram-Bot (Runtime, Secrets)
-telegram-agent/inbound/
-telegram-agent/config.json
-telegram-agent/state.json
-
 # NB-Benachrichtigung (Secrets + Versand-Log)
 scripts/terms-notify.config.json
 scripts/.terms-notify-log.json
@@ -31,7 +26,4 @@ scripts/gsc-token.json
 scripts/backup-supabase.config.json
 backups/
 
-
-
-# Inbox — Drop-Dateien dürfen ins Repo (Sync verschiebt sie ins Ziel)
-inbox/.DS_Store
+# Ops & Bot: siehe privates Repo ../KiezQuiz-Ops/

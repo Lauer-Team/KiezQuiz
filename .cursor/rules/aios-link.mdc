@@ -13,6 +13,8 @@ Session-Start (bei operativen Tasks):
 3. `../AIOS/Efforts/vps-hub-live.md` (bei Server/VPS)
 4. `../AIOS/AIOS/skills-map.md` (bei Deploy/Prozessen)
 
-# Dieses Repo: KiezQuiz
+# Dieses Repo: KiezQuiz (öffentlich)
 
-KiezQuiz-Website (HTML/CSS/JS) + Telegram-Bot Kalle (`telegram-agent/`).
+Öffentliche Web-App — HTML/CSS/JS, Spiel-Daten, Marke „Kalle die Kieztaube“.
+
+**Ops, Bot, KI-Team:** privates Geschwister-Repo `../KiezQuiz-Ops/`.

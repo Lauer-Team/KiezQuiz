@@ -52,6 +52,15 @@ Deno.serve(async (req) => {
     });
   }
 
+  return new Response(
+    JSON.stringify({
+      ok: false,
+      error: "maintenance",
+      message: "Dashboard in Wartung — Neuberechnung pausiert bis VPS-Cockpit live ist.",
+    }),
+    { status: 503, headers: cors },
+  );
+
   const githubPat = Deno.env.get("GITHUB_PAT")?.trim();
   if (!githubPat) {
     return new Response(
