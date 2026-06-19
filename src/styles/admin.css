@@ -275,7 +275,7 @@
   display: inline-flex;
   gap: 0.35rem;
   padding: 0.25rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-2, rgba(255, 255, 255, 0.04));
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
 }
@@ -293,9 +293,14 @@
   transition: var(--transition-fast);
 }
 
+.admin-view-tab:hover:not(.is-active) {
+  color: var(--text-primary);
+}
+
 .admin-view-tab.is-active {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: var(--surface-3, rgba(255, 255, 255, 0.08));
+  color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px var(--border-color);
 }
 
 .admin-search {
@@ -463,7 +468,7 @@
   flex-wrap: nowrap;
   gap: 0.35rem;
   padding: 0.2rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-2, rgba(255, 255, 255, 0.04));
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow-x: auto;
@@ -488,19 +493,21 @@
 }
 
 .admin-pill:hover:not(:disabled) {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background: var(--surface-3, rgba(255, 255, 255, 0.05));
 }
 
 .admin-pill.is-active {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.09);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+  background: var(--surface-3, rgba(255, 255, 255, 0.09));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--border-color) 80%, transparent);
 }
 
 .admin-pill--metric.is-active {
-  border-color: color-mix(in srgb, var(--pill-accent, #8b93a7) 55%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pill-accent, #8b93a7) 35%, transparent);
+  border-color: color-mix(in srgb, var(--pill-accent, #8b93a7) 55%, var(--border-color));
+  background: color-mix(in srgb, var(--pill-accent, #8b93a7) 14%, var(--surface, var(--bg-surface)));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pill-accent, #8b93a7) 28%, transparent);
 }
 
 .admin-pill.is-disabled,
@@ -520,7 +527,7 @@
   padding: 0.75rem 0.85rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--surface, var(--bg-surface));
   border-top: 3px solid var(--kpi-accent, #8b93a7);
 }
 
@@ -538,7 +545,7 @@
   font-family: var(--font-display);
   font-size: 1.35rem;
   line-height: 1.1;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .admin-analytics-kpi-meta {
@@ -565,7 +572,7 @@
 .admin-analytics-chart-wrap {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  background: rgba(0, 0, 0, 0.15);
+  background: var(--surface-2, rgba(0, 0, 0, 0.15));
   padding: 0.75rem 0.85rem 0.5rem;
 }
 
@@ -616,13 +623,13 @@
 }
 
 .admin-analytics-grid-line {
-  stroke: rgba(255, 255, 255, 0.06);
+  stroke: color-mix(in srgb, var(--text-muted) 22%, transparent);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
 
 .admin-analytics-axis-line {
-  stroke: rgba(255, 255, 255, 0.18);
+  stroke: color-mix(in srgb, var(--text-muted) 45%, transparent);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
@@ -654,8 +661,8 @@
   padding: 0.45rem 0.55rem;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  background: rgba(12, 14, 20, 0.96);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  background: var(--surface, rgba(12, 14, 20, 0.96));
+  box-shadow: var(--shadow, 0 8px 24px rgba(0, 0, 0, 0.35));
   pointer-events: none;
   z-index: 2;
 }
@@ -676,7 +683,7 @@
 }
 
 .admin-analytics-tip-row strong {
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -714,4 +721,21 @@
   .admin-pill-row {
     width: 100%;
   }
+}
+
+/* Light mode: active pills/tabs need visible contrast on paper background */
+html[data-theme="light"] .admin-pill.is-active {
+  background: var(--acc-fill, rgba(37, 99, 176, 0.12));
+  border-color: var(--acc-line, rgba(37, 99, 176, 0.35));
+}
+
+html[data-theme="light"] .admin-pill--metric.is-active {
+  background: color-mix(in srgb, var(--pill-accent, #8b93a7) 16%, var(--surface));
+  border-color: color-mix(in srgb, var(--pill-accent, #8b93a7) 42%, var(--border-color));
+}
+
+html[data-theme="light"] .admin-view-tab.is-active {
+  background: var(--acc-fill, rgba(37, 99, 176, 0.12));
+  border-color: var(--acc-line, rgba(37, 99, 176, 0.35));
+  box-shadow: none;
 }

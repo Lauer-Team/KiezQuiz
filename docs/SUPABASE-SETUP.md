@@ -18,6 +18,14 @@ Diese Anleitung richtet **optionale Cloud-Speicherung** für KiezQuiz ein. Ohne 
 
 ## 2. Datenbank-Schema anlegen
 
+### Option A — CLI-Migrations (empfohlen ab 2026-06)
+
+Siehe **[SUPABASE-MIGRATIONS.md](./SUPABASE-MIGRATIONS.md)** für `supabase link` + `supabase db push`.
+
+Das Basis-Schema (§2 unten) muss auf **neuen** Projekten weiterhin zuerst existieren (profiles, game_saves, city wishes). Die Erweiterungen (Freunde, Analytics, …) kommen dann per Migration.
+
+### Option B — SQL Editor (Legacy)
+
 1. Im Supabase-Dashboard links auf **SQL Editor** klicken.
 2. **New query** wählen.
 3. Den folgenden SQL-Block **komplett** einfügen und auf **Run** klicken:
@@ -294,7 +302,7 @@ $$;
 grant execute on function public.submit_city_wish(text, text, text) to anon, authenticated;
 ```
 
-**Bereits deployt?** Nur die Cooldown-Funktionen nachziehen: `docs/sql/city-wish-cooldown.sql` im SQL Editor ausführen (entfernt ggf. die alte `wish_insert`-Policy). Pro Account oder Gast-Gerät darf jede Stadt nur einmal innerhalb von 23 Stunden gewünscht/voted werden; danach ist eine erneute Stimme für dieselbe Stadt möglich (tägliches Öffnen belohnen, Spam verhindern).
+**Bereits deployt?** Cooldown-Funktionen: `./scripts/supabase-db-push.sh` (Migration `20250103000001`) — oder Legacy `docs/sql/city-wish-cooldown.sql`. Pro Account oder Gast-Gerät darf jede Stadt nur einmal innerhalb von 23 Stunden gewünscht/voted werden.
 
 Falls du die Unique-Indizes aus einer früheren Version bereits angelegt hast, einmal entfernen:
 
@@ -318,9 +326,9 @@ Alternativ in `src/supabaseConfig.js`: `adminUserIds: ['DEINE-USER-UUID']`.
 
 ## 2c. Profil, Freunde & Bestenliste (optional)
 
-Für eingeloggte Nutzer: persönliche Bestwerte pro Stadt, Freundesliste und öffentliche Bestenliste. Im SQL Editor ausführen:
+Für eingeloggte Nutzer: persönliche Bestwerte pro Stadt, Freundesliste und öffentliche Bestenliste.
 
-**Neu deployt:** `docs/sql/profile-social-leaderboard.sql` (Tabellen `user_city_best_scores`, `friend_requests` + RPCs; kein direkter Client-Zugriff auf Tabellen).
+**Deploy:** `./scripts/supabase-db-push.sh` (ab Migration `20250101000001`) — Details in [SUPABASE-MIGRATIONS.md](./SUPABASE-MIGRATIONS.md).
 
 Nach dem Ausführen:
 
@@ -335,7 +343,7 @@ Nach dem Ausführen:
 
 ### Admin: Spieler-Aktivität
 
-Im SQL Editor ausführen: `docs/sql/admin-player-activity.sql` (Tabelle `player_game_log`, RPCs `log_player_game`, `get_admin_play_volume`, `get_admin_player_activity`; importiert bestehende Runden aus Cloud-Spielständen).
+Per CLI: `./scripts/supabase-db-push.sh` (Migrationen ab `20250102000001`). Legacy: `docs/sql/admin-player-activity.sql`.
 
 Im Dashboard unter **Admin → Spieler-Aktivität**: Karten für Heute / Woche / Monat / Jahr / Gesamt plus Tabelle pro Spieler. Neue Runden werden beim Spielen automatisch geloggt (nur eingeloggte Nutzer).
 

@@ -5,7 +5,9 @@
   "keywords": ["KiezQuiz", "Hamburg Stadtteile", "Berlin Ortsteile", "Frankfurt Stadtteile", "Bezirke lernen", "Karten-Quiz", "Geografie"],
   "scripts": {
     "dev": "npx -y http-server -p 3000 -c-1 -a 0.0.0.0",
-    "dev:lan": "npx -y http-server -p 3000 -c-1 -a 0.0.0.0"
+    "dev:lan": "npx -y http-server -p 3000 -c-1 -a 0.0.0.0",
+    "db:push": "./scripts/supabase-db-push.sh",
+    "db:baseline": "./scripts/supabase-migration-baseline.sh"
   },
   "keywords": [],
   "author": "",

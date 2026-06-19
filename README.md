@@ -128,7 +128,8 @@ KiezQuiz/
 │   ├── style.css           # Layout & Design
 │   └── data/               # Bezirke, Stadtteile, Karte
 ├── docs/
-│   └── SUPABASE-SETUP.md   # Supabase Schritt-für-Schritt-Anleitung
+│   ├── SUPABASE-SETUP.md   # Supabase Schritt-für-Schritt-Anleitung
+│   └── SUPABASE-MIGRATIONS.md  # CLI: supabase db push statt SQL Editor
 ├── icons/
 └── scripts/
     └── assemble_html.py    # Optional: index.html aus Vorlage regenerieren

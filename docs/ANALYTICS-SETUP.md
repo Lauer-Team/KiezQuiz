@@ -6,19 +6,15 @@ First-Party-Statistik in Supabase (0 €): Besucher, Seitenaufrufe, Spielrunden 
 
 ---
 
-## 1. SQL in Supabase ausführen
+## 1. Schema auf Supabase anwenden
 
-1. Supabase Dashboard → **SQL Editor**
-2. Zuerst (falls noch nicht): `docs/sql/admin-player-activity.sql`
-3. Dann: **`docs/sql/analytics.sql`** komplett ausführen
+**Empfohlen (CLI):** Siehe **[SUPABASE-MIGRATIONS.md](./SUPABASE-MIGRATIONS.md)** — einmal `supabase link`, dann `./scripts/supabase-db-push.sh`.
 
-**Falls Pageviews nicht ankommen (Fehler `42P01` / `analytics_daily`):** zusätzlich **`docs/sql/analytics-fix-refresh-daily.sql`** ausführen.
+**Bestehende DB (schon manuell eingerichtet):** einmal `./scripts/supabase-migration-baseline.sh`, danach nur noch `db push` für neue Migrationen.
 
-**Falls Admin-Tab „Besucher & Statistik“ fehlschlägt (`user_id is ambiguous`):** **`docs/sql/analytics-fix-player-activity-ambiguous.sql`** ausführen.
+Legacy (SQL Editor): die Skripte in `docs/sql/` spiegeln `supabase/migrations/` — nicht mehr einzeln pflegen.
 
-**Für Zeitreihen-Chart (Stundenansicht „Heute“, Nutzerfilter):** **`docs/sql/analytics-chart-series.sql`** ausführen.
-
-Enthält: Tabellen `analytics_events`, `analytics_gsc_daily`, `analytics_daily`, RPCs, Erweiterung `player_game_log` für Gäste.
+Enthält u. a.: Tabellen `analytics_events`, `analytics_gsc_daily`, `analytics_daily`, Chart-RPC, Erweiterung `player_game_log` für Gäste.
 
 ---
 

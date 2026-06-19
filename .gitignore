@@ -26,4 +26,8 @@ scripts/gsc-token.json
 scripts/backup-supabase.config.json
 backups/
 
+# Supabase CLI (lokal)
+.env
+.supabase/
+
 # Ops & Bot: siehe privates Repo ../KiezQuiz-Ops/

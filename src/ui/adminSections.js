@@ -797,16 +797,18 @@
     analyticsActors = [];
     analyticsSeriesLoading = true;
 
-    const [overviewResult, actorsResult] = await Promise.all([
+    const [overviewResult, actorsResult, seriesResult] = await Promise.all([
       window.kiezAnalytics?.fetchAdminOverview?.() || { overview: null, error: null },
-      window.kiezAnalytics?.fetchAdminActors?.() || { rows: [], error: null }
+      window.kiezAnalytics?.fetchAdminActors?.() || { rows: [], error: null },
+      window.kiezAnalytics?.fetchAdminSeries?.(analyticsRange, analyticsActorKey || null)
+        || { meta: null, error: null },
     ]);
 
     analyticsOverview = overviewResult?.overview || null;
     analyticsActors = actorsResult?.rows || [];
-    analyticsLoadError = overviewResult?.error || actorsResult?.error || null;
-
-    await reloadAnalyticsSeries();
+    analyticsSeriesMeta = seriesResult?.meta || null;
+    analyticsLoadError = overviewResult?.error || actorsResult?.error || seriesResult?.error || null;
+    analyticsSeriesLoading = false;
 
     return analyticsActors.length;
   }
