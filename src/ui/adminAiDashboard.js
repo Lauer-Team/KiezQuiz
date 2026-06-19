@@ -8,6 +8,8 @@
     '⚪': 'neutral',
   };
 
+  let dashState = { tab: 'overview', deskFilter: 'open', deskSort: 'due' };
+
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g, '&amp;')
@@ -76,6 +78,31 @@
     return { ok: false, reason: 'load_failed', message: 'legacy_html_response' };
   }
 
+  async function triggerAgentRefresh(agentId) {
+    const config = getConfig();
+    const token = await getAccessToken();
+    const url = functionUrl('refresh-ai-dashboard');
+    if (!token || !url || !config.anonKey) {
+      return { ok: false, error: 'login' };
+    }
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        apikey: config.anonKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ agentId: agentId || null }),
+    });
+
+    try {
+      return await res.json();
+    } catch (_) {
+      return { ok: false, error: 'invalid_response' };
+    }
+  }
+
   function setStatus(root, message, isError) {
     const el = root.querySelector('#admin-ai-dashboard-status');
     if (!el) return;
@@ -86,6 +113,21 @@
 
   function statusClass(emoji) {
     return STATUS_CLASS[emoji] || 'neutral';
+  }
+
+  function runStatusClass(status) {
+    const s = String(status || '').toLowerCase();
+    if (s === 'ok') return 'ok';
+    if (s === 'warn') return 'warn';
+    if (s === 'error') return 'urgent';
+    return 'neutral';
+  }
+
+  function dueRelLabel(daysUntil) {
+    if (typeof daysUntil !== 'number') return '';
+    if (daysUntil < 0) return t('adminPage.aiDashOverdue');
+    if (daysUntil === 0) return t('adminPage.aiDashDueToday');
+    return t('adminPage.aiDashInDays', { n: daysUntil });
   }
 
   function renderSparkline(spark, sc) {
@@ -182,7 +224,21 @@
     }).join('')}</div>`;
   }
 
-  function renderProjects(projects) {
+  function renderRoutinePills(pills) {
+    if (!pills?.length) return '';
+    return `
+      <div class="ai-dash-routine-pills" aria-label="${escapeHtml(t('adminPage.aiDashRoutinePills'))}">
+        ${pills.map((p) => {
+          const rs = runStatusClass(p.lastStatus);
+          return `
+            <span class="ai-dash-routine-pill ai-dash-run-badge--${rs}" title="${escapeHtml(p.label || p.name || '')}">
+              ♻️ ${escapeHtml(p.name || p.slug || t('adminPage.aiDashRoutinePills'))}
+            </span>`;
+        }).join('')}
+      </div>`;
+  }
+
+  function renderProjects(projects, detailed) {
     if (!projects?.length) {
       return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoProjects'))}</p>`;
     }
@@ -192,6 +248,8 @@
           <span class="ai-dash-project-title">${escapeHtml(p.title)}</span>
           <span class="ai-dash-project-meta">${escapeHtml(p.status || '')}${p.due ? ` · ${escapeHtml(p.due)}` : ''}</span>
         </div>
+        ${detailed && p.summary ? `<p class="ai-dash-project-summary">${escapeHtml(p.summary)}</p>` : ''}
+        ${detailed && p.note ? `<p class="ai-dash-project-note">${escapeHtml(p.note)}</p>` : ''}
         <div class="ai-dash-progress" role="progressbar" aria-valuenow="${escapeHtml(String(p.progress || 0))}" aria-valuemin="0" aria-valuemax="100">
           <span class="ai-dash-progress-bar" style="width:${Math.max(0, Math.min(100, p.progress || 0))}%"></span>
           <span class="ai-dash-progress-val">${escapeHtml(String(p.progress || 0))}%</span>
@@ -199,77 +257,152 @@
       </li>`).join('')}</ul>`;
   }
 
-  function runStatusClass(status) {
-    const s = String(status || '').toLowerCase();
-    if (s === 'ok') return 'ok';
-    if (s === 'warn') return 'warn';
-    if (s === 'error') return 'urgent';
-    return 'neutral';
-  }
-
-  function renderAutomationsTable(autos, meta) {
-    if (!autos?.length) {
-      return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoAutomations'))}</p>`;
+  function filterDeskItems(items) {
+    let list = [...(items || [])];
+    if (dashState.deskFilter === 'open') {
+      list = list.filter((x) => x.status !== 'done');
+    } else if (dashState.deskFilter === 'done') {
+      list = list.filter((x) => x.status === 'done');
     }
-    const rows = autos.map((a) => {
-      const rs = runStatusClass(a.lastStatus);
-      const owner = `${a.ownerEmoji || ''} ${a.ownerName || a.ownerId || ''}`.trim();
-      return `
-        <tr class="ai-dash-auto-row ai-dash-status--${rs}">
-          <td>
-            <strong>${escapeHtml(a.name)}</strong>
-            <span class="ai-dash-muted ai-dash-auto-slug">${escapeHtml(a.slug || '')}</span>
-          </td>
-          <td class="ai-dash-owner">${escapeHtml(owner)}</td>
-          <td><code class="ai-dash-cron">${escapeHtml(a.cron || '—')}</code></td>
-          <td><span class="ai-dash-kind ai-dash-kind--${escapeHtml(a.kind || 'n8n')}">${escapeHtml(a.kindLabel || a.kind || '—')}</span></td>
-          <td class="ai-dash-auto-next">${a.nextRun ? escapeHtml(a.nextRun) : '—'}${a.daysUntil != null ? ` <span class="ai-dash-muted">(${escapeHtml(t('adminPage.aiDashInDays', { n: a.daysUntil }))})</span>` : ''}</td>
-          <td class="ai-dash-auto-last">${a.lastRun ? escapeHtml(a.lastRun) : '—'}</td>
-          <td><span class="ai-dash-run-badge ai-dash-run-badge--${rs}">${escapeHtml(a.lastStatusLabel || a.lastStatus || '—')}</span></td>
-        </tr>
-        <tr class="ai-dash-auto-detail-row">
-          <td colspan="7">${escapeHtml(a.task || a.description || '')}</td>
-        </tr>`;
-    }).join('');
-
-    const bundle = meta?.weeklyBundle
-      ? `<p class="ai-dash-bundle-note"><strong>${escapeHtml(t('adminPage.aiDashWeeklyBundle'))}:</strong> ${escapeHtml(meta.weeklyBundle)}</p>`
-      : '';
-
-    return `
-      ${bundle}
-      <div class="ai-dash-table-wrap">
-        <table class="ai-dash-table ai-dash-auto-table">
-          <thead>
-            <tr>
-              <th>${escapeHtml(t('adminPage.aiDashColName'))}</th>
-              <th>${escapeHtml(t('adminPage.aiDashColOwner'))}</th>
-              <th>Cron (UTC)</th>
-              <th>${escapeHtml(t('adminPage.aiDashColKind'))}</th>
-              <th>${escapeHtml(t('adminPage.aiDashColNext'))}</th>
-              <th>${escapeHtml(t('adminPage.aiDashColLastRun'))}</th>
-              <th>${escapeHtml(t('adminPage.aiDashColRunStatus'))}</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>`;
+    if (dashState.deskSort === 'priority') {
+      const order = { urgent: 0, warn: 1, normal: 2 };
+      list.sort((a, b) => (order[a.priority] ?? 9) - (order[b.priority] ?? 9));
+    } else {
+      list.sort((a, b) => {
+        const da = a.daysUntil;
+        const db = b.daysUntil;
+        if (da == null && db == null) return 0;
+        if (da == null) return -1;
+        if (db == null) return 1;
+        return da - db;
+      });
+    }
+    return list;
   }
 
-  function renderAutomationsSection(data) {
-    const autos = data.automationsGlobal || [];
-    const meta = data.automationMeta || {};
+  function renderDesk(data) {
+    const items = filterDeskItems(data.myDeskItems || data.ceo?.myDeskItems || []);
+    const filter = dashState.deskFilter;
+    const sort = dashState.deskSort;
+
     return `
-      <section class="ai-dash-section ai-dash-automations-section">
-        <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashGlobalAutomations'))}</h2>
-        <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashAutomationsHint'))}</p>
-        ${renderAutomationsTable(autos, meta)}
+      <section class="ai-dash-desk">
+        <div class="ai-dash-desk-head">
+          <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashDeskMergedTitle'))}</h2>
+          <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashDeskMergedHint'))}</p>
+        </div>
+        <div class="ai-dash-desk-toolbar">
+          <div class="ai-dash-filter-group" role="group" aria-label="${escapeHtml(t('adminPage.aiDashFilterStatus'))}">
+            <button type="button" class="ai-dash-filter-btn${filter === 'open' ? ' is-active' : ''}" data-desk-filter="open">${escapeHtml(t('adminPage.aiDashFilterOpen'))}</button>
+            <button type="button" class="ai-dash-filter-btn${filter === 'all' ? ' is-active' : ''}" data-desk-filter="all">${escapeHtml(t('adminPage.aiDashFilterAll'))}</button>
+            <button type="button" class="ai-dash-filter-btn${filter === 'done' ? ' is-active' : ''}" data-desk-filter="done">${escapeHtml(t('adminPage.aiDashFilterDone'))}</button>
+          </div>
+          <div class="ai-dash-filter-group" role="group" aria-label="${escapeHtml(t('adminPage.aiDashFilterSort'))}">
+            <button type="button" class="ai-dash-filter-btn${sort === 'due' ? ' is-active' : ''}" data-desk-sort="due">${escapeHtml(t('adminPage.aiDashSortDue'))}</button>
+            <button type="button" class="ai-dash-filter-btn${sort === 'priority' ? ' is-active' : ''}" data-desk-sort="priority">${escapeHtml(t('adminPage.aiDashSortPrio'))}</button>
+          </div>
+        </div>
+        ${!items.length ? `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashDeskEmpty'))}</p>` : `
+        <div class="ai-dash-table-wrap">
+          <table class="ai-dash-table ai-dash-todo-table">
+            <thead>
+              <tr>
+                <th>${escapeHtml(t('adminPage.aiDashColTask'))}</th>
+                <th>${escapeHtml(t('adminPage.aiDashColDue'))}</th>
+                <th>${escapeHtml(t('adminPage.aiDashColPrio'))}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map((item) => {
+                const rel = dueRelLabel(item.daysUntil);
+                const relCls = item.daysUntil != null && item.daysUntil <= 14 ? ' is-soon' : '';
+                const overCls = item.daysUntil != null && item.daysUntil < 0 ? ' is-over' : '';
+                return `
+                  <tr>
+                    <td class="ai-dash-todo-task">
+                      ${item.kind === 'deadline' ? '⏰ ' : '✅ '}${escapeHtml(item.title)}
+                      ${item.note ? `<span class="ai-dash-muted ai-dash-todo-note">${escapeHtml(item.note)}</span>` : ''}
+                    </td>
+                    <td class="ai-dash-due-cell">
+                      ${item.due ? `<span class="ai-dash-due">${escapeHtml(item.due)}</span>` : '<span class="ai-dash-muted">—</span>'}
+                      ${rel ? `<span class="ai-dash-due-rel${relCls}${overCls}">${escapeHtml(rel)}</span>` : ''}
+                    </td>
+                    <td><span class="ai-dash-prio ai-dash-prio--${escapeHtml(item.priority || 'normal')}">${escapeHtml(item.priorityLabel || item.priority || '')}</span></td>
+                  </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>`}
       </section>`;
   }
 
-  function renderMember(agent, isCeo) {
+  function renderDataOverview(data) {
+    const rows = data.dataCollectionOverview || [];
+    if (!rows.length) return '';
+    return `
+      <section class="ai-dash-section ai-dash-data-overview">
+        <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashDataOverviewTitle'))}</h2>
+        <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashDataOverviewHint'))}</p>
+        <div class="ai-dash-table-wrap">
+          <table class="ai-dash-table">
+            <thead>
+              <tr>
+                <th>${escapeHtml(t('adminPage.aiDashColOwner'))}</th>
+                <th>${escapeHtml(t('adminPage.aiDashDataCollects'))}</th>
+                <th>${escapeHtml(t('adminPage.aiDashDataFrequency'))}</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map((r) => `
+                <tr>
+                  <td>${escapeHtml(r.emoji || '')} ${escapeHtml(r.name || r.agentId || '')}</td>
+                  <td>${escapeHtml(r.collects || '')}${r.note ? ` <span class="ai-dash-muted">(${escapeHtml(r.note)})</span>` : ''}</td>
+                  <td>${escapeHtml(r.frequency || '')}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </section>`;
+  }
+
+  function renderTeamNavCards(data) {
+    const ceo = data.ceo;
+    const agents = data.agents || [];
+    const all = [ceo, ...agents].filter(Boolean);
+    return `
+      <section class="ai-dash-section">
+        <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashTeamNavTitle'))}</h2>
+        <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashTeamNavHint'))}</p>
+        <div class="ai-dash-team-nav">
+          ${all.map((a) => {
+            const sc = statusClass(a.status);
+            const isCeo = a.id === data.ceo?.id;
+            return `
+              <button type="button" class="ai-dash-team-card ai-dash-status--${sc}${isCeo ? ' is-ceo' : ''}" data-dash-tab="${escapeHtml(a.id)}">
+                <span class="ai-dash-emoji">${escapeHtml(a.emoji || '🤖')}</span>
+                <strong>${escapeHtml(a.name)}</strong>
+                <span class="ai-dash-muted">${escapeHtml(a.role || '')}</span>
+                <span class="ai-dash-badge ai-dash-badge--${sc}">${escapeHtml(a.status)} ${escapeHtml(a.statusLabel || '')}</span>
+                ${a.lage ? `<span class="ai-dash-team-card-lage">${escapeHtml(a.lage.slice(0, 120))}${a.lage.length > 120 ? '…' : ''}</span>` : ''}
+              </button>`;
+          }).join('')}
+        </div>
+      </section>`;
+  }
+
+  function renderRefreshButton(agentId, label) {
+    return `
+      <button type="button" class="kq-btn kq-btn--secondary ai-dash-agent-refresh" data-agent-refresh="${escapeHtml(agentId)}" title="${escapeHtml(t('adminPage.aiDashAgentRefreshHint'))}">
+        ${escapeHtml(label || t('adminPage.aiDashAgentRefresh'))}
+      </button>`;
+  }
+
+  function renderMember(agent, options) {
     if (!agent) return '';
+    const { isCeo = false, compact = false, minimal = false } = options || {};
     const sc = statusClass(agent.status);
+    const detailed = !compact && !minimal;
+
     return `
       <article class="ai-dash-member ai-dash-status--${sc}${isCeo ? ' is-ceo' : ''}" data-agent-id="${escapeHtml(agent.id)}">
         <header class="ai-dash-member-head">
@@ -277,124 +410,114 @@
           <div class="ai-dash-member-id">
             <h3 class="ai-dash-member-name">${escapeHtml(agent.name)}</h3>
             <p class="ai-dash-role">${escapeHtml(agent.role || '')}</p>
+            ${agent.roleExplain ? `<p class="ai-dash-explain">${escapeHtml(agent.roleExplain)}</p>` : ''}
           </div>
-          <span class="ai-dash-badge ai-dash-badge--${sc}">${escapeHtml(agent.status)} ${escapeHtml(agent.statusLabel || '')}</span>
+          <div class="ai-dash-member-actions">
+            ${renderRefreshButton(agent.id)}
+            <span class="ai-dash-badge ai-dash-badge--${sc}">${escapeHtml(agent.status)} ${escapeHtml(agent.statusLabel || '')}</span>
+          </div>
         </header>
         ${agent.lage ? `<p class="ai-dash-lage">${escapeHtml(agent.lage)}</p>` : ''}
-        ${renderKpis(agent.kpis)}
-        ${renderAgentCharts(agent)}
+        ${renderRoutinePills(agent.routinePills)}
+        ${minimal ? '' : renderKpis(agent.kpis)}
+        ${detailed ? renderAgentCharts(agent) : ''}
+        ${minimal ? '' : `
         <section class="ai-dash-block">
           <h4>${escapeHtml(t('adminPage.aiDashProjects'))}</h4>
-          ${renderProjects(agent.projects)}
-        </section>
+          ${renderProjects(agent.projects, detailed)}
+        </section>`}
       </article>`;
   }
 
-  function renderDesk(ceo, openDeadlines) {
-    const human = ceo?.humanTodos || [];
-    const approvals = ceo?.approvalGates || [];
-    const upcoming = (openDeadlines || []).filter(
-      (d) => d.status === '🔴' || (typeof d.daysUntil === 'number' && d.daysUntil <= 30)
-    );
-    const hasContent = human.length || approvals.length || upcoming.length;
-    return `
-      <section class="ai-dash-desk">
-        <div class="ai-dash-desk-head">
-          <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashDeskTitle'))}</h2>
-          <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashDeskHint'))}</p>
-        </div>
-        ${!hasContent ? `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashDeskEmpty'))}</p>` : `
-        <div class="ai-dash-desk-grid">
-          ${human.length ? `
-            <div class="ai-dash-desk-card">
-              <h3>✅ ${escapeHtml(t('adminPage.aiDashYourTasks'))}</h3>
-              <ul class="ai-dash-list">${human.map((x) => `<li>${escapeHtml(x)}</li>`).join('')}</ul>
-            </div>` : ''}
-          ${upcoming.length ? `
-            <div class="ai-dash-desk-card">
-              <h3>⏰ ${escapeHtml(t('adminPage.aiDashUpcoming'))}</h3>
-              <ul class="ai-dash-list">${upcoming.map((d) => `<li><strong>${escapeHtml(d.what)}</strong> — ${escapeHtml(d.due || '')}${typeof d.daysUntil === 'number' ? ` <span class="ai-dash-muted">(${escapeHtml(t('adminPage.aiDashInDays', { n: d.daysUntil }))})</span>` : ''}</li>`).join('')}</ul>
-            </div>` : ''}
-          ${approvals.length ? `
-            <div class="ai-dash-desk-card">
-              <h3>🔑 ${escapeHtml(t('adminPage.aiDashApprovals'))}</h3>
-              <div class="ai-dash-chips">${approvals.map((x) => `<span class="ai-dash-chip">${escapeHtml(x)}</span>`).join('')}</div>
-            </div>` : ''}
-        </div>`}
-      </section>`;
-  }
-
-  function renderOrgAgentNode(agent) {
-    const sc = statusClass(agent.status);
-    return `
-      <div class="ai-dash-org-agent ai-dash-status--${sc}" title="${escapeHtml(agent.roleExplain || agent.role || '')}">
-        <span class="ai-dash-emoji" aria-hidden="true">${escapeHtml(agent.emoji || '🤖')}</span>
-        <div class="ai-dash-org-agent-text">
-          <strong>${escapeHtml(agent.name)}</strong>
-          <span class="ai-dash-muted">${escapeHtml(agent.role || '')}</span>
-          ${agent.roleExplain ? `<span class="ai-dash-org-role-desc">${escapeHtml(agent.roleExplain)}</span>` : ''}
-        </div>
-        <span class="ai-dash-badge ai-dash-badge--${sc}">${escapeHtml(agent.status)} ${escapeHtml(agent.statusLabel || '')}</span>
-      </div>`;
-  }
-
-  function renderOrgChart(data) {
+  function renderCeoBigPicture(data) {
     const ceo = data.ceo;
-    const agents = data.agents || [];
+    if (!ceo) return '';
+    const refs = (data.agents || []).map((a) => {
+      const sc = statusClass(a.status);
+      return `
+        <button type="button" class="ai-dash-ceo-ref ai-dash-status--${sc}" data-dash-tab="${escapeHtml(a.id)}">
+          <span>${escapeHtml(a.emoji || '')} ${escapeHtml(a.name)}</span>
+          <span class="ai-dash-muted">${escapeHtml(a.lage ? a.lage.slice(0, 80) : a.role)}${a.lage && a.lage.length > 80 ? '…' : ''}</span>
+        </button>`;
+    }).join('');
 
     return `
-      <section class="ai-dash-section ai-dash-org-section">
-        <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashOrgTitle'))}</h2>
-        <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashOrgHint'))}</p>
-        <div class="ai-dash-org-tree">
-          <div class="ai-dash-org-tier">
-            <span class="ai-dash-org-node ai-dash-org-node--owner">${escapeHtml(data.orgChart?.owner?.emoji || '👤')} ${escapeHtml(t('adminPage.aiDashOwner'))}</span>
-          </div>
-          <div class="ai-dash-org-vline" aria-hidden="true"></div>
-          <div class="ai-dash-org-tier">
-            <span class="ai-dash-org-node ai-dash-org-node--ceo">${escapeHtml(ceo?.emoji || '🕊️')} ${escapeHtml(ceo?.name || 'Kalle')}</span>
-            ${ceo?.roleExplain ? `<p class="ai-dash-org-ceo-desc">${escapeHtml(ceo.roleExplain)}</p>` : ''}
-          </div>
-          <div class="ai-dash-org-vline" aria-hidden="true"></div>
-          <p class="ai-dash-org-branch-label">${escapeHtml(t('adminPage.aiDashTeamNodes', { n: agents.length }))}</p>
-          <div class="ai-dash-org-grid">${agents.map((a) => renderOrgAgentNode(a)).join('')}</div>
+      <section class="ai-dash-section">
+        <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashCeoTitle'))}</h2>
+        <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashCeoHint'))}</p>
+        ${renderMember(ceo, { isCeo: true, minimal: true })}
+        <div class="ai-dash-ceo-refs">
+          <h3 class="ai-dash-h3">${escapeHtml(t('adminPage.aiDashCeoRefs'))}</h3>
+          ${refs || `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashNoKpis'))}</p>`}
         </div>
       </section>`;
   }
 
-  function renderDashboard(data) {
+  function renderStats(data) {
     const stats = data.stats || {};
-    const ceo = data.ceo;
-    const agents = data.agents || [];
     const opsConnected = data.opsDb?.connected === true;
-    const opsLabel = opsConnected ? t('adminPage.aiDashOpsLive') : t('adminPage.aiDashOpsOffline');
-
-    const statsHtml = `
+    return `
       <div class="ai-dash-stats">
         <div class="ai-dash-stat"><span class="ai-dash-stat-num">${escapeHtml(String(stats.agentsOk ?? '—'))}/${escapeHtml(String(stats.agentsTotal ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatAgents'))}</span></div>
         <div class="ai-dash-stat ai-dash-stat--accent"><span class="ai-dash-stat-num">${escapeHtml(String(stats.yourTasks ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatYourTasks'))}</span></div>
         <div class="ai-dash-stat"><span class="ai-dash-stat-num">${escapeHtml(String(stats.openDeadlines ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatDeadlines'))}</span></div>
         <div class="ai-dash-stat"><span class="ai-dash-stat-num">${escapeHtml(String(stats.automationsOk ?? stats.automationsLive ?? '—'))}/${escapeHtml(String(stats.automationsLive ?? '—'))}</span><span class="ai-dash-stat-label">${escapeHtml(t('adminPage.aiDashStatAutoOk'))}</span></div>
+        <span class="ai-dash-ops-pill ai-dash-ops-pill--${opsConnected ? 'ok' : 'off'}">${escapeHtml(opsConnected ? t('adminPage.aiDashOpsLive') : t('adminPage.aiDashOpsOffline'))}</span>
       </div>`;
+  }
 
+  function allTabs(data) {
+    const tabs = [{ id: 'overview', label: t('adminPage.aiDashTabOverview'), emoji: '📋' }];
+    if (data.ceo) {
+      tabs.push({ id: data.ceo.id, label: data.ceo.name, emoji: data.ceo.emoji || '🕊️' });
+    }
+    (data.agents || []).forEach((a) => {
+      tabs.push({ id: a.id, label: a.name, emoji: a.emoji || '🤖' });
+    });
+    return tabs;
+  }
+
+  function renderTabBar(data) {
+    const tabs = allTabs(data);
+    const active = dashState.tab;
+    return `
+      <nav class="ai-dash-tabs" aria-label="${escapeHtml(t('adminPage.aiDashTabNav'))}">
+        ${tabs.map((tab) => `
+          <button type="button" class="ai-dash-tab${active === tab.id ? ' is-active' : ''}" data-dash-tab="${escapeHtml(tab.id)}">
+            <span aria-hidden="true">${escapeHtml(tab.emoji)}</span>
+            <span>${escapeHtml(tab.label)}</span>
+          </button>`).join('')}
+      </nav>`;
+  }
+
+  function renderTabContent(data) {
+    const tab = dashState.tab;
+    if (tab === 'overview') {
+      return `
+        ${renderDesk(data)}
+        ${renderDataOverview(data)}
+        ${renderTeamNavCards(data)}`;
+    }
+    if (tab === data.ceo?.id) {
+      return renderCeoBigPicture(data);
+    }
+    const agent = (data.agents || []).find((a) => a.id === tab);
+    if (agent) {
+      return renderMember(agent, { isCeo: false, compact: false });
+    }
+    return `<p class="ai-dash-empty">${escapeHtml(t('adminPage.aiDashboardLoadError'))}</p>`;
+  }
+
+  function renderDashboard(data) {
     return `
       <div class="ai-dash-root">
         <p class="ai-dash-meta">
           ${escapeHtml(t('adminPage.aiDashGenerated'))}: ${escapeHtml(data.generatedAtDe || data.generatedAt || '')}
-          <span class="ai-dash-ops-pill ai-dash-ops-pill--${opsConnected ? 'ok' : 'off'}">${escapeHtml(opsLabel)}</span>
+          ${data.pipeline?.stage1 ? `<span class="ai-dash-muted"> · ${escapeHtml(data.pipeline.stage1)}</span>` : ''}
         </p>
-        ${statsHtml}
-        ${renderDesk(ceo, data.openDeadlines || data.deadlines)}
-        ${renderAutomationsSection(data)}
-        <section class="ai-dash-section">
-          <h2 class="ai-dash-h2">${escapeHtml(t('adminPage.aiDashExecTitle'))}</h2>
-          <p class="ai-dash-hint">${escapeHtml(t('adminPage.aiDashExecHint'))}</p>
-          <div class="ai-dash-members">
-            ${renderMember(ceo, true)}
-            ${agents.map((a) => renderMember(a, false)).join('')}
-          </div>
-        </section>
-        ${renderOrgChart(data)}
+        ${renderStats(data)}
+        ${renderTabBar(data)}
+        <div class="ai-dash-tab-panel">${renderTabContent(data)}</div>
       </div>`;
   }
 
@@ -402,6 +525,62 @@
     const mount = root.querySelector('#admin-ai-dashboard-mount');
     if (!mount || !data) return;
     mount.innerHTML = renderDashboard(data);
+    bindDashboardInteractions(root, data);
+  }
+
+  function bindDashboardInteractions(root, data) {
+    const mount = root.querySelector('#admin-ai-dashboard-mount');
+    if (!mount) return;
+
+    mount.querySelectorAll('[data-dash-tab]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        dashState.tab = btn.getAttribute('data-dash-tab') || 'overview';
+        showDashboard(root, data);
+      });
+    });
+
+    mount.querySelectorAll('[data-desk-filter]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        dashState.deskFilter = btn.getAttribute('data-desk-filter') || 'open';
+        showDashboard(root, data);
+      });
+    });
+
+    mount.querySelectorAll('[data-desk-sort]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        dashState.deskSort = btn.getAttribute('data-desk-sort') || 'due';
+        showDashboard(root, data);
+      });
+    });
+
+    mount.querySelectorAll('[data-agent-refresh]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        void handleAgentRefresh(root, btn.getAttribute('data-agent-refresh'), data);
+      });
+    });
+  }
+
+  async function handleAgentRefresh(root, agentId, data) {
+    const btn = root.querySelector(`[data-agent-refresh="${agentId}"]`);
+    if (btn) btn.disabled = true;
+    setStatus(root, t('adminPage.aiDashboardRefreshing'), false);
+
+    const result = await triggerAgentRefresh(agentId);
+    if (!result.ok) {
+      const msg = result.message || result.error || t('adminPage.aiDashboardLoadError');
+      setStatus(root, msg, true);
+      if (btn) btn.disabled = false;
+      return;
+    }
+
+    setStatus(root, result.message || t('adminPage.aiDashboardRefreshStarted'), false);
+
+    await new Promise((r) => setTimeout(r, 8000));
+    const fresh = await loadDashboardIntoMount(root);
+    if (fresh) {
+      setStatus(root, t('adminPage.aiDashboardRefreshDone'), false);
+    }
+    if (btn) btn.disabled = false;
   }
 
   function renderMaintenance() {

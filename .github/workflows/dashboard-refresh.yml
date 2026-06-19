@@ -2,6 +2,17 @@ name: AI Dashboard Refresh
 
 on:
   workflow_dispatch:
+    inputs:
+      routine:
+        description: "VPS-Routine (Hinweis — läuft nur mit n8n-Webhook; GH baut JSON neu)"
+        required: false
+        default: dashboard
+        type: string
+      agent_id:
+        description: "Manager-ID (optional)"
+        required: false
+        default: ""
+        type: string
   repository_dispatch:
     types: [dashboard-refresh]
 
@@ -27,6 +38,8 @@ jobs:
         working-directory: KiezQuiz-Ops
         env:
           GSC_TOKEN_JSON: ${{ secrets.GSC_TOKEN_JSON }}
+          ROUTINE: ${{ github.event.inputs.routine || 'dashboard' }}
+          AGENT_ID: ${{ github.event.inputs.agent_id || '' }}
         run: python3 scripts/build_ai_dashboard_data.py
 
       - name: Upload to Supabase Storage

@@ -11,67 +11,67 @@ const cors = {
 const GITHUB_REPO = Deno.env.get("GITHUB_REPO") || "logic3/KiezQuiz";
 const WORKFLOW_FILE = "dashboard-refresh.yml";
 
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: cors });
-  }
+const AGENT_ROUTINES: Record<string, string> = {
+  "CEO-Kalle": "deadlines",
+  "CMO-Marie": "seo-daily",
+  "CFO-Fiona": "finance",
+  "COO-Oskar": "uptime",
+  "CSO-Stella": "security",
+  "CXO-Xenia": "support",
+  "CTO-Theo": "dashboard",
+  "CLO-Lena": "dashboard",
+};
 
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ ok: false, error: "method_not_allowed" }), {
-      status: 405,
-      headers: cors,
-    });
-  }
-
-  const authHeader = req.headers.get("Authorization");
+async function requireAdmin(authHeader: string | null) {
   if (!authHeader?.startsWith("Bearer ")) {
-    return new Response(JSON.stringify({ ok: false, error: "login_required" }), {
-      status: 401,
-      headers: cors,
-    });
+    return { ok: false as const, status: 401, error: "login_required" };
   }
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
   const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
   if (!supabaseUrl || !supabaseAnonKey) {
-    return new Response(JSON.stringify({ ok: false, error: "server_misconfigured" }), {
-      status: 500,
-      headers: cors,
-    });
+    return { ok: false as const, status: 500, error: "server_misconfigured" };
   }
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     global: { headers: { Authorization: authHeader } },
   });
 
-  const { data: isAdmin, error: adminError } = await supabase.rpc("is_city_wish_admin");
-  if (adminError || !isAdmin) {
-    return new Response(JSON.stringify({ ok: false, error: "forbidden" }), {
-      status: 403,
-      headers: cors,
-    });
+  const { data: isAdmin, error } = await supabase.rpc("is_city_wish_admin");
+  if (error || !isAdmin) {
+    return { ok: false as const, status: 403, error: "forbidden" };
   }
 
-  return new Response(
-    JSON.stringify({
-      ok: true,
-      message:
-        "Dashboard wird jeden Montag automatisch vom VPS aktualisiert. Bitte Ansicht neu laden.",
-    }),
-    { status: 200, headers: cors },
-  );
+  return { ok: true as const };
+}
 
+async function triggerN8nRefresh(routine: string, agentId: string | null) {
+  const webhook = Deno.env.get("N8N_KQ_OPS_REFRESH_WEBHOOK")?.trim();
+  if (!webhook) return null;
+
+  const res = await fetch(webhook, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ routine, agentId, source: "admin-dashboard" }),
+  });
+
+  if (!res.ok) {
+    const detail = await res.text();
+    throw new Error(`n8n_webhook_failed:${res.status}:${detail.slice(0, 200)}`);
+  }
+
+  return await res.json().catch(() => ({ ok: true }));
+}
+
+async function triggerGithubRefresh(routine: string, agentId: string | null) {
   const githubPat = Deno.env.get("GITHUB_PAT")?.trim();
   if (!githubPat) {
-    return new Response(
-      JSON.stringify({
-        ok: false,
-        error: "github_pat_missing",
-        message:
-          "GITHUB_PAT fehlt in Supabase Edge Function Secrets. Siehe ops/ZUGAENGE.md.",
-      }),
-      { status: 503, headers: cors },
-    );
+    return {
+      ok: false,
+      error: "github_pat_missing",
+      message:
+        "GITHUB_PAT fehlt in Supabase Edge Function Secrets. Siehe ops/ZUGAENGE.md.",
+    };
   }
 
   const dispatchUrl =
@@ -85,23 +85,78 @@ Deno.serve(async (req) => {
       "X-GitHub-Api-Version": "2022-11-28",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ref: "main" }),
+    body: JSON.stringify({
+      ref: "main",
+      inputs: {
+        routine: routine || "dashboard",
+        agent_id: agentId || "",
+      },
+    }),
   });
 
   if (!ghRes.ok) {
     const detail = await ghRes.text();
     console.error("GitHub workflow dispatch failed:", ghRes.status, detail);
-    return new Response(
-      JSON.stringify({ ok: false, error: "github_dispatch_failed", status: ghRes.status }),
-      { status: 502, headers: cors },
-    );
+    return { ok: false, error: "github_dispatch_failed", status: ghRes.status };
   }
 
-  return new Response(
-    JSON.stringify({
-      ok: true,
-      message: "Dashboard-Neuberechnung gestartet. Live in ca. 1–3 Minuten.",
-    }),
-    { status: 200, headers: cors },
-  );
+  return {
+    ok: true,
+    message: "Neuberechnung gestartet — in ca. 1–3 Minuten neu laden.",
+    via: "github",
+  };
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: cors });
+  }
+
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ ok: false, error: "method_not_allowed" }), {
+      status: 405,
+      headers: cors,
+    });
+  }
+
+  const gate = await requireAdmin(req.headers.get("Authorization"));
+  if (!gate.ok) {
+    return new Response(JSON.stringify({ ok: false, error: gate.error }), {
+      status: gate.status,
+      headers: cors,
+    });
+  }
+
+  let agentId: string | null = null;
+  try {
+    const body = await req.json();
+    agentId = typeof body?.agentId === "string" ? body.agentId : null;
+  } catch {
+    agentId = null;
+  }
+
+  const routine = (agentId && AGENT_ROUTINES[agentId]) || "dashboard";
+
+  try {
+    const n8nResult = await triggerN8nRefresh(routine, agentId);
+    if (n8nResult) {
+      return new Response(
+        JSON.stringify({
+          ok: true,
+          message: "Routine auf dem VPS gestartet — in ca. 1–2 Minuten neu laden.",
+          routine,
+          agentId,
+          via: "n8n",
+        }),
+        { status: 200, headers: cors },
+      );
+    }
+  } catch (err) {
+    console.error("n8n refresh failed:", err);
+  }
+
+  const ghResult = await triggerGithubRefresh(routine, agentId);
+  const status = ghResult.ok ? 200 : ghResult.error === "github_pat_missing" ? 503 : 502;
+
+  return new Response(JSON.stringify(ghResult), { status, headers: cors });
 });
