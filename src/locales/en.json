@@ -716,6 +716,36 @@
     "progressHint": "Counties {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
     "yourRank": "Mississippi rank"
   },
+  "cityRanksWien": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Melange Newbie" },
+    "3": { "name": "Viennese Rookie" },
+    "4": { "name": "Danube Captain" },
+    "5": { "name": "Vienna Expert" },
+    "6": { "name": "True Viennese" },
+    "7": { "name": "District Boss" },
+    "8": { "name": "King of Vienna" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Vienna rank — all 23 districts & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Districts {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Vienna rank"
+  },
+  "cityRanksParis": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Baguette Newbie" },
+    "3": { "name": "Parisien(ne) en herbe" },
+    "4": { "name": "Seine Captain" },
+    "5": { "name": "Paris Expert" },
+    "6": { "name": "True Parisian" },
+    "7": { "name": "Arrondissement Boss" },
+    "8": { "name": "Roi/Raine de Paris" },
+    "fallback": "Tourist",
+    "maxReached": "Highest Paris rank — all 20 arrondissements & trophies!",
+    "progressTo": "{percent}% to {name}",
+    "progressHint": "Arrondissements {districts}/{totalDistricts} · Trophies {trophies}/{totalTrophies}",
+    "yourRank": "Paris rank"
+  },
   "trophiesEurope": {
     "eu_founding_perfect": {
       "name": "EU Founding Fathers",
@@ -808,6 +838,34 @@
       "unlockTitle": "County Champion 🏛️",
       "desc": "Name all 82 counties of Mississippi in the challenge.",
       "unlockDesc": "All 82 counties named in the challenge!"
+    }
+  },
+  "trophiesWien": {
+    "paradise_explorer": {
+      "name": "Favoriten Explorer!",
+      "unlockTitle": "Favoriten Explorer! 🌴",
+      "desc": "Correctly tap \"Favoriten\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified Favoriten for the first time."
+    },
+    "meister_alle_bezirke": {
+      "name": "District Champion",
+      "unlockTitle": "District Champion 🏛️",
+      "desc": "Name all 23 Vienna districts in the challenge.",
+      "unlockDesc": "All 23 districts named in the challenge!"
+    }
+  },
+  "trophiesParis": {
+    "paradise_explorer": {
+      "name": "11th Explorer!",
+      "unlockTitle": "11th Explorer! 🌴",
+      "desc": "Correctly tap \"11e arrondissement\" for the first time — in any mode.",
+      "unlockDesc": "You correctly identified the 11e arrondissement for the first time."
+    },
+    "meister_alle_bezirke": {
+      "name": "Arrondissement Champion",
+      "unlockTitle": "Arrondissement Champion 🏛️",
+      "desc": "Name all 20 Paris arrondissements in the challenge.",
+      "unlockDesc": "All 20 arrondissements named in the challenge!"
     }
   },
   "trophiesBerlin": {
@@ -970,6 +1028,8 @@
     "defaultOrtschaftRavensburg": "One of the four official villages of Ravensburg.",
     "defaultCountryEurope": "A sovereign state in Europe.",
     "defaultCountyMississippi": "A county in the state of Mississippi.",
+    "defaultBezirkWien": "A Viennese district with its own distinct character.",
+    "defaultArrondissementParis": "A Parisian arrondissement with its own neighbourhood flair.",
     "locatedIn": "{name} is in the borough of {bezirk}.",
     "templates": {
       "Altona": [
@@ -1044,7 +1104,50 @@
       "Gerresheim": ["District 7 — east: Gerresheim, Grafenberg, Ludenberg, Hubbelrath and Knittkuhl.", "Once an independent town — today with basilica and lively centre.", "Hilly location on the edge of the Bergisches Land."],
       "Eller": ["District 8 — south-east: Eller, Lierenfeld, Vennhausen and Unterbach.", "Ellersee and nearby recreation areas attract residents.", "A good mix of housing and light industry."],
       "Benrath": ["District 9 — the large southern district: Benrath, Wersten, Urdenbach and Holthausen.", "Benrath Palace and its park are landmarks.", "Many detached homes and quiet suburbs on the city edge."],
-      "Garath": ["District 10 — Garath and Hellerhof in the far south.", "Large post-war housing estates shape the area.", "Strong neighbourhood communities and civic engagement."]
+      "Garath": ["District 10 — Garath and Hellerhof in the far south.", "Large post-war housing estates shape the area.", "Strong neighbourhood communities and civic engagement."],
+      "Innere Stadt": ["District 1 — where tourists photograph St. Stephen's and locals know which alley leads to the best Melange.", "Barely 17,000 residents but millions of footsteps on the Graben.", "Hofburg, State Opera, coffee-house culture: Vienna performing for the world."],
+      "Leopoldstadt": ["District 2 — Prater, Danube Canal, Augarten: pleasure meets bohemia.", "Once Vienna's Jewish centre, now a lively mix of creatives, families, and night owls.", "Residents know the Ferris wheel soundtrack and the best canal spot at sunset."],
+      "Landstraße": ["District 3 — Belvedere, embassies, and elegant old buildings between centre and Danube.", "Rasumofsky Palace, Swiss Garden: diplomatic flair meets real neighbourhood life.", "People here say Landstraße and mean: Vienna can be very grand indeed."],
+      "Wieden": ["District 4 — Karlskirche, Naschmarkt, Freihaus quarter: scene meets tradition.", "Small district, big personality — from opera ball to Saturday flea market.", "Market visitors, coffee-house regulars, and students share the same streets."],
+      "Margareten": ["District 5 — workers' quarter with heart, behind the Gürtel but in the middle of the city.", "Matzleinsdorfer Platz, Reumannplatz: real Viennese live here.", "Compact, down-to-earth, and proud — the 5th is the underdog with charm."],
+      "Mariahilf": ["District 6 — Mariahilfer Straße, Naschmarkt edge, creative scene in side streets.", "Shopping mile by day, pubs and studios by night — the 6th pulses.", "Locals know the best Naschmarkt hour is the one tourists sleep through."],
+      "Neubau": ["District 7 — Museumsquartier, Spittelberg: Vienna's creative hotspot.", "Artists, start-ups, and late-night coffee houses — Kreuzberg with Sachertorte.", "People who were in Vienna before it went mainstream live here."],
+      "Josefstadt": ["District 8 — theatre, palaces, smallest by area but huge on culture.", "Josefstadt Theatre, border with Alsergrund: intellectuals and old-building lovers.", "If you know the 8th, you take culture seriously."],
+      "Alsergrund": ["District 9 — Medical University, General Hospital, Gründerzeit: students, doctors, families.", "Franzensgasse, Liechtensteinstraße: Vienna's knowledge and residential quarter.", "Residents know the hospital alarm clock and still love the tram."],
+      "Favoriten": ["District 10 — Vienna's most populous: Favoriten, Oberlaa, Inzersdorf — pure diversity.", "From Südbahnhof to Oberlaa spa: more people than some Austrian provinces.", "Down-to-earth, multicultural, and a Heuriger or döner for every taste."],
+      "Simmering": ["District 11 — Gasometers, industry, and the Central Cemetery: the 11th has depth.", "Simmeringers say see you again and mean the cemetery — Vienna's largest green space.", "Residents with humour who know the 11th is a world of its own."],
+      "Meidling": ["District 12 — Meidling Längenfeld, Hetzendorf Palace, Philadelphia Bridge.", "Workers' quarter with history — people have always worked and lived here.", "The district everyone knows because the station is named after it."],
+      "Hietzing": ["District 13 — Schönbrunn Palace, Lainzer Tiergarten, villa quarters.", "Imperial splendour meets local railway charm — Vienna's green oasis.", "Residents use the game reserve as a garden and still take the tram."],
+      "Penzing": ["District 14 — Baumgartner Höhe, Technical Museum, Vienna's west.", "Breitensee, Hütteldorf: nature, history, and suburban idyll.", "Locals swear by Auer-Welsbach Park and every shortcut to Hütteldorf station."],
+      "Rudolfsheim-Fünfhaus": ["District 15 — Westbahnhof, Reindorf, Gürtel: arrive, live, move on.", "Multicultural, lively, sometimes loud — Vienna's melting pot at Westbahnhof.", "Three languages on the street is normal life here."],
+      "Ottakring": ["District 16 — Brunnenmarkt, Yppenplatz, highest immigrant share in Vienna.", "Brunnen quarter: colourful, loud, and warm-hearted.", "Saturday Brunnenmarkt is where Vienna tastes most honest."],
+      "Hernals": ["District 17 — Dornbach, Neuwaldegg, Kalvarienberg: green and Gründerzeit.", "Hernalser Hauptstraße: the quiet neighbour of the 16th.", "Families who treat Türkenschanzpark as their backyard."],
+      "Währing": ["District 18 — university, Pötzleinsdorf, Schubertpark.", "Academics, old buildings, Tiefenbach: Vienna's intelligence quarter.", "Most residents studied — or live next to someone who does."],
+      "Döbling": ["District 19 — Grinzing, Kahlenberg, Heurigen: wine and views.", "Everyone drives here on Sunday — except those who live here.", "Kahlenberg as terrace, Heurigen as living room."],
+      "Brigittenau": ["District 20 — between Danube Canal and Danube: compact and connected.", "Workers' quarter with water views.", "Canal as beach, Brigittenauer Bridge as neighbourhood border."],
+      "Floridsdorf": ["District 21 — Franz-Jonas-Platz, Nordbahn, Danube shore.", "Large estates and real Viennese suburb — the 21st has space.", "Floridsdorf means: Vienna doesn't end here, it really begins."],
+      "Donaustadt": ["District 22 — UNO-City, Danube Island, Seestadt Aspern: Vienna's newest and largest.", "New builds, water, future — already inhabited today.", "Pioneers who use the island as a park and UNO-City as a neighbour."],
+      "Liesing": ["District 23 — Vienna's southernmost: Atzgersdorf, Mauer, Rodaun.", "Liesing basin, Mauer-Ohlsdorf: green, quiet, proud of its number.", "We are Vienna — even when the rest forgets we exist."],
+      "1er arrondissement": ["The 1st — Louvre, Tuileries, Palais-Royal: tourists, kings (once), and luxury.", "Smallest area, highest rents — locals know every concierge.", "Paris starts at the Louvre — locals often stop at the border to the 2nd."],
+      "2e arrondissement": ["The 2nd — Bourse, Grands Boulevards, Sentier: business and bohemia side by side.", "Paris stock exchange, passages, tech start-ups: compact and growing.", "Montorgueil as supermarket, Bourse as landmark."],
+      "3e arrondissement": ["The 3rd — Temple, northern Marais, Archives: history in every cobblestone.", "Picasso Museum, Rue de Bretagne: the Marais before it got expensive.", "Creatives who know the real Marais is still in the 3rd and 4th."],
+      "4e arrondissement": ["The 4th — Hôtel-de-Ville, Île de la Cité, Marais: heart of historic Paris.", "Notre-Dame, Place des Vosges, Rue des Rosiers: Paris on a postcard.", "Sunday flea market every week — and they still pay rent."],
+      "5e arrondissement": ["The 5th — Panthéon, Latin Quarter, Sorbonne: students, professors, eternal youth.", "Bouquinistes, Rue Mouffetard: smells of Gauloises and crêpes.", "Still feel young at 40 — still go to the Sorbonne at 60."],
+      "6e arrondissement": ["The 6th — Luxembourg, Saint-Germain, Odéon: intellectuals and expensive cafés.", "Luxembourg Garden, Café de Flore: Paris taking itself seriously.", "Quote Sartre and still sprint to the bakery at 8 a.m."],
+      "7e arrondissement": ["The 7th — National Assembly, Eiffel Tower, Invalides: power, military, tourists.", "Champ-de-Mars: official yet residential.", "Diplomats tired of the Eiffel Tower view."],
+      "8e arrondissement": ["The 8th — Élysée, Champs-Élysées, Madeleine: luxury, power, perfume.", "Presidential palace, Grand Palais: Paris in black tie.", "Avoid the Champs-Élysées — except when visitors come."],
+      "9e arrondissement": ["The 9th — Opéra, Grands Boulevards, north Pigalle: theatre, department stores, nightlife.", "Galeries Lafayette, Folies Bergère: glittering and busy.", "Pigalle as neighbour and still up early."],
+      "10e arrondissement": ["The 10th — Canal Saint-Martin, Gare du Nord: arrive and stay.", "Canal, bridges, pubs: Kreuzberg with better baguette.", "Canal picnics and knowing which bridge glows best."],
+      "11e arrondissement": ["The 11th — Bastille, Oberkampf: rebel bohemia meets organic bakery.", "Rue de la Roquette, Place de la Bastille: loud and lovable.", "A bar at 2 a.m. and the best croissant bakery at 8."],
+      "12e arrondissement": ["The 12th — Reuilly, Bercy, Bois de Vincennes: green, station, residential.", "Opéra Bastille, Coulée verte: diverse and sprawling.", "Bois de Vincennes as garden, Bastille as neighbour."],
+      "13e arrondissement": ["The 13th — Gobelins, Butte-aux-Cailles, Chinatown: multicultural and rising.", "National Library, Olympiade: Paris's south-east with character.", "Dim sum for breakfast, Butte-aux-Cailles as insider tip."],
+      "14e arrondissement": ["The 14th — Observatoire, Montparnasse, Denfert: artists, catacombs, coffee.", "Catacombs, Montparnasse Tower: depth — literally and figuratively.", "Montparnasse Tower as compass, catacombs as neighbours."],
+      "15e arrondissement": ["The 15th — Vaugirard, Beaugrenelle: Paris's most populous arrondissement.", "Eiffel views, Convention: pure residential — 232,000 residents.", "Live in Paris without being a tourist every day."],
+      "16e arrondissement": ["The 16th — Passy, Trocadéro, Bois de Boulogne: villas, diplomats, Eiffel views.", "Palais de Chaillot, Avenue Foch: Paris's posh quarter.", "Jog in the Bois and still take the metro."],
+      "17e arrondissement": ["The 17th — Batignolles, Parc Monceau: families and Batignolles bohemia.", "Batignolles market and square: green and bourgeois.", "Batignolles as village, Monceau as park."],
+      "18e arrondissement": ["The 18th — Montmartre, Sacré-Cœur, Barbès: artists, tourists, real Parisians.", "Place du Tertre, Abbesses: all the clichés and real life.", "Sacré-Cœur as neighbour and still rush for the metro."],
+      "19e arrondissement": ["The 19th — Buttes-Chaumont, La Villette: green, culture, diversity.", "Buttes-Chaumont park, Philharmonie: Paris's green north-east.", "Park as living room, La Villette as cinema."],
+      "20e arrondissement": ["The 20th — Ménilmontant, Père-Lachaise: cemetery, street art, bohemia.", "Père-Lachaise, Rue de Ménilmontant: Paris's last real neighbourhood.", "Jim Morrison as neighbour — and still paying rent."]
     },
     "specific": {
       "St. Pauli": "Home to the famous Kiez (neighborhood), the Reeperbahn, and FC St. Pauli. Once a suburb outside Hamburg's city limits.",
@@ -1110,6 +1213,10 @@
     "emptyCountryEurope": "Click a country on the map of Europe to discover population, area and capital!",
     "emptyCountyMississippi": "Click a county on the Mississippi map to discover population and area!",
     "countiesMississippi": "Counties ({count})",
+    "emptyBezirkWien": "Click a district on the Vienna map to discover population, area, and neighbourhood stories!",
+    "bezirkeWien": "Districts ({count})",
+    "emptyArrondissementParis": "Click an arrondissement on the Paris map to discover population, area, and neighbourhood stories!",
+    "arrondissementsParis": "Arrondissements ({count})",
     "emptyCapitalEurope": "Click a country to see its capital and facts!",
     "capitalsEurope": "Capital",
     "emptyStadtteil": "Click a district on the map to see fascinating metadata and Hanseatic facts!",
@@ -1495,6 +1602,26 @@
       "singular": {
         "county": "County"
       }
+    },
+    "wien": {
+      "greeting": "Servus Vienna!",
+      "blurb": "23 districts",
+      "levels": {
+        "bezirke": "Districts"
+      },
+      "singular": {
+        "bezirk": "District"
+      }
+    },
+    "paris": {
+      "greeting": "Bonjour Paris!",
+      "blurb": "20 arrondissements",
+      "levels": {
+        "arrondissements": "Arrondissements"
+      },
+      "singular": {
+        "arrondissement": "Arrondissement"
+      }
     }
   },
   "aboutPage": {
@@ -1512,7 +1639,7 @@
     "modesTitle": "Game modes",
     "modesBody": "Explorer mode for free discovery, map quiz for clicking, detective for searching, challenge under time pressure and typing mode — something for every learning style.",
     "citiesTitle": "Cities & wishes",
-    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Munich, Düsseldorf and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
+    "citiesBody": "Currently playable: Hamburg, Berlin, Frankfurt am Main, Munich, Düsseldorf, Vienna, Paris and Europe. Missing your city? Drop a city wish in the hub — we're listening.",
     "privacyTitle": "Privacy",
     "privacyBody": "Without an account, your progress is stored locally in the browser only. With an optional account, email, username and save data are transmitted via TLS and stored with Supabase (EU); passwords are hashed. Full details in the <a href=\"/datenschutz/\">privacy policy</a>.",
     "licensesTitle": "Open source & licences",

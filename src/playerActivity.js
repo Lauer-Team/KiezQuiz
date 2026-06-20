@@ -3,7 +3,7 @@
  */
 (function () {
   const VALID_CITIES = new Set([
-    'hamburg', 'berlin', 'frankfurt', 'muenchen', 'duesseldorf', 'ravensburg', 'europe', 'mississippi'
+    'hamburg', 'berlin', 'frankfurt', 'muenchen', 'duesseldorf', 'ravensburg', 'europe', 'mississippi', 'wien', 'paris'
   ]);
 
   function getSupabase() {

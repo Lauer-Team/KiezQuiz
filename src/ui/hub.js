@@ -9,9 +9,11 @@
     duesseldorf: ['Altstadt', 'Unterbilk', 'Oberkassel', 'Benrath', 'Golzheim', 'Flingern', 'Derendorf', 'Kaisersw.', 'Hafen', 'Heerdt', 'Stockum', 'Gerresheim'],
     ravensburg: ['Ravensburg', 'Veitsburg', 'Weißenau', 'Obereschach', 'Gornhofen', 'Schmalegg', 'Oberzell', 'Bavendorf', 'Taldorf', 'Adelsreute', 'Eschach', 'Spetzel'],
     europe: ['Paris', 'London', 'Berlin', 'Madrid', 'Rom', 'Wien', 'Amsterdam', 'Brüssel', 'Prag', 'Warschau', 'Stockholm', 'Oslo'],
-    mississippi: ['Jackson', 'Hinds', 'Harrison', 'DeSoto', 'Madison', 'Rankin', 'Lee', 'Lauderdale', 'Forrest', 'Adams', 'Warren', 'Washington']
+    mississippi: ['Jackson', 'Hinds', 'Harrison', 'DeSoto', 'Madison', 'Rankin', 'Lee', 'Lauderdale', 'Forrest', 'Adams', 'Warren', 'Washington'],
+    wien: ['Innere Stadt', 'Leopoldstadt', 'Favoriten', 'Simmering', 'Neubau', 'Mariahilf', 'Hietzing', 'Döbling', 'Ottakring', 'Floridsdorf', 'Donaustadt', 'Meidling'],
+    paris: ['Louvre', 'Marais', 'Montmartre', 'Bastille', 'Latin Quarter', 'Saint-Germain', 'Champs-Élysées', 'Belleville', 'Pigalle', 'République', 'Oberkampf', 'Passy']
   };
-  const PREVIEW_IDX = { hamburg: 4, berlin: 1, frankfurt: 6, muenchen: 2, duesseldorf: 0, ravensburg: 3, europe: 2, mississippi: 0 };
+  const PREVIEW_IDX = { hamburg: 4, berlin: 1, frankfurt: 6, muenchen: 2, duesseldorf: 0, ravensburg: 3, europe: 2, mississippi: 0, wien: 9, paris: 10 };
   const PREVIEW_LAKE = { hamburg: true };
   const MAP_PREVIEW_CACHE = new Map();
 

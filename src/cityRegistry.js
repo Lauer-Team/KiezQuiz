@@ -14,6 +14,7 @@
     countries: 'BEZIRKE',
     capitals: 'STADTTEILE',
     counties: 'BEZIRKE',
+    arrondissements: 'BEZIRKE',
     orschaften: 'BEZIRKE',
     wohnbezirke: 'STADTTEILE'
   };

@@ -368,6 +368,28 @@
           'Tap circles now respond to clicks in all game modes'
         ]
       }
+    },
+    {
+      date: '2026-06-20',
+      version: '1.8.0',
+      de: {
+        title: 'Wien & Paris',
+        items: [
+          'Neu spielbar: Wien mit allen 23 Bezirken — vom 1. (Innere Stadt) bis zum 23. (Liesing)',
+          'Neu spielbar: Paris mit allen 20 Arrondissements — vom 1er bis zum 20e',
+          'Kiez-Trivia zu jedem Bezirk und Arrondissement: wer wohnt wo, was ist typisch?',
+          'Eigene Stadt-Ränge, Pokale und SEO-Seiten unter /wien/ und /paris/'
+        ]
+      },
+      en: {
+        title: 'Vienna & Paris',
+        items: [
+          'Now playable: Vienna with all 23 districts — from the 1st (Innere Stadt) to the 23rd (Liesing)',
+          'Now playable: Paris with all 20 arrondissements — from the 1st to the 20th',
+          'Neighbourhood trivia for every district and arrondissement',
+          'City ranks, trophies, and SEO pages at /wien/ and /paris/'
+        ]
+      }
     }
   ];
 

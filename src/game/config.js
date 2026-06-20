@@ -120,6 +120,26 @@ const CITY_LOCALE_CONFIG = {
     subdistricts: 'explorer.countiesMississippi',
     specialIds: ['paradise_explorer', 'meister_alle_bezirke'],
     detailUnit: 'County'
+  },
+  wien: {
+    rankKey: 'cityRanksWien',
+    trophyNs: 'trophiesWien',
+    defaultBezirkTrivia: 'trivia.defaultBezirkWien',
+    emptyBezirk: 'explorer.emptyBezirkWien',
+    emptyDetail: 'explorer.emptyBezirkWien',
+    subdistricts: 'explorer.bezirkeWien',
+    specialIds: ['paradise_explorer', 'meister_alle_bezirke'],
+    detailUnit: 'Bezirk'
+  },
+  paris: {
+    rankKey: 'cityRanksParis',
+    trophyNs: 'trophiesParis',
+    defaultBezirkTrivia: 'trivia.defaultArrondissementParis',
+    emptyBezirk: 'explorer.emptyArrondissementParis',
+    emptyDetail: 'explorer.emptyArrondissementParis',
+    subdistricts: 'explorer.arrondissementsParis',
+    specialIds: ['paradise_explorer', 'meister_alle_bezirke'],
+    detailUnit: 'Arrondissement'
   }
 };
 
@@ -220,6 +240,8 @@ function getCityDataArray(cityId) {
   if (key === 'RAVENSBURG_DATA' && typeof RAVENSBURG_DATA !== 'undefined') return RAVENSBURG_DATA;
   if (key === 'EUROPE_DATA' && typeof EUROPE_DATA !== 'undefined') return EUROPE_DATA;
   if (key === 'MISSISSIPPI_DATA' && typeof MISSISSIPPI_DATA !== 'undefined') return MISSISSIPPI_DATA;
+  if (key === 'WIEN_DATA' && typeof WIEN_DATA !== 'undefined') return WIEN_DATA;
+  if (key === 'PARIS_DATA' && typeof PARIS_DATA !== 'undefined') return PARIS_DATA;
   if (key === 'EUROPE_ISLAND_EGGS' && typeof EUROPE_ISLAND_EGGS !== 'undefined') return EUROPE_ISLAND_EGGS;
   if (typeof HAMBURG_DATA !== 'undefined') return HAMBURG_DATA;
   return [];

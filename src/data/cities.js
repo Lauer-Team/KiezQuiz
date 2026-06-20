@@ -271,6 +271,40 @@
       islandEasterEgg: 'europe'
     },
     {
+      id: 'wien',
+      name: 'Wien',
+      greetingKey: 'cities.wien.greeting',
+      blurbKey: 'cities.wien.blurb',
+      hue: 12,
+      status: 'playable',
+      levels: [
+        { key: 'bezirke', labelKey: 'cities.wien.levels.bezirke', singularKey: 'cities.wien.singular.bezirk', tierKey: 'cities.tier.overview', count: 23 }
+      ],
+      dataGlobal: 'WIEN_DATA',
+      mapSvg: 'src/data/wien_map.svg',
+      progression: typeof WIEN_BEZIRKE_PROGRESSION !== 'undefined' ? WIEN_BEZIRKE_PROGRESSION : [],
+      trophyCatalog: 'wien',
+      totalTrophies: 25,
+      paradiseTarget: 'Favoriten'
+    },
+    {
+      id: 'paris',
+      name: 'Paris',
+      greetingKey: 'cities.paris.greeting',
+      blurbKey: 'cities.paris.blurb',
+      hue: 268,
+      status: 'playable',
+      levels: [
+        { key: 'arrondissements', labelKey: 'cities.paris.levels.arrondissements', singularKey: 'cities.paris.singular.arrondissement', tierKey: 'cities.tier.overview', count: 20 }
+      ],
+      dataGlobal: 'PARIS_DATA',
+      mapSvg: 'src/data/paris_map.svg',
+      progression: typeof PARIS_ARRONDISSEMENTS_PROGRESSION !== 'undefined' ? PARIS_ARRONDISSEMENTS_PROGRESSION : [],
+      trophyCatalog: 'paris',
+      totalTrophies: 22,
+      paradiseTarget: '11e arrondissement'
+    },
+    {
       id: 'mississippi',
       name: 'Mississippi',
       greetingKey: 'cities.mississippi.greeting',

@@ -1,0 +1,164 @@
+const WIEN_DATA = [
+  {
+    "name": "Innere Stadt",
+    "bezirk": "Innere Stadt",
+    "bezirk_nr": "1",
+    "area_km2": "2,88",
+    "population": "16.500"
+  },
+  {
+    "name": "Leopoldstadt",
+    "bezirk": "Leopoldstadt",
+    "bezirk_nr": "2",
+    "area_km2": "19,27",
+    "population": "105.000"
+  },
+  {
+    "name": "Landstraße",
+    "bezirk": "Landstraße",
+    "bezirk_nr": "3",
+    "area_km2": "7,42",
+    "population": "98.000"
+  },
+  {
+    "name": "Wieden",
+    "bezirk": "Wieden",
+    "bezirk_nr": "4",
+    "area_km2": "1,80",
+    "population": "32.000"
+  },
+  {
+    "name": "Margareten",
+    "bezirk": "Margareten",
+    "bezirk_nr": "5",
+    "area_km2": "2,06",
+    "population": "54.000"
+  },
+  {
+    "name": "Mariahilf",
+    "bezirk": "Mariahilf",
+    "bezirk_nr": "6",
+    "area_km2": "1,48",
+    "population": "31.000"
+  },
+  {
+    "name": "Neubau",
+    "bezirk": "Neubau",
+    "bezirk_nr": "7",
+    "area_km2": "1,61",
+    "population": "31.000"
+  },
+  {
+    "name": "Josefstadt",
+    "bezirk": "Josefstadt",
+    "bezirk_nr": "8",
+    "area_km2": "1,09",
+    "population": "24.000"
+  },
+  {
+    "name": "Alsergrund",
+    "bezirk": "Alsergrund",
+    "bezirk_nr": "9",
+    "area_km2": "2,99",
+    "population": "42.000"
+  },
+  {
+    "name": "Favoriten",
+    "bezirk": "Favoriten",
+    "bezirk_nr": "10",
+    "area_km2": "31,80",
+    "population": "208.000"
+  },
+  {
+    "name": "Simmering",
+    "bezirk": "Simmering",
+    "bezirk_nr": "11",
+    "area_km2": "23,23",
+    "population": "105.000"
+  },
+  {
+    "name": "Meidling",
+    "bezirk": "Meidling",
+    "bezirk_nr": "12",
+    "area_km2": "8,16",
+    "population": "98.000"
+  },
+  {
+    "name": "Hietzing",
+    "bezirk": "Hietzing",
+    "bezirk_nr": "13",
+    "area_km2": "37,70",
+    "population": "55.000"
+  },
+  {
+    "name": "Penzing",
+    "bezirk": "Penzing",
+    "bezirk_nr": "14",
+    "area_km2": "33,88",
+    "population": "99.000"
+  },
+  {
+    "name": "Rudolfsheim-Fünfhaus",
+    "bezirk": "Rudolfsheim-Fünfhaus",
+    "bezirk_nr": "15",
+    "area_km2": "1,80",
+    "population": "66.000"
+  },
+  {
+    "name": "Ottakring",
+    "bezirk": "Ottakring",
+    "bezirk_nr": "16",
+    "area_km2": "5,66",
+    "population": "104.000"
+  },
+  {
+    "name": "Hernals",
+    "bezirk": "Hernals",
+    "bezirk_nr": "17",
+    "area_km2": "11,39",
+    "population": "61.000"
+  },
+  {
+    "name": "Währing",
+    "bezirk": "Währing",
+    "bezirk_nr": "18",
+    "area_km2": "6,28",
+    "population": "51.000"
+  },
+  {
+    "name": "Döbling",
+    "bezirk": "Döbling",
+    "bezirk_nr": "19",
+    "area_km2": "24,90",
+    "population": "75.000"
+  },
+  {
+    "name": "Brigittenau",
+    "bezirk": "Brigittenau",
+    "bezirk_nr": "20",
+    "area_km2": "5,67",
+    "population": "87.000"
+  },
+  {
+    "name": "Floridsdorf",
+    "bezirk": "Floridsdorf",
+    "bezirk_nr": "21",
+    "area_km2": "44,46",
+    "population": "165.000"
+  },
+  {
+    "name": "Donaustadt",
+    "bezirk": "Donaustadt",
+    "bezirk_nr": "22",
+    "area_km2": "44,36",
+    "population": "208.000"
+  },
+  {
+    "name": "Liesing",
+    "bezirk": "Liesing",
+    "bezirk_nr": "23",
+    "area_km2": "32,00",
+    "population": "112.000"
+  }
+];
+window.WIEN_DATA = WIEN_DATA;

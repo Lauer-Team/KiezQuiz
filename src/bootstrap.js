@@ -21,6 +21,8 @@
     'src/data/ravensburg_data.js',
     'src/data/europe_data.js',
     'src/data/mississippi_data.js',
+    'src/data/wien_data.js',
+    'src/data/paris_data.js',
     'src/data/europe_islands.js',
     'src/data/europe_microstates.js',
     'src/ui/cityDashboard.js',

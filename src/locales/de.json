@@ -716,6 +716,36 @@
     "progressHint": "Countys {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
     "yourRank": "Mississippi-Rang"
   },
+  "cityRanksWien": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Melange-Neuling" },
+    "3": { "name": "Wiener Jung / Maus" },
+    "4": { "name": "Donau-Kapitän" },
+    "5": { "name": "Wien-Experte" },
+    "6": { "name": "Ur-Wiener" },
+    "7": { "name": "Bezirks-Babo" },
+    "8": { "name": "König von Wien" },
+    "fallback": "Tourist",
+    "maxReached": "Höchster Wien-Rang — alle 23 Bezirke & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Bezirke {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Wien-Rang"
+  },
+  "cityRanksParis": {
+    "1": { "name": "Tourist" },
+    "2": { "name": "Baguette-Neuling" },
+    "3": { "name": "Parisien(ne) en herbe" },
+    "4": { "name": "Seine-Kapitän" },
+    "5": { "name": "Paris-Experte" },
+    "6": { "name": "Ur-Parisien" },
+    "7": { "name": "Arrondissement-Babo" },
+    "8": { "name": "Roi/Raine de Paris" },
+    "fallback": "Tourist",
+    "maxReached": "Höchster Paris-Rang — alle 20 Arrondissements & Pokale!",
+    "progressTo": "{percent}% bis {name}",
+    "progressHint": "Arrondissements {districts}/{totalDistricts} · Pokale {trophies}/{totalTrophies}",
+    "yourRank": "Paris-Rang"
+  },
   "trophiesEurope": {
     "eu_founding_perfect": {
       "name": "Gründerväter der EU",
@@ -808,6 +838,34 @@
       "unlockTitle": "County-Champion 🏛️",
       "desc": "Benenne alle 82 Countys von Mississippi in der Challenge.",
       "unlockDesc": "Alle 82 Countys in der Challenge benannt!"
+    }
+  },
+  "trophiesWien": {
+    "paradise_explorer": {
+      "name": "Favoriten-Entdecker!",
+      "unlockTitle": "Favoriten-Entdecker! 🌴",
+      "desc": "Tippe „Favoriten“ zum ersten Mal richtig — in einem beliebigen Modus.",
+      "unlockDesc": "Du hast Favoriten zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_bezirke": {
+      "name": "Bezirks-Champion",
+      "unlockTitle": "Bezirks-Champion 🏛️",
+      "desc": "Benenne alle 23 Wiener Bezirke in der Challenge.",
+      "unlockDesc": "Alle 23 Bezirke in der Challenge benannt!"
+    }
+  },
+  "trophiesParis": {
+    "paradise_explorer": {
+      "name": "11e-Entdecker!",
+      "unlockTitle": "11e-Entdecker! 🌴",
+      "desc": "Tippe „11e arrondissement“ zum ersten Mal richtig — in einem beliebigen Modus.",
+      "unlockDesc": "Du hast das 11e arrondissement zum ersten Mal richtig erkannt."
+    },
+    "meister_alle_bezirke": {
+      "name": "Arrondissement-Champion",
+      "unlockTitle": "Arrondissement-Champion 🏛️",
+      "desc": "Benenne alle 20 Pariser Arrondissements in der Challenge.",
+      "unlockDesc": "Alle 20 Arrondissements in der Challenge benannt!"
     }
   },
   "trophiesBerlin": {
@@ -970,6 +1028,8 @@
     "defaultOrtschaftRavensburg": "Eine der vier Ortschaften der Großen Kreisstadt Ravensburg.",
     "defaultCountryEurope": "Ein souveräner Staat in Europa.",
     "defaultCountyMississippi": "Ein County im Bundesstaat Mississippi.",
+    "defaultBezirkWien": "Ein Wiener Gemeindebezirk mit ganz eigenem Charakter.",
+    "defaultArrondissementParis": "Ein Pariser Arrondissement mit ganz eigenem Kiez-Flair.",
     "locatedIn": "{name} liegt im herrlichen Bezirk {bezirk}.",
     "templates": {
       "Altona": [
@@ -1196,6 +1256,221 @@
         "Stadtbezirk 10 — mit Garath und Hellerhof im Süden Düsseldorfs.",
         "Großsiedlungen der Nachkriegsmoderne prägen das Bild.",
         "Engagierte Nachbarschaften und viel Gemeinschaftsleben."
+      ],
+      "Innere Stadt": [
+        "Der 1. Bezirk — wo Touristen den Stephansdom fotografieren und Einheimische wissen, welche Gasse zum nächsten Melange führt.",
+        "Kaum 17.000 Einwohner, aber Millionen Schuhe auf dem Graben — Wiens kleinster und teuerster Bezirk.",
+        "Hofburg, Staatsoper, Kaffeehauskultur: Hier wohnt die Stadt, die sich selbst für die Welt inszeniert."
+      ],
+      "Leopoldstadt": [
+        "Der 2. Bezirk — Prater, Donaukanal und der Augarten: Hier trifft Vergnügung auf Bohème.",
+        "Einst jüdisches Zentrum Wiens, heute lebendiger Mix aus Kreativen, Familien und Nachtschwärmern.",
+        "Wer hier wohnt, kennt den Riesenrad-Soundtrack und die beste Stelle am Kanal zum Sonnenuntergang."
+      ],
+      "Landstraße": [
+        "Der 3. Bezirk — Belvedere, Botschaften und elegante Altbauten zwischen Zentrum und Donau.",
+        "Rasumofsky-Palais, Schweizergarten: Diplomaten-Flair trifft auf echte Nachbarschaft.",
+        "Hier wohnen Leute, die „Landstraße“ sagen und meinen: Wien kann auch sehr vornehm sein."
+      ],
+      "Wieden": [
+        "Der 4. Bezirk — Karlskirche, Naschmarkt und das Freihausviertel: Szene trifft auf Tradition.",
+        "Kleiner Bezirk, große Persönlichkeit — vom Opernball bis zum Flohmarkt am Samstag.",
+        "Naschmarkt-Besucher, Kaffeehaus-Stammgäste und Studierende teilen sich dieselben Gassen."
+      ],
+      "Margareten": [
+        "Der 5. Bezirk — Arbeiterviertel mit Herz, hinter dem Gürtel aber mitten in der Stadt.",
+        "Matzleinsdorfer Platz, Reumannplatz: Hier wohnen echte Wiener, nicht nur Postleitzahlen.",
+        "Kompakt, bodenständig und stolz — der 5er ist der Underdog mit Charme."
+      ],
+      "Mariahilf": [
+        "Der 6. Bezirk — Mariahilfer Straße, Naschmarktrand und Kreativszene in den Seitengassen.",
+        "Shopping-Meile tagsüber, Kneipen und Ateliers nachts — der 6er pulsiert.",
+        "Wer hier lebt, hat gelernt: Die beste Stunde am Naschmarkt ist die, die Touristen verschlafen."
+      ],
+      "Neubau": [
+        "Der 7. Bezirk — Museumsquartier, Spittelberg und der Siebener: Wiens Kreativ-Hotspot.",
+        "Künstler, Start-ups und Spätverdiener-Kaffeehäuser — der 7er ist Berlins Kreuzberg mit Sachertorte.",
+        "Hier wohnt, wer „schon immer in Wien war“, bevor es mainstream wurde."
+      ],
+      "Josefstadt": [
+        "Der 8. Bezirk — Theater, Palais und der kleinste Bezirk nach Fläche, aber mit großer Kultur.",
+        "Josefstädter Theater, Alsergrund-Grenze: Intellektuelle, Schauspieler und Altbau-Liebhaber.",
+        "Wer den 8er kennt, weiß: Hier beginnt Wien, wenn man Kultur ernst nimmt."
+      ],
+      "Alsergrund": [
+        "Der 9. Bezirk — MedUni, AKH und Gründerzeit: Studenten, Ärzte und Familien unter einem Dach.",
+        "Franzensgasse, Liechtensteinstraße: Der 9er ist Wiens Wissens- und Wohnviertel.",
+        "Hier wohnen Leute, die den AKH-Wecker kennen und trotzdem die Straßenbahn lieben."
+      ],
+      "Favoriten": [
+        "Der 10. Bezirk — Wiens bevölkerungsreichster: Favoriten, Oberlaa, Inzersdorf — Vielfalt pur.",
+        "Vom Südbahnhof bis zum Kurpark Oberlaa: Hier leben mehr Menschen als in manchen Bundesländern.",
+        "Der 10er ist bodenständig, multikulturell und hat für jeden Geschmack einen Heurigen oder Döner."
+      ],
+      "Simmering": [
+        "Der 11. Bezirk — Gasometer, Industrie und der Zentralfriedhof: Der 11er hat Tiefe.",
+        "„Bis wiedersieh'n“ sagen die Simmeringer und meinen den Friedhof — Wiens größte Grünfläche.",
+        "Hier wohnen Leute mit Humor, die wissen: Der 11er ist kein Randbezirk, sondern eine Welt für sich."
+      ],
+      "Meidling": [
+        "Der 12. Bezirk — Meidlinger Längenfeld, Schloss Hetzendorf und der Philadelphiabrücke.",
+        "Arbeiterviertel mit Geschichte — hier wurde schon immer gearbeitet und gelebt.",
+        "Der 12er ist der Bezirk, den alle kennen, weil der Bahnhof heißt, wie er heißt."
+      ],
+      "Hietzing": [
+        "Der 13. Bezirk — Schloss Schönbrunn, Lainzer Tiergarten und Villenviertel.",
+        "Kaiserlicher Glanz trifft auf Lokalbahn-Charme — der 13er ist Wiens grüne Oase.",
+        "Hier wohnen Leute, die den Tiergarten als Garten nutzen und trotzdem zur Straßenbahn gehen."
+      ],
+      "Penzing": [
+        "Der 14. Bezirk — Baumgartner Höhe, Technisches Museum und der Westen Wiens.",
+        "Breitensee, Hütteldorf: Der 14er verbindet Natur, Geschichte und Vorstadtidylle.",
+        "Wer hier lebt, schwört auf den Auer-Welsbach-Park und kennt jede Abkürzung zum Hütteldorfer Bahnhof."
+      ],
+      "Rudolfsheim-Fünfhaus": [
+        "Der 15. Bezirk — Westbahnhof, Reindorf und der Gürtel: Ankommen, Leben, Weiter.",
+        "Multikulturell, lebendig, manchmal laut — der 15er ist Wiens Schmelztiegel am Westbahnhof.",
+        "Hier wohnen Leute, die drei Sprachen auf der Straße hören und das als Normalität empfinden."
+      ],
+      "Ottakring": [
+        "Der 16. Bezirk — Brunnenmarkt, Yppenplatz und der höchste Anteil an Zuwanderern Wiens.",
+        "Brunnenviertel, Hernals-Grenze: Der 16er ist bunt, laut und herzlich.",
+        "Wer den Brunnenmarkt am Samstag kennt, weiß: Hier schmeckt Wien am ehrlichsten."
+      ],
+      "Hernals": [
+        "Der 17. Bezirk — Dornbach, Neuwaldegg und der Kalvarienberg: Grün und gründerzeitlich.",
+        "Hernalser Hauptstraße, Schafberg: Der 17er ist der ruhige Nachbar des 16ers.",
+        "Hier wohnen Familien, die den Türkenschanzpark als Hinterhof betrachten."
+      ],
+      "Währing": [
+        "Der 18. Bezirk — Universität, Pötzleinsdorf und der Schubertpark.",
+        "Akademiker, Altbauten und der Tiefenbach: Der 18er ist Wiens Intelligenzviertel.",
+        "Wer hier lebt, hat oft studiert — oder wohnt neben jemandem, der es tut."
+      ],
+      "Döbling": [
+        "Der 19. Bezirk — Grinzing, Kahlenberg und Heurigen: Wiens Wein und Aussicht.",
+        "Cobenzl, Nussdorf: Der 19er ist der Bezirk, in den alle am Sonntag fahren — außer denen, die dort wohnen.",
+        "Hier wohnen Leute, die den Kahlenberg als Terrasse und den Heurigen als Wohnzimmer kennen."
+      ],
+      "Brigittenau": [
+        "Der 20. Bezirk — Zwischen Donaukanal und Donau: Brigittenau und Zwischenbrücken.",
+        "Arbeiterviertel mit Wasserblick — der 20er ist kompakt und vernetzt.",
+        "Hier wohnen Leute, die den Donaukanal als Strand und die Brigittenauer Brücke als Nachbarschaftsgrenze kennen."
+      ],
+      "Floridsdorf": [
+        "Der 21. Bezirk — Donaustadt-Nachbar, Franz-Jonas-Platz und die Nordbahn.",
+        "Großsiedlungen, Donauufer und echte Wiener Vorstadt — der 21er hat Platz.",
+        "Wer hier lebt, sagt „Floridsdorf“ und meint: Wien endet hier nicht, hier fängt es erst richtig an."
+      ],
+      "Donaustadt": [
+        "Der 22. Bezirk — UNO-City, Donauinsel und Seestadt Aspern: Wiens jüngster und größter.",
+        "Neubau, Wasser, Zukunft: Der 22er ist die Stadt von morgen — schon heute bewohnt.",
+        "Hier wohnen Pioniere, die die Donauinsel als Freizeitpark und die UNO-City als Nachbar betrachten."
+      ],
+      "Liesing": [
+        "Der 23. Bezirk — Wiens südlichster: Atzgersdorf, Mauer, Rodaun — Randlage mit Charakter.",
+        "Liesinger Becken, Mauer-Ohlsdorf: Der 23er ist grün, ruhig und stolz auf seine Nummer.",
+        "Hier wohnen Leute, die sagen: Wir sind Wien — auch wenn der Rest manchmal vergisst, dass es uns gibt."
+      ],
+      "1er arrondissement": [
+        "Das 1er — Louvre, Tuilerien, Palais-Royal: Hier wohnen Touristen, Könige (früher) und Luxus.",
+        "Die kleinste Fläche, die höchsten Mieten — wer hier lebt, kennt jeden Concierge.",
+        "Paris beginnt am Louvre — und endet für Einheimische oft an der Grenze zum 2e."
+      ],
+      "2e arrondissement": [
+        "Das 2e — Bourse, Grands Boulevards, Sentier: Business und Bohème nebeneinander.",
+        "Die Pariser Börse, Passagen, Tech-Start-ups: Der 2er ist kompakt und wach.",
+        "Hier wohnen Leute, die Montorgueil als Supermarkt und die Bourse als Orientierungspunkt nutzen."
+      ],
+      "3e arrondissement": [
+        "Das 3e — Temple, Marais-Nord, Archives: Geschichte in jedem Pflasterstein.",
+        "Musée Picasso, Rue de Bretagne: Der 3er ist das Marais, bevor es teuer wurde.",
+        "Hier wohnen Kreative, die wissen: Der echte Marais-Kiez ist noch im 3e und 4e."
+      ],
+      "4e arrondissement": [
+        "Das 4e — Hôtel-de-Ville, Île de la Cité, Marais: Das Herz des historischen Paris.",
+        "Notre-Dame, Place des Vosges, Rue des Rosiers: Der 4er ist Paris wie auf der Postkarte.",
+        "Hier wohnen Leute, die jeden Sonntag am Flohmarkt vorbeigehen — und trotzdem wohnen."
+      ],
+      "5e arrondissement": [
+        "Das 5e — Panthéon, Quartier Latin, Sorbonne: Studenten, Professoren und ewige Jugend.",
+        "Bouquinisten, Rue Mouffetard: Der 5er riecht nach Gauloises und Crêpes.",
+        "Hier wohnen Menschen, die mit 40 noch „jeune“ fühlen — und mit 60 immer noch zur Sorbonne gehen."
+      ],
+      "6e arrondissement": [
+        "Das 6e — Luxembourg, Saint-Germain, Odéon: Intellektuelle, Literaten und teure Cafés.",
+        "Jardin du Luxembourg, Café de Flore: Der 6er ist Paris, wenn es sich selbst ernst nimmt.",
+        "Hier wohnen Leute, die Sartre zitiert und trotzdem um 8 Uhr zur Bäckerei rennen."
+      ],
+      "7e arrondissement": [
+        "Das 7e — Palais-Bourbon, Eiffelturm, Invalides: Macht, Militär und Millionen Touristen.",
+        "Assemblée nationale, Champ-de-Mars: Der 7er ist offiziell und trotzdem Wohnviertel.",
+        "Hier wohnen Diplomaten, Beamte und Nachbarn, die den Eiffelturm-Blick satt haben."
+      ],
+      "8e arrondissement": [
+        "Das 8e — Élysée, Champs-Élysées, Madeleine: Luxus, Macht und Parfüm.",
+        "Präsidentenpalast, Grand Palais: Der 8er ist Paris in Smoking.",
+        "Hier wohnen Leute, die die Champs-Élysées meiden — außer wenn Besuch kommt."
+      ],
+      "9e arrondissement": [
+        "Das 9e — Opéra, Grands Boulevards, Pigalle-Nord: Theater, Kaufhäuser und Nachtleben.",
+        "Galeries Lafayette, Folies Bergère: Der 9er ist glitzernd und geschäftig.",
+        "Hier wohnen Menschen, die Pigalle als Nachbar kennen und trotzdem früh aufstehen."
+      ],
+      "10e arrondissement": [
+        "Das 10e — Enclos-St-Laurent, Canal Saint-Martin, Gare du Nord: Ankommen und Bleiben.",
+        "Canal, Brücken, Kneipen: Der 10er ist Berlins Kreuzberg mit besserem Baguette.",
+        "Hier wohnen Leute, die am Kanal picknicken und wissen, welche Brücke am schönsten leuchtet."
+      ],
+      "11e arrondissement": [
+        "Das 11e — Popincourt, Bastille, Oberkampf: Rebel-Bohème trifft Bio-Bäckerei.",
+        "Rue de la Roquette, Place de la Bastille: Der 11er ist lebendig, laut und liebenswert.",
+        "Hier wohnen Menschen, die um 2 Uhr nachts noch eine Bar finden — und um 8 Uhr die beste Croissant-Bäckerei."
+      ],
+      "12e arrondissement": [
+        "Das 12e — Reuilly, Bercy, Bois de Vincennes: Grün, Gare und Wohnviertel.",
+        "Opéra Bastille, Coulée verte: Der 12er ist vielfältig und weitläufig.",
+        "Hier wohnen Familien, die den Bois de Vincennes als Garten und die Bastille als Nachbar kennen."
+      ],
+      "13e arrondissement": [
+        "Das 13e — Gobelins, Butte-aux-Cailles, Chinatown: Multikulturell und aufstrebend.",
+        "Bibliothèque nationale, Olympiade: Der 13er ist Paris' Südosten mit Charakter.",
+        "Hier wohnen Leute, die Dim Sum zum Frühstück kennen und die Butte-aux-Cailles als Geheimtipp."
+      ],
+      "14e arrondissement": [
+        "Das 14e — Observatoire, Montparnasse, Denfert-Rochereau: Künstler, Katzenkeller und Kaffee.",
+        "Catacombes, Tour Montparnasse: Der 14er hat Tiefe — wörtlich und bildlich.",
+        "Hier wohnen Menschen, die Montparnasse-Tower als Orientierung nutzen und die Catacombes als Nachbarn."
+      ],
+      "15e arrondissement": [
+        "Das 15e — Vaugirard, Beaugrenelle, Parc André-Citroën: Wiens Favoriten in Paris — bevölkerungsreichster Bezirk.",
+        "Tour Eiffel-Blick, Convention: Der 15er ist Wohnviertel pur — mit 230.000 Einwohnern.",
+        "Hier wohnen Familien, die wissen: Man kann in Paris wohnen, ohne jeden Tag Touristen zu sein."
+      ],
+      "16e arrondissement": [
+        "Das 16e — Passy, Trocadéro, Bois de Boulogne: Villen, Diplomaten und Eiffelturm-Blick.",
+        "Palais de Chaillot, Avenue Foch: Der 16er ist Paris' Nobelviertel.",
+        "Hier wohnen Leute, die den Bois de Boulogne joggen und trotzdem die Metro nehmen."
+      ],
+      "17e arrondissement": [
+        "Das 17e — Batignolles-Monceau, Parc Monceau, Porte Maillot: Familien und Batignolles-Bohème.",
+        "Marché des Batignolles, Square des Batignolles: Der 17er ist grün und bürgerlich.",
+        "Hier wohnen Menschen, die Batignolles als Dorf im Stadt und Monceau als Park kennen."
+      ],
+      "18e arrondissement": [
+        "Das 18e — Butte-Montmartre, Sacré-Cœur, Barbès: Künstler, Touristen und echte Pariser.",
+        "Place du Tertre, Abbesses: Der 18er ist Montmartre — mit allen Klischees und dem echten Leben.",
+        "Hier wohnen Leute, die den Sacré-Cœur als Nachbar haben und trotzdem zur Metro rennen."
+      ],
+      "19e arrondissement": [
+        "Das 19e — Buttes-Chaumont, La Villette, Belleville-Nord: Grün, Kultur und Vielfalt.",
+        "Parc des Buttes-Chaumont, Philharmonie: Der 19er ist Paris' grüner Nordosten.",
+        "Hier wohnen Familien, die den Park als Wohnzimmer und La Villette als Kino nutzen."
+      ],
+      "20e arrondissement": [
+        "Das 20e — Ménilmontant, Père-Lachaise, Belleville: Friedhof, Streetart und Bohème.",
+        "Cimetière du Père-Lachaise, Rue de Ménilmontant: Der 20er ist Paris' letztes echtes Viertel.",
+        "Hier wohnen Menschen, die Jim Morrison als Nachbar haben und trotzdem mieten zahlen."
       ]
     },
     "specific": {
@@ -1262,6 +1537,10 @@
     "emptyCountryEurope": "Klicke auf ein Land der Europakarte, um Bevölkerung, Fläche und Hauptstadt zu entdecken!",
     "emptyCountyMississippi": "Klicke auf ein County der Mississippi-Karte, um Bevölkerung und Fläche zu entdecken!",
     "countiesMississippi": "Countys ({count})",
+    "emptyBezirkWien": "Klicke auf einen Bezirk der Wiener Karte, um Bevölkerung, Fläche und Kiez-Geschichten zu entdecken!",
+    "bezirkeWien": "Bezirke ({count})",
+    "emptyArrondissementParis": "Klicke auf ein Arrondissement der Paris-Karte, um Bevölkerung, Fläche und Kiez-Geschichten zu entdecken!",
+    "arrondissementsParis": "Arrondissements ({count})",
     "emptyCapitalEurope": "Klicke auf ein Land, um die Hauptstadt und Fakten zu sehen!",
     "capitalsEurope": "Hauptstadt",
     "emptyStadtteil": "Klicke auf einen Stadtteil der Karte, um spannende Metadaten und hanseatische Fakten anzuzeigen!",
@@ -1647,6 +1926,26 @@
       "singular": {
         "county": "County"
       }
+    },
+    "wien": {
+      "greeting": "Servus Wien!",
+      "blurb": "23 Bezirke",
+      "levels": {
+        "bezirke": "Bezirke"
+      },
+      "singular": {
+        "bezirk": "Bezirk"
+      }
+    },
+    "paris": {
+      "greeting": "Bonjour Paris!",
+      "blurb": "20 Arrondissements",
+      "levels": {
+        "arrondissements": "Arrondissements"
+      },
+      "singular": {
+        "arrondissement": "Arrondissement"
+      }
     }
   },
   "aboutPage": {
@@ -1664,7 +1963,7 @@
     "modesTitle": "Spielmodi",
     "modesBody": "Entdecker-Modus zum freien Erkunden, Karten-Quiz zum Anklicken, Detektiv zum Suchen, Challenge unter Zeitdruck und Eingabe-Modus zum Tippen — für jeden Lerntyp das Richtige.",
     "citiesTitle": "Städte & Wünsche",
-    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, München, Düsseldorf und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
+    "citiesBody": "Aktuell spielbar: Hamburg, Berlin, Frankfurt am Main, München, Düsseldorf, Wien, Paris und Europa. Deine Stadt fehlt? Im Hub kannst du eine City-Wish abgeben — wir lesen mit.",
     "privacyTitle": "Datenschutz",
     "privacyBody": "Ohne Account wird dein Spielstand nur lokal im Browser gespeichert. Mit optionalem Account werden E-Mail, Benutzername und Spielstand per TLS übertragen und bei Supabase (EU) gespeichert; Passwörter werden gehasht. Ausführlich in der <a href=\"/datenschutz/\">Datenschutzerklärung</a>.",
     "licensesTitle": "Open Source & Lizenzen",

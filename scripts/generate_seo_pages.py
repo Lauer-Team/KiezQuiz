@@ -174,6 +174,52 @@ CITIES = {
             ),
         ],
     },
+    "wien": {
+        "slug": "wien",
+        "name": "Wien",
+        "meta_description": (
+            "Lerne alle 23 Wiener Bezirke spielerisch auf der Karte — vom 1. bis zum 23. "
+            "Kostenlos, ohne Anmeldung, mit XP, Streaks und Kiez-Trivia — mobil und offline."
+        ),
+        "h1": "Wiener Bezirke spielerisch lernen",
+        "faq": [
+            (
+                "Wie viele Bezirke hat Wien?",
+                "Wien ist in 23 Gemeindebezirke unterteilt — vom 1. (Innere Stadt) bis zum 23. (Liesing). KiezQuiz bildet alle ab.",
+            ),
+            (
+                "Was ist der 11. Bezirk?",
+                "Der 11. Wiener Gemeindebezirk heißt Simmering — mit Gasometer, Industrie und dem berühmten Zentralfriedhof.",
+            ),
+            (
+                "Ist KiezQuiz kostenlos?",
+                "Ja — KiezQuiz ist komplett kostenlos, ohne Werbung und ohne Pflicht-Registrierung.",
+            ),
+        ],
+    },
+    "paris": {
+        "slug": "paris",
+        "name": "Paris",
+        "meta_description": (
+            "Lerne alle 20 Pariser Arrondissements spielerisch auf der Karte — vom 1er bis zum 20e. "
+            "Kostenlos, ohne Anmeldung, mit XP, Streaks und Kiez-Trivia — mobil und offline."
+        ),
+        "h1": "Pariser Arrondissements spielerisch lernen",
+        "faq": [
+            (
+                "Wie viele Arrondissements hat Paris?",
+                "Paris hat 20 Arrondissements — spiralförmig nummeriert vom 1er (Louvre) bis zum 20e (Ménilmontant).",
+            ),
+            (
+                "Was ist das 11e arrondissement?",
+                "Das 11e — Popincourt — gilt als eines der lebendigsten Viertel: Bastille, Oberkampf, Bars und Bohème.",
+            ),
+            (
+                "Ist KiezQuiz kostenlos?",
+                "Ja — KiezQuiz ist komplett kostenlos, ohne Werbung und ohne Pflicht-Registrierung.",
+            ),
+        ],
+    },
 }
 
 
