@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout KiezQuiz-Ops
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: Lauer-Team/KiezQuiz-Ops
           token: ${{ secrets.GITHUB_TOKEN }}
